@@ -26,7 +26,7 @@ require 'json';
 
 
 #
-# Implementations for our protocol tests.
+# Implementation of our protocol tests.
 #
 require 'tests/ftp'
 require 'tests/http'
@@ -42,14 +42,21 @@ require 'tests/ssh'
 
 
 
-
+#
+#  TODO
+#
+#    Use the mauve-library to clear the specified alert
+#
 def clear_alert( hash )
   puts "CLEARING ALERT: #{hash}"
 end
 
 
-
-
+#
+# TODO
+#
+#    Use the mauve-library to raise the specified alert
+#
 def raise_alert( hash )
   puts "Raising ALERT: #{hash}"
 end
@@ -78,7 +85,12 @@ loop do
   #
   #  Find the next job.
   #
-  job = beanstalk.reserve
+  #  TODO:
+  #    1.  Reserve with a timeout
+  #
+  #    2.  Send a heartbeat so that we know this script is still running
+  #
+  job = beanstalk.reserve()
   puts "Job acquired: #{Time.new.inspect}"
 
 
@@ -99,7 +111,8 @@ loop do
 
 
   #
-  #  Switch on type of test.
+  #  Given the test-type of "YYY" we'll call the method "YYY_test", which
+  # we assume comes from one of the files beneath ./tests/
   #
   test   = hash['test_type']
   method = "#{test}_test".to_sym
