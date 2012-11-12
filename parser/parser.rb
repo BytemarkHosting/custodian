@@ -3,13 +3,10 @@
 # Notes
 #
 #  Macros may be defined either literally, or as a result of a HTTP-fetch.
-# Macro names match the pattern "^[A-Z_]$"
+# Macro names match the pattern "^[0-9A-Z_]$"
 #
 #
 # TODO:
-#   Add command line parsing.
-#
-#   Add --dump flag to just dump the JSON and not insert it.
 #
 #   Write manual.
 #
