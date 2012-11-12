@@ -1,18 +1,28 @@
 #!/usr/bin/ruby
+#
+# Empty the beanstalk-queue.
+#
+# This is useful if you're aborting runs, or messing with the parser.
+#
+# Steve
+# -- 
+#
+
+
 
 require 'beanstalk-client'
-
 
 beanstalk = Beanstalk::Pool.new(['localhost:11300'])
 
 #
-# Run until we're killed
+# Run until we receive a timeout-error - because retrieval of jobs failed.
 #
 while(true)
   begin
-    puts "\n\nWaiting for job.."
+    puts "\nWaiting for job.."
     job = beanstalk.reserve(1)
-    puts "Job acquired: #{Time.new.inspect}"
+    id  = job.id
+    puts "\tDeleted job #{id}"
     job.delete
   rescue Beanstalk::TimedOut => ex
     puts "Queue is empty"
