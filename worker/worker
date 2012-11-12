@@ -20,7 +20,8 @@
 
 
 require 'beanstalk-client'
-require 'json';
+require 'getoptlong'
+require 'json'
 
 
 
@@ -41,120 +42,166 @@ require 'tests/ssh'
 
 
 
+#
+#  This class encapsulates the raising and clearing of alerts
+# via Mauve.
+#
+class Alert
 
-#
-#  TODO
-#
-#    Use the mauve-library to clear the specified alert
-#
-def clear_alert( hash )
-  puts "CLEARING ALERT: #{hash}"
+  attr_reader :details
+
+  def initialize( test_details )
+    @details = test_details
+  end
+
+  def raise
+    puts "RAISING ALERT: #{@details}"
+  end
+
+  def clear
+    puts "CLEARING ALERT: #{@details}"
+  end
+
 end
 
 
-#
-# TODO
-#
-#    Use the mauve-library to raise the specified alert
-#
-def raise_alert( hash )
-  puts "Raising ALERT: #{hash}"
-end
-
-
-
-
-
 
 #
-# Connect to the queue server
+# This class contains the code for connecting to a Beanstalk queue,
+# fetching tests from it, and executing them
 #
-beanstalk = Beanstalk::Pool.new(['localhost:11300'])
+class Custodian
 
-
-
-
-#
-# Run until we're killed
-#
-loop do
-
-  puts "\n\nWaiting for job.."
+  #
+  # The beanstalk queue.
+  #
+  attr_reader :queue
 
 
   #
-  #  Find the next job.
+  # Constructor: Connect to the queue
   #
-  #  TODO:
-  #    1.  Reserve with a timeout
-  #
-  #    2.  Send a heartbeat so that we know this script is still running
-  #
-  job = beanstalk.reserve()
-  puts "Job acquired: #{Time.new.inspect}"
+  def initialize
+    @queue = Beanstalk::Pool.new(['localhost:11300'])
+  end
+
 
 
   #
-  #  Parse the JSON of the job body.
+  # Process jobs from the queue - never return.
   #
-  json = job.body
-  hash = JSON.parse( json )
-
-  #
-  #  Output the details.
-  #
-  puts "JOB: #{job.id}"
-  puts "Type of test is #{hash['test_type']}"
-  hash.keys.each do |key|
-    puts "\t#{key} => #{hash[key]}"
+  def run!
+    while( true )
+      puts "\n\nWaiting for job.." if ( ENV['VERBOSE'] )
+      process_single_job()
+    end
   end
 
 
   #
-  #  Given the test-type of "YYY" we'll call the method "YYY_test", which
-  # we assume comes from one of the files beneath ./tests/
+  # Fetch a single job from the queue, and process it.
   #
-  test   = hash['test_type']
-  method = "#{test}_test".to_sym
+  def process_single_job
 
-  #
-  # If it succeeds.
-  #
-  begin
+    job = @queue.reserve()
+    puts "Job acquired: #{Time.new.inspect}" if ( ENV['VERBOSE'] )
 
-    success = false
-    count   = 0
 
     #
-    #  We'll run no more than MAX times.
+    #  Parse the JSON of the job body.
     #
-    #  We stop the execution on a single success.
+    json = job.body
+    hash = JSON.parse( json )
+    hash['verbose'] = 1 if ( ENV['VERBOSE'] )
+
+
     #
-    while ( ( count < 5 ) && ( success == false ) )
-      if ( send( method, hash ) )
-        clear_alert(hash)
-        success= true
+    #  Output the details.
+    #
+    if ( ENV['VERBOSE'] )
+      puts "JOB: #{job.id}"
+      puts "Type of test is #{hash['test_type']}"
+      hash.keys.each do |key|
+        puts "\t#{key} => #{hash[key]}"
       end
-      count += 1
     end
 
-    #
-    #  If we didn't succeed on any of the attempts raise the alert.
-    #
-    if ( ! success )
-      raise_alert( hash )
-    end
 
-  rescue => ex
-    puts "Exception: #{ex}"
-  ensure
     #
-    #  Delete the job - either we received an error, in which case
-    # we should remove it to avoid picking it up again, or we handled
-    # it successfully so it should be removed.
+    #  Given the test-type of "YYY" we'll call the method "YYY_test", which
+    # we assume comes from one of the files beneath ./tests/
     #
-    job.delete
+    test   = hash['test_type']
+    method = "#{test}_test".to_sym
+
+    #
+    # If it succeeds.
+    #
+    begin
+      success = false
+      count   = 0
+
+      alert = Alert.new( hash )
+
+      #
+      #  We'll run no more than MAX times.
+      #
+      #  We stop the execution on a single success.
+      #
+      while ( ( count < 5 ) && ( success == false ) )
+        if ( send( method, hash ) )
+          alert.clear()
+          success= true
+        end
+        count += 1
+      end
+
+      #
+      #  If we didn't succeed on any of the attempts raise the alert.
+      #
+      if ( ! success )
+        alert.raise()
+      end
+    rescue => ex
+      puts "Exception: #{ex}"
+    ensure
+      #
+      #  Delete the job - either we received an error, in which case
+      # we should remove it to avoid picking it up again, or we handled
+      # it successfully so it should be removed.
+      #
+      job.delete
+    end
   end
 end
 
 
+
+
+
+
+
+#
+#  Entry-point to our code.
+#
+if __FILE__ == $0 then
+
+
+  begin
+    opts = GetoptLong.new(
+                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
+                          )
+    opts.each do |opt, arg|
+      case opt
+      when "--verbose":
+          ENV["VERBOSE"] = "1"
+      end
+    end
+  rescue StandardError => ex
+    puts "Option parsing failed: #{ex.to_s}"
+    exit
+  end
+
+  worker = Custodian.new()
+  worker.run!
+end
