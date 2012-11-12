@@ -1,0 +1,15 @@
+
+  This directory contains the protocol-tests.
+
+  For the protocol "XXX" we must have:
+
+        - The file called XXX.rb
+
+        - The definition of the single method XXX_test
+
+  The test will make use of "target_host", and "test_port" (other keys may be optionally
+ used) and will return the single result:
+
+        false:  The test failed.
+
+        true:  The test succeeded.

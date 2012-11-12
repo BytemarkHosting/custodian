@@ -1,0 +1,13 @@
+
+  This is the worker component.
+
+  It is designed to pull (testing) jobs from the beanstalk queue, executing them serially.
+
+  The jobs will be serialized JSON objects which have the following keys in all cases:
+
+    * test_type => ping | ssh | mysql | http | https | ...
+    * test_target => example.com | 192.168.0.1 | etc
+
+  Tests may implement additional keys, they will be used or ignored as appropriate.
+
+  There is no concept of an execution time, nor is there any threading to worry about.

@@ -1,0 +1,23 @@
+#!/usr/bin/ruby
+
+require 'beanstalk-client'
+
+
+beanstalk = Beanstalk::Pool.new(['localhost:11300'])
+
+#
+# Run until we're killed
+#
+while(true)
+  begin
+    puts "\n\nWaiting for job.."
+    job = beanstalk.reserve(1)
+    puts "Job acquired: #{Time.new.inspect}"
+    job.delete
+  rescue Beanstalk::TimedOut => ex
+    puts "Queue is empty"
+    exit(0)
+  end
+end
+
+

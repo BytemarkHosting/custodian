@@ -1,0 +1,82 @@
+#!/usr/bin/ruby
+#
+#  Given a hostname, or IP address, run a ping test against it.
+#
+#  This tool looks up the IP address to determine whether to run the
+# test with "ping" or "ping6".
+#
+# Steve
+# --
+#
+
+
+
+require 'socket'
+
+
+#
+#  Get the address to ping.
+#
+hostname = ARGV.shift
+
+#
+#  If we have no host then abort
+#
+if ( hostname.nil? )
+  puts "Usage: #{$0} hostname"
+  exit 1
+end
+
+
+#
+#  The IP we'll deal with
+#
+ip = nil
+
+
+#
+#  Lookup the IP, catching any exception
+#
+begin
+  Socket.getaddrinfo(hostname, 'echo').each do |a|
+    ip = a[3]
+  end
+rescue SocketError
+  puts "Failed to resolve: #{hostname}"
+  exit 1
+end
+
+
+#
+#  Was the result an IPv4 address?
+#
+if ( ip =~ /^([0-9]+).([0-9]+).([0-9]+).([0-9]+)$/ )
+
+  #
+  #  If so invoke "ping"
+  #
+  if ( system( "ping -c 1 #{ip} 2>/dev/null >/dev/null" ) == true )
+    puts "#{hostname} alive."
+    exit 0
+  else
+    puts "ping4 failed - #{hostname} [#{ip}]"
+    exit 1
+  end
+elsif ( ip =~ /2001/ )
+
+  #
+  #  Was the result an IPv6 address?
+  #
+  if ( system( "ping6 -c 1 -w1 #{ip} 2>/dev/null >/dev/null" ) == true )
+    puts "#{hostname} alive."
+    exit 0
+  else
+    puts "ping6 failed - #{hostname} [#{ip}]"
+    exit 1
+  end
+end
+
+
+#
+#  All done.
+#

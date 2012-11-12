@@ -1,0 +1,141 @@
+
+
+About
+-----
+
+  We have a existing monitoring solution which suffers several problems:
+
+    * It is hard to scale, because all tests are executed upon one machine.
+
+    * It is over-engineered, hard to modify, and suffers from threading-related issues.
+
+
+Proposal
+--------
+
+  Steve proposes we throw this away and replace with something that is
+ both simpler in implementation, and easier to modify.  We'll keep in mind the
+ aim of allowing multiple monitoring stations - although we note that we will
+ need to update firewalls to allow probes from more hosts than our single current
+ one.
+
+  The core design is based upon a work queue.  I envisage two parts to the system:
+
+    * A parser that reads a list of hosts and tests to apply.  These
+      tests are broken down into individual jobs, serialized to JSON,
+      and stored in a queue.
+
+    * An arbitrary number of monitoring hosts, which pull jobs from the
+      work queue and execute them.
+
+
+
+
+
+Implementation
+--------------
+
+  Because we have an existing tool deployed, sentinel, which has a
+ reasonably well-defined configuration file I propose that the new
+ solution will be 100% compatible with it.
+
+  This means we must accept lines of the following form:
+
+--
+
+LINN_HOSTS is 89.16.185.172 and 46.43.50.217 and 89.16.185.171 and 89.16.185.173 and 89.16.185.174 and 46.43.50.216 and 46.43.50.212 and 46.43.50.217 and 89.16.185.171.
+
+LINN_SSH_HOSTS must run ssh on 22 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/linn ssh failure'.
+
+http://acerecords.co.uk/ must run http with status 200 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
+http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
+--
+
+  In brief we accept four distinct kinds of line:
+
+
+
+  1. Comments
+  ------------
+  Comments are lines that are blank or which begin with the comment-character ("#").
+
+
+  2. Macro Definitions
+  ---------------------
+  There are two types of macros:
+
+     FOO is 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
+     FOO are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
+
+  We accept both of these easily, with the caveat that macro-names must match
+  the regular expression ^[A-Z_]$.
+
+
+  3.  Service Tests
+  -----------------
+  Service tests are best explained by several examples:
+
+     SWITCHES must run ssh otherwise 'Bytemark networking infrastructure: switch'.
+     mirror.bytemark.co.uk must run ftp on 21 otherwise 'Bytemark Mirror: FTP failure'.
+
+  The general case is:
+
+     hostname|macro must run XXX [on NN] otherwise 'alert'.
+
+  If we restrict ourself to saying that every test must be named by the service
+  then we can generalize them.
+
+
+
+  4. ping tests
+  -------------
+  Ping tests are of the form:
+
+     FOO must ping otherwise 'alert text'.
+     example.vm.bytemark.co.uk must ping otherwise 'alert text'.
+
+  These are a simplification of the service tests, because the only real difference
+  is that we write "must ping" rather than "must run XXX".
+
+
+
+
+Behaviour
+---------
+
+There are two parts to our system:
+
+
+  a.  Parser.
+
+  b.  Worker.
+
+The parser will read the named configuration file(s), parse them, and submit
+to our queue a JSON-encoded piece of data for each test we must run.
+
+The worker will pull down these tests, and execute them.
+
+Sample JSON looks like this:
+
+  {"target_host":"46.43.37.199","test_type":"ssh","test_port":"22","test_alert":"*Managed client*: \"[Goto Redmine]\":https://managed.bytemark.co.uk/projects/wellinformed/wiki/Wiki ssh failure"}
+
+
+You'll see that the JSON-encoded data is merely a hash, with the following
+keys:
+
+   target_host:  The host that will be probed.
+
+   test_port:  The port number that will be queried.  i.e "22", or "222" for SSH probes.
+
+   test_type:  The type of test we're runnign "ssh", "http", "ftp", "imap", etc.
+
+   test_alert:  The text of the alert we'll raise, on failure.
+
+There are only two extra fields that we expect to set in the normal course of events:
+
+   http_text:    Expected HTTP/HTTPS contents.
+   http_status:  Expected HTTP/HTTPS response code.
+
+
+
+
