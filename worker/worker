@@ -8,7 +8,7 @@
 #
 #           1.  set failure count 3 in a row, for example.
 #
-#           2.  enable/disable logging.
+#           2.  enable/disable logging to a file
 #
 #           3.  Specify server name/port for the beanstalk queue.
 #
