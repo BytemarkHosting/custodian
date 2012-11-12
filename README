@@ -45,9 +45,10 @@ Implementation
 
 LINN_HOSTS is 89.16.185.172 and 46.43.50.217 and 89.16.185.171 and 89.16.185.173 and 89.16.185.174 and 46.43.50.216 and 46.43.50.212 and 46.43.50.217 and 89.16.185.171.
 
-LINN_SSH_HOSTS must run ssh on 22 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/linn ssh failure'.
+LINN_HOSTS must run ssh on 22 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/linn ssh failure'.
 
 http://acerecords.co.uk/ must run http with status 200 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
+
 http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
 --
 
@@ -68,7 +69,7 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
      FOO are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
 
   We accept both of these easily, with the caveat that macro-names must match
-  the regular expression ^[A-Z_]$.
+  the regular expression ^[1-9A-Z_]$.
 
 
   3.  Service Tests
@@ -82,9 +83,16 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
 
      hostname|macro must run XXX [on NN] otherwise 'alert'.
 
-  If we restrict ourself to saying that every test must be named by the service
-  then we can generalize them.
+  If we restrict ourself to saying that every test must be named by the service that is
+  under test then we can generalize them.  This means we'll invoke the ftp-handler for
+  
+     foo.vm must run ftp otherwise 'alert text'.
 
+  The bar-handler for the line:
+
+     example.vm.bytemark.co.uk must run bar otherwise 'alert text'.
+
+  The JSON which we serialize will also have "test_type:ftp", and "test_type:bar", respectively.
 
 
   4. ping tests
@@ -95,7 +103,7 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
      example.vm.bytemark.co.uk must ping otherwise 'alert text'.
 
   These are a simplification of the service tests, because the only real difference
-  is that we write "must ping" rather than "must run XXX".
+  is that we write "must ping" rather than "must run ping".
 
 
 
@@ -107,7 +115,6 @@ There are two parts to our system:
 
 
   a.  Parser.
-
   b.  Worker.
 
 The parser will read the named configuration file(s), parse them, and submit
@@ -136,6 +143,7 @@ There are only two extra fields that we expect to set in the normal course of ev
    http_text:    Expected HTTP/HTTPS contents.
    http_status:  Expected HTTP/HTTPS response code.
 
+TODO:  The DNS-test will also use different fields.
 
 
 
