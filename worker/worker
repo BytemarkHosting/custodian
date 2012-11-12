@@ -202,7 +202,8 @@ if __FILE__ == $0 then
   begin
     opts = GetoptLong.new(
                           [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],
-                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ]
+                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
+                          [ "--single",  "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
@@ -210,6 +211,8 @@ if __FILE__ == $0 then
           ENV["VERBOSE"] = "1"
       when "--flush":
           ENV["FLUSH"] = "1"
+      when "--single":
+          ENV["SINGLE"] = "1"
       end
     end
   rescue StandardError => ex
@@ -217,12 +220,29 @@ if __FILE__ == $0 then
     exit
   end
 
+  #
+  #  Create the object
+  #
   worker = Custodian.new()
 
+  #
+  #  Are we flushing the queue?
+  #
   if ( ENV['FLUSH'] )
     worker.flush_queue!
     exit(0)
   end
 
+  #
+  #  Single step?
+  #
+  if ( ENV['SINGLE'] )
+    worker.process_single_job
+    exit(0)
+  end
+
+  #
+  #  Otherwise loop indefinitely
+  #
   worker.run!
 end
