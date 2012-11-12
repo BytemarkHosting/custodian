@@ -18,7 +18,7 @@ def ldap_test ( params )
   host = params['target_host']
   port = params['test_port']
 
-  puts "LDAP testing host #{host}:#{port}"
+  puts "LDAP testing host #{host}:#{port}" if ( params['verbose'] )
 
 
   begin
@@ -29,13 +29,14 @@ def ldap_test ( params )
         socket.close()
         return true
       rescue
-        puts "LDAP exception on host #{host}:#{port} - #{$!}"
+        puts "LDAP exception on host #{host}:#{port} - #{$!}" if ( params['verbose'] )
         return false
       end
     end
   rescue Timeout::Error => e
-    puts "TIMEOUT: #{e}"
+    puts "TIMEOUT: #{e}" if ( params['verbose'] )
     return false
   end
+  puts "Misc failure" if ( params['verbose'] )
   return false
 end
