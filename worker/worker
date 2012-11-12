@@ -118,41 +118,38 @@ class Custodian
   #
   def process_single_job
 
-    job = @queue.reserve()
-    puts "Job acquired: #{Time.new.inspect}" if ( ENV['VERBOSE'] )
-
-
-    #
-    #  Parse the JSON of the job body.
-    #
-    json = job.body
-    hash = JSON.parse( json )
-    hash['verbose'] = 1 if ( ENV['VERBOSE'] )
-
-
-    #
-    #  Output the details.
-    #
-    if ( ENV['VERBOSE'] )
-      puts "JOB: #{job.id}"
-      puts "Type of test is #{hash['test_type']}"
-      hash.keys.each do |key|
-        puts "\t#{key} => #{hash[key]}"
-      end
-    end
-
-
-    #
-    #  Given the test-type of "YYY" we'll call the method "YYY_test", which
-    # we assume comes from one of the files beneath ./tests/
-    #
-    test   = hash['test_type']
-    method = "#{test}_test".to_sym
-
-    #
-    # If it succeeds.
-    #
     begin
+      job = @queue.reserve()
+      puts "Job acquired: #{Time.new.inspect}" if ( ENV['VERBOSE'] )
+
+
+      #
+      #  Parse the JSON of the job body.
+      #
+      json = job.body
+      hash = JSON.parse( json )
+      hash['verbose'] = 1 if ( ENV['VERBOSE'] )
+
+
+      #
+      #  Output the details.
+      #
+      if ( ENV['VERBOSE'] )
+        puts "JOB: #{job.id}"
+        puts "Type of test is #{hash['test_type']}"
+        hash.keys.each do |key|
+          puts "\t#{key} => #{hash[key]}"
+        end
+      end
+
+
+      #
+      #  Given the test-type of "YYY" we'll call the method "YYY_test", which
+      # we assume comes from one of the files beneath ./tests/
+      #
+      test   = hash['test_type']
+      method = "#{test}_test".to_sym
+
       success = false
       count   = 0
 
@@ -178,7 +175,7 @@ class Custodian
         alert.raise()
       end
     rescue => ex
-      puts "Exception: #{ex}"
+      puts "Exception raised processing job: #{ex}"
     ensure
       #
       #  Delete the job - either we received an error, in which case
