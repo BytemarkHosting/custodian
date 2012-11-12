@@ -86,6 +86,21 @@ class Custodian
   end
 
 
+  #
+  #  Flush the queue.
+  #
+  def flush_queue!
+    while( true )
+      begin
+        job = @queue.reserve(1)
+        id  = job.id
+        puts "\tDeleted job #{id}" if ( ENV['VERBOSE'] )
+        job.delete
+      rescue Beanstalk::TimedOut => ex
+        return
+      end
+    end
+  end
 
   #
   # Process jobs from the queue - never return.
@@ -189,12 +204,15 @@ if __FILE__ == $0 then
 
   begin
     opts = GetoptLong.new(
-                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
+                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],
+                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
       when "--verbose":
           ENV["VERBOSE"] = "1"
+      when "--flush":
+          ENV["FLUSH"] = "1"
       end
     end
   rescue StandardError => ex
@@ -203,5 +221,11 @@ if __FILE__ == $0 then
   end
 
   worker = Custodian.new()
+
+  if ( ENV['FLUSH'] )
+    worker.flush_queue!
+    exit(0)
+  end
+
   worker.run!
 end
