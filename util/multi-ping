@@ -3,7 +3,7 @@
 #  Given a hostname, or IP address, run a ping test against it.
 #
 #  This tool looks up the IP address to determine whether to run the
-# test with "ping" or "ping6".
+# test with the system binaries "ping" or "ping6".
 #
 # Steve
 # --
