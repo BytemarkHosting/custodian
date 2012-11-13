@@ -34,7 +34,6 @@ class TestSMTPProtocolProbe < Test::Unit::TestCase
       "test_type"   => "smtp",
       "test_port"   => 25,
       "verbose"     => 1,
-      "test_port"   => 21,
       "test_alert"  => "SMTP service down",
     }
 
@@ -53,7 +52,6 @@ class TestSMTPProtocolProbe < Test::Unit::TestCase
     #
     test_data_bad_two = {
       "test_type"   => "smtp",
-      "test_port"   => 25,
       "verbose"     => 1,
       "test_port"   => 25,
       "test_alert"  => "SMTP service down",

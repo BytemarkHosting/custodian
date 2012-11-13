@@ -78,7 +78,7 @@ class TestFTPProtocolProbe < Test::Unit::TestCase
 
 
     #
-    #  Now create a probe with a missing URL.
+    #  Now create a probe with a missing host.
     #
     assert_raise ArgumentError do
       bad = FTPTest.new( test_data_bad_two )
