@@ -48,9 +48,11 @@ class PINGTest
     # Find the binary
     #
     binary = nil
-    binary = "./util/multi-ping"  if ( File.exists?( "./util/multi-ping" ) )
-    binary = "../util/multi-ping" if ( File.exists?( "../util/multi-ping" ) )
-    binary = "../../util/multi-ping" if ( File.exists?( "../../util/multi-ping" ) )
+    binary = "./bin/multi-ping"  if ( File.exists?( "./bin/multi-ping" ) )
+    binary = "../bin/multi-ping" if ( File.exists?( "../bin/multi-ping" ) )
+    binary = "../../bin/multi-ping" if ( File.exists?( "../../bin/multi-ping" ) )
+    binary = "../../../bin/multi-ping" if ( File.exists?( "../../../bin/multi-ping" ) )
+    binary = "../../../../bin/multi-ping" if ( File.exists?( "../../../../bin/multi-ping" ) )
 
     if ( binary.nil? )
       @error = "Failed to find 'multi-ping'"
