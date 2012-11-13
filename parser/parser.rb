@@ -87,22 +87,20 @@ class MonitorConfig
     end
 
     @MACROS[name] = val
-
-
-    #
-    #  Save it away
-    #
-#    puts "Macro definition: #{name}"
- #   val.each do |value|
-  #    puts "\t#{value}"
-   # end
   end
 
 
+  #
+  # Is the given string of text a macro?
+  #
   def is_macro?( name )
     !@MACROS[name].nil?
   end
 
+
+  #
+  # Return an array of hosts if the given string was a macro identifier.
+  #
   def get_macro_targets( name )
     @MACROS[name]
   end
@@ -168,7 +166,6 @@ class MonitorConfig
           alert=$1.dup
         end
 
-
         #
         #  Store the test(s)
         #
@@ -188,12 +185,18 @@ class MonitorConfig
 
       elsif ( line =~ /\s+must\s+run\s+([^\s]+)\s+/i )
 
+        #
+        # Get the service we're testing, and remove any trailing "."
+        #
+        # This handles the case of:
+        #
+        #  LINN_HOSTS must run ssh.
+        #
         service = $1.dup
-
         service.chomp!(".")
 
         #
-        #  Target
+        #  Target of the service-test.
         #
         targets = Array.new
         target  = line.split( /\s+/)[0]
@@ -208,7 +211,7 @@ class MonitorConfig
         end
 
         #
-        #  Alert
+        #  Alert text
         #
         alert = "#{service} failed"
         if ( line =~ /otherwise '([^']+)'/ )
@@ -216,7 +219,7 @@ class MonitorConfig
         end
 
         #
-        # Does this service require a port?
+        # Does this service require a port?  If it does we'll setup the default here
         #
         case service
         when /ssh/ then
@@ -237,6 +240,15 @@ class MonitorConfig
           port=25
         end
 
+        #
+        # But allow that to be changed
+        #
+        # e.g.
+        #
+        #  must run ssh on 33 otherwise ..
+        #  must run ftp on 44 otherwise ..
+        #  must run http on 8000 otherwise ..
+        #
         if ( line =~ /\s+on\s+([0-9]+)/ )
           port = $1.dup
         end
@@ -250,6 +262,16 @@ class MonitorConfig
             :test_alert  => alert
           }
 
+          #
+          # HTTP-tests will include the expected result in one of two
+          # forms:
+          #
+          #    must run http with status 200
+          #
+          #    must run http with content 'text'
+          #
+          # If those are sepcified then include them here
+          #
           if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
             test[:http_status]=$1.dup
           end
@@ -257,6 +279,10 @@ class MonitorConfig
             test[:http_text]=$1.dup
           end
 
+          #
+          # We've parsed(!) the line.  Either output the JSON to the console
+          # or add to the queue.
+          #
           if ( !ENV['DUMP'].nil? )
             puts ( test.to_json )
           else
