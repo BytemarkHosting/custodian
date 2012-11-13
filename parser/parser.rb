@@ -54,8 +54,11 @@ class MonitorConfig
   #
   attr_reader :filename
 
+
+
+
   #
-  # Constructors
+  # Constructor
   #
   def initialize( filename )
     @MACROS = Hash.new()
@@ -66,6 +69,7 @@ class MonitorConfig
       raise ArgumentError, "Missing configuration file!"
     end
   end
+
 
 
   #
@@ -109,9 +113,18 @@ class MonitorConfig
 
 
 
+
+  #
+  #  Return a hash of our current macro-definitions.
+  #
+  #  This is used only by the test-suite.
+  #
   def macros
     @MACROS
   end
+
+
+
 
   #
   # Is the given string of text a macro?
@@ -128,6 +141,8 @@ class MonitorConfig
   def get_macro_targets( name )
     @MACROS[name]
   end
+
+
 
 
   #
@@ -166,8 +181,8 @@ class MonitorConfig
       #  Fallback target is the first token on the line
       #
       target = line.split( /\s+/)[0]
-      
-      
+
+
       #
       #  If the target is a macro
       #
@@ -176,7 +191,7 @@ class MonitorConfig
       else
         targets.push( target )
       end
-      
+
       #
       #  The alert-failure message
       #
@@ -184,7 +199,7 @@ class MonitorConfig
       if ( line =~ /otherwise '([^']+)'/ )
         alert=$1.dup
       end
-      
+
       #
       #  Store the test(s)
       #
@@ -194,16 +209,16 @@ class MonitorConfig
           :test_type => "ping",
           :test_alert => alert
         }
-        
+
         if ( !ENV['DUMP'].nil? )
           puts ( test.to_json )
         else
           @queue.put( test.to_json )
         end
       end
-      
+
     elsif ( line =~ /\s+must\s+run\s+([^\s]+)\s+/i )
-      
+
       #
       # Get the service we're testing, and remove any trailing "."
       #
@@ -213,13 +228,13 @@ class MonitorConfig
       #
       service = $1.dup
       service.chomp!(".")
-      
+
       #
       #  Target of the service-test.
       #
       targets = Array.new
       target  = line.split( /\s+/)[0]
-      
+
       #
       #  If the target is a macro
       #
@@ -228,7 +243,7 @@ class MonitorConfig
       else
         targets.push( target )
       end
-      
+
       #
       #  Alert text
       #
@@ -236,7 +251,7 @@ class MonitorConfig
       if ( line =~ /otherwise '([^']+)'/ )
         alert=$1.dup
       end
-      
+
       #
       # All our service tests require a port - we setup the defaults here,
       # but the configuration file will allow users to specify an alternative
@@ -262,7 +277,7 @@ class MonitorConfig
       when /smtp/i then
         port=25
       end
-      
+
       #
       # But allow that to be changed
       #
@@ -275,16 +290,16 @@ class MonitorConfig
       if ( line =~ /\s+on\s+([0-9]+)/ )
         port = $1.dup
       end
-      
+
       targets.each do |host|
-        
+
         test = {
           :target_host => host,
           :test_type   => service,
           :test_port   => port,
           :test_alert  => alert
         }
-        
+
         #
         # HTTP-tests will include the expected result in one of two
         # forms:
@@ -323,8 +338,10 @@ class MonitorConfig
   end
 
 
+
+
   #
-  # Parse the configuration file, named in our constructor.
+  # Parse the configuration file which was named in our constructor.
   #
   def parse_file()
     #
