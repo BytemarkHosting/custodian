@@ -1,9 +1,10 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/
+#!/usr/bin/ruby -I../lib/ -Ilib/
 
 
 require 'test/unit'
 require 'webrick'
-require 'http'
+require 'custodian/protocol-tests/http.rb'
+
 
 
 

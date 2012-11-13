@@ -6,7 +6,6 @@ require 'ssh'
 
 
 
-
 #
 # Unit test for the SSH-protocol probe.
 #
