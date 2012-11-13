@@ -9,10 +9,9 @@
 
   The class must implement the methods:
 
-    run_test
+    run_test()
 
-    get_details
+    error()
 
   'run_test' will be called to run the test, returning true if passed, and false
- otherwise.  In the event of a test failure 'get_details' will return
- something useful.
+ otherwise.  In the event of a test failure 'error' will return  something useful.

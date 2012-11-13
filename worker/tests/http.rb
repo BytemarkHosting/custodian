@@ -36,7 +36,7 @@ class HTTPTest
   #
   #  Return "false" on failure.
   #
-  # If the test fails the details should be retrieved from "get_details".
+  # If the test fails the details should be retrieved from "error()".
   #
   def run_test
 
@@ -92,7 +92,7 @@ class HTTPTest
   #
   #  Return the error text for why this test failed.
   #
-  def get_details
+  def error
     return @error
   end
 

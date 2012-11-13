@@ -39,7 +39,7 @@ class JABBERTest
   #
   #  Return "false" on failure.
   #
-  # If the test fails the details should be retrieved from "get_details".
+  # If the test fails the details should be retrieved from "error()".
   #
   def run_test
     @error = ""
@@ -90,7 +90,7 @@ class JABBERTest
   #
   #  Return the error text for why this test failed.
   #
-  def get_details
+  def error
     return @error
   end
 
@@ -121,7 +121,7 @@ if __FILE__ == $0 then
     puts "TEST OK"
   else
     puts "TEST FAILED"
-    puts obj.get_details()
+    puts obj.error()
   end
 
 end

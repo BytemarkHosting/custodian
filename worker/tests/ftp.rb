@@ -38,7 +38,7 @@ class FTPTest
   #
   #  Return "false" on failure.
   #
-  # If the test fails the details should be retrieved from "get_details".
+  # If the test fails the details should be retrieved from "error()".
   #
   def run_test
 
@@ -119,7 +119,7 @@ if __FILE__ == $0 then
     puts "TEST OK"
   else
     puts "TEST FAILED"
-    puts tst.get_details()
+    puts tst.error()
   end
 
 end
