@@ -276,6 +276,8 @@ class MonitorConfig
         port=23
       when /smtp/i then
         port=25
+      when /dns/i then
+        port=53
       end
 
       #
@@ -300,9 +302,9 @@ class MonitorConfig
           :test_alert  => alert
         }
 
+
         #
-        # HTTP-tests will include the expected result in one of two
-        # forms:
+        # HTTP-tests will include the expected result in one of two forms:
         #
         #    must run http with status 200
         #
@@ -310,9 +312,10 @@ class MonitorConfig
         #
         # If those are sepcified then include them here.
         #
-        # Note we're deliberately fast and loose here - which allows both to be specified
+        # Note we're deliberately fast and loose here - which allows both to
+        # be specified:
         #
-        #   http://example.vm/ must run http with status 200 and content 'OK' otherwise 'boo!'.
+        # http://example.vm/ must run http with status 200 and content 'OK'.
         #
         #
         if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
@@ -321,6 +324,25 @@ class MonitorConfig
         if ( line =~ /\s+with\s+content\s+'([^']+)'/ )
           test[:http_text]=$1.dup
         end
+
+        #
+        # These are special cased for the DNS types
+        #
+        if ( test[:test_type] =~ /dns/ )
+
+          #
+          #  Sample line:
+          #
+          # DNSHOSTS must run dns for www.bytemark.co.uk resolving A as '212.110.161.144'.
+          #
+          #
+          if ( line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/ )
+            test[:resolve_name]     = $1.dup
+            test[:resolve_type]     = $2.dup
+            test[:resolve_expected] = $3.dup
+          end
+        end
+
 
         #
         # We've parsed(!) the line.  Either output the JSON to the console
