@@ -40,7 +40,7 @@ class MonitorConfig
   #
   def initialize( filename )
     @MACROS = Hash.new()
-    @queue  = Beanstalk::Pool.new(['localhost:11300'])
+    @queue  = Beanstalk::Pool.new(['127.0.0.1:11300'])
     @file   = filename
 
     if ( @file.nil? || ( ! File.exists?( @file) ) )
