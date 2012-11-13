@@ -1,10 +1,42 @@
 #!/usr/bin/ruby1.8 -Ilib/ -I../lib/
 #
-#  This script will pull tests to complete from the Beanstalk Queue,
-# where they will be found in JSON form, and executes them.
+# NAME
+#  custodian-dequeue - Pull network tests from a queue and execute them in series.
 #
-# Steve
-# --
+# SYNOPSIS
+#  custodian-dequeue  [ -h | --help ]
+#                     [ -m | --manual]
+#                     [      --server 1.2.3.4:123 ]
+#                     [ -s | --single ]
+#                     [ -v | --verbose ]
+#                     [ -f | --flush ]
+#
+# OPTIONS
+#
+#  -h, --help          Show a help message, and exit.
+#
+#  -m, --manual        Show this manual, and exit.
+#
+#  -f, --flush         Flush the queue, removing all jobs.
+#
+#  -s, --single        Run a single test and exit.  Don't poll the queue for more.
+#
+#  -v, --verbose       Be noisy.
+#
+# ABOUT
+#
+#  This tool is designed to pull JSON-encoded network/protocol-tests from
+# a beanstalkd server and execute them, in series.
+#
+#  The tests are created, via custodian-enqueue, by parsing a configuration
+# file largely compatible with that used for our obsolete sentinel tool.
+#
+#  The results of the testing will be sent to a mauvealert server.
+#
+#
+# AUTHOR
+#
+#  Steve Kemp  <steve@bytemark.co.uk>
 #
 
 
@@ -311,15 +343,19 @@ end
 #
 if __FILE__ == $0 then
 
-  $SERVER = "127.0.0.1:11300";
+  $SERVER = "127.0.0.1:11300"
+  $help   = false
+  $manual = false
 
   begin
     opts = GetoptLong.new(
-                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
-                          [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
+                          [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
-                          [ "--single",  "-s", GetoptLong::NO_ARGUMENT ]
+                          [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
+                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
@@ -333,11 +369,46 @@ if __FILE__ == $0 then
           $SERVER = arg
       when "--single":
           ENV["SINGLE"] = "1"
+      when "--help":
+          $help = true
+      when "--manual":
+          $manual = true
       end
     end
   rescue StandardError => ex
     puts "Option parsing failed: #{ex.to_s}"
     exit
+  end
+
+
+
+  #
+  # CAUTION! Here be quality kode.
+  #
+  if $manual or $help
+
+    # Open the file, stripping the shebang line
+    lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
+
+    found_synopsis = false
+
+    lines.each do |line|
+
+      line.chomp!
+      break if line.empty?
+
+      if $help and !found_synopsis
+        found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
+        next
+      end
+
+      puts line[2..-1].to_s
+
+      break if $help and found_synopsis and line =~ /^#\s*$/
+
+    end
+
+    exit 0
   end
 
   #
