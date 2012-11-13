@@ -128,8 +128,16 @@ class HTTPTest
         response = http.start { http.get("#{url.path}?#{url.query}") }
       end
 
-      @status = response.code.to_i
-      @body   =  response.body
+      case response
+      when Net::HTTPRedirection
+      then
+        newURL = response['location'].match(/^http/)?
+        response['Location']:uri_str+response['Location']
+        return( getURL(newURL) )
+      else
+        @status = response.code.to_i
+        @body   =  response.body
+      end
 
       return true
     rescue Errno::EHOSTUNREACH => ex
