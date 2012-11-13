@@ -62,7 +62,7 @@ class HTTPTest
       #  Do we need to test for a HTTP status code?
       #
       if ( @test_data["http_status"] )
-        puts "Testing for HTTP status code: #{@test_data['http_status']}"
+        puts "Testing for HTTP status code: #{@test_data['http_status']}" if ( @test_data['verbose'] )
 
         if ( @status != @test_data['http_status'].to_i)
           @error = "#{@error} status code was #{@status} not #{@test_data['http_status']}"
@@ -73,7 +73,7 @@ class HTTPTest
       #  Do we need to search for text in the body of the reply?
       #
       if ( @test_data['http_text'] )
-        puts "Testing for text in the response: #{@test_data['http_text']}"
+        puts "Testing for text in the response: #{@test_data['http_text']}" if ( @test_data['verbose'] )
 
         if (! @body.match(/#{@test_data['http_text']}/i) )
           @error = "#{@error} The respond did not contain #{test_data['http_text']}"
@@ -172,7 +172,7 @@ if __FILE__ == $0 then
     puts "TEST OK"
   else
     puts "TEST FAILED"
-    puts http.get_details()
+    puts http.error()
   end
 
 end

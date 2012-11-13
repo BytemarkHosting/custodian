@@ -48,7 +48,7 @@ class FTPTest
     host = @test_data["target_host"]
     port = @test_data["test_port"]
 
-    puts "FTP testing host #{host}:#{port}"
+    puts "FTP testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
       timeout(3) do
