@@ -26,6 +26,25 @@ class HTTPTest
   #
   def initialize( data )
     @test_data = data
+    @error = nil
+
+    #
+    # Ensure we have an URL
+    #
+    if ( @test_data["target_host"].nil? )
+      @error = "Missing URL for the test."
+      raise ArgumentError, @error
+    end
+
+    #
+    # Ensure we have a port
+    #
+    if ( @test_data["test_port"].nil? )
+      @error = "Missing port for the test."
+      raise ArgumentError, @error
+
+    end
+
   end
 
 
@@ -39,18 +58,6 @@ class HTTPTest
   # If the test fails the details should be retrieved from "error()".
   #
   def run_test
-
-    @error = ""
-
-
-    #
-    # Ensure we had a URL
-    #
-    if ( @test_data["target_host"].nil? )
-      @error = "Missing URL for the test"
-      return false
-    end
-
 
     #
     #  Do the fetch, if this success then we'll have the
