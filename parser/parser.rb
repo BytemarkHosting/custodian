@@ -270,7 +270,12 @@ class MonitorConfig
           #
           #    must run http with content 'text'
           #
-          # If those are sepcified then include them here
+          # If those are sepcified then include them here.
+          #
+          # Note we're deliberately fast and loose here - which allows both to be specified
+          #
+          #   http://example.vm/ must run http with status 200 and content 'OK' otherwise 'boo!'.
+          #
           #
           if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
             test[:http_status]=$1.dup
