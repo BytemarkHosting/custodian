@@ -32,9 +32,7 @@ require 'uri'
 #
 # TODO:
 #
-# 1.  Explicitly abort and panic on malformed lines.
-#
-# 2.  Implement HTTP-fetching for macro-bodies.
+#   1. Explicitly abort and panic on malformed lines.
 #
 #
 # Steve
@@ -68,9 +66,8 @@ class MonitorConfig
     @queue  = Beanstalk::Pool.new(['127.0.0.1:11300'])
     @file   = filename
 
-    if ( @file.nil? || ( ! File.exists?( @file) ) )
-      raise ArgumentError, "Missing configuration file!"
-    end
+    raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
+    raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
   end
 
 
