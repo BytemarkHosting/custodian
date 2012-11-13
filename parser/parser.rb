@@ -6,14 +6,6 @@
 # Macro names match the pattern "^[0-9A-Z_]$"
 #
 #
-# TODO:
-#
-#   Write manual.
-#
-#   Use a real parser framework?
-#
-#   Love me.
-#
 
 
 require 'beanstalk-client'
@@ -28,11 +20,40 @@ require 'json'
 
 
 #
-#  Simple wrapper to parse the configuration file
+# This is a simple class which will parse a sentinel configuration file.
+#
+# Unlike Sentinel it is not using a real parser, instead it peels off lines
+# via a small number of very simple regular expressions - this should be flaky,
+# but in practice it manages to successfully parse each of the configuration
+# files that we currently maintain @ Bytemark.
+#
+# TODO:
+#
+# 1. Break parse_file down into repeated calls to parse_line, to allow test
+#    cases to be written.
+#
+# 2.  Explicitly abort and panic on malformed lines.
+#
+# 3.  Implement HTTP-fetching for macro-bodies.
+#
+# Steve
+# -- 
 #
 class MonitorConfig
+
+  #
+  # A hash of macros we found.
+  #
   attr_reader :MACROS
+
+  #
+  # A handle to the beanstalkd queue.
+  #
   attr_reader :queue
+
+  #
+  # The filename that we're going to parse.
+  #
   attr_reader :filename
 
   #
@@ -90,12 +111,14 @@ class MonitorConfig
   end
 
 
+
   #
   # Is the given string of text a macro?
   #
   def is_macro?( name )
     !@MACROS[name].nil?
   end
+
 
 
   #
