@@ -6,11 +6,8 @@
 #
 #  TODO: Command line parsing:
 #
-#           1.  set failure count 3 in a row, for example.
+#           1.  enable/disable logging to a file
 #
-#           2.  enable/disable logging to a file
-#
-#           3.  Specify server name/port for the beanstalk queue.
 #
 #
 # Steve
@@ -76,12 +73,24 @@ class Custodian
   #
   attr_reader :queue
 
+  #
+  # How many times we re-test before we detect a failure
+  #
+  attr_reader :retry_count
 
   #
   # Constructor: Connect to the queue
   #
   def initialize( server )
     @queue = Beanstalk::Pool.new([server])
+
+    if ( ENV['REPEAT'] )
+       @retry_count=ENV['REPEAT'].to_i
+    else
+       @retry_count=5
+    end
+
+    puts "Retrying each test #{@retry_count} times before failures" if ( ENV['VERBOSE'] )
   end
 
 
@@ -149,9 +158,18 @@ class Custodian
       test   = hash['test_type']
       method = "#{test}_test".to_sym
 
+      #
+      # Did the test succeed?  If not count the number of times it failed in
+      # a row.  We'll repeat several times
+      #
       success = false
       count   = 0
 
+      #
+      # As a result of this test we'll either raise/clear with mauve.
+      #
+      # This helper will do that job.
+      #
       alert = Alert.new( hash )
 
       #
@@ -159,7 +177,7 @@ class Custodian
       #
       #  We stop the execution on a single success.
       #
-      while ( ( count < 5 ) && ( success == false ) )
+      while ( ( count < @retry_count ) && ( success == false ) )
         if ( send( method, hash ) )
           alert.clear()
           success= true
@@ -204,6 +222,7 @@ if __FILE__ == $0 then
                           [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
@@ -212,6 +231,8 @@ if __FILE__ == $0 then
           ENV["VERBOSE"] = "1"
       when "--flush":
           ENV["FLUSH"] = "1"
+      when "--repeat":
+          ENV["REPEAT"] = arg
       when "--server":
           ENV["SERVER"] = arg
       when "--single":
