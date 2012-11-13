@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../worker/ -I./worker/
+#!/usr/bin/ruby -I../lib/ -Ilib/
 
 
 require 'test/unit'
-require 'tests/ldap'
+require 'custodian/protocol-tests/ldap.rb'
 
 
 

@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/
+#!/usr/bin/ruby -I../lib/ -Ilib/
 
 
 require 'test/unit'
-require 'rsync'
+require 'custodian/protocol-tests/rsync.rb'
 
 
 

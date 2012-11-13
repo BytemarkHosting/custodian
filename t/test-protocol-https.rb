@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/
+#!/usr/bin/ruby -I../lib/ -Ilib/
 
 
 require 'test/unit'
-require 'https'
+require 'custodian/protocol-tests/https.rb'
 
 
 

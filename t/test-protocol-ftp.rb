@@ -1,8 +1,9 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/
+#!/usr/bin/ruby -I../lib/ -Ilib/
 
 
 require 'test/unit'
-require 'ftp'
+
+require 'custodian/protocol-tests/ftp.rb'
 
 
 
