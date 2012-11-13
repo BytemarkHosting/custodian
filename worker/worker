@@ -56,9 +56,9 @@ class Alert
   #
   # Raise the alert.
   #
-  def raise
+  def raise( detail )
 
-    puts "RAISE"
+    puts "RAISE: #{detail}"
     return
 
     update = Mauve::Proto::AlertUpdate.new
@@ -119,6 +119,8 @@ class Custodian
   #
   attr_reader :retry_count
 
+
+
   #
   # Constructor: Connect to the queue
   #
@@ -131,7 +133,7 @@ class Custodian
        @retry_count=5
     end
 
-    puts "Retrying each test #{@retry_count} times before failures" if ( ENV['VERBOSE'] )
+    puts "We'll run each test #{@retry_count} before alerting failures." if ( ENV['VERBOSE'] )
   end
 
 
@@ -151,6 +153,8 @@ class Custodian
     end
   end
 
+
+
   #
   # Process jobs from the queue - never return.
   #
@@ -160,6 +164,7 @@ class Custodian
       process_single_job()
     end
   end
+
 
 
   #
@@ -192,12 +197,6 @@ class Custodian
       end
 
 
-      #
-      #  Given the test-type of "YYY" we'll call the method "YYY_test", which
-      # we assume comes from one of the files beneath ./tests/
-      #
-      test   = hash['test_type']
-      method = "#{test}_test".to_sym
 
       #
       # Did the test succeed?  If not count the number of times it failed in
@@ -215,15 +214,19 @@ class Custodian
 
 
       #
-      # Conver the type to a className
+      # Convert the test-type to a className
       #
+      # Given a test-type "foo" we'll attempt to instantiate a class
+      # called FOOTest.
+      #
+      test  = hash['test_type']
       clazz = test.upcase
       clazz = "#{clazz}Test"
 
       #
       # Create the test object.
       #
-      obj =  eval(clazz).new( hash )
+      obj = eval(clazz).new( hash )
 
 
       #
@@ -244,9 +247,8 @@ class Custodian
       #
       if ( ! success )
 
-        # save the error message
-        hash['error'] = obj.error()
-        alert.raise()
+        # Raise the alert, passing the error message.
+        alert.raise( obj.error )
       end
     rescue => ex
       puts "Exception raised processing job: #{ex}"
