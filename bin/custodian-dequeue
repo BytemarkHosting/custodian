@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -Ilib/ -I../lib/
+#!/usr/bin/ruby1.8 -Ilib/ -I../lib/
 #
 #  This script will pull tests to complete from the Beanstalk Queue,
 # where they will be found in JSON form, and executes them.
