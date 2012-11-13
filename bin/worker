@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -Ilib/ -I../lib/
 #
 #  This script will pull tests to complete from the Beanstalk Queue,
 # where they will be found in JSON form, and executes them.
@@ -22,15 +22,16 @@ require 'mauve/proto'
 #
 # Implementation of our protocol tests.
 #
-require 'tests/ftp'
-require 'tests/http'
-require 'tests/https'
-require 'tests/jabber'
-require 'tests/ldap'
-require 'tests/ping'
-require 'tests/rsync'
-require 'tests/smtp'
-require 'tests/ssh'
+require 'custodian/protocol-tests/ftp.rb'
+require 'custodian/protocol-tests/http.rb'
+require 'custodian/protocol-tests/https.rb'
+require 'custodian/protocol-tests/jabber.rb'
+require 'custodian/protocol-tests/ldap.rb'
+require 'custodian/protocol-tests/ping.rb'
+require 'custodian/protocol-tests/rsync.rb'
+require 'custodian/protocol-tests/smtp.rb'
+require 'custodian/protocol-tests/ssh.rb'
+
 
 
 
