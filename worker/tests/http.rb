@@ -138,6 +138,9 @@ class HTTPTest
     rescue Timeout::Error => ex
       @error = "time out reached"
       return false
+    rescue Errno::ECONNREFUSED => ex
+      @error = "Connection refused"
+      return false
     rescue => ex
       raise ex
       return false
