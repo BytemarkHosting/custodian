@@ -224,6 +224,8 @@ class MonitorConfig
         case service
         when /ssh/ then
           port=22
+        when /jabber/ then
+          port=5222
         when /ldap/ then
           port=389
         when /^https$/ then
@@ -235,7 +237,7 @@ class MonitorConfig
         when /ftp/i then
           port=21
         when /telnet/i then
-          port=20
+          port=23
         when /smtp/i then
           port=25
         end
