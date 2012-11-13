@@ -85,7 +85,7 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
 
   If we restrict ourself to saying that every test must be named by the service that is
   under test then we can generalize them.  This means we'll invoke the ftp-handler for
-  
+
      foo.vm must run ftp otherwise 'alert text'.
 
   The bar-handler for the line:
@@ -113,9 +113,8 @@ Behaviour
 
 There are two parts to our system:
 
-
-  a.  Parser.
-  b.  Worker.
+  a.  Parser:  ./bin/custodian-enqueue
+  b.  Worker:  ./bin/custodian-dequeue
 
 The parser will read the named configuration file(s), parse them, and submit
 to our queue a JSON-encoded piece of data for each test we must run.
