@@ -206,7 +206,7 @@ class TestParser < Test::Unit::TestCase
     #
     #   2.  The addition should have the correct test-type
     #
-    %w( dns ftp http https jabber ldap rsync ssh smtp ).each do |name|
+    %w( dns ftp http https jabber ldap ping rsync ssh smtp ).each do |name|
       ret = parser.parse_line( "MACRO must run #{name} otherwise '#{name} failure'." )
 
       #
