@@ -19,6 +19,7 @@
 require 'beanstalk-client'
 require 'getoptlong'
 require 'json'
+require 'logger'
 
 require 'mauve/sender'
 require 'mauve/proto'
@@ -103,6 +104,7 @@ end
 
 
 
+
 #
 # This class contains the code for connecting to a Beanstalk queue,
 # fetching tests from it, and executing them
@@ -119,13 +121,21 @@ class Custodian
   #
   attr_reader :retry_count
 
-
+  #
+  # The log-file object
+  #
+  attr_reader :logger
 
   #
   # Constructor: Connect to the queue
   #
   def initialize( server )
+
+    # Connect to the queue
     @queue = Beanstalk::Pool.new([server])
+
+    # Instantiate the logger.
+    @logger = Logger.new( "worker.log", "daily" )
 
     if ( ENV['REPEAT'] )
        @retry_count=ENV['REPEAT'].to_i
@@ -133,24 +143,34 @@ class Custodian
        @retry_count=5
     end
 
-    puts "We'll run each test #{@retry_count} before alerting failures." if ( ENV['VERBOSE'] )
+    log_message( "We'll run each test #{@retry_count} before alerting failures." )
   end
 
+
+  #
+  # Write the given message to our logfile - and show it to the console
+  # if we're running with '--verbose' in play
+  #
+  def log_message( msg )
+      @logger.info( msg )
+      puts msg if ( ENV['VERBOSE'] )
+  end
 
   #
   #  Flush the queue.
   #
   def flush_queue!
 
-    puts "Flushing queue" if ( ENV['VERBOSE'] )
+    log_message( "Flushing queue" )
 
     while( true )
       begin
         job = @queue.reserve(1)
         id  = job.id
-        puts "\tDeleted job #{id}" if ( ENV['VERBOSE'] )
+        log_message( "Deleted job #{id}" )
         job.delete
       rescue Beanstalk::TimedOut => ex
+        log_message( "The queue is now empty" )
         return
       end
     end
@@ -163,7 +183,7 @@ class Custodian
   #
   def run!
     while( true )
-      puts "\n\nWaiting for job.." if ( ENV['VERBOSE'] )
+      log_message( "Waiting for job.." )
       process_single_job()
     end
   end
@@ -178,7 +198,13 @@ class Custodian
     begin
       job = @queue.reserve()
 
-      puts "Job acquired: #{Time.new.inspect} - Job ID : #{job.id}" if ( ENV['VERBOSE'] )
+      #
+      # Get the count of pending jobs
+      #
+      stats = @queue.stats()
+      pend  = stats['current-jobs-ready'] || 0
+
+      log_message( "Job aquired.  Job ID : #{job.id}  pending jobs:#{pend}" )
 
 
       #
@@ -192,11 +218,9 @@ class Custodian
       #
       #  Output the details.
       #
-      if ( ENV['VERBOSE'] )
-        puts "Job body contains the following keys & values:"
-        hash.keys.each do |key|
-          puts "\t#{key} => #{hash[key]}"
-        end
+      log_message( "Job body contains the following keys & values:")
+      hash.keys.each do |key|
+        log_message( "#{key} => #{hash[key]}" )
       end
 
 
@@ -249,7 +273,9 @@ class Custodian
       #  We stop the execution on a single success.
       #
       while ( ( count < @retry_count ) && ( success == false ) )
+
         if ( obj.run_test() )
+          log_message( "Test succeeed - clearing alert" )
           alert.clear()
           success= true
         end
@@ -264,6 +290,7 @@ class Custodian
         #
         # Raise the alert, passing the error message.
         #
+        log_message( "Test failed - alerting with #{obj.error()}" )
         alert.raise( obj.error() )
       end
 
