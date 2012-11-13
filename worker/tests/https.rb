@@ -157,6 +157,7 @@ if __FILE__ == $0 then
     "target_host" => "http://www.steve.org.uk/",
     "test_type"   => "http",
     "test_port"   => 80,
+    "verbose"     => 1,
     "test_alert"  => "Steve's website is unavailable",
     "http_text"   => "Steve Kemp",
     "http_status" => "200"
