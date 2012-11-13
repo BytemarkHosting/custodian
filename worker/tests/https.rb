@@ -26,7 +26,7 @@ class HTTPSTest
   #
   def initialize( data )
     @test_data = data
-    @error = nil
+    @error     = nil
 
     #
     # Ensure we have an URL
@@ -87,7 +87,7 @@ class HTTPSTest
         end
       end
 
-      return true if ( @error.length() == 0 )
+      return true if ( @error.nil? )
 
       return false
     end

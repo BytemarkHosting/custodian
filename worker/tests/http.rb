@@ -26,7 +26,7 @@ class HTTPTest
   #
   def initialize( data )
     @test_data = data
-    @error = nil
+    @error     = nil
 
     #
     # Ensure we have an URL
@@ -42,7 +42,6 @@ class HTTPTest
     if ( @test_data["test_port"].nil? )
       @error = "Missing port for the test."
       raise ArgumentError, @error
-
     end
 
   end
@@ -87,7 +86,7 @@ class HTTPTest
         end
       end
 
-      return true if ( @error.length() == 0 )
+      return true if ( @error.nil? )
 
       return false
     end
