@@ -261,52 +261,28 @@ class MonitorConfig
     elsif ( line =~ /^([0-9A-Z_]+)\s+(is|are)\s+/ )
       define_macro( line )
 
-    elsif ( line =~ /\s+must\s+ping/ )
+    elsif ( line =~ /(.*)\s+must\s+ping(.*)/ )
 
       #
-      #  Target
+      #  Ping is a special case because the configuration file entry
+      # would read:
       #
-      targets = Array.new
-
+      #  $FOO must ping otherwise ...
       #
-      #  Fallback target is the first token on the line
+      #  All other tests are of the form:
       #
-      target = line.split( /\s+/)[0]
-
-
+      #  $FOO must run XXX ... otherwise ...
       #
-      #  If the target is a macro
+      #  If we clevery rewrite the line into:
       #
-      if ( is_macro?( target ) )
-        targets = get_macro_targets(target)
-      else
-        targets.push( target )
-      end
-
+      #  ... must run ping ...
       #
-      #  The alert-failure message
+      #  We can avoid duplicating the macro-expansion, etc.
       #
-      alert = "Ping failed"
-      if ( line =~ /otherwise '([^']+)'/ )
-        alert=$1.dup
-      end
-
-      #
-      #  Store the test(s)
-      #
-      targets.each do |host|
-        test = {
-          :target_host => host,
-          :test_type => "ping",
-          :test_alert => alert
-        }
-
-        if ( !ENV['DUMP'].nil? )
-          puts ( test.to_json )
-        else
-          @queue.put( test.to_json )
-        end
-      end
+      pre  = $1.dup
+      post = $2.dup
+      new_line = "#{pre} must run ping #{post}"
+      return( parse_line( new_line ) )
 
     elsif ( line =~ /\s+must\s+run\s+([^\s]+)\s+/i )
 
@@ -327,16 +303,21 @@ class MonitorConfig
       target  = line.split( /\s+/)[0]
 
       #
-      #  If the target is a macro
+      #  If the target is a macro then get the list of hosts to
+      # which the test will apply.
       #
       if ( is_macro?( target ) )
         targets = get_macro_targets( target )
       else
+
+        #
+        # Otherwise a list of one, literal, entry.
+        #
         targets.push( target )
       end
 
       #
-      #  Alert text
+      #  Alert text will have a default, which may be overridden.
       #
       alert = "#{service} failed"
       if ( line =~ /otherwise '([^']+)'/ )
@@ -344,7 +325,7 @@ class MonitorConfig
       end
 
       #
-      # All our service tests require a port - we setup the defaults here,
+      # All our service tests, except ping, require a port - we setup the defaults here,
       # but the configuration file will allow users to specify an alternative
       # via " on XXX ".
       #
@@ -372,20 +353,25 @@ class MonitorConfig
       end
 
       #
-      # But allow that to be changed
+      # Allow the port to be changed, for example:
       #
-      # e.g.
-      #
-      #  must run ssh on 33 otherwise ..
-      #  must run ftp on 44 otherwise ..
+      #  must run ssh  on   33 otherwise ..
+      #  must run ftp  on   44 otherwise ..
       #  must run http on 8000 otherwise ..
       #
       if ( line =~ /\s+on\s+([0-9]+)/ )
         port = $1.dup
       end
 
+
+      #
+      # For each host in our possibly-macro-expanded list:
+      #
       targets.each do |host|
 
+        #
+        # The test we'll apply.
+        #
         test = {
           :target_host => host,
           :test_type   => service,
@@ -436,7 +422,7 @@ class MonitorConfig
 
 
         #
-        # We've parsed(!) the line.  Either output the JSON to the console
+        # We've now parsed the line.  Either output the JSON to the console
         # or add to the queue.
         #
         if ( !ENV['DUMP'].nil? )
@@ -492,7 +478,7 @@ if __FILE__ == $0 then
       when "--dump":
           ENV["DUMP"] = "1"
       when "--file":
-          ENV["FILE"] = arge
+          ENV["FILE"] = arg
       when "--help":
           $help = true
       when "--manual":
