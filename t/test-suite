@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/ -I../../worker/tests/ -I../worker/ -I../../worker/ -I./worker/
+#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/ -I../../worker/tests/ -I../worker/ -I../../worker/ -I./worker/ -I./parser/ -I../parser/
 #
 #  This is a simple wrapper that will run the complete test-suite.
 #
