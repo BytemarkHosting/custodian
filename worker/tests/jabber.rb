@@ -50,7 +50,7 @@ class JABBERTest
     host = @test_data['target_host']
     port = 5222
 
-    puts "Jabber testing host #{host}:#{port}"
+    puts "Jabber testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
       timeout(3) do
@@ -65,7 +65,7 @@ class JABBERTest
           socket.close()
 
           if ( banner =~ /xml version/i )
-            puts "Jabber alive: #{banner}"
+            puts "Jabber alive: #{banner}" if ( @test_data['verbose'] )
             return true
           else
             @error = "Banner didn't seem reasonable: #{banner}"
@@ -108,6 +108,7 @@ if __FILE__ == $0 then
   test = {
     "target_host" => "chat.bytemark.co.uk",
     "test_type"   => "jabber",
+    "verbose"     => 1,
     "test_alert"  => "Chat is down?",
   }
 
