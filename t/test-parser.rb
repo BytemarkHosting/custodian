@@ -101,6 +101,35 @@ class TestParser < Test::Unit::TestCase
     assert( val.size() == 2 )
     assert( val.include?( "kvm1.vm.bytemark.co.uk" ) )
     assert( val.include?( "kvm2.vm.bytemark.co.uk" ) )
+
+
+    #
+    # Add a macro, using the parser directly.
+    #
+    # Before defining it double-check it doesn't exist
+    #
+    assert( !(parser.is_macro?( "BAR" )) )
+
+    parser.parse_line( "BAR is example.vm.bytemark.co.uk and www.bytemark.co.uk." )
+
+    #
+    #  OK we should now have two macros defined.
+    #
+    macros = parser.macros
+    assert( macros.size() == 2 )
+
+    #
+    #  The macro name "BAR" should exist
+    #
+    assert( parser.is_macro?( "BAR" ) )
+
+    #
+    #  The contents of the BAR macro should have the value we expect
+    #
+    val = parser.get_macro_targets( "BAR" )
+    assert( val.size() == 2 )
+    assert( val.include?( "example.vm.bytemark.co.uk" ) )
+    assert( val.include?( "www.bytemark.co.uk" ) )
   end
 
 
