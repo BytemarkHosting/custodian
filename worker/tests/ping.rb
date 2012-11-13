@@ -1,36 +1,116 @@
+#!/usr/bin/ruby
+
+
+
+require 'socket'
+require 'timeout'
+
 
 #
-# Run a PING test.
+# Test that we can receive a ping response from the remote host.
 #
-#
-# Return value
-#   TRUE:  The host is up
-#
-#  FALSE:  The host is not up
-#
-def ping_test( params )
+class PINGTest
 
   #
-  # Find the binary
+  # Data passed from the JSON hash.
   #
-  binary = nil
-  binary = "./util/multi-ping"  if ( File.exists?( "./util/multi-ping" ) )
-  binary = "../util/multi-ping" if ( File.exists?( "../util/multi-ping" ) )
+  attr_reader :test_data
 
-  if ( binary.nil? )
-    puts "Failed to find 'multi-ping'"
-    exit 1
+  #
+  # The error text we return on failure.
+  #
+  attr_reader :error
+
+
+
+  #
+  # Save the data away.
+  #
+  def initialize( data )
+    @test_data = data
   end
 
+
   #
-  # Is it IPv6 or IPv4a
+  # Run the test.
   #
-  host = params['target_host']
-  if ( system( "#{binary} #{host}" ) == true )
-    puts "PING OK"
-    return  true
+  #  Return "true" on success
+  #
+  #  Return "false" on failure.
+  #
+  # If the test fails the details should be retrieved from "get_details".
+  #
+  def run_test
+    @error = ""
+
+
+    #
+    # Find the binary
+    #
+    binary = nil
+    binary = "./util/multi-ping"  if ( File.exists?( "./util/multi-ping" ) )
+    binary = "../util/multi-ping" if ( File.exists?( "../util/multi-ping" ) )
+    binary = "../../util/multi-ping" if ( File.exists?( "../../util/multi-ping" ) )
+
+    if ( binary.nil? )
+      @error = "Failed to find 'multi-ping'"
+      return false
+    end
+
+
+    #
+    #  Get the hostname to test against.
+    #
+    host = @test_data['target_host']
+    puts "ping testing host #{host}" if ( @test_data['verbose'] )
+
+
+    if ( system( "#{binary} #{host}" ) == true )
+      puts "PING OK" if ( @test_data['verbose'] )
+      return  true
+    else
+      @error = "Ping failed.  TODO: Mtr"
+      return false
+    end
+
+  end
+
+
+  #
+  #  Return the error text for why this test failed.
+  #
+  def get_details
+    return @error
+  end
+
+end
+
+
+#
+# Sample test, for testing.
+#
+if __FILE__ == $0 then
+
+  #
+  #  Sample data.
+  #
+  test = {
+    "target_host" => "upload.ns.bytemark.co.uk",
+    "test_type"   => "ping",
+    "verbose"     => 1,
+    "test_alert"  => "Pingly faily",
+  }
+
+
+  #
+  #  Run the test.
+  #
+  obj = PINGTest.new( test )
+  if ( obj.run_test )
+    puts "TEST OK"
   else
-    puts "PING FAILED"
-    return false
+    puts "TEST FAILED"
+    puts obj.get_details()
   end
+
 end

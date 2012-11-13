@@ -1,42 +1,122 @@
+#!/usr/bin/ruby
+
+
+
+require 'socket'
 require 'timeout'
 
 
 #
-# Run an LDAP test.
+# Test that we can receive a response from an LDAP server.
 #
-#
-# Return value
-#   TRUE:  The host is up
-#
-#  FALSE:  The host is not up
-#
-def ldap_test ( params )
+class LDAPTest
 
   #
-  #  Get the hostname & port to test against.
+  # Data passed from the JSON hash.
   #
-  host = params['target_host']
-  port = params['test_port']
+  attr_reader :test_data
 
-  puts "LDAP testing host #{host}:#{port}" if ( params['verbose'] )
+  #
+  # The error text we return on failure.
+  #
+  attr_reader :error
 
 
-  begin
-    timeout(3) do
 
-      begin
-        socket = TCPSocket.new( host, port )
-        socket.close()
-        return true
-      rescue
-        puts "LDAP exception on host #{host}:#{port} - #{$!}" if ( params['verbose'] )
-        return false
+  #
+  # Save the data away.
+  #
+  def initialize( data )
+    @test_data = data
+  end
+
+
+  #
+  # Run the test.
+  #
+  #  Return "true" on success
+  #
+  #  Return "false" on failure.
+  #
+  # If the test fails the details should be retrieved from "get_details".
+  #
+  def run_test
+
+    #
+    # Until the test runs we have no error.
+    #
+    @error = ""
+
+    #
+    #  Get the hostname & port to test against.
+    #
+    host = @test_data['target_host']
+    port = @test_data['test_port']
+
+    puts "LDAP testing host #{host}:#{port}" if ( @test_data['verbose'] )
+
+    begin
+      timeout(3) do
+
+        begin
+          socket = TCPSocket.new( host, port )
+          socket.puts( "QUIT")
+          socket.close()
+
+          puts "LDAP alive" if ( @test_data['verbose'] )
+          return true
+        rescue
+          @error = "Exception connecting to host #{host}:#{port} - #{$!}"
+          return false
+        end
       end
+    rescue Timeout::Error => e
+      @error = "TIMEOUT: #{e}"
+      return false
     end
-  rescue Timeout::Error => e
-    puts "TIMEOUT: #{e}" if ( params['verbose'] )
+
+    @error = "Misc failure"
     return false
   end
-  puts "Misc failure" if ( params['verbose'] )
-  return false
+
+
+
+  #
+  #  Return the error text for why this test failed.
+  #
+  def get_details
+    return @error
+  end
+
+end
+
+
+#
+# Sample test, for testing.
+#
+if __FILE__ == $0 then
+
+  #
+  #  Sample data.
+  #
+  test = {
+    "target_host" => "auth.bytemark.co.uk",
+    "test_type"   => "ldap",
+    "test_port"   => 389,
+    "verbose"     => 1,
+    "test_alert"  => "LDAP is down?",
+  }
+
+
+  #
+  #  Run the test.
+  #
+  obj = LDAPTest.new( test )
+  if ( obj.run_test )
+    puts "TEST OK"
+  else
+    puts "TEST FAILED"
+    puts obj.get_details()
+  end
+
 end

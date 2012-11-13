@@ -1,50 +1,126 @@
+#!/usr/bin/ruby
+
+require 'socket'
 require 'timeout'
 
 
 #
-# Run an SSH test.
+# Test that we can receive a response from an SSH server that looks
+# reasonable.
 #
-#
-# Return value
-#   TRUE:  The host is up
-#
-#  FALSE:  The host is not up
-#
-def ssh_test ( params )
+class SSHTest
 
   #
-  #  Get the hostname & port to test against.
+  # Data passed from the JSON hash.
   #
-  host = params['target_host']
-  port = params['test_port']
+  attr_reader :test_data
 
-  puts "SSH testing host #{host}:#{port}"
+  #
+  # The error text we return on failure.
+  #
+  attr_reader :error
 
 
-  begin
-    timeout(3) do
 
-      begin
-        socket = TCPSocket.new( host, port )
-        socket.puts( "QUIT")
+  #
+  # Save the data away.
+  #
+  def initialize( data )
+    @test_data = data
+  end
 
-        banner = socket.gets(nil)
-        banner = banner[0,20]
-        socket.close()
 
-        if ( banner =~ /ssh/i )
-          puts "SSH alive: #{banner}"
-          return true
+  #
+  # Run the test.
+  #
+  #  Return "true" on success
+  #
+  #  Return "false" on failure.
+  #
+  # If the test fails the details should be retrieved from "get_details".
+  #
+  def run_test
+    @error = ""
+
+    #
+    #  Get the hostname & port to test against.
+    #
+    host = @test_data['target_host']
+    port = @test_data['test_port']
+
+    puts "ssh testing host #{host}:#{port}" if ( @test_data['verbose'] )
+
+    begin
+      timeout(3) do
+
+        begin
+          socket = TCPSocket.new( host, port )
+          socket.puts( "QUIT")
+
+          banner = socket.gets(nil)
+          banner = banner[0,20]
+
+          socket.close()
+
+          if ( banner =~ /ssh/i )
+            puts "ssh alive: #{banner}" if ( @test_data['verbose'] )
+            return true
+          else
+            @error = "Banner didn't seem reasonable: #{banner}"
+            return false;
+          end
+        rescue
+          @error = "ssh exception on host #{host}:#{port} - #{$!}"
+          return false
         end
-      rescue
-        puts "SSH exception on host #{host}:#{port} - #{$!}"
-        return false
       end
+    rescue Timeout::Error => e
+      @error = "TIMEOUT: #{e}"
+      return false
     end
-  rescue Timeout::Error => e
-    puts "TIMEOUT: #{e}"
+
+    @error = "Misc failure"
     return false
   end
 
-  return false
+
+
+  #
+  #  Return the error text for why this test failed.
+  #
+  def get_details
+    return @error
+  end
+
+end
+
+
+#
+# Sample test, for testing.
+#
+if __FILE__ == $0 then
+
+  #
+  #  Sample data.
+  #
+  test = {
+    "target_host" => "ssh.steve.org.uk",
+    "test_type"   => "ssh",
+    "test_port"   => 2222,
+    "verbose"     => 1,
+    "test_alert"  => "Steve's host isn't running SSH?",
+  }
+
+
+  #
+  #  Run the test.
+  #
+  obj = SSHTest.new( test )
+  if ( obj.run_test )
+    puts "TEST OK"
+  else
+    puts "TEST FAILED"
+    puts obj.get_details()
+  end
+
 end
