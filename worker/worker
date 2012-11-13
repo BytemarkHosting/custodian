@@ -43,8 +43,7 @@ require 'tests/ssh'
 
 
 #
-#  This class encapsulates the raising and clearing of alerts
-# via Mauve.
+#  This class encapsulates the raising and clearing of alerts via Mauve.
 #
 class Alert
 
@@ -81,8 +80,8 @@ class Custodian
   #
   # Constructor: Connect to the queue
   #
-  def initialize
-    @queue = Beanstalk::Pool.new(['localhost:11300'])
+  def initialize( server )
+    @queue = Beanstalk::Pool.new([server])
   end
 
 
@@ -198,11 +197,13 @@ end
 #
 if __FILE__ == $0 then
 
+  $SERVER = "localhost:11300";
 
   begin
     opts = GetoptLong.new(
                           [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
+                          [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
@@ -211,6 +212,8 @@ if __FILE__ == $0 then
           ENV["VERBOSE"] = "1"
       when "--flush":
           ENV["FLUSH"] = "1"
+      when "--server":
+          ENV["SERVER"] = arg
       when "--single":
           ENV["SINGLE"] = "1"
       end
@@ -223,7 +226,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = Custodian.new()
+  worker = Custodian.new( $SERVER )
 
   #
   #  Are we flushing the queue?
