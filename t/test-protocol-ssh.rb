@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../worker/tests/ -I./worker/tests/
+#!/usr/bin/ruby -I../lib/ -I./lib/
 
 
 require 'test/unit'
-require 'ssh'
+require 'custodian/protocol-tests/ssh.rb'
 
 
 

@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../parser/ -I./parser/
+#!/usr/bin/ruby -I../bin/ -Ibin/
 
 
 require 'test/unit'
-require 'parser'
+require 'custodian-enqueue'
 
 
 
