@@ -20,6 +20,8 @@ require 'beanstalk-client'
 require 'getoptlong'
 require 'json'
 
+require 'mauve/sender'
+require 'mauve/proto'
 
 
 
@@ -50,12 +52,45 @@ class Alert
     @details = test_details
   end
 
+
+  #
+  # Raise the alert.
+  #
   def raise
-    puts "RAISING ALERT: #{@details}"
+
+    update = Mauve::Proto::AlertUpdate.new
+    update.alert   = []
+    update.source  = "custodian"
+    update.replace = true
+
+    alert            = Mauve::Proto::Alert.new
+    alert.id         = @details['test_type']
+    alert.subject    = "#{@details['test_host']} #{@details['test_alert']]"
+    alert.detail     = "The test of type #{@details['test_type']} failed"
+    alert.raise_time = Time.now.to_i
+    update.alert << alert
+
+    Mauve::Sender.new("alert.bytemark.co.uk").send(update)
+
   end
 
+  #
+  #  Clear the alert.
+  #
   def clear
-    puts "CLEARING ALERT: #{@details}"
+    update = Mauve::Proto::AlertUpdate.new
+    update.alert   = []
+    update.source  = "custodian"
+    update.replace = true
+
+    alert            = Mauve::Proto::Alert.new
+    alert.id         = @details['test_type']
+    alert.subject    = "#{@details['test_host']} #{@details['test_alert']]"
+    alert.detail     = "The test of type #{@details['test_type']} failed"
+    alert.clear_time = Time.now.to_i
+    update.alert << alert
+
+    Mauve::Sender.new("alert.bytemark.co.uk").send(update)
   end
 
 end
@@ -215,7 +250,7 @@ end
 #
 if __FILE__ == $0 then
 
-  $SERVER = "localhost:11300";
+  $SERVER = "127.0.0.1:11300";
 
   begin
     opts = GetoptLong.new(
