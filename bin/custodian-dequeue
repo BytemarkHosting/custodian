@@ -22,6 +22,7 @@ require 'mauve/proto'
 #
 # Implementation of our protocol tests.
 #
+require 'custodian/protocol-tests/dns.rb'
 require 'custodian/protocol-tests/ftp.rb'
 require 'custodian/protocol-tests/http.rb'
 require 'custodian/protocol-tests/https.rb'
