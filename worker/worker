@@ -65,7 +65,7 @@ class Alert
 
     alert            = Mauve::Proto::Alert.new
     alert.id         = @details['test_type']
-    alert.summary    = "#{@details['test_host']} #{@details['test_alert']]"
+    alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test failed against #{@details['test_host']}"
     alert.raise_time = Time.now.to_i
     update.alert << alert
@@ -85,7 +85,7 @@ class Alert
 
     alert            = Mauve::Proto::Alert.new
     alert.id         = @details['test_type']
-    alert.summary    = "#{@details['test_host']} #{@details['test_alert']]"
+    alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test failed against #{@details['test_host']}"
     alert.clear_time = Time.now.to_i
     update.alert << alert
