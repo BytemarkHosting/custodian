@@ -1,0 +1,9 @@
+syntax: glob
+
+
+debian/custodian.debhelper.log
+debian/custodian.install
+debian/custodian.substvars
+debian/custodian/DEBIAN
+debian/custodian/usr
+debian/files
