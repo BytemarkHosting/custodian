@@ -364,6 +364,8 @@ class MonitorConfig
       end
 
 
+      ret = Array.new()
+
       #
       # For each host in our possibly-macro-expanded list:
       #
@@ -430,7 +432,11 @@ class MonitorConfig
         else
           @queue.put( test.to_json )
         end
+
+        ret.push( test.to_json )
       end
+
+      ret
     else
       puts "Unknown line: '#{line}'"
     end
