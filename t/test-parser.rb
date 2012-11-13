@@ -1,8 +1,8 @@
-#!/usr/bin/ruby -I../bin/ -Ibin/
+#!/usr/bin/ruby1.8 -I./bin/ -I../bin/
 
 
 require 'test/unit'
-require 'custodian-enqueue'
+load    'custodian-enqueue'
 
 
 
