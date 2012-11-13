@@ -9,6 +9,9 @@ About
 
     * It is over-engineered, hard to modify, and suffers from threading-related issues.
 
+    * It is heavy-weight.  Each time an alert is raised/cleared this is done by
+      executing a "mauvesend" command.
+
 
 Proposal
 --------
@@ -19,7 +22,7 @@ Proposal
  need to update firewalls to allow probes from more hosts than our single current
  one.
 
-  The core design is based upon a work queue.  I envisage two parts to the system:
+  The core design is based upon a work queue.  There are two parts to the system:
 
     * A parser that reads a list of hosts and tests to apply.  These
       tests are broken down into individual jobs, serialized to JSON,
@@ -52,8 +55,9 @@ http://acerecords.co.uk/ must run http with status 200 otherwise '*Managed clien
 http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
 --
 
-  In brief we accept four distinct kinds of line:
 
+
+  In brief we accept four distinct kinds of line:
 
 
   1. Comments
@@ -63,12 +67,13 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
 
   2. Macro Definitions
   ---------------------
-  There are two types of macros:
+  There are three types of macros:
 
-     FOO is 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
-     FOO are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
+     FOO_HOSTS is 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
+     FOO_HOSTS are 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
+     FOO_HOSTS are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
 
-  We accept both of these easily, with the caveat that macro-names must match
+  We accept each of these, with the caveat that macro-names must match
   the regular expression ^[1-9A-Z_]$.
 
 
@@ -95,7 +100,7 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
   The JSON which we serialize will also have "test_type:ftp", and "test_type:bar", respectively.
 
 
-  4. ping tests
+  4. Ping Tests
   -------------
   Ping tests are of the form:
 
@@ -103,7 +108,16 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
      example.vm.bytemark.co.uk must ping otherwise 'alert text'.
 
   These are a simplification of the service tests, because the only real difference
-  is that we write "must ping" rather than "must run ping".
+  is that we write "must ping" rather than "must run ping" - to that end we silently
+  rewrite any line which reads:
+
+    (.*) must ping (.*)
+
+  This becomes:
+
+    $1 must run ping $2
+
+  This allows the line to be parsed by the previous service-test rules.
 
 
 
@@ -126,23 +140,32 @@ Sample JSON looks like this:
   {"target_host":"46.43.37.199","test_type":"ssh","test_port":"22","test_alert":"*Managed client*: \"[Goto Redmine]\":https://managed.bytemark.co.uk/projects/wellinformed/wiki/Wiki ssh failure"}
 
 
-You'll see that the JSON-encoded data is merely a hash, with the following
-keys:
+You'll see that the JSON-encoded data is merely a hash, with the following keys:
 
    target_host:  The host that will be probed.
+   test_port:    The port number that will be queried.  i.e "22", or "222" for SSH probes.
+   test_type:    The type of test we're runnign "ssh", "http", "ftp", "imap", etc.
+   test_alert:   The text of the alert we'll raise, on failure.
 
-   test_port:  The port number that will be queried.  i.e "22", or "222" for SSH probes.
+There are some extra fields which we might expect to see - these are test specific:
 
-   test_type:  The type of test we're runnign "ssh", "http", "ftp", "imap", etc.
+http/https
+----------
+   http_text:        Expected HTTP/HTTPS contents.
+   http_status:      Expected HTTP/HTTPS response code.
 
-   test_alert:  The text of the alert we'll raise, on failure.
+dns
+---
+   resolve_name:     A name to lookup, via DNS.
+   resolve_type:     The type of record to lookup [A|AAAA|MX|NS]
+   resolve_expected: A semicolon-deliminated list of results whihc *must* be detected.
 
-There are only two extra fields that we expect to set in the normal course of events:
 
-   http_text:    Expected HTTP/HTTPS contents.
-   http_status:  Expected HTTP/HTTPS response code.
 
-TODO:  The DNS-test will also use different fields.
 
+Bugs
+----
+
+Poke Steve
 
 
