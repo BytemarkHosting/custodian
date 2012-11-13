@@ -2,7 +2,6 @@
 
 
 require 'test/unit'
-
 require 'custodian/protocol-tests/ftp.rb'
 
 
