@@ -2,6 +2,7 @@
 
 
 require 'test/unit'
+require 'webrick'
 require 'http'
 
 
@@ -12,16 +13,32 @@ require 'http'
 #
 class TestHTTPProtocolProbe < Test::Unit::TestCase
 
-  #
-  # Create the test suite environment: NOP.
-  #
-  def setup
-  end
 
   #
-  # Destroy the test suite environment: NOP.
+  # Holder for the new thread we launch, and the servr
+  # we run within it.
+  #
+  attr_reader :server, :server_thread
+
+
+  #
+  # Create the test suite environment: Launch a HTTP server in a new thread.
+  #
+  def setup
+    @server_thread = Thread.new do
+      @server = WEBrick::HTTPServer.new( :Port => 12000,
+                                         :DocumentRoot => "/tmp",
+                                         :AccessLog => [])
+      @server.start
+    end
+  end
+
+
+  #
+  # Destroy the test suite environment: Kill the HTTP-Server
   #
   def teardown
+    @server_thread.kill!
   end
 
 
@@ -93,5 +110,40 @@ class TestHTTPProtocolProbe < Test::Unit::TestCase
   end
 
 
+
+  #
+  #  Test we can make a HTTP fetch, and retrieve the status code
+  # against our stub-Webbrick server.
+  #
+  def test_http_fetch
+
+    test_probe = {
+      "target_host" => "http://localhost:12000/",
+      "test_type"   => "http",
+      "verbose"     => 1,
+      "test_port"   => 12000,
+      "http_status" => "200"
+    }
+
+    #
+    #  Create a new HTTPTest object.  This should succeed
+    #
+    test = HTTPTest.new( test_probe )
+    assert( test )
+
+
+    #
+    #  Make the test - ensure that:
+    #
+    # a. There is no error before it is tested.
+    #
+    # b. The test method "run_test" returns true.
+    #
+    # c. There is no error logged after completion.
+    #
+    assert( test.error().nil? )
+    assert( test.run_test() )
+    assert( test.error().nil? )
+  end
 
 end
