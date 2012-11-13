@@ -6,7 +6,7 @@ require 'uri'
 
 
 
-class HTTPTest
+class HTTPSTest
 
   #
   # Data passed from the JSON hash.
@@ -41,6 +41,16 @@ class HTTPTest
   def run_test
 
     @error = ""
+
+
+    #
+    # Ensure we had a URL
+    #
+    if ( @test_data[:target_host].nil? )
+      @error = "Missing URL for the test"
+      return false
+    end
+
 
     #
     #  Do the fetch, if this success then we'll have the

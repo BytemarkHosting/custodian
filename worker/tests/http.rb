@@ -42,6 +42,16 @@ class HTTPTest
 
     @error = ""
 
+
+    #
+    # Ensure we had a URL
+    #
+    if ( @test_data[:target_host].nil? )
+      @error = "Missing URL for the test"
+      return false
+    end
+
+
     #
     #  Do the fetch, if this success then we'll have the
     # @status + @text setup
