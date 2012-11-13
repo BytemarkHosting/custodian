@@ -209,6 +209,8 @@ class MonitorConfig
   #
   def parse_line( line )
 
+    line.chomp!
+
     #
     # A blank line, or a comment may be skipped.
     #
@@ -414,7 +416,7 @@ class MonitorConfig
         end
       end
     else
-      puts "Unknown line: #{line}" if ( line.length > 2 )
+      puts "Unknown line: '#{line}'"
     end
   end
 
