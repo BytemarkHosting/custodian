@@ -1,8 +1,2 @@
 
-  1.  Complete items marked TODO in:
-            ./worker/worker.rb
-
-            ./parser/parser.rb
-
-
-2.  Complete DNS protocol tests.
+1.  Implement DNS protocol tests.
