@@ -27,6 +27,24 @@ class SSHTest
   #
   def initialize( data )
     @test_data = data
+    @error     = nil
+
+
+    #
+    # Ensure we have a host to probe
+    #
+    if ( @test_data["target_host"].nil? )
+      @error = "Missing target for the test."
+      raise ArgumentError, @error
+    end
+
+    #
+    # Ensure we have a port to test.
+    #
+    if ( @test_data["test_port"].nil? )
+      @error = "Missing port for the test."
+      raise ArgumentError, @error
+    end
   end
 
 
