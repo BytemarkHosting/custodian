@@ -176,6 +176,8 @@ class Custodian
   #
   def run!
     while( true )
+      log_message( "\n" )
+      log_message( "\n" )
       log_message( "Waiting for job.." )
       process_single_job()
     end
