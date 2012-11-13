@@ -229,6 +229,18 @@ class Custodian
       obj = eval(clazz).new( hash )
 
 
+
+      #
+      # Ensure that the object we load implements the methods
+      # we expect
+      #
+      if ( ( ! obj.respond_to?( "error") ) ||
+           ( ! obj.respond_to?( "run_test" ) ) )
+        puts "Class #{clazz} doesn't implement the full protocol-test API"
+      end
+
+
+
       #
       #  We'll run no more than MAX times.
       #
@@ -248,7 +260,7 @@ class Custodian
       if ( ! success )
 
         # Raise the alert, passing the error message.
-        alert.raise( obj.error )
+        alert.raise( obj.error() )
       end
     rescue => ex
       puts "Exception raised processing job: #{ex}"
