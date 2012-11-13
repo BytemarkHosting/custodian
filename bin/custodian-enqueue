@@ -239,17 +239,17 @@ class MonitorConfig
   #
   def parse_line( line )
 
-    line.chomp!
+    line.chomp! if ( !line.nil? )
 
     #
     # A blank line, or a comment may be skipped.
     #
-    return if ( ( line =~ /^#/ ) || ( line.length < 1 ) )
+    return nil if ( ( line.nil? ) || ( line =~ /^#/ ) || ( line.length < 1 ) )
 
     #
     # The specification of mauve-server to which we should raise our alerts to.
     #
-    return if ( line =~ /Mauve\s+server(.*)source/ )
+    return nil if ( line =~ /Mauve\s+server(.*)source/ )
 
 
     #
