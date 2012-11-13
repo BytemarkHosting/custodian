@@ -3,13 +3,6 @@
 #  This script will pull tests to complete from the Beanstalk Queue,
 # where they will be found in JSON form, and executes them.
 #
-#
-#  TODO: Command line parsing:
-#
-#           1.  enable/disable logging to a file
-#
-#
-#
 # Steve
 # --
 #
