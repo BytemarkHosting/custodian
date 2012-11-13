@@ -58,6 +58,9 @@ class Alert
   #
   def raise
 
+    puts "RAISE"
+    return
+
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
@@ -78,6 +81,9 @@ class Alert
   #  Clear the alert.
   #
   def clear
+    puts "CLEAR"
+    return
+
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
@@ -207,13 +213,26 @@ class Custodian
       #
       alert = Alert.new( hash )
 
+
+      #
+      # Conver the type to a className
+      #
+      clazz = test.upcase
+      clazz = "#{clazz}Test"
+
+      #
+      # Create the test object.
+      #
+      obj =  eval(clazz).new( hash )
+
+
       #
       #  We'll run no more than MAX times.
       #
       #  We stop the execution on a single success.
       #
       while ( ( count < @retry_count ) && ( success == false ) )
-        if ( send( method, hash ) )
+        if ( obj.run_test() )
           alert.clear()
           success= true
         end
@@ -224,6 +243,9 @@ class Custodian
       #  If we didn't succeed on any of the attempts raise the alert.
       #
       if ( ! success )
+
+        # save the error message
+        hash['error'] = obj.error()
         alert.raise()
       end
     rescue => ex

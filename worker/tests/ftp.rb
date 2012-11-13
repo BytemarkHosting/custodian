@@ -45,8 +45,8 @@ class FTPTest
     #
     #  Get the hostname & port to test against.
     #
-    host = @test_data[:target_host]
-    port = @test_data[:test_port]
+    host = @test_data["target_host"]
+    port = @test_data["test_port"]
 
     puts "FTP testing host #{host}:#{port}"
 
@@ -103,10 +103,10 @@ if __FILE__ == $0 then
   #  Sample data.
   #
   test = {
-    :target_host => "mirror.bytemark.co.uk",
-    :test_type   => "ftp",
-    :test_port   => 21,
-    :test_alert  => "The FTP server no worky",
+    "target_host" => "mirror.bytemark.co.uk",
+    "test_type"   => "ftp",
+    "test_port"   => 21,
+    "test_alert"  => "The FTP server no worky",
   }
 
 

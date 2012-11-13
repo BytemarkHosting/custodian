@@ -46,7 +46,7 @@ class HTTPSTest
     #
     # Ensure we had a URL
     #
-    if ( @test_data[:target_host].nil? )
+    if ( @test_data["target_host"].nil? )
       @error = "Missing URL for the test"
       return false
     end
@@ -56,27 +56,27 @@ class HTTPSTest
     #  Do the fetch, if this success then we'll have the
     # @status + @text setup
     #
-    if ( getURL (@test_data[:target_host] ) )
+    if ( getURL (@test_data["target_host"] ) )
 
       #
       #  Do we need to test for a HTTP status code?
       #
-      if ( @test_data[:http_status] )
-        puts "Testing for HTTP status code: #{@test_data[:http_status]}"
+      if ( @test_data["http_status"] )
+        puts "Testing for HTTP status code: #{@test_data['http_status']}"
 
-        if ( @status != @test_data[:http_status].to_i)
-          @error = "#{@error} status code was #{@status} not #{@test_data[:http_status]}"
+        if ( @status != @test_data['http_status'].to_i)
+          @error = "#{@error} status code was #{@status} not #{@test_data['http_status']}"
         end
       end
 
       #
       #  Do we need to search for text in the body of the reply?
       #
-      if ( @test_data[:http_text] )
-        puts "Testing for text in the response: #{@test_data[:http_text]}"
+      if ( @test_data['http_text'] )
+        puts "Testing for text in the response: #{@test_data['http_text']}"
 
-        if (! @body.match(/#{@test_data[:http_text]}/i) )
-          @error = "#{@error} The respond did not contain #{test_data[:http_text]}"
+        if (! @body.match(/#{@test_data['http_text']}/i) )
+          @error = "#{@error} The respond did not contain #{test_data['http_text']}"
         end
       end
 
@@ -154,19 +154,19 @@ if __FILE__ == $0 then
   #  Sample data.
   #
   test = {
-    :target_host => "http://www.steve.org.uk/",
-    :test_type   => "http",
-    :test_port   => 80,
-    :test_alert  => "Steve's website is unavailable",
-    :http_text   => "Steve Kemp",
-    :http_status => "200"
+    "target_host" => "http://www.steve.org.uk/",
+    "test_type"   => "http",
+    "test_port"   => 80,
+    "test_alert"  => "Steve's website is unavailable",
+    "http_text"   => "Steve Kemp",
+    "http_status" => "200"
   }
 
 
   #
   #  Run the test.
   #
-  http = HTTPTest.new( test )
+  http = HTTPSTest.new( test )
   if ( http.run_test )
     puts "TEST OK"
   else
