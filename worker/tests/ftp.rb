@@ -106,6 +106,7 @@ if __FILE__ == $0 then
     "target_host" => "mirror.bytemark.co.uk",
     "test_type"   => "ftp",
     "test_port"   => 21,
+    "verbose"     => 1,
     "test_alert"  => "The FTP server no worky",
   }
 
