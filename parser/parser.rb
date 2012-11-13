@@ -219,7 +219,9 @@ class MonitorConfig
         end
 
         #
-        # Does this service require a port?  If it does we'll setup the default here
+        # All our service tests require a port - we setup the defaults here,
+        # but the configuration file will allow users to specify an alternative
+        # via " on XXX ".
         #
         case service
         when /ssh/ then
