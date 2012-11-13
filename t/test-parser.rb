@@ -1,6 +1,7 @@
 #!/usr/bin/ruby1.8 -I./bin/ -I../bin/
 
 
+require 'json'
 require 'test/unit'
 load    'custodian-enqueue'
 
@@ -219,9 +220,75 @@ class TestParser < Test::Unit::TestCase
       #  The test-type should be set to the correct test.
       #
       ret.each do |test|
+
+        #
+        #  Look for valid-seeming JSON with a string match
+        #
         assert( test =~ /^\{/ )
         assert( test =~ /"test_type":"#{name}"/ )
+
+        #
+        #  Deserialize and look for a literal match
+        #
+        hash = JSON.parse( test )
+        assert( hash['test_type'] == name )
+
       end
+    end
+  end
+
+
+
+  #
+  # Most services define a default port.  Ensure that is correct
+  #
+  def test_default_ports
+
+    expected = {
+      "dns" => 53,
+      "ftp" => 21,
+      "ldap" => 389,
+      "jabber" => 5222,
+      "http" => 80,
+      "rsync" => 873,
+      "smtp" => 25,
+      "ssh" => 22,
+    }
+
+
+    #
+    #  Create the helper
+    #
+    parser = MonitorConfig.new("/dev/null" )
+
+
+    #
+    #  Run through our cases
+    #
+    expected.each do |test,port|
+
+      #
+      # Adding a test should return an array - an array of JSON strings.
+      #
+      ret = parser.parse_line( "example.vm.bytemark must run #{test} otherwise 'fail'." )
+      assert_equal( ret.class.to_s, "Array" )
+      assert_equal( ret.size(), 1 )
+
+      #
+      # Get the (sole) member of the array
+      #
+      addition = ret[0]
+
+      #
+      # Look for the correct port in our JSON.
+      #
+      assert( addition =~ /"test_port":#{port}/ )
+
+      #
+      # Deserialize and look for a literal match.
+      #
+      hash = JSON.parse( addition )
+      assert( hash['test_port'] == port )
     end
   end
 
