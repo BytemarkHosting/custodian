@@ -98,7 +98,11 @@ class Alert
     update.replace = true
 
     alert            = Mauve::Proto::Alert.new
-    alert.id         = "#{@details['test_type']}-low"
+
+    # e.g. ping-example.vm.bytemark.co.uk-low
+    # e.g. http-http://example.com/page1-low
+    alert.id         = "#{@details['test_type']}-@details['test_host']-low"
+
     alert.subject    = @details['test_host']
     alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test failed against #{@details['test_host']}: #{detail}"
@@ -120,7 +124,11 @@ class Alert
     update.replace = true
 
     alert            = Mauve::Proto::Alert.new
-    alert.id         = "#{@details['test_type']}-low"
+
+    # e.g. ping-example.vm.bytemark.co.uk-low
+    # e.g. http-http://example.com/page1-low
+    alert.id         = "#{@details['test_type']}-@details['test_host']-low"
+
     alert.subject    = @details['test_host']
     alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test succeeded against #{@details['test_host']}"
