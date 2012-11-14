@@ -16,15 +16,13 @@ require 'uri'
 #
 # This is a simple class which will parse a sentinel configuration file.
 #
-# Unlike Sentinel it is not using a real parser, instead it peels off lines
+# Unlike Sentinel it is not built using a real parser, instead it peels off lines
 # via a small number of very simple regular expressions - this should be flaky,
 # but in practice it manages to successfully parse each of the configuration
 # files that we currently maintain @ Bytemark.
 #
-# TODO:
-#
-#   1. Explicitly abort and panic on malformed lines.
-#
+# If there are any lines which are not recognized the class will terminate
+# with an error.
 #
 # Steve
 # --
@@ -69,10 +67,17 @@ class MonitorConfig
   end
 
 
+  #
+  # Get the current value of the timeout figure.
+  #
   def get_timeout()
     @timeout
   end
 
+
+  #
+  # Set the timeout value.
+  #
   def set_timeout( new_val )
     @timeout = new_val
   end
