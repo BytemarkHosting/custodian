@@ -101,11 +101,11 @@ class Alert
 
     # e.g. ping-example.vm.bytemark.co.uk-low
     # e.g. http-http://example.com/page1-low
-    alert.id         = "#{@details['test_type']}-@details['test_host']-low"
+    alert.id         = "#{@details['test_type']}-@details['target_host']-low"
 
-    alert.subject    = @details['test_host']
-    alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
-    alert.detail     = "The #{@details['test_type']} test failed against #{@details['test_host']}: #{detail}"
+    alert.subject    = @details['target_host']
+    alert.summary    = "#{@details['target_host']} #{@details['test_alert']}"
+    alert.detail     = "The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}"
     alert.raise_time = Time.now.to_i
     update.alert << alert
 
@@ -127,11 +127,11 @@ class Alert
 
     # e.g. ping-example.vm.bytemark.co.uk-low
     # e.g. http-http://example.com/page1-low
-    alert.id         = "#{@details['test_type']}-@details['test_host']-low"
+    alert.id         = "#{@details['test_type']}-@details['target_host']-low"
 
-    alert.subject    = @details['test_host']
-    alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
-    alert.detail     = "The #{@details['test_type']} test succeeded against #{@details['test_host']}"
+    alert.subject    = @details['target_host']
+    alert.summary    = "#{@details['target_host']} #{@details['test_alert']}"
+    alert.detail     = "The #{@details['test_type']} test succeeded against #{@details['target_host']}"
     alert.clear_time = Time.now.to_i
     update.alert << alert
 
