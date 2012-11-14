@@ -61,9 +61,9 @@ class LDAPTest
   def run_test
 
     #
-    # Until the test runs we have no error.
+    # Reset state from previous test.
     #
-    @error = ""
+    @error = nil
 
     #
     #  Get the hostname & port to test against.

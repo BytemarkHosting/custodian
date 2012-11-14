@@ -59,6 +59,11 @@ class HTTPTest
   def run_test
 
     #
+    # Reset state from previous test.
+    #
+    @error = nil
+
+    #
     #  Do the fetch, if this success then we'll have the
     # @status + @text setup
     #
