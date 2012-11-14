@@ -95,7 +95,9 @@ class Alert
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
-    update.replace = true
+
+    # be explicit about raising/clearing
+    update.replace = false
 
     alert            = Mauve::Proto::Alert.new
 
@@ -121,7 +123,10 @@ class Alert
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
-    update.replace = true
+
+    # be explicit about raising/clearing
+    update.replace = false
+
 
     alert            = Mauve::Proto::Alert.new
 
