@@ -1,3 +1,10 @@
+custodian (2012:1114-9) stable; urgency=low
+
+  * Added a "custodian-queue --monitor" option, to alert if our queue doesn't
+    empty.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 15:05:00 +0000
+
 custodian (2012:1114-8) stable; urgency=low
 
   * Macro definition work when they contain numbers.
