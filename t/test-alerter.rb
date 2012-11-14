@@ -46,7 +46,7 @@ class TestAlerter < Test::Unit::TestCase
   #
   #  Test location-detection.
   #
-  def test_families
+  def test_locations_inside_outside
 
     #
     #  Hash of hostnames and version of address.
