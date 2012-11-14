@@ -8,6 +8,7 @@ Standards-Version: 3.9.1
 Package: custodian
 Architecture: all
 Depends: ruby1.8, libjson-ruby1.8, libbeanstalkclient-ruby1.8, ${misc:Depends}
+Build-Depends: ruby1.8, libjson-ruby1.8, libbeanstalkclient-ruby1.8, ${misc:Depends}
 Suggests: beanstalkd
 Description: This package provides remote monitoring
  This package allows you to setup a semi-distributed monitoring
