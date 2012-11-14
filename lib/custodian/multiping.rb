@@ -60,7 +60,7 @@ class MultiPing
   # Does the hostname resolve to an IPv6 address?
   #
   def is_ipv6?
-    if ( ( ! @resolved.nil? ) && ( @resolved =~  /^2001/ ) )
+    if ( ( ! @resolved.nil? ) && ( @resolved =~  /^([a-f0-9:]+)$/i ) )
       true
     else
       false
