@@ -6,7 +6,6 @@
 # SYNOPSIS
 #  custodian-dequeue  [ -h | --help ]
 #                     [ -m | --manual]
-#                     [ -f | --flush ]
 #                     [ -l | --logfile FILE]
 #                     [ -S | --server 1.2.3.4:123 ]
 #                     [ -s | --single ]
@@ -17,8 +16,6 @@
 #  -h, --help          Show a help message, and exit.
 #
 #  -m, --manual        Show this manual, and exit.
-#
-#  -f, --flush         Flush the queue, removing all jobs.
 #
 #  -l, --logfile       Specify the path to the logfile to run.
 #
@@ -199,26 +196,6 @@ class Custodian
       puts msg if ( ENV['VERBOSE'] )
   end
 
-  #
-  #  Flush the queue.
-  #
-  def flush_queue!
-
-    log_message( "Flushing queue" )
-
-    while( true )
-      begin
-        job = @queue.reserve(1)
-        id  = job.id
-        log_message( "Deleted job #{id}" )
-        job.delete
-      rescue Beanstalk::TimedOut => ex
-        log_message( "The queue is now empty" )
-        return
-      end
-    end
-  end
-
 
 
   #
@@ -366,7 +343,6 @@ if __FILE__ == $0 then
 
   begin
     opts = GetoptLong.new(
-                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
@@ -379,8 +355,6 @@ if __FILE__ == $0 then
       case opt
       when "--verbose":
           ENV["VERBOSE"] = "1"
-      when "--flush":
-          ENV["FLUSH"] = "1"
       when "--logfile":
           $LOGFILE = arg
       when "--repeat":
@@ -436,13 +410,6 @@ if __FILE__ == $0 then
   #
   worker = Custodian.new( $SERVER, $LOGFILE )
 
-  #
-  #  Are we flushing the queue?
-  #
-  if ( ENV['FLUSH'] )
-    worker.flush_queue!
-    exit(0)
-  end
 
   #
   #  Single step?
