@@ -428,6 +428,7 @@ class MonitorConfig
       ret
     else
       puts "Unknown line: '#{line}'"
+      exit( 0 )
     end
   end
 
