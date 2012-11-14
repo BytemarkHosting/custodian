@@ -67,7 +67,7 @@ class HTTPTest
     #  Do the fetch, if this success then we'll have the
     # @status + @text setup
     #
-    if ( getURL(@test_data["target_host"], @test_data["timeout"] ) )
+    if ( getURL(@test_data["target_host"], @test_data["timeout"].to_i ) )
 
       #
       #  Do we need to test for a HTTP status code?

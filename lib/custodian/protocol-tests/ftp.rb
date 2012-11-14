@@ -74,7 +74,7 @@ class FTPTest
     puts "FTP testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout( @test_data["timeout"] ) do
+      timeout( @test_data["timeout"].to_i ) do
 
         begin
           socket = TCPSocket.new( host, port )
