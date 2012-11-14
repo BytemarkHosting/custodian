@@ -160,6 +160,92 @@ class TestParser < Test::Unit::TestCase
 
 
 
+
+  #
+  #  Test that we can define macros with only a single host.
+  #
+  def test_short_macros
+
+    parser = MonitorConfig.new("/dev/null" )
+
+    #
+    #  With nothing loaded we should have zero macros - so the
+    # count of our macros hash should be zero
+    #
+    macros = parser.macros
+    assert( macros.empty? )
+    assert( macros.size() == 0 )
+
+
+    #
+    #  Define a macro:
+    #
+    #  FOO =>  "kvm1.vm.bytemark.co.uk".
+    #
+    #  Before defining it double-check it doesn't exist
+    #
+    assert( !(parser.is_macro?( "FOO" )) )
+
+    #
+    #  Add it.
+    #
+    ret = parser.define_macro( "FOO is kvm1.vm.bytemark.co.uk." )
+
+    #
+    #  The return value should be an array containing the values we added.
+    #
+    assert( ret.class.to_s == "Array" )
+    assert( ret.size == 1 )
+    assert( ret.include?( "kvm1.vm.bytemark.co.uk" ) )
+
+
+    #
+    #  OK we should now have a single macro defined.
+    #
+    macros = parser.macros
+    assert( macros.size() == 1 )
+
+    #
+    # Add a macro, using the parser directly.
+    #
+    # Before defining it double-check it doesn't exist
+    #
+    assert( !(parser.is_macro?( "BAR_HOSTS" )) )
+
+    #
+    # Add it.
+    #
+    ret = parser.parse_line( "BAR_HOSTS are example.vm.bytemark.co.uk." )
+
+    #
+    #  The return value should be an array containing the single value
+    # we added.
+    #
+    assert( ret.class.to_s == "Array" )
+    assert( ret.size == 1 )
+    assert( ret.include?( "example.vm.bytemark.co.uk" ) )
+
+    #
+    #  OK we should now have two macros defined.
+    #
+    macros = parser.macros
+    assert( macros.size() == 2 )
+
+    #
+    #  The macro name "BAR_HOSTS" should exist
+    #
+    assert( parser.is_macro?( "BAR_HOSTS" ) )
+
+    #
+    #  The contents of the BAR macro should have the single value we expect.
+    #
+    val = parser.get_macro_targets( "BAR_HOSTS" )
+    assert( val.size() == 1 )
+    assert( val.include?( "example.vm.bytemark.co.uk" ) )
+  end
+
+
+
   #
   #  Test that we can define macros.
   #
