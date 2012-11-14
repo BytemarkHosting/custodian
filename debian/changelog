@@ -1,3 +1,9 @@
+custodian (2012:1114-8) stable; urgency=low
+
+  * Macro definition work when they contain numbers.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 13:45:00 +0000
+
 custodian (2012:1114-7) stable; urgency=low
 
   * Macro definition works for single hosts too.
