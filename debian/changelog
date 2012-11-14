@@ -1,3 +1,9 @@
+custodian (2012:1114-10) stable; urgency=low
+
+  * New release to pickup the timeout changes.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 16:10:12 +0000
+
 custodian (2012:1114-9) stable; urgency=low
 
   * Added a "custodian-queue --monitor" option, to alert if our queue doesn't
