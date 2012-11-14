@@ -108,6 +108,7 @@ if __FILE__ == $0 then
     "target_host" => "upload.ns.bytemark.co.uk",
     "test_type"   => "ping",
     "verbose"     => 1,
+    "timeout"     => 5,
     "test_alert"  => "Pingly faily",
   }
 

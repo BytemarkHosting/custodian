@@ -73,7 +73,7 @@ class SSHTest
     puts "ssh testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout(3) do
+      timeout(@test_data["timeout"]) do
 
         begin
           socket = TCPSocket.new( host, port )
@@ -130,6 +130,7 @@ if __FILE__ == $0 then
     "test_type"   => "ssh",
     "test_port"   => 2222,
     "verbose"     => 1,
+    "timeout"     => 5,
     "test_alert"  => "Steve's host isn't running SSH?",
   }
 

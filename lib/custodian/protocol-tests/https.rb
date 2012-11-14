@@ -68,7 +68,7 @@ class HTTPSTest
     #  Do the fetch, if this success then we'll have the
     # @status + @text setup
     #
-    if ( getURL (@test_data["target_host"] ) )
+    if ( getURL(@test_data["target_host"], @test_data["timeout"] ) )
 
       #
       #  Do we need to test for a HTTP status code?
@@ -115,13 +115,13 @@ class HTTPSTest
   # Retrieve a HTTP page from the web.
   #
   # NOTE:  This came from sentinel.
-  def getURL (uri_str)
+  def getURL (uri_str, timeout)
     begin
       uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
       url = URI.parse(uri_str)
       http = Net::HTTP.new(url.host, url.port)
-      http.open_timeout = 3
-      http.read_timeout = 3
+      http.open_timeout = timeout
+      http.read_timeout = timeout
 
       if (url.scheme == "https")
         http.use_ssl = true
@@ -148,7 +148,7 @@ class HTTPSTest
       then
         newURL = response['location'].match(/^http/)?
         response['Location']:uri_str+response['Location']
-        return( getURL(newURL) )
+        return( getURL(newURL, timeout) )
       else
         @status = response.code.to_i
         @body   =  response.body
@@ -190,6 +190,7 @@ if __FILE__ == $0 then
     "target_host" => "http://www.steve.org.uk/",
     "test_type"   => "http",
     "verbose"     => 1,
+    "timeout"     => 5,
     "test_port"   => 80,
     "test_alert"  => "Steve's website is unavailable",
     "http_text"   => "Steve Kemp",
