@@ -1,3 +1,9 @@
+custodian (2012:1114-4) stable; urgency=low
+
+  * Don't replace alerts.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:12:00 +0000
+
 custodian (2012:1114-3) stable; urgency=low
 
   * Strings are not my friend - interpolate the ID correctly
