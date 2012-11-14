@@ -1,3 +1,9 @@
+custodian (2012:1114-3) stable; urgency=low
+
+  * Strings are not my friend - interpolate the ID correctly
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:00:00 +0000
+
 custodian (2012:1114-2) stable; urgency=low
 
   * Use target_host, not test_host for alerting purposes.
