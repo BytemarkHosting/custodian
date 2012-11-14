@@ -1,7 +1,12 @@
+custodian (2012:1114-7) stable; urgency=low
+
+  * Macro definition works for single hosts too.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 11:06:00 +0000
+
 custodian (2012:1114-6) stable; urgency=low
 
   * HTTP/HTTPS tests should work with a missing path.
-
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:54:00 +0000
 
