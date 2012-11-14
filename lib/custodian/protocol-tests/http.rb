@@ -113,63 +113,65 @@ class HTTPTest
   #
   # NOTE:  This came from sentinel.
   def getURL (uri_str, timeout)
-    begin
-      uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
-      url = URI.parse(uri_str)
-      http = Net::HTTP.new(url.host, url.port)
-      http.open_timeout = timeout
-      http.read_timeout = timeout
 
-      if (url.scheme == "https")
-        http.use_ssl = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    timeout( timeout ) do
+      begin
+        uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
+        url = URI.parse(uri_str)
+        http = Net::HTTP.new(url.host, url.port)
+        http.open_timeout = timeout
+        http.read_timeout = timeout
+
+        if (url.scheme == "https")
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+
+        response = nil
+
+        #
+        # Ensure we have a trailing "/"
+        #
+        if ( url.path.empty? )
+          url.path = "/"
+        end
+
+        if nil == url.query
+          response = http.start { http.get(url.path) }
+        else
+          response = http.start { http.get("#{url.path}?#{url.query}") }
+        end
+
+        case response
+        when Net::HTTPRedirection
+        then
+          newURL = response['location'].match(/^http/)?
+          response['Location']:uri_str+response['Location']
+          return( getURL(newURL, timeout) )
+        else
+          @status = response.code.to_i
+          @body   =  response.body
+        end
+
+        return true
+      rescue Errno::EHOSTUNREACH => ex
+        @error = "no route to host"
+        return false
+      rescue Timeout::Error => ex
+        @error = "time out reached"
+        return false
+      rescue Errno::ECONNREFUSED => ex
+        @error = "Connection refused"
+        return false
+      rescue Timeout::Error => e
+        @error = "TIMEOUT: #{e}"
+        return false
+      rescue => ex
+        @error = ex
+        return false
       end
-
-      response = nil
-
-      #
-      # Ensure we have a trailing "/"
-      #
-      if ( url.path.empty? )
-        url.path = "/"
-      end
-
-      if nil == url.query
-        response = http.start { http.get(url.path) }
-      else
-        response = http.start { http.get("#{url.path}?#{url.query}") }
-      end
-
-      case response
-      when Net::HTTPRedirection
-      then
-        newURL = response['location'].match(/^http/)?
-        response['Location']:uri_str+response['Location']
-        return( getURL(newURL, timeout) )
-      else
-        @status = response.code.to_i
-        @body   =  response.body
-      end
-
-      return true
-    rescue Errno::EHOSTUNREACH => ex
-      @error = "no route to host"
-      return false
-    rescue Timeout::Error => ex
-      @error = "time out reached"
-      return false
-    rescue Errno::ECONNREFUSED => ex
-      @error = "Connection refused"
-      return false
-    rescue => ex
-      @error = ex
-      return false
     end
-    @error = "Misc failure"
-    return false
   end
-
-
 
 end
 
