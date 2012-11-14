@@ -5,9 +5,10 @@
 #
 # SYNOPSIS
 #  custodian-queu  [ -h | --help ]
-#                  [ -m | --manual]
+#                  [ -m | --manual ]
+#                  [ -M | --monitor ]
 #                  [ -f | --flush ]
-#                  [ -s | --stats]
+#                  [ -s | --stats ]
 #                  [ -S | --server 1.2.3.4:123 ]
 #
 # OPTIONS
@@ -15,6 +16,8 @@
 #  -h, --help          Show a help message, and exit.
 #
 #  -m, --manual        Show this manual, and exit.
+#
+#  -M, --monitor       Alert, via mauve, if our queue is too full.
 #
 #  -f, --flush         Flush the queue, removing all jobs.
 #
@@ -51,17 +54,21 @@ if __FILE__ == $0 then
   $STATS   = false
   $help    = false
   $manual  = false
+  $MONITOR = false
 
   begin
     opts = GetoptLong.new(
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
+                          [ "--monitor", "-M", GetoptLong::NO_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--stats",   "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
+      when "--monitor":
+          $MONITOR = true
       when "--stats":
           $STATS = true
       when "--flush":
@@ -114,6 +121,26 @@ if __FILE__ == $0 then
   queue = Beanstalk::Pool.new([$SERVER])
 
   #
+  # Alerting on a queue that is too-full?
+  #
+  if ( $MONITOR )
+
+    #
+    # Find the number of jobs
+    #
+    stats = queue.stats()
+    jobs  = stats['current-jobs-ready'] || 0
+
+    if ( jobs > 3000 )
+      system( "mauvesend alert.bytemark.co.uk -i custodian -r now -s \"Our queue has #{jobs} in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers?</p>\" " )
+    else
+      system( "mauvesend alert.bytemark.co.uk -i custodian -c now -s \"Our queue has #{jobs} in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers?</p>\" " )
+    end
+    exit( 0 )
+  end
+
+
+  #
   # Showing stats?
   #
   if ( $STATS )
@@ -122,6 +149,7 @@ if __FILE__ == $0 then
      exit( 0 )
   end
 
+   
   #
   #  Are we flushing the queue?
   #
