@@ -1,3 +1,10 @@
+custodian (2012:1114-2) stable; urgency=low
+
+  * Use target_host, not test_host for alerting purposes.
+  * Use the correct ID for generating alerts.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:51:55 +0000
+
 custodian (2012:1114-1) stable; urgency=low
 
   * Updated alerting via mauve.
