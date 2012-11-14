@@ -130,6 +130,13 @@ class HTTPSTest
 
       response = nil
 
+      #
+      # Ensure we have a trailing "/"
+      #
+      if ( url.path.empty? )
+        url.path = "/"
+      end
+
       if nil == url.query
         response = http.start { http.get(url.path) }
       else
