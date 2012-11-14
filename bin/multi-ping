@@ -3,16 +3,17 @@
 # NAME
 #   multi-ping - IPv4 and IPv6 ping tool
 #
+#
 # SYNOPSIS
 #  multi-ping  [ -h | --help ] [-m | --manual] hostname1
 #
+#
 # OPTIONS
 #
-#  -h, --help              Show a help message, and exit.
+#  -h, --help      Show a help message, and exit.
 #
-#  -m, --manual            Show this manual, and exit.
+#  -m, --manual    Show this manual, and exit.
 #
-#  -v, --verbose           Show verbose errors
 #
 # ABOUT
 #
@@ -23,6 +24,7 @@
 #  The tool works by resolving the hostname specified upon the command line,
 # and invoking "ping" or "ping6" upon the result - using the correct one for
 # the address family which has been returned.
+#
 #
 # AUTHOR
 #
