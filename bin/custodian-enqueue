@@ -134,8 +134,8 @@ class MonitorConfig
       uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
       url = URI.parse(uri_str)
       http = Net::HTTP.new(url.host, url.port)
-      http.open_timeout = 3
-      http.read_timeout = 3
+      http.open_timeout = @timeout
+      http.read_timeout = @timeout
 
       if (url.scheme == "https")
         http.use_ssl = true
