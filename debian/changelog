@@ -1,5 +1,13 @@
+custodian (2012:1114) stable; urgency=low
+
+  * Promoted to live usage:
+    - All scripts have a "--help"/"--manual" flag.
+    - The alerting has been un-hobbled.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:13:55 +0000
+
 custodian (2012:1113) stable; urgency=low
 
   * Initial release
 
- -- Steve Kemp <steve@bytemark.co.uk>  Thu, 8 Nov 2012 15:54:55 +0000
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 13 Nov 2012 15:54:55 +0000
