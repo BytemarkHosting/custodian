@@ -4,6 +4,3 @@
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 
-build/custodian::
-	        ruby t/test-suite
-
