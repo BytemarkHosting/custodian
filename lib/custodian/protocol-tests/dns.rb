@@ -173,6 +173,7 @@ if __FILE__ == $0 then
     "target_host"      => "a.ns.bytemark.co.uk",
     "test_type"        => "dns",
     "verbose"          => 1,
+    "timeout"          => 4,
     "test_alert"       => "DNS failure",
     "resolve_name"     => "support.bytemark.co.uk",
     "resolve_type"     => "MX",

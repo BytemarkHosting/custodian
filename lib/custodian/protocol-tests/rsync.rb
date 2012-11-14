@@ -74,7 +74,7 @@ class RSYNCTest
     puts "rsync testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout(3) do
+      timeout(@test_data["timeout"]) do
 
         begin
           socket = TCPSocket.new( host, port )
@@ -129,7 +129,9 @@ if __FILE__ == $0 then
   test = {
     "target_host" => "upload.ns.bytemark.co.uk",
     "test_type"   => "rsync",
+    "test_port"   => "873",
     "verbose"     => 1,
+    "timeout"     => 5,
     "test_alert"  => "DNS upload service failure",
   }
 

@@ -74,7 +74,7 @@ class LDAPTest
     puts "LDAP testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout(3) do
+      timeout(@test_data["timeout"]) do
 
         begin
           socket = TCPSocket.new( host, port )
@@ -122,6 +122,7 @@ if __FILE__ == $0 then
     "test_type"   => "ldap",
     "test_port"   => 389,
     "verbose"     => 1,
+    "timeout"     => 5,
     "test_alert"  => "LDAP is down?",
   }
 

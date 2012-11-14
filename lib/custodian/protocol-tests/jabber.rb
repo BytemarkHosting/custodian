@@ -75,7 +75,7 @@ class JABBERTest
     puts "Jabber testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout(3) do
+      timeout(@test_data["timeout"]) do
 
         begin
           socket = TCPSocket.new( host, port )
@@ -130,6 +130,8 @@ if __FILE__ == $0 then
   test = {
     "target_host" => "chat.bytemark.co.uk",
     "test_type"   => "jabber",
+    "test_port"   => "5222",
+    "timeout"     => 4,
     "verbose"     => 1,
     "test_alert"  => "Chat is down?",
   }

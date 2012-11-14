@@ -74,7 +74,7 @@ class FTPTest
     puts "FTP testing host #{host}:#{port}" if ( @test_data['verbose'] )
 
     begin
-      timeout(3) do
+      timeout( @test_data["timeout"] ) do
 
         begin
           socket = TCPSocket.new( host, port )
@@ -130,6 +130,7 @@ if __FILE__ == $0 then
     "test_type"   => "ftp",
     "test_port"   => 21,
     "verbose"     => 1,
+    "timeout"     => 4,
     "test_alert"  => "The FTP server no worky",
   }
 
