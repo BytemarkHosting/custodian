@@ -188,7 +188,7 @@ class MonitorConfig
     #
     #  Get the name
     #
-    name = $1.dup if ( line =~ /^([A-Z_]+)\s+/ )
+    name = $1.dup if ( line =~ /^([1-2A-Z_]+)\s+/ )
 
 
     #
@@ -253,7 +253,7 @@ class MonitorConfig
   # Is the given string of text a macro?
   #
   def is_macro?( name )
-    !@MACROS[name].nil?
+    !(@MACROS[name]).nil?
   end
 
 
@@ -289,7 +289,7 @@ class MonitorConfig
     #
     #  Look for macro definitions, inline
     #
-    if ( line =~ /^([A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/ )
+    if ( line =~ /^([0-9A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/ )
       define_macro( line )
 
     elsif ( line =~ /^([0-9A-Z_]+)\s+(is|are)\s+/ )
