@@ -3,10 +3,10 @@ default:
 	@echo "Utility makefile - valid targets are"
 	@echo ""
 	@echo "  test - Run the test suite"
-	@echo " clean - Clean debian-package files"
+	@echo "  tidy - Clean debian-package files"
 
 
-clean:
+tidy:
 	rm -rf ./debian/custodian
 	rm -f ./debian/custodian.debhelper.log
 	rm -f ./debian/custodian.substvars
