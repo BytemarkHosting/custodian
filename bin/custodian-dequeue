@@ -243,7 +243,7 @@ class Custodian
       #
       log_message( "Job body contains the following keys & values:")
       hash.keys.each do |key|
-        log_message( "#{key} => #{hash[key]}" )
+        log_message( "   #{key} => #{hash[key]}" )
       end
 
 
