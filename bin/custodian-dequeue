@@ -92,16 +92,13 @@ class Alert
   #
   def raise( detail )
 
-    puts "RAISE: #{detail}"
-    return
-
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
     update.replace = true
 
     alert            = Mauve::Proto::Alert.new
-    alert.id         = @details['test_type']
+    alert.id         = "#{@details['test_type']}-low"
     alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test failed against #{@details['test_host']}: #{detail}"
     alert.raise_time = Time.now.to_i
@@ -115,8 +112,6 @@ class Alert
   #  Clear the alert.
   #
   def clear
-    puts "CLEAR"
-    return
 
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
@@ -124,7 +119,7 @@ class Alert
     update.replace = true
 
     alert            = Mauve::Proto::Alert.new
-    alert.id         = @details['test_type']
+    alert.id         = "#{@details['test_type']}-low"
     alert.summary    = "#{@details['test_host']} #{@details['test_alert']}"
     alert.detail     = "The #{@details['test_type']} test succeeded against #{@details['test_host']}"
     alert.clear_time = Time.now.to_i
