@@ -378,7 +378,8 @@ class MonitorConfig
           :target_host => host,
           :test_type   => service,
           :test_port   => port,
-          :test_alert  => alert
+          :test_alert  => alert,
+          :timeout     => 3
         }
 
 
