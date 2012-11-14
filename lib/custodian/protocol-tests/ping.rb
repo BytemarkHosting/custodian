@@ -73,7 +73,7 @@ class PINGTest
 
     if ( system( "#{binary} #{host}" ) == true )
       puts "PING OK" if ( @test_data['verbose'] )
-      return  true
+      return true
     else
       @error = "Ping failed.  TODO: Mtr"
       return false

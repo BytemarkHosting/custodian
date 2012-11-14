@@ -155,9 +155,10 @@ class HTTPTest
       @error = "Connection refused"
       return false
     rescue => ex
-      raise ex
+      @error = ex
       return false
     end
+    @error = "Misc failure"
     return false
   end
 
