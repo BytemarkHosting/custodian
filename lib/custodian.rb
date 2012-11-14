@@ -149,6 +149,7 @@ class Custodian
       # Given a test-type "foo" we'll attempt to instantiate a class called FOOTest.
       #
       test  = hash['test_type']
+      test  = "http" if ( test == "https" )
       clazz = test.upcase
       clazz = "#{clazz}Test"
 
