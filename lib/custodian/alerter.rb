@@ -55,9 +55,9 @@ class Alerter
     #  Test trange
     #
     if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(resolved.to_s))} )
-      return "<p>#{host} resolves to #{target} which is inside the Bytemark network.</p>"
+      return "<p>#{host} resolves to #{resolved} which is inside the Bytemark network.</p>"
     else
-      return "<p>#{host} resolves to #{target} which <b>is not</b> inside the Bytemark network.</p>"
+      return "<p>#{host} resolves to #{resolved} which <b>is not</b> inside the Bytemark network.</p>"
     end
 
   end
