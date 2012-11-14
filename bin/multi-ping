@@ -31,7 +31,7 @@
 
 
 require 'getoptlong'
-require 'socket'
+require 'custodian/multiping'
 
 
 
@@ -93,13 +93,15 @@ end
 
 
 
+
 #
 #  Get the address to ping.
 #
 hostname = ARGV.shift
 
+
 #
-#  If we have no host then abort
+#  Abort if we don't have a hostname
 #
 if ( hostname.nil? )
   puts "Usage: #{$0} hostname"
@@ -107,55 +109,19 @@ if ( hostname.nil? )
 end
 
 
+
 #
-#  The IP we'll deal with
+#  Create the object
 #
-ip = nil
+helper = MultiPing.new( hostname )
 
 
 #
-#  Lookup the IP, catching any exception
+#  Ping the host, via the helper
 #
-begin
-  Socket.getaddrinfo(hostname, 'echo').each do |a|
-    ip = a[3]
-  end
-rescue SocketError
-  puts "Failed to resolve: #{hostname}"
+if ( helper.run_ping() )
+  puts "#{hostname} - #{helper.address} - is alive."
+  exit 0
+else
   exit 1
 end
-
-
-#
-#  Was the result an IPv4 address?
-#
-if ( ip =~ /^([0-9]+).([0-9]+).([0-9]+).([0-9]+)$/ )
-
-  #
-  #  If so invoke "ping"
-  #
-  if ( system( "ping -c 1 #{ip} 2>/dev/null >/dev/null" ) == true )
-    puts "#{hostname} alive."
-    exit 0
-  else
-    puts "ping4 failed - #{hostname} [#{ip}]"
-    exit 1
-  end
-elsif ( ip =~ /2001/ )
-
-  #
-  #  Was the result an IPv6 address?
-  #
-  if ( system( "ping6 -c 1 -w1 #{ip} 2>/dev/null >/dev/null" ) == true )
-    puts "#{hostname} alive."
-    exit 0
-  else
-    puts "ping6 failed - #{hostname} [#{ip}]"
-    exit 1
-  end
-end
-
-
-#
-#  All done.
-#
