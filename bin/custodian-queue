@@ -1,0 +1,140 @@
+#!/usr/bin/ruby1.8
+#
+# NAME
+#  custodian-queue - Work with the queue.
+#
+# SYNOPSIS
+#  custodian-queu  [ -h | --help ]
+#                  [ -m | --manual]
+#                  [ -f | --flush ]
+#                  [ -s | --stats]
+#                  [ -S | --server 1.2.3.4:123 ]
+#
+# OPTIONS
+#
+#  -h, --help          Show a help message, and exit.
+#
+#  -m, --manual        Show this manual, and exit.
+#
+#  -f, --flush         Flush the queue, removing all jobs.
+#
+#  -s, --stats         Show the pending jobs.
+#
+#  -S, --server        Specify the host:port for the beanstalkd queue.
+#
+#
+# ABOUT
+#
+#  This tool is designed to inspect the beanstalkd queue.
+#
+#
+# AUTHOR
+#
+#  Steve Kemp  <steve@bytemark.co.uk>
+#
+
+
+
+require 'beanstalk-client'
+require 'getoptlong'
+
+
+
+
+#
+#  Entry-point to our code.
+#
+if __FILE__ == $0 then
+
+  $SERVER  = "127.0.0.1:11300"
+  $FLUSH   = false
+  $STATS   = false
+  $help    = false
+  $manual  = false
+
+  begin
+    opts = GetoptLong.new(
+                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
+                          [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
+                          [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
+                          [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--stats",   "-s", GetoptLong::NO_ARGUMENT ]
+                          )
+    opts.each do |opt, arg|
+      case opt
+      when "--stats":
+          $STATS = true
+      when "--flush":
+          $FLUSH = true
+      when "--server":
+          $SERVER = arg
+      when "--help":
+          $help = true
+      when "--manual":
+          $manual = true
+      end
+    end
+  rescue StandardError => ex
+    puts "Option parsing failed: #{ex.to_s}"
+    exit
+  end
+
+  #
+  # CAUTION! Here be quality kode.
+  #
+  if $manual or $help
+
+    # Open the file, stripping the shebang line
+    lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
+
+    found_synopsis = false
+
+    lines.each do |line|
+
+      line.chomp!
+      break if line.empty?
+
+      if $help and !found_synopsis
+        found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
+        next
+      end
+
+      puts line[2..-1].to_s
+
+      break if $help and found_synopsis and line =~ /^#\s*$/
+
+    end
+
+    exit 0
+  end
+
+  #
+  #  Create the object
+  #
+  queue = Beanstalk::Pool.new([$SERVER])
+
+  #
+  # Showing stats?
+  #
+  if ( $STATS )
+     stats = queue.stats()
+     puts "There are #{stats['current-jobs-ready'] || 0} jobs pending."
+     exit( 0 )
+  end
+
+  #
+  #  Are we flushing the queue?
+  #
+  if ( $FLUSH )
+    while( true )
+      begin
+        job = queue.reserve(1)
+        job.delete
+      rescue Beanstalk::TimedOut => ex
+        exit( 0 )
+      end
+    end
+  end
+
+
+end
