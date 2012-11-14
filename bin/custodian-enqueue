@@ -4,7 +4,11 @@
 #  custodian-enqueue - Insert sentinel-probes into a queue.
 #
 # SYNOPSIS
-#  custodian-enqueue  [ -h | --help ] [-m | --manual] [--file | -f FILE] [--dump | -d ]
+#  custodian-enqueue  [ -h | --help ]
+#                     [ -m | --manual]
+#                     [ -f | --file FILE]
+#                     [ -d | --dump ]
+#                     [ -t | --timeout N ]
 #
 # OPTIONS
 #
@@ -15,6 +19,9 @@
 #  -d, --dump          Dump the generated JSON to the console; don't insert in the queue.
 #
 #  -f, --file FILE     Parse the given configuration file.
+#
+#  -t, --timeout N     Specify the timeout period for the tests.
+#
 #
 # ABOUT
 #
@@ -85,6 +92,10 @@ class MonitorConfig
   #
   attr_reader :filename
 
+  #
+  # Timeout period, in seconds, that we encode into test objects.
+  #
+  attr_reader :timeout
 
 
 
@@ -92,15 +103,25 @@ class MonitorConfig
   # Constructor
   #
   def initialize( filename )
-    @MACROS = Hash.new()
-    @queue  = Beanstalk::Pool.new(['127.0.0.1:11300'])
-    @file   = filename
+
+
+    @MACROS  = Hash.new()
+    @queue   = Beanstalk::Pool.new(['127.0.0.1:11300'])
+    @file    = filename
+    @timeout = 3
 
     raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
     raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
   end
 
 
+  def get_timeout()
+    @timeout
+  end
+
+  def set_timeout( new_val )
+    @timeout = new_val
+  end
 
 
   #
@@ -379,7 +400,7 @@ class MonitorConfig
           :test_type   => service,
           :test_port   => port,
           :test_alert  => alert,
-          :timeout     => 3
+          :timeout     => @timeout
         }
 
 
@@ -478,7 +499,8 @@ if __FILE__ == $0 then
                           [ "--dump",  "-d", GetoptLong::NO_ARGUMENT ],
                           [ "--file",  "-f", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--help",  "-h", GetoptLong::NO_ARGUMENT ],
-                          [ "--manual","-m", GetoptLong::NO_ARGUMENT ]
+                          [ "--manual","-m", GetoptLong::NO_ARGUMENT ],
+                          [ "--timeout","-t", GetoptLong::REQUIRED_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
@@ -486,6 +508,8 @@ if __FILE__ == $0 then
           ENV["DUMP"] = "1"
       when "--file":
           ENV["FILE"] = arg
+      when "--timeout":
+          ENV["TIMEOUT"] = arg
       when "--help":
           $help = true
       when "--manual":
@@ -527,7 +551,22 @@ if __FILE__ == $0 then
     exit 0
   end
 
+
+  #
+  # Create the parser
+  #
   mon = MonitorConfig.new( ENV['FILE'] )
+
+  #
+  # Set the timeout
+  #
+  if ( !ENV['TIMEOUT'].nil? )
+     mon.set_timeout( ENV['TIMEOUT'] )
+  end
+
+  #
+  # Run
+  #
   mon.parse_file();
 end
 
