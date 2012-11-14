@@ -209,12 +209,25 @@ class MonitorConfig
     elsif ( line =~ /\s(is|are)\s+(.*)\.+$/ )
 
       #
-      #  Literal list.
+      #  Literal list of hosts
       #
-      tmp = $2.dup.split( /\s+and\s+/ )
-      tmp.each do |entry|
-        val.push( entry )
+      hosts = $2.dup
+
+      #
+      #  If there is " and " then tokenize
+      #
+      if ( hosts =~ /\s+and\s+/ )
+        tmp = hosts.split( /\s+and\s+/ )
+        tmp.each do |entry|
+          val.push( entry )
+        end
+      else
+        #
+        # Otherwise a single host
+        #
+        val.push( hosts )
       end
+
 
     end
 
