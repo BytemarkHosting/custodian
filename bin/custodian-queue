@@ -4,12 +4,12 @@
 #  custodian-queue - Work with the queue.
 #
 # SYNOPSIS
-#  custodian-queu  [ -h | --help ]
-#                  [ -m | --manual ]
-#                  [ -M | --monitor ]
-#                  [ -f | --flush ]
-#                  [ -s | --stats ]
-#                  [ -S | --server 1.2.3.4:123 ]
+#  custodian-queue  [ -h | --help ]
+#                   [ -m | --manual ]
+#                   [ -M | --monitor ]
+#                   [ -f | --flush ]
+#                   [ -s | --stats ]
+#                   [ -S | --server 1.2.3.4:123 ]
 #
 # OPTIONS
 #
