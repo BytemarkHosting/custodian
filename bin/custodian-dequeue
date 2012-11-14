@@ -290,10 +290,12 @@ class Custodian
       #
       while ( ( count < @retry_count ) && ( success == false ) )
 
+        log_message( "Running test - attempt #{count}" )
+
         if ( obj.run_test() )
           log_message( "Test succeeed - clearing alert" )
+          success = true
           alert.clear()
-          success= true
         end
         count += 1
       end
