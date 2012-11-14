@@ -22,7 +22,7 @@
 #
 #  The tool works by resolving the hostname specified upon the command line,
 # and invoking "ping" or "ping6" upon the result - using the correct one for
-# the address which has been returned.
+# the address family which has been returned.
 #
 # AUTHOR
 #
