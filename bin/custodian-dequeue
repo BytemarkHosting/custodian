@@ -6,10 +6,11 @@
 # SYNOPSIS
 #  custodian-dequeue  [ -h | --help ]
 #                     [ -m | --manual]
-#                     [      --server 1.2.3.4:123 ]
+#                     [ -f | --flush ]
+#                     [ -l | --logfile FILE]
+#                     [ -S | --server 1.2.3.4:123 ]
 #                     [ -s | --single ]
 #                     [ -v | --verbose ]
-#                     [ -f | --flush ]
 #
 # OPTIONS
 #
@@ -19,9 +20,14 @@
 #
 #  -f, --flush         Flush the queue, removing all jobs.
 #
+#  -l, --logfile       Specify the path to the logfile to run.
+#
+#  -S, --server        Specify the host:port for the beanstalkd queue.
+#
 #  -s, --single        Run a single test and exit.  Don't poll the queue for more.
 #
 #  -v, --verbose       Be noisy.
+#
 #
 # ABOUT
 #
@@ -156,13 +162,13 @@ class Custodian
   #
   # Constructor: Connect to the queue
   #
-  def initialize( server )
+  def initialize( server, logfile )
 
     # Connect to the queue
     @queue = Beanstalk::Pool.new([server])
 
     # Instantiate the logger.
-    @logger = Logger.new( "worker.log", "daily" )
+    @logger = Logger.new( logfile, "daily" )
 
     if ( ENV['REPEAT'] )
        @retry_count=ENV['REPEAT'].to_i
@@ -343,15 +349,17 @@ end
 #
 if __FILE__ == $0 then
 
-  $SERVER = "127.0.0.1:11300"
-  $help   = false
-  $manual = false
+  $SERVER  = "127.0.0.1:11300"
+  $LOGFILE = "custodian-dequeue.log"
+  $help    = false
+  $manual  = false
 
   begin
     opts = GetoptLong.new(
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
+                          [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
@@ -363,6 +371,8 @@ if __FILE__ == $0 then
           ENV["VERBOSE"] = "1"
       when "--flush":
           ENV["FLUSH"] = "1"
+      when "--logfile":
+          $LOGFILE = arg
       when "--repeat":
           ENV["REPEAT"] = arg
       when "--server":
@@ -414,7 +424,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = Custodian.new( $SERVER )
+  worker = Custodian.new( $SERVER, $LOGFILE )
 
   #
   #  Are we flushing the queue?
