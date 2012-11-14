@@ -26,6 +26,10 @@ class TestParser < Test::Unit::TestCase
   end
 
 
+
+
+
+
   #
   #  Test we can create a new parser object - specifically
   # that it throws exceptions if it is not given a filename
@@ -55,6 +59,10 @@ class TestParser < Test::Unit::TestCase
     end
 
   end
+
+
+
+
 
 
   #
@@ -162,6 +170,8 @@ class TestParser < Test::Unit::TestCase
 
 
 
+
+
   #
   #  Test that we can define macros with only a single host.
   #
@@ -246,6 +256,18 @@ class TestParser < Test::Unit::TestCase
   end
 
 
+
+
+
+
+  #
+  # We found a bug in our live code because macros didn't get expanded
+  # unless they matched the regular expression "[A-Z_]" - here we test
+  # that this bug is fixed.
+  #
+  # (The issue being that several of our macros have numeric digits in
+  # their names.)
+  #
   def test_misc_macro
 
     parser = MonitorConfig.new("/dev/null" )
@@ -258,13 +280,18 @@ class TestParser < Test::Unit::TestCase
     assert( macros.empty? )
     assert( macros.size() == 0 )
 
-    parser.parse_line( "FRONTLINESTAGING2 is 89.16.186.138 and 89.16.186.139 and 89.16.186.148." )
 
+    #
+    # Define a new macro, and ensure it is now present
+    #
+    parser.parse_line( "FRONTLINESTAGING2 is 89.16.186.138 and 89.16.186.139 and 89.16.186.148." )
     macros = parser.macros
     assert( macros.size() == 1 )
 
+
     #
-    # Test that we got a suitable value.
+    # Test that we got a suitable value when lookup up the contents
+    # of that newly defined macro.
     #
     values = parser.get_macro_targets( "FRONTLINESTAGING2" )
     assert(values.class.to_s == "Array" )
@@ -274,14 +301,22 @@ class TestParser < Test::Unit::TestCase
     # Parse another line
     #
     parser.parse_line( "SWML_HOSTS is 212.110.191.9.")
+
+
+    #
+    # Ensure our macro-list is now bigger.
+    #
     macros = parser.macros
     assert( macros.size() == 2 )
+
+    #
+    # And ensure the macro expansion is correct.
+    #
     values = parser.get_macro_targets( "SWML_HOSTS" )
     assert(values.class.to_s == "Array" )
-
-
-
   end
+
+
 
 
 
@@ -300,8 +335,8 @@ class TestParser < Test::Unit::TestCase
     assert_equal( ret.size(), 1 )
 
     #
-    # Define a macro - such that a single added test will become
-    # several indivual tests.
+    # Define a macro - such that a single parsed line will become multiple
+    # tests.
     #
     parser.parse_line( "MACRO is kvm1.vm.bytemark.co.uk and kvm1.vm.bytemark.co.uk and kvm3.vm.bytemark.co.uk." )
     assert( parser.is_macro?( "MACRO") )
@@ -315,7 +350,7 @@ class TestParser < Test::Unit::TestCase
     # The resulting array should contain three JSON strings.
     #
     assert_equal( ret.class.to_s, "Array" )
-    assert_equal( ret.size(),3 )
+    assert_equal( ret.size(), 3 )
 
     #
     # Ensure we look like valid JSON, and contains the correct hostnames.
@@ -333,6 +368,7 @@ class TestParser < Test::Unit::TestCase
     #   2.  The addition should have the correct test-type
     #
     %w( dns ftp http https jabber ldap ping rsync ssh smtp ).each do |name|
+
       ret = parser.parse_line( "MACRO must run #{name} otherwise '#{name} failure'." )
 
       #
@@ -342,7 +378,8 @@ class TestParser < Test::Unit::TestCase
       assert_equal( ret.size(),3 )
 
       #
-      #  The test-type should be set to the correct test.
+      #  The test-type should be set to the correct test for each of those
+      # three tests we've added.
       #
       ret.each do |test|
 
@@ -357,10 +394,11 @@ class TestParser < Test::Unit::TestCase
         #
         hash = JSON.parse( test )
         assert( hash['test_type'] == name )
-
       end
     end
   end
+
+
 
 
 
@@ -418,6 +456,7 @@ class TestParser < Test::Unit::TestCase
   end
 
 
+
   #
   # Comment-handling
   #
@@ -434,5 +473,33 @@ class TestParser < Test::Unit::TestCase
     assert( parser.parse_line( nil ).nil? )
   end
 
+
+
+
+  #
+  # Test we can add tests which don't contain a trailing period.
+  #
+  def test_short_test
+
+    parser = MonitorConfig.new("/dev/null" )
+
+    #
+    # Adding a simple test must work - no trailing whitespace required
+    # after the test-type.
+    #
+    ret = parser.parse_line( "foo.vm.bytemark.co.uk must run ssh." )
+    assert( ret )
+    assert( ret.class.to_s == "Array" )
+    assert( ret.size == 1 )
+
+    #
+    # Adding a simple test must work - no trailing period required
+    # after the test-type.
+    #
+    ret = parser.parse_line( "foo.vm.bytemark.co.uk must run ssh" )
+    assert( ret )
+    assert( ret.class.to_s == "Array" )
+    assert( ret.size == 1 )
+  end
 
 end
