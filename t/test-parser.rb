@@ -1,9 +1,10 @@
-#!/usr/bin/ruby1.8 -I./bin/ -I../bin/
+#!/usr/bin/ruby1.8 -I./lib/ -I../lib/
 
 
 require 'json'
 require 'test/unit'
-load    'custodian-enqueue'
+require 'custodian/parser'
+
 
 
 
