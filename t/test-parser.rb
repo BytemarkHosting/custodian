@@ -245,6 +245,33 @@ class TestParser < Test::Unit::TestCase
   end
 
 
+  def test_misc_macro
+
+    parser = MonitorConfig.new("/dev/null" )
+
+    #
+    #  With nothing loaded we should have zero macros - so the
+    # count of our macros hash should be zero
+    #
+    macros = parser.macros
+    assert( macros.empty? )
+    assert( macros.size() == 0 )
+
+    parser.parse_line( "FRONTLINESTAGING2 is 89.16.186.138 and 89.16.186.139 and 89.16.186.148." )
+
+    macros = parser.macros
+    assert( macros.size() == 1 )
+
+    #
+    # Test that we got a suitable value.
+    #
+    values = parser.get_macro_targets( "FRONTLINESTAGING2" )
+
+    assert(values.class.to_s == "Array" )
+
+  end
+
+
 
   #
   #  Test that we can define tests which expand macros successfully.
