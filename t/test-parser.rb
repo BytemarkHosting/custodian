@@ -266,8 +266,19 @@ class TestParser < Test::Unit::TestCase
     # Test that we got a suitable value.
     #
     values = parser.get_macro_targets( "FRONTLINESTAGING2" )
-
     assert(values.class.to_s == "Array" )
+
+
+    #
+    # Parse another line
+    #
+    parser.parse_line( "SWML_HOSTS is 212.110.191.9.")
+    macros = parser.macros
+    assert( macros.size() == 2 )
+    values = parser.get_macro_targets( "SWML_HOSTS" )
+    assert(values.class.to_s == "Array" )
+
+
 
   end
 
