@@ -247,7 +247,7 @@ class TestParser < Test::Unit::TestCase
 
 
   #
-  #  Test that we can define macros.
+  #  Test that we can define tests which expand macros successfully.
   #
   def test_adding_tests
 
@@ -326,7 +326,7 @@ class TestParser < Test::Unit::TestCase
 
 
   #
-  # Most services define a default port.  Ensure that is correct
+  # Most services define a default port.  Ensure that is correct.
   #
   def test_default_ports
 
@@ -394,4 +394,6 @@ class TestParser < Test::Unit::TestCase
     assert( parser.parse_line( "" ).nil? )
     assert( parser.parse_line( nil ).nil? )
   end
+
+
 end
