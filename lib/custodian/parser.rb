@@ -62,7 +62,7 @@ class MonitorConfig
     @MACROS  = Hash.new()
     @queue   = Beanstalk::Pool.new(['127.0.0.1:11300'])
     @file    = filename
-    @timeout = 3
+    @timeout = 10
 
     raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
     raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
@@ -272,7 +272,7 @@ class MonitorConfig
       new_line = "#{pre} must run ping #{post}"
       return( parse_line( new_line ) )
 
-    elsif ( line =~ /\s+must\s+run\s+([^\s]+)(\s+|\.)/i )
+    elsif ( line =~ /\s+must\s+run\s+([^\s]+)(\s+|\.|$)/i )
 
       #
       # Get the service we're testing, and remove any trailing "."
