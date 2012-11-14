@@ -81,14 +81,16 @@ class HTTPSTest
         end
       end
 
+
+
       #
       #  Do we need to search for text in the body of the reply?
       #
       if ( @test_data['http_text'] )
-        puts "Testing for text in the response: #{@test_data['http_text']}" if ( @test_data['verbose'] )
+        puts "Testing for text in the response: '#{@test_data['http_text']}'" if ( @test_data['verbose'] )
 
         if (! @body.match(/#{@test_data['http_text']}/i) )
-          @error = "#{@error} The respond did not contain #{test_data['http_text']}"
+          @error = "#{@error} The response did not contain our expected text '#{test_data['http_text']}'"
         end
       end
 
