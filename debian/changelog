@@ -1,3 +1,9 @@
+custodian (2012:1114-1) stable; urgency=low
+
+  * Updated alerting via mauve.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:13:55 +0000
+
 custodian (2012:1114) stable; urgency=low
 
   * Promoted to live usage:
