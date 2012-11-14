@@ -59,7 +59,11 @@ class RSYNCTest
   # If the test fails the details should be retrieved from "error()".
   #
   def run_test
-    @error = ""
+
+    #
+    # Reset state from previous test.
+    #
+    @error = nil
 
     #
     #  Get the hostname & port to test against.

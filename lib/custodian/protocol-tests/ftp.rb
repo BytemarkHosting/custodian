@@ -30,7 +30,6 @@ class FTPTest
     @test_data = data
     @error     = nil
 
-
     #
     # Ensure we have a host to probe
     #
@@ -60,6 +59,11 @@ class FTPTest
   # If the test fails the details should be retrieved from "error()".
   #
   def run_test
+
+    #
+    # Reset state from previous test.
+    #
+    @error = nil
 
     #
     #  Get the hostname & port to test against.

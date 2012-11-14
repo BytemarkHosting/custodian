@@ -66,6 +66,11 @@ class DNSTest
   def run_test
 
     #
+    # Reset state from previous test.
+    #
+    @error = nil
+
+    #
     # Get the nameserver to resolve with
     #
     nameserver = @test_data["target_host"]
