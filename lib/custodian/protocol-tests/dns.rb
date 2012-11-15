@@ -143,7 +143,7 @@ class DNSTest
               dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push r.address.to_s() }
 
             when /^NS$/ then
-              dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.pushResolv.getaddresses(r.name.to_s()) }
+              dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.name.to_s()) }
 
             when /^MX$/ then
               dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.exchange.to_s()) }
