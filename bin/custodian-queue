@@ -131,7 +131,7 @@ if __FILE__ == $0 then
     stats = queue.stats()
     jobs  = stats['current-jobs-ready'] || 0
 
-    if ( jobs > 3000 )
+    if ( jobs > 5000 )
       system( "mauvesend alert.bytemark.co.uk -i custodian -r now -s \"Our queue has #{jobs} in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers?</p>\" " )
     else
       system( "mauvesend alert.bytemark.co.uk -i custodian -c now -s \"Our queue has #{jobs} in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers?</p>\" " )
