@@ -425,6 +425,11 @@ class MonitorConfig
 
 
         #
+        #  Just testing syntax?  At this point we're done
+        #
+        next if ( ENV['TEST'] )
+
+        #
         # We've now parsed the line.  Either output the JSON to the console
         # or add to the queue.
         #
