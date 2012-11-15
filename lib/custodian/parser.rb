@@ -361,6 +361,9 @@ class MonitorConfig
       end
 
 
+      #
+      # The array of JSON objects we will return to the caller.
+      #
       ret = Array.new()
 
       #
