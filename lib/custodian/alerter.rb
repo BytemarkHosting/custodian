@@ -43,29 +43,43 @@ class Alerter
     #
     resolved = nil
 
+
     #
-    #  Resolve the target to an IP
+    #  Resolve the target to an IP, unless it is already an address.
     #
-    begin
-      Socket.getaddrinfo(target, 'echo').each do |a|
-       resolved = a[3] if ( a )
+    if ( ( target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
+         ( target =~ /^([0-9a-f:]+)$/ ) )
+      resolved = target
+    else
+      begin
+        Socket.getaddrinfo(target, 'echo').each do |a|
+          resolved = a[3] if ( a )
+        end
+      rescue SocketError
+        resolved = nil
       end
-    rescue SocketError
     end
 
+    #
+    # Did we get an error?
+    #
     return "" unless ( !resolved.nil? )
 
+
+    #
+    # Make any HTTP target a link in the details.
+    #
     if ( host =~ /^http/ )
         host = "<a href=\"#{host}\">#{host}</a>"
     end
 
     #
-    #  Test trange
+    #  Test trange, and format the appropriate message.
     #
     if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(resolved.to_s))} )
       return "<p>#{host} resolves to <tt>#{resolved}</tt> which is inside the Bytemark network.</p>"
     else
-      return "<p>#{host} resolves to <tt>#{resolved}</tt> which <b>is not</b> inside the Bytemark network.</p>"
+      return "<p>#{host} resolves to <tt>#{resolved}</tt> which is not inside the Bytemark network.</p>"
     end
 
   end
