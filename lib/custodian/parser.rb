@@ -190,6 +190,10 @@ class MonitorConfig
 
     end
 
+    if ( is_macro?( name ) )
+      raise ArgumentError, "The macro #{name} is already defined"
+    end
+
     @MACROS[name] = val
   end
 

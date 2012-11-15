@@ -57,7 +57,6 @@ class TestParser < Test::Unit::TestCase
     assert_nothing_raised do
       MonitorConfig.new("/dev/null" )
     end
-
   end
 
 
@@ -168,6 +167,41 @@ class TestParser < Test::Unit::TestCase
   end
 
 
+
+
+
+  #
+  # Redefinining a macro should cause an error
+  #
+  def test_duplicate_macro
+
+
+    #
+    # Create the parser.
+    #
+    parser = MonitorConfig.new("/dev/null" )
+
+
+    #
+    #  With nothing loaded we should have zero macros - so the
+    # count of our macros hash should be zero
+    #
+    macros = parser.macros
+    assert( macros.empty? )
+    assert( macros.size() == 0 )
+
+
+    #
+    #  Define a macro twice.  The first will work, the second will fail
+    #
+    assert_nothing_raised do
+      parser.define_macro( "FOO is kvm1.vm.bytemark.co.uk and kvm2.vm.bytemark.co.uk." )
+    end
+
+    assert_raise ArgumentError do
+      parser.define_macro( "FOO is kvm1.vm.bytemark.co.uk and kvm2.vm.bytemark.co.uk." )
+    end
+  end
 
 
 
