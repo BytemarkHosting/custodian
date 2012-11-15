@@ -52,10 +52,17 @@ class Alerter
       resolved = target
     else
       begin
-        Socket.getaddrinfo(target, 'echo').each do |a|
-          resolved = a[3] if ( a )
+        timeout( 4 ) do
+
+          begin
+            Socket.getaddrinfo(target, 'echo').each do |a|
+              resolved = a[3] if ( a )
+            end
+          rescue SocketError
+            resolved = nil
+          end
         end
-      rescue SocketError
+      rescue Timeout::Error => e
         resolved = nil
       end
     end
@@ -93,9 +100,15 @@ class Alerter
     raise ArgumentError, "Address must not be nil" if ( address.nil? )
 
     begin
-      Resolv.new.getname(address)
-    rescue
-      nil
+      timeout( 4 ) do
+        begin
+          Resolv.new.getname(address)
+        rescue
+          nil
+        end
+      end
+    rescue Timeout::Error => e
+      resolved = nil
     end
   end
 
