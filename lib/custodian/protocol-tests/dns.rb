@@ -91,9 +91,13 @@ class DNSTest
     expected = @test_data["resolve_expected"]
 
     #
-    # Do the lookup
+    # Do the lookup abort if that fails.
     #
-    results = resolve_via( nameserver, record, lookup )
+    timeout = @test_data["timeout"].to_i
+
+    results = resolve_via( nameserver, record, lookup, timeout )
+    return false if ( results.nil? )
+
 
     #
     # Show the results if we found something.
@@ -122,26 +126,38 @@ class DNSTest
   #
   # Resolve an IP
   #
-  def resolve_via( server, ltype, name )
+  def resolve_via( server, ltype, name, period )
     puts "Resolving #{name} [#{ltype}] via server #{server}"
 
     results = Array.new()
 
-    Resolv::DNS.open(:nameserver=>[server]) do |dns|
-      case ltype
-      when /^A$/ then
-        dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push r.address.to_s() }
-      when /^AAAA$/ then
-        dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push r.address.to_s() }
+    begin
+      timeout( period ) do
 
-      when /^NS$/ then
-        dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.pushResolv.getaddresses(r.name.to_s()) }
+        begin
+          Resolv::DNS.open(:nameserver=>[server]) do |dns|
+            case ltype
+            when /^A$/ then
+              dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push r.address.to_s() }
+            when /^AAAA$/ then
+              dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push r.address.to_s() }
 
-      when /^MX$/ then
-        dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.exchange.to_s()) }
+            when /^NS$/ then
+              dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.pushResolv.getaddresses(r.name.to_s()) }
+
+            when /^MX$/ then
+              dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.exchange.to_s()) }
+            end
+          end
+        rescue Exception => x
+          @error = "Exception was received when resolving : #{x}"
+          return nil
+        end
       end
+    rescue Timeout::Error => e
+      @error = "Timed-out connecting #{e}"
+      return nil
     end
-
     results.flatten!
     return results
   end
@@ -173,7 +189,7 @@ if __FILE__ == $0 then
     "target_host"      => "a.ns.bytemark.co.uk",
     "test_type"        => "dns",
     "verbose"          => 1,
-    "timeout"          => 4,
+    "timeout"          => "4",
     "test_alert"       => "DNS failure",
     "resolve_name"     => "support.bytemark.co.uk",
     "resolve_type"     => "MX",
