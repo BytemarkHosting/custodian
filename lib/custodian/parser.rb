@@ -439,8 +439,7 @@ class MonitorConfig
 
       ret
     else
-      puts "Unknown line: '#{line}'"
-      exit( 0 )
+      raise ArgumentError, "Unknown line: '#{line}'"
     end
   end
 
