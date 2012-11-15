@@ -1,13 +1,13 @@
-custodian (2012:1115-3) stable; urgency=low
+custodian (2012:1115-2) stable; urgency=low
 
- * A HTTP-request might result in a legitimately empty body.
+  * A HTTP-request might result in a legitimately empty body.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 10:28:01 +0000
 
 custodian (2012:1115-2) stable; urgency=low
 
- * Throw exceptions on bogus configuration file entries.
- * Throw exceptions if macros are redefinied.
+  * Throw exceptions on bogus configuration file entries.
+  * Throw exceptions if macros are redefinied.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 08:28:08 +0000
 
