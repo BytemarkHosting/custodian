@@ -66,7 +66,7 @@ class Custodian
     if ( ENV['REPEAT'] )
        @retry_count=ENV['REPEAT'].to_i
     else
-       @retry_count=5
+       @retry_count=3
     end
 
     log_message( "We'll run each test #{@retry_count} before alerting failures." )
