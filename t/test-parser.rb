@@ -510,6 +510,32 @@ class TestParser < Test::Unit::TestCase
 
 
 
+
+  #
+  #  Test that an exception is raised on a malformed line.
+  #
+  def test_bogus
+
+    parser = MonitorConfig.new("/dev/null" )
+
+
+    assert_nothing_raised do
+      parser.parse_line( "# This is a test" )
+      parser.parse_line( "foo must run ssh." )
+    end
+
+    assert_raise ArgumentError do
+      parser.parse_line( "steve is bored." )
+    end
+
+    assert_raise ArgumentError do
+      parser.parse_line( "steve.com must ." )
+    end
+
+  end
+
+
+
   #
   # Test we can add tests which don't contain a trailing period.
   #
