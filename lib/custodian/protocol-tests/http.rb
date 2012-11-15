@@ -84,7 +84,7 @@ class HTTPTest
         puts "Testing for text in the response: '#{@test_data['http_text']}'" if ( @test_data['verbose'] )
 
         if (! obj.content.match(/#{@test_data['http_text']}/i) )
-          @error = "#{@error}<p>The response did not contain our expected text '#{test_data['http_text']}</p>'"
+          @error = "#{@error}<p>The response did not contain our expected text '#{test_data['http_text']}'</p>"
         end
       end
 
@@ -119,14 +119,14 @@ if __FILE__ == $0 then
   #  Sample data.
   #
   test = {
-    "target_host" => "http://collector2.sh.bytemark.co.uk/",
+    "target_host" => "http://itsdanbull.co.uk/",
     "test_type"   => "http",
     "verbose"     => 1,
     "timeout"     => 3,
     "test_port"   => 80,
     "test_alert"  => "Collector is unavailable",
     "http_status" => "200",
-    "http_text"   => "Bytemark Monitor"
+    "http_text"   => "Dan Bull"
   }
 
 
