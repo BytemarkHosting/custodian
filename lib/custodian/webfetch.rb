@@ -59,10 +59,11 @@ class WebFetch
 
 
     #
-    # If both files are size zero then we clearly failed.
+    # If the header was empty then we're a failure.
     #
-    if ( ( File.size( body ) == 0 ) ||
-         ( File.size( head ) == 0 ) )
+    # (A body might be legitimately empty.)
+    #
+    if ( File.size( head ) == 0 )
 
       #
       # Cleanup
