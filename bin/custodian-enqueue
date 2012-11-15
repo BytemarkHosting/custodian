@@ -8,6 +8,7 @@
 #                     [ -m | --manual]
 #                     [ -f | --file FILE]
 #                     [ -d | --dump ]
+#                     [    | --test ]
 #                     [ -t | --timeout N ]
 #
 # OPTIONS
@@ -17,6 +18,8 @@
 #  -m, --manual        Show this manual, and exit.
 #
 #  -d, --dump          Dump the generated JSON to the console; don't insert in the queue.
+#
+#  --test              Test the parsing of the given file, alert on errors.
 #
 #  -f, --file FILE     Parse the given configuration file.
 #
@@ -64,6 +67,7 @@ if __FILE__ == $0 then
   begin
     opts = GetoptLong.new(
                           [ "--dump",  "-d", GetoptLong::NO_ARGUMENT ],
+                          [ "--test",   GetoptLong::NO_ARGUMENT ],
                           [ "--file",  "-f", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--help",  "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual","-m", GetoptLong::NO_ARGUMENT ],
@@ -73,6 +77,8 @@ if __FILE__ == $0 then
       case opt
       when "--dump":
           ENV["DUMP"] = "1"
+      when "--test":
+          ENV["TEST"] = "1"
       when "--file":
           ENV["FILE"] = arg
       when "--timeout":
