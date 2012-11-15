@@ -11,6 +11,10 @@ require 'socket'
 #
 #  This class encapsulates the raising and clearing of alerts via Mauve.
 #
+#  There is a helper method to update any alerts with details of whether the
+# affected host is inside/outside the Bytemark network.
+#
+#
 class Alerter
 
 
@@ -68,11 +72,46 @@ class Alerter
 
 
   #
+  # Resolve an IP address
+  #
+  def document_address( address )
+
+    raise ArgumentError, "Address must not be nil" if ( address.nil? )
+
+    begin
+      Resolv.new.getname(address)
+    rescue
+      nil
+    end
+  end
+
+
+
+  #
   # Raise the alert.
   #
   def raise( detail )
 
+    #
+    # Is this alert affecting a machine inside/outside our network
+    #
     inside = expand_inside_bytemark( @details["target_host"] )
+
+
+    #
+    # Document the hostname if the alert relates to an IP address.
+    #
+    resolved = ""
+    if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
+         ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
+
+      resolved = document_address( @details["target_host"] )
+      if ( resolved.nil? )
+        resolved = ""
+      else
+        resolved = "The IP address #{@details["target_host"]} resolves to #{resolved}."
+      end
+    end
 
 
     update = Mauve::Proto::AlertUpdate.new
@@ -90,7 +129,7 @@ class Alerter
 
     alert.subject    = @details['target_host']
     alert.summary    = @details['test_alert']
-    alert.detail     = "#{inside} <p>The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}</p>"
+    alert.detail     = "#{inside} <p>The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}</p><p>#{resolved}</p>"
     alert.raise_time = Time.now.to_i
     update.alert << alert
 
@@ -103,7 +142,27 @@ class Alerter
   #
   def clear
 
+    #
+    # Is this alert affecting a machine inside/outside our network
+    #
     inside = expand_inside_bytemark( @details["target_host"] )
+
+
+    #
+    # Document the hostname if the alert relates to an IP address.
+    #
+    resolved = ""
+    if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
+         ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
+
+      resolved = document_address( @details["target_host"] )
+      if ( resolved.nil? )
+        resolved = ""
+      else
+        resolved = "The IP address #{@details["target_host"]} resolves to #{resolved}."
+      end
+    end
+
 
     update = Mauve::Proto::AlertUpdate.new
     update.alert   = []
@@ -121,7 +180,7 @@ class Alerter
 
     alert.subject    = @details['target_host']
     alert.summary    = @details['test_alert']
-    alert.detail     = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p>"
+    alert.detail     = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
     alert.clear_time = Time.now.to_i
     update.alert << alert
 
