@@ -11,6 +11,7 @@ tidy:
 	rm -f ./debian/custodian.debhelper.log
 	rm -f ./debian/custodian.substvars
 	rm -f ./debian/files
+	find . -name 'custodian-dequeue.log' -delete || true
 
 test:
 	t/test-suite
