@@ -1,7 +1,7 @@
 
 require 'getoptlong'
 require 'socket'
-
+require 'timeout'
 
 
 class MultiPing
@@ -24,10 +24,17 @@ class MultiPing
     res = nil
 
     begin
-      Socket.getaddrinfo(hostname, 'echo').each do |a|
-       res = a[3]
+      timeout( 4 ) do
+
+        begin
+          Socket.getaddrinfo(hostname, 'echo').each do |a|
+            res = a[3]
+          end
+        rescue SocketError
+        end
       end
-    rescue SocketError
+    rescue Timeout::Error => e
+      resolved = nil
     end
 
     res
