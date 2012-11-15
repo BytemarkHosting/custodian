@@ -69,8 +69,8 @@ class Custodian
        @retry_count=3
     end
 
-    log_message( "We'll run each test #{@retry_count} before alerting failures." )
   end
+
 
 
   #
@@ -177,7 +177,7 @@ class Custodian
       #
       while ( ( count < @retry_count ) && ( success == false ) )
 
-        log_message( "Running test - attempt #{count}" )
+        log_message( "Running test - [#{count}/#{@retry_count}]" )
 
         if ( obj.run_test() )
           log_message( "Test succeeed - clearing alert" )
