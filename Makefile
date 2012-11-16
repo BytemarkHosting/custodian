@@ -19,7 +19,7 @@ docs: ./man/custodian-dequeue.man ./man/custodian-enqueue.man ./man/custodian-qu
 
 man/%.man: ./bin/%
 	        [ -d man ] || mkdir man
-			        RUBYLIB=./lib $<  --manual | sed -e 's/^=\+$$//' | txt2man -p -s 1 -t $(notdir $<) | sed -e 's/\\\\fB/\\fB/' > $@
+			        RUBYLIB=./lib ./$<  --manual | sed -e 's/^=\+$$//' | txt2man -p -s 1 -t $(notdir $<) | sed -e 's/\\\\fB/\\fB/' > $@
 
 test:
 	t/test-suite
