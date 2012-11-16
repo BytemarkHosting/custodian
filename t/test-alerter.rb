@@ -39,14 +39,13 @@ class TestAlerter < Test::Unit::TestCase
       obj = Alerter.new( {} )
       assert( obj )
     end
-
   end
 
 
   #
   #  Test location-detection.
   #
-  def test_locations_inside_outside
+  def test_location_detection
 
     #
     #  Hash of hostnames and version of address.
@@ -84,10 +83,21 @@ class TestAlerter < Test::Unit::TestCase
       if ( text =~ /is inside/ )
         assert( inside == true )
       end
-      if ( text =~ /is not/ )
+      if ( text =~ /OUTSIDE/ )
         assert( inside == false )
       end
     end
+
+    #
+    # OK now look for the text returned
+    #
+    obj = Alerter.new( nil )
+    details = obj.expand_inside_bytemark( "46.43.50.217" )
+    assert( details.match( /46.43.50.217 is inside the Bytemark network/ ) )
+
+    details = obj.expand_inside_bytemark( "www.linnrecords.com" )
+    assert( details.match( /resolves to 46.43.50.217 which is inside the Bytemark network/ ) )
+
   end
 
 
@@ -120,5 +130,6 @@ class TestAlerter < Test::Unit::TestCase
     #
     details = obj.document_address( "800.683.853.348" )
     assert( details.nil? )
+
   end
 end
