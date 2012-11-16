@@ -1,3 +1,9 @@
+custodian (2012:1117-1) stable; urgency=low
+
+  * Better alert text.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 16 Nov 2012 16:00:16 +0000
+
 custodian (2012:1116-1) stable; urgency=low
 
   * Generate manpages via "make docs", and include those man-pages
