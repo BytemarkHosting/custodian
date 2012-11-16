@@ -2,7 +2,7 @@ Source: custodian
 Section: net
 Priority: extra
 Maintainer: Steve Kemp <steve@bytemark.co.uk>
-Build-Depends: debhelper (>= 7.0.0), cdbs
+Build-Depends: debhelper (>= 7.0.0), cdbs, txt2man
 Standards-Version: 3.9.1
 
 Package: custodian
