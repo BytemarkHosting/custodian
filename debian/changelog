@@ -1,3 +1,10 @@
+custodian (2012:1116-1) stable; urgency=low
+
+  * Generate manpages via "make docs", and include those man-pages
+    in the generated Debian package.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 16 Nov 2012 14:00:41 +0000
+
 custodian (2012:1115-4) stable; urgency=low
 
   * Timeout DNS lookups for alerting purposes.
