@@ -14,7 +14,7 @@ tidy:
 	rm -f ./debian/files
 	find . -name 'custodian-dequeue.log' -delete || true
 
-docs: man/custodian-dequeue.man man/custodian-enqueue.man man/custodian-queue.man man/multi-ping.man
+docs: ./man/custodian-dequeue.man ./man/custodian-enqueue.man ./man/custodian-queue.man ./man/multi-ping.man
 
 
 man/%.man: ./bin/%
