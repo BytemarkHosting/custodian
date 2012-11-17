@@ -384,6 +384,14 @@ class MonitorConfig
 
 
         #
+        # TCP-tests will include a banner, optionally
+        #
+        if ( line =~ /\s+with\s+banner\s+'([^']+)'/ )
+          test[:banner]=$1.dup
+        end
+
+
+        #
         # HTTP-tests will include the expected result in one of two forms:
         #
         #    must run http with status 200
