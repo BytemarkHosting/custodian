@@ -7,3 +7,4 @@ debian/custodian.substvars
 debian/custodian/DEBIAN
 debian/custodian/usr
 debian/files
+man/*.man
