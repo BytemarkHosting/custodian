@@ -71,6 +71,8 @@ class TCPTest
     host = @test_data['target_host']
     port = @test_data['test_port']
 
+@test_data['verbose'] = true
+
     #
     #  Get the banner we expect
     #
@@ -94,17 +96,20 @@ class TCPTest
 
           socket.close()
 
-          if ( !banner.nil? )
-              # test for bannerbanner
-              if ( read =~ /#{banner}/i )
-                   puts "We connected and matched the banner against '#{read}'" if ( @test_data['verbose'] )
-                return true
-              end
 
-              @error = "We expected a banner matching '#{banner}' but we got '#{read}'"
-              return false
+          if ( banner.nil? )
+            return true
+          else
+            # test for banner
+            if ( read =~ /#{banner}/i )
+              puts "We connected and matched the banner against '#{read}'" if ( @test_data['verbose'] )
+              return true
+            end
+
+            @error = "We expected a banner matching '#{banner}' but we got '#{read}'"
+            return false
           end
-       rescue
+        rescue
           @error = "Exception connecting to host #{host}:#{port} - #{$!}"
           return false
         end
@@ -113,7 +118,7 @@ class TCPTest
       @error = "TIMEOUT: #{e}"
       return false
     end
-
+    
     @error = "Misc failure"
     return false
   end
