@@ -1,3 +1,9 @@
+custodian (2012:1117-2) stable; urgency=low
+
+  * Added 'tcp' test with the optional banner.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Sat, 17 Nov 2012 16:16:16 +0000
+
 custodian (2012:1117-1) stable; urgency=low
 
   * Better alert text.
