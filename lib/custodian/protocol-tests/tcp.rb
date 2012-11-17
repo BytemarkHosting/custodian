@@ -90,7 +90,10 @@ class TCPTest
 
           # read a banner from the remote server
           read = socket.gets(nil)
+
+          # trim to a sane length & strip newlines.
           read = read[0,255]
+          read.gsub!(/[\n\r]/, "") unless ( read.nil? )
 
           socket.close()
 
@@ -116,7 +119,6 @@ class TCPTest
       @error = "TIMEOUT: #{e}"
       return false
     end
-    
     @error = "Misc failure"
     return false
   end
@@ -134,7 +136,7 @@ end
 
 
 #
-# Sample test, for testing.
+# Sample test, for basic testing.
 #
 if __FILE__ == $0 then
 
