@@ -22,6 +22,7 @@ require 'custodian/protocol-tests/ping.rb'
 require 'custodian/protocol-tests/rsync.rb'
 require 'custodian/protocol-tests/smtp.rb'
 require 'custodian/protocol-tests/ssh.rb'
+require 'custodian/protocol-tests/tcp.rb'
 
 
 
