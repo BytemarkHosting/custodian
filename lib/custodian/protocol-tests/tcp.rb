@@ -71,8 +71,6 @@ class TCPTest
     host = @test_data['target_host']
     port = @test_data['test_port']
 
-@test_data['verbose'] = true
-
     #
     #  Get the banner we expect
     #
