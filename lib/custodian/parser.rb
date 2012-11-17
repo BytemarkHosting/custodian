@@ -387,8 +387,12 @@ class MonitorConfig
         #
         # TCP-tests will include a banner, optionally
         #
-        if ( line =~ /\s+with\s+banner\s+'([^']+)'/ )
-          test[:banner]=$1.dup
+        if ( test[:test_type] =~ /tcp/ )
+          if ( line =~ /\s+with\s+banner\s+'([^']+)'/ )
+            test[:banner]=$1.dup
+          else
+            puts "You did not specify a banner to match against in line: #{line}"
+          end
         end
 
 
@@ -407,12 +411,23 @@ class MonitorConfig
         # http://example.vm/ must run http with status 200 and content 'OK'.
         #
         #
-        if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
-          test[:http_status]=$1.dup
+        if ( test[:test_type] =~ /^https?/ )
+          found = 0
+
+          if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
+            test[:http_status]=$1.dup
+            found += 1
+          end
+          if ( line =~ /\s+with\s+content\s+'([^']+)'/ )
+            test[:http_text]=$1.dup
+            found += 1
+          end
+
+          if ( found == 0 )
+            puts "WARNING: Neither an expected text, or a status code, were specified in the line: #{line}"
+          end
         end
-        if ( line =~ /\s+with\s+content\s+'([^']+)'/ )
-          test[:http_text]=$1.dup
-        end
+
 
         #
         # These are special cased for the DNS types
