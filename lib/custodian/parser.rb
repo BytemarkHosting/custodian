@@ -379,6 +379,7 @@ class MonitorConfig
           :test_type   => service,
           :test_port   => port,
           :test_alert  => alert,
+          :verbose     => true,
           :timeout     => @timeout
         }
 
