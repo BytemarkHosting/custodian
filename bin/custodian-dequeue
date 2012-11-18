@@ -6,6 +6,7 @@
 # SYNOPSIS
 #  custodian-dequeue  [ -h | --help ]
 #                     [ -m | --manual]
+#                     [ -f | --fail ]
 #                     [ -l | --logfile FILE]
 #                     [ -S | --server 1.2.3.4:123 ]
 #                     [ -s | --single ]
@@ -22,6 +23,8 @@
 #  -S, --server        Specify the host:port for the beanstalkd queue.
 #
 #  -s, --single        Run a single test and exit.  Don't poll the queue for more.
+#
+#  -f, --fail          Run tests but stop the first time we see a fail.
 #
 #  -v, --verbose       Be noisy.
 #
@@ -72,6 +75,7 @@ if __FILE__ == $0 then
     opts = GetoptLong.new(
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
+                          [ "--fail",    "-f", GetoptLong::NO_ARGUMENT  ],
                           [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
@@ -90,6 +94,8 @@ if __FILE__ == $0 then
           $SERVER = arg
       when "--single":
           ENV["SINGLE"] = "1"
+      when "--fail":
+          ENV["FAIL"] = "1"
       when "--help":
           $help = true
       when "--manual":
@@ -142,7 +148,15 @@ if __FILE__ == $0 then
   #  Single step?
   #
   if ( ENV['SINGLE'] )
-    worker.process_single_job
+    worker.process_single_job()
+    exit(0)
+  end
+
+  #
+  #  Run until we see a failure?
+  #
+  if ( ENV['FAIL'] )
+    worker.process_until_fail()
     exit(0)
   end
 

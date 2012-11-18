@@ -104,6 +104,8 @@ class Custodian
   #
   def process_single_job
 
+    result = false
+
     begin
       job = @queue.reserve()
 
@@ -200,6 +202,7 @@ class Custodian
           log_message( "Test succeeed - clearing alert" )
           success = true
           alert.clear()
+          result = true
         end
         count += 1
       end
@@ -228,7 +231,20 @@ class Custodian
       log_message( "Job ID : #{job.id} - Removed" )
       job.delete if ( job )
     end
+
+    return result
   end
+
+
+  #
+  #  Process jobs until we see a failure - stop then.
+  #
+  def process_until_fail
+      while( process_single_job() )
+          # nop
+      end
+  end
+
 end
 
 
