@@ -12,15 +12,12 @@ custodian-enqueue
 custodian-dequeue
 -----------------
 
-  Two tests pass arguments from the configuration file to
- the shell:
+  Two tests pass arguments from the configuration file to the shell:
 
     ping
-
     http/https
 
-  The hostname used to ping, and the url, are both passed
- directly to the shell with no encoding or sanitizing.
+  The hostname used to ping, and the url, are both passed directly to the shell with no encoding or sanitizing.
 
   This means a test such as the following is a risk:
 
@@ -30,8 +27,7 @@ custodian-dequeue
 
 ^([^\s]+)\s+
 
-  So in real terms the only risk is commands without
- spaces:
+  So in real terms the only risk is commands without spaces:
 
 
   $(/tmp/exploit.sh) must run ping
@@ -41,13 +37,17 @@ custodian-dequeue
 
 
 
-general
+General
 -------
 
-  We decode arbitrary JSON from the queue.  We should sign
- it, or validate it.  This will prevent trojan malformed
- JSON from being added.
+We decode arbitrary JSON from the queue.  We should sign it, or validate it to  will prevent trojan malformed
+JSON from being added.
 
+At the moment we ensure that the job-body we retrieve looks JSON-like, and decodes to a non-empty hash.
+
+Problem: We cannot sign the body without giving away our key details.
+
+Solution: Read /etc/custodian/salt, and store the checksum of all keys + values with that salt?
 
 
 TODO
