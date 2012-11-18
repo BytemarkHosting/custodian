@@ -111,10 +111,26 @@ class Custodian
 
 
       #
-      #  Parse the JSON of the job body.
+      #  Get the job body
       #
       json = job.body
+      raise ArgumentError, "Body doesn't look like JSON" unless( json =~ /[{}]/ )
+
+
+      #
+      # Decode the JSON body - it should return a non-empty hash.
+      #
       hash = JSON.parse( json )
+
+      #
+      # Ensure we got a non-empty hash.
+      #
+      raise ArgumentError, "JSON didn't decode to a hash" unless hash.kind_of?(Hash)
+      raise ArgumentError, "JSON hash is empty" if (hash.empty?)
+
+      #
+      # Are we being verbose?
+      #
       hash['verbose'] = 1 if ( ENV['VERBOSE'] )
 
 
