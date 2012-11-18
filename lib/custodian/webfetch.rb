@@ -4,6 +4,17 @@
 require 'tempfile'
 
 
+#
+# This is a class which allows a remote HTTP/HTTPS page to be downloaded
+# it allows both the content and the HTTP status-code to be retrieved assuming
+# a success was made.
+#
+# This code is *horrificly* bad, but required because net/http doesn't honour
+# timouts under certain circumstances.  I'm not proud of this code.
+#
+# Steve
+# -- 
+#
 class WebFetch
 
   #
@@ -14,7 +25,12 @@ class WebFetch
   #
   # The HTTP status code, and content, we received from fetching the URL
   #
-  attr_reader :status, :text, :error
+  attr_reader :status, :text
+
+  #
+  # An error to return to the caller, on failure
+  #
+  attr_reader :error
 
 
 
@@ -34,9 +50,7 @@ class WebFetch
 
 
   #
-  # Perform the fetch.
-  #
-  # Return true on success.
+  # Perform the fetch of the remote URL.  Return "true" on success.
   #
   def fetch
 
@@ -72,15 +86,19 @@ class WebFetch
       File.unlink( head ) if ( File.exists?( head ) )
 
       #
-      # Save the error.
+      # Store the error.
       #
-      @error = "Fetch failed"
+      @error = "Fetch of #{@url} failed"
       return false
     end
 
 
     #
     #  Get the HTTP status code, by parsing the HTTP headers.
+    #
+    #  NOTE: We will replace the code with later ones - this gives
+    #  the status code *after* any potential redirection(s) have
+    #  completed.
     #
     File.open( head, "r").each_line do |line|
       if ( line =~ /HTTP\/[0-9]\.[0-9]\s+([0-9]+)\s+/ )
@@ -106,16 +124,14 @@ class WebFetch
 
 
   #
-  # Return the HTTP status code the server responded with, if the
-  # fetch was successful.
+  # Return the HTTP status code the server responded with, if the fetch was successful.
   #
   def status
     @status
   end
 
   #
-  # Return the HTTP content the server responded with, if the
-  # fetch was successful.
+  # Return the HTTP content the server responded with, if the fetch was successful.
   #
   def content
     @text
