@@ -562,4 +562,50 @@ class TestParser < Test::Unit::TestCase
     assert( ret.size == 1 )
   end
 
+
+
+
+  #
+  #  Test that each test has the hostname in it.
+  #
+  def test_alert_expansion
+
+    parser = MonitorConfig.new("/dev/null" )
+
+    #
+    # Define a macro - such that a single parsed line will become multiple
+    # tests.
+    #
+    parser.parse_line( "MACRO is kvm1.vm.bytemark.co.uk and kvm1.vm.bytemark.co.uk and kvm3.vm.bytemark.co.uk." )
+    assert( parser.is_macro?( "MACRO") )
+
+    #
+    # Now add a ping-test against that macro
+    #
+    ret = parser.parse_line( "MACRO must run ping." )
+
+    #
+    # The resulting array should contain three JSON strings.
+    #
+    assert_equal( ret.class.to_s, "Array" )
+    assert_equal( ret.size(), 3 )
+
+    #
+    # Ensure we look like valid JSON, and contains the correct hostnames.
+    #
+    ret.each do |test|
+      #
+      #  Looks like JSON?
+      #
+      assert( test =~ /^\{/ )
+      assert( test =~ /(kvm1|kvm2|kvm3)\.vm.bytemark.co.uk/ )
+
+      #
+      #  Decode and look for $hostname in the alert text.
+      #
+      hash = JSON.parse( test )
+      assert( hash['test_alert'] =~ /kvm/ )
+    end
+  end
+
 end
