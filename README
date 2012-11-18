@@ -7,7 +7,8 @@ About
 
     * It is hard to scale, because all tests are executed upon one machine.
 
-    * It is over-engineered, hard to modify, and suffers from threading-related issues.
+    * It is over-engineered, hard to modify, and suffers from threading-related
+      stability issues.
 
     * It is heavy-weight.  Each time an alert is raised/cleared this is done by
       executing a "mauvesend" command.
@@ -130,8 +131,8 @@ There are two parts to our system:
   a.  Parser:  ./bin/custodian-enqueue
   b.  Worker:  ./bin/custodian-dequeue
 
-The parser will read the named configuration file(s), parse them, and submit
-to our queue a JSON-encoded piece of data for each test we must run.
+The parser will read the named configuration file, parse it, and submit the JSON-encoded tests
+to the queue.
 
 The worker will pull down these tests, and execute them.
 
@@ -147,12 +148,7 @@ You'll see that the JSON-encoded data is merely a hash, with the following keys:
    test_type:    The type of test we're runnign "ssh", "http", "ftp", "imap", etc.
    test_alert:   The text of the alert we'll raise, on failure.
 
-There are some extra fields which we might expect to see - these are test specific:
-
-http/https
-----------
-   http_text:        Expected HTTP/HTTPS contents.
-   http_status:      Expected HTTP/HTTPS response code.
+There are some test-specific extra fields which we might also expect to see:
 
 dns
 ---
@@ -160,6 +156,14 @@ dns
    resolve_type:     The type of record to lookup [A|AAAA|MX|NS]
    resolve_expected: A semicolon-deliminated list of results whihc *must* be detected.
 
+http/https
+----------
+   http_text:        Expected HTTP/HTTPS contents.
+   http_status:      Expected HTTP/HTTPS response code.
+
+tcp
+---
+   banner   Regular expression tested against the response from the remote TCP server.
 
 
 
