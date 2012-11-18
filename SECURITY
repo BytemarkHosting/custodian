@@ -12,29 +12,24 @@ custodian-enqueue
 custodian-dequeue
 -----------------
 
-  Two tests pass arguments from the configuration file to the shell:
+Two tests pass arguments from the configuration file to the shell:
 
     ping
     http/https
 
-  The hostname used to ping, and the url, are both passed directly to the shell with no encoding or sanitizing.
-
-  This means a test such as the following is a risk:
-
- $(touch /tmp/blah) must run ping.
-
-  HOWEVER the hostname will pass the following regexp:
+The hostname used to ping, and the url, are both passed directly to the shell with no encoding or sanitizing.  The only issue is that the hostnames must match the following regular expression:
 
 ^([^\s]+)\s+
 
-  So in real terms the only risk is commands without spaces:
+The following configuration file allows the specified command to be executed, as root, via the shell:
 
+    $(/home/steve/hg/custodian/exploit.sh) must ping otherwise "Owned".
 
-  $(/tmp/exploit.sh) must run ping
+Given that anybody who can talk to the beanstalkd server can submit JSON-encoded-jobs we have no solution here which involves sanity-checking the parsed-hostnames.  Instead we much either restrict submissions to signed ones, or we must remove the following from hostnames:
 
-
-  TODO: Fix this
-
+    $( ... )  - Expansion.
+    ` .. `    - Backticks.
+    ; ..      - Sub-commands.
 
 
 General
