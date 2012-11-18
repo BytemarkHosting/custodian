@@ -1,3 +1,9 @@
+custodian (2012:1118-1) stable; urgency=low
+
+  * The Sundey-before-release Release.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Sun, 18 Nov 2012 16:19:21 +0000
+
 custodian (2012:1117-2) stable; urgency=low
 
   * Added 'tcp' test with the optional banner.
