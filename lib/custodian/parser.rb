@@ -21,8 +21,7 @@ require 'uri'
 # but in practice it manages to successfully parse each of the configuration
 # files that we currently maintain @ Bytemark.
 #
-# If there are any lines which are not recognized the class will terminate
-# with an error.
+# If there are any lines which are not recognized the class will raise an exception.
 #
 # Steve
 # --
@@ -60,7 +59,7 @@ class MonitorConfig
     @MACROS  = Hash.new()
     @queue   = Beanstalk::Pool.new(['127.0.0.1:11300'])
     @file    = filename
-    @timeout = 12
+    @timeout = 15
 
     raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
     raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
@@ -145,7 +144,7 @@ class MonitorConfig
     val  = Array.new
 
     #
-    #  Get the name
+    #  Get the name of the macro.
     #
     name = $1.dup if ( line =~ /^([1-2A-Z_]+)\s+/ )
 
@@ -314,14 +313,6 @@ class MonitorConfig
       end
 
       #
-      #  Alert text will have a default, which may be overridden.
-      #
-      alert = "#{service} failed"
-      if ( line =~ /otherwise '([^']+)'/ )
-        alert=$1.dup
-      end
-
-      #
       # All our service tests, except ping, require a port - we setup the defaults here,
       # but the configuration file will allow users to specify an alternative
       # via " on XXX ".
@@ -378,11 +369,26 @@ class MonitorConfig
           :target_host => host,
           :test_type   => service,
           :test_port   => port,
-          :test_alert  => alert,
           :verbose     => true,
           :timeout     => @timeout
         }
 
+
+        #
+        #  Alert text will have a default, which may be overridden.
+        #
+        alert = "#{service} failed on #{host}"
+        if ( line =~ /otherwise '([^']+)'/ )
+          alert=$1.dup
+        end
+
+        #
+        # Store the alert
+        #
+        # Note: We do this in the loop so that we can have "on $host" with
+        # the per-test hostname inserted.
+        #
+        test[:test_alert] = alert
 
         #
         # TCP-tests will include a banner, optionally
