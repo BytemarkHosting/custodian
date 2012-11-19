@@ -3,6 +3,7 @@ custodian (2012:1119-3) stable; urgency=low
   * Many service probes read a banner from a remote server, and then test it
     is sane.  For example looking for "ssh", or "smtp" in the string we read.
     Ensure we read a string prior to testing for a given response.
+  * Avoid potential shell-injection attacks against HTTP probes.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Mon, 19 Nov 2012 16:25:34 +0000
 
