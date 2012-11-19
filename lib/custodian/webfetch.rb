@@ -69,7 +69,20 @@ class WebFetch
     #
     # Shell out to curl (!!!) to do the fetch.
     #
-    system( "curl --max-time #{timeout} --silent --location --insecure --dump-header #{head} --out #{body} --silent #{@url}")
+    # Avoid using the actual shell to avoid a security risk
+    #
+    system( "curl",
+            "--max-time",
+            timeout.to_s,
+            "--silent",
+            "--location",
+            "--insecure",
+            "--dump-header",
+            head,
+            "--out",
+            body,
+            "--silent",
+            @url )
 
 
     #
