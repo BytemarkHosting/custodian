@@ -80,11 +80,11 @@ class SSHTest
           socket.puts( "QUIT")
 
           banner = socket.gets(nil)
-          banner = banner[0,20]
+          banner = banner[0,20] unless( banner.nil? )
 
           socket.close()
 
-          if ( banner =~ /ssh/i )
+          if ( !banner.nil? && ( banner =~ /ssh/i ) )
             puts "ssh alive: #{banner}" if ( @test_data['verbose'] )
             return true
           else

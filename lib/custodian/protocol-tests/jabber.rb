@@ -82,11 +82,11 @@ class JABBERTest
           socket.puts( "QUIT")
 
           banner = socket.gets(nil)
-          banner = banner[0,20]
+          banner = banner[0,20] unless( banner.nil? )
 
           socket.close()
 
-          if ( banner =~ /xml version/i )
+          if ( ( !banner.nil? ) &&  ( banner =~ /xml version/i ) )
             puts "Jabber alive: #{banner}" if ( @test_data['verbose'] )
             return true
           else

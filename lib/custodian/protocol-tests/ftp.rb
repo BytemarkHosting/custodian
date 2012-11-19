@@ -81,11 +81,11 @@ class FTPTest
           socket.puts( "QUIT")
 
           banner = socket.gets(nil)
-          banner = banner[0,20]
+          banner = banner[0,20] unless( banner.nil? )
 
           socket.close()
 
-          if ( banner =~ /^220/ )
+          if ( ( !banner.nil? ) && ( banner =~ /^220/ ) )
             return true
           else
             @error = "Banner didn't report OK: #{banner}"

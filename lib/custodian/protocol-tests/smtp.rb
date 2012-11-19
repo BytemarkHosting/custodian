@@ -81,11 +81,11 @@ class SMTPTest
           socket.puts( "QUIT")
 
           banner = socket.gets(nil)
-          banner = banner[0,40]
+          banner = banner[0,40] unless( banner.nil? )
 
           socket.close()
 
-          if ( banner =~ /SMTP/i )
+          if ( ( !banner.nil? ) && ( banner =~ /SMTP/i ) )
             puts "SMTP alive: #{banner}" if ( @test_data['verbose'] )
             return true
           else

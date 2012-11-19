@@ -92,7 +92,7 @@ class TCPTest
           read = socket.gets(nil)
 
           # trim to a sane length & strip newlines.
-          read = read[0,255]
+          read = read[0,255] unless ( read.nil? )
           read.gsub!(/[\n\r]/, "") unless ( read.nil? )
 
           socket.close()
@@ -102,7 +102,7 @@ class TCPTest
             return true
           else
             # test for banner
-            if ( read =~ /#{banner}/i )
+            if ( ( !read.nil? ) && ( read =~ /#{banner}/i ) )
               puts "We connected and matched the banner against '#{read}'" if ( @test_data['verbose'] )
               return true
             end
