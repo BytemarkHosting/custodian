@@ -30,15 +30,19 @@ So the following configuration file potentially allows a command to be executed 
 
 Given that anybody who can talk to the beanstalkd server can submit JSON-encoded-jobs we cannot rely on catching this solely in the parser.
 
-For the moment we've solved the case of the ping-exploitation, because the
-valid hostnames passed there are [a-z0-9.-].  We've not yet sanitized URLs
-because that is a harder job.
+For the moment we've solved the case of the ping-exploitation, by validating
+that hostnames passed to the multi-ping command match ^[a-z0-9.-]$ - both forms
+of input are validated:
 
-In the case of the ping-test we've done both levels of testing:
-
-  * Test the hostname is valid priorer to executing the shell.
+  * Ensuring the hostname is valid prior to executing the shell command.
 
   * Ensure the hostname is valid before adding the job to the queue.
+
+
+For HTTP-testing we're avoiding the shell by using the array-based invokation
+of the curl command.  We don't perform validation on the URL though, because
+that is a significantly harder jhob.
+
 
 
 
@@ -53,6 +57,8 @@ At the moment we ensure that the job-body we retrieve looks JSON-like, and decod
 Problem: We cannot sign the body without giving away our key details.
 
 Solution: Read /etc/custodian/salt, and store the checksum of all keys + values with that salt?
+
+
 
 
 TODO
