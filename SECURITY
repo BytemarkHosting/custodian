@@ -18,21 +18,27 @@ Two tests pass arguments from the configuration file to the shell:
     ping
     http/https
 
-The hostname used to ping, and the URL for web-tests, are both passed directly to the shell with no encoding or sanitizing.  The only issue is that the hostnames must match the following regular expression:
+The hostname used to ping, and the URL for web-tests, are both passed directly to the shell assuming they match the following regular expression:
 
 ^([^\s]+)\s+
 
-The following configuration file allows the specified command to be executed, as the user running the dequeue tool, via the shell:
+So the following configuration file potentially allows a command to be executed by our worker:
 
     $(/home/steve/hg/custodian/exploit.sh) must ping otherwise "Owned".
 
-Given that anybody who can talk to the beanstalkd server can submit JSON-encoded-jobs we have no solution here which involves sanity-checking the parsed-hostnames.  Instead we much either restrict submissions to signed ones, or we must remove the following from hostnames:
+    http://$(/tmp/exploit.sh)/ must run http with status 200 otherwise "Owned".
 
-    $( ... )  - Expansion.
-    ` .. `    - Backticks.
-    ; ..      - Sub-commands.
+Given that anybody who can talk to the beanstalkd server can submit JSON-encoded-jobs we cannot rely on catching this solely in the parser.
 
-That has not yet been done, but it is definitely on the map.
+For the moment we've solved the case of the ping-exploitation, because the
+valid hostnames passed there are [a-z0-9.-].  We've not yet sanitized URLs
+because that is a harder job.
+
+In the case of the ping-test we've done both levels of testing:
+
+  * Test the hostname is valid priorer to executing the shell.
+
+  * Ensure the hostname is valid before adding the job to the queue.
 
 
 
