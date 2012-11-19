@@ -31,11 +31,12 @@ class Alerter
   # Resolve an IP address
   #
   def resolve_ip( target )
+    resolved = nil
     begin
       timeout( 4 ) do
         begin
           Socket.getaddrinfo(target, 'echo').each do |a|
-            resolved = a[3] if ( a )
+            resolved = a[2] if ( a )
           end
         rescue SocketError
           resolved = nil
@@ -44,6 +45,7 @@ class Alerter
     rescue Timeout::Error => e
       resolved = nil
     end
+    resolved
   end
 
 
