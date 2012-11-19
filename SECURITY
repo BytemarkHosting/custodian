@@ -4,9 +4,10 @@
 custodian-enqueue
 -----------------
 
-  We open named files from the user to parse tests.
+  We open named files from the user to parse tests.  The configuration file(s)
+ are currently opened by root, via /etc/service/custodian-enqueue.  This should
+ be changed to run as a lower-privileged user.
 
-  We don't run shell commands.
 
 
 custodian-dequeue
@@ -17,11 +18,11 @@ Two tests pass arguments from the configuration file to the shell:
     ping
     http/https
 
-The hostname used to ping, and the url, are both passed directly to the shell with no encoding or sanitizing.  The only issue is that the hostnames must match the following regular expression:
+The hostname used to ping, and the URL for web-tests, are both passed directly to the shell with no encoding or sanitizing.  The only issue is that the hostnames must match the following regular expression:
 
 ^([^\s]+)\s+
 
-The following configuration file allows the specified command to be executed, as root, via the shell:
+The following configuration file allows the specified command to be executed, as the user running the dequeue tool, via the shell:
 
     $(/home/steve/hg/custodian/exploit.sh) must ping otherwise "Owned".
 
@@ -30,6 +31,9 @@ Given that anybody who can talk to the beanstalkd server can submit JSON-encoded
     $( ... )  - Expansion.
     ` .. `    - Backticks.
     ; ..      - Sub-commands.
+
+That has not yet been done, but it is definitely on the map.
+
 
 
 General
