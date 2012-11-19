@@ -81,11 +81,11 @@ class RSYNCTest
           socket.puts( "QUIT")
 
           banner = socket.gets(nil)
-          banner = banner[0,20]
+          banner = banner[0,20] unless( banner.nil? )
 
           socket.close()
 
-          if ( banner =~ /rsyncd/i )
+          if ( ( !banner.nil? ) && ( banner =~ /rsyncd/i ) )
             puts "rsync alive: #{banner}" if ( @test_data['verbose'] )
             return true
           else
