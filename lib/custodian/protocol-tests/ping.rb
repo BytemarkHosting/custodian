@@ -72,6 +72,21 @@ class PINGTest
     #  Get the hostname to test against.
     #
     host = @test_data['target_host']
+
+
+    #
+    # Sanity check the hostname for ping-tests, to
+    # avoid this security hole:
+    #
+    #   $(/tmp/exploit.sh) must run ping ..
+    #
+    raise ArgumentError, "Invalid hostname for ping-test: #{host}" unless( host =~ /^([a-zA-Z0-9:\-\.]+)$/ )
+
+
+
+    #
+    # Show the hostname.
+    #
     puts "ping testing host #{host}" if ( @test_data['verbose'] )
 
 

@@ -373,6 +373,16 @@ class MonitorConfig
           :timeout     => @timeout
         }
 
+        #
+        # Sanity check the hostname for ping-tests, to
+        # avoid this security hole:
+        #
+        #   $(/tmp/exploit.sh) must run ping ..
+        #
+        if ( service == "ping" )
+          raise ArgumentError, "Invalid hostname for ping-test: #{host}" unless( host =~ /^([a-zA-Z0-9:\-\.]+)$/ )
+        end
+
 
         #
         #  Alert text will have a default, which may be overridden.

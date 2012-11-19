@@ -608,4 +608,24 @@ class TestParser < Test::Unit::TestCase
     end
   end
 
+
+  #
+  # Test the potential security-hole for ping-tests
+  #
+  def test_ping_security_hole
+
+
+    parser = MonitorConfig.new("/dev/null" )
+
+    assert_raise ArgumentError do
+      parser.parse_line( "$(/tmp/exploit) must ping ." )
+    end
+
+    assert_nothing_raised do
+      parser.parse_line( "test.example.vm.bytemark.co.uk must ping ." )
+    end
+
+  end
+
+
 end
