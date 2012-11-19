@@ -28,6 +28,28 @@ class Alerter
 
 
   #
+  # Resolve an IP address
+  #
+  def resolve_ip( target )
+    begin
+      timeout( 4 ) do
+        begin
+          Socket.getaddrinfo(target, 'echo').each do |a|
+            resolved = a[3] if ( a )
+          end
+        rescue SocketError
+          resolved = nil
+        end
+      end
+    rescue Timeout::Error => e
+      resolved = nil
+    end
+  end
+
+
+
+
+  #
   # Expand to a message indicating whether a hostname is inside bytemark.
   #
   def expand_inside_bytemark( host )
@@ -140,6 +162,23 @@ class Alerter
 
 
     #
+    # Subject of the alert.
+    #
+    # If it is purely numeric then resolve it
+    #
+    subject = @details['target_host']
+    if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
+         ( subject =~ /^([0-9a-f:]+)$/ ) )
+      res = resolve_ip( subject )
+
+      if ( res )
+        subject = "#{subject} [#{res}]"
+      end
+    end
+
+
+
+    #
     # Document the hostname if the alert relates to an IP address.
     #
     resolved = ""
@@ -168,7 +207,7 @@ class Alerter
     # e.g. http-http://example.com/page1
     alert.id         = "#{@details['test_type']}-#{@details['target_host']}"
 
-    alert.subject    = @details['target_host']
+    alert.subject    = subject
     alert.summary    = @details['test_alert']
     alert.detail     = "#{inside} <p>The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}</p><p>#{resolved}</p>"
     alert.raise_time = Time.now.to_i
@@ -188,6 +227,21 @@ class Alerter
     #
     inside = expand_inside_bytemark( @details["target_host"] )
 
+    #
+    # Subject of the alert.
+    #
+    # If it is purely numeric then resolve it
+    #
+    subject = @details['target_host']
+    if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
+         ( subject =~ /^([0-9a-f:]+)$/ ) )
+      res = resolve_ip( subject )
+
+      if ( res )
+        subject = "#{subject} [#{res}]"
+      end
+    end
+
 
     #
     # Document the hostname if the alert relates to an IP address.
@@ -219,7 +273,7 @@ class Alerter
     # e.g. http-http://example.com/page1
     alert.id         = "#{@details['test_type']}-#{@details['target_host']}"
 
-    alert.subject    = @details['target_host']
+    alert.subject    = subject
     alert.summary    = @details['test_alert']
     alert.detail     = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
     alert.clear_time = Time.now.to_i
