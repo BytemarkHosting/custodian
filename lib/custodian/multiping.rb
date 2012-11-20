@@ -4,6 +4,13 @@ require 'socket'
 require 'timeout'
 
 
+#
+# This class has methods to determine whether the target
+# of a hostname/IP address is IPv4 or IPv6.
+#
+# Assuming the address resolves to one of those two types
+# it can invoke on of /usr/bin/ping or /usr/bin/ping6 appropriately.
+#
 class MultiPing
 
   #
@@ -11,6 +18,9 @@ class MultiPing
   #
   attr_reader :hostname, :resolved
 
+  #
+  # Save the hostname away, resolve it if possible.
+  #
   def initialize( hostname )
     @hostname = hostname
     @resolved = resolve_hostname( hostname )
@@ -18,14 +28,13 @@ class MultiPing
 
 
   #
-  #
+  # TODO:  Use custodian/dnsutil now it exists.
   #
   def resolve_hostname( hostname )
     res = nil
 
     begin
       timeout( 4 ) do
-
         begin
           Socket.getaddrinfo(hostname, 'echo').each do |a|
             res = a[3]
@@ -95,7 +104,6 @@ class MultiPing
     end
     return false
   end
-
 
 end
 
