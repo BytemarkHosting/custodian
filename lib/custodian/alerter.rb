@@ -28,7 +28,7 @@ class Alerter
 
 
   #
-  # Resolve an IP address
+  # Return the reverse DNS for the specified IP address, nil on failure.
   #
   def resolve_ip( target )
     resolved = nil
