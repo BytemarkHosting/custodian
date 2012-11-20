@@ -150,7 +150,7 @@ if __FILE__ == $0 then
     #
     # Inititate a heartbeat
     #
-    system( "mauvesend alert.bytemark.co.uk -i custodian-enqueue -c now -r +10m -s \"heartbeat failed for custodian-queue.\" --detail=\"<p>The heartbeat wasn't sent for <tt>custodian-queue</tt> - This means that new tests are not being pushed into the <tt>beanstalkd</tt> queue, and our monitoring is potentially broken</p>\" " )
+    system( "mauvesend alert.bytemark.co.uk -i custodian-enqueue -c now -r +10m -s \"heartbeat failed for custodian-enqueue.\" --detail=\"<p>The heartbeat wasn't sent for custodian-enqueue - This means that new tests are not being pushed into the <tt>beanstalkd</tt> queue, and our monitoring is potentially broken</p>\" " )
   end
 
 
