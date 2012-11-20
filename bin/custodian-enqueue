@@ -75,17 +75,17 @@ if __FILE__ == $0 then
                           )
     opts.each do |opt, arg|
       case opt
-      when "--dump":
+      when "--dump" then
           ENV["DUMP"] = "1"
-      when "--test":
+      when "--test" then
           ENV["TEST"] = "1"
-      when "--file":
+      when "--file" then
           ENV["FILE"] = arg
-      when "--timeout":
+      when "--timeout" then
           ENV["TIMEOUT"] = arg
-      when "--help":
+      when "--help" then
           $help = true
-      when "--manual":
+      when "--manual" then
           $manual = true
       end
     end

@@ -84,21 +84,21 @@ if __FILE__ == $0 then
                           )
     opts.each do |opt, arg|
       case opt
-      when "--verbose":
+      when "--verbose" then
           ENV["VERBOSE"] = "1"
-      when "--logfile":
+      when "--logfile" then
           $LOGFILE = arg
-      when "--repeat":
+      when "--repeat" then
           ENV["REPEAT"] = arg
-      when "--server":
+      when "--server" then
           $SERVER = arg
-      when "--single":
+      when "--single" then
           ENV["SINGLE"] = "1"
-      when "--fail":
+      when "--fail" then
           ENV["FAIL"] = "1"
-      when "--help":
+      when "--help" then
           $help = true
-      when "--manual":
+      when "--manual" then
           $manual = true
       end
     end
