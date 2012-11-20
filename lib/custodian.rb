@@ -67,7 +67,7 @@ class Custodian
     if ( ENV['REPEAT'] )
        @retry_count=ENV['REPEAT'].to_i
     else
-       @retry_count=3
+       @retry_count=5
     end
 
   end
