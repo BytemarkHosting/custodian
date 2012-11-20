@@ -102,34 +102,4 @@ class TestAlerter < Test::Unit::TestCase
 
 
 
-  #
-  #  Test documentation-detection.
-  #
-  def test_locations_inside_outside
-
-    obj = Alerter.new( nil )
-
-    assert_raise ArgumentError do
-      obj.document_address( nil )
-    end
-
-    #
-    # IPv6 lookup
-    #
-    details = obj.document_address( "2001:41c8:125:46::22" )
-    assert( details =~ /ssh.steve.org.uk/i )
-
-    #
-    # IPv4 lookup
-    #
-    details = obj.document_address( "80.68.85.48" )
-    assert( details =~ /ssh.steve.org.uk/i )
-
-    #
-    # Bogus lookup - should return nil.
-    #
-    details = obj.document_address( "800.683.853.348" )
-    assert( details.nil? )
-
-  end
 end
