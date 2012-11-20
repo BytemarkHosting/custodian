@@ -318,7 +318,7 @@ class TestParser < Test::Unit::TestCase
     #
     # Define a new macro, and ensure it is now present
     #
-    parser.parse_line( "FRONTLINESTAGING2 is 89.16.186.138 and 89.16.186.139 and 89.16.186.148." )
+    parser.parse_line( "FRONTLINESTAGING29 is 89.16.186.138 and 89.16.186.139 and 89.16.186.148." )
     macros = parser.macros
     assert( macros.size() == 1 )
 
@@ -327,7 +327,7 @@ class TestParser < Test::Unit::TestCase
     # Test that we got a suitable value when lookup up the contents
     # of that newly defined macro.
     #
-    values = parser.get_macro_targets( "FRONTLINESTAGING2" )
+    values = parser.get_macro_targets( "FRONTLINESTAGING29" )
     assert(values.class.to_s == "Array" )
 
 
