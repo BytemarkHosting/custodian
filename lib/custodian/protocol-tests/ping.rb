@@ -49,17 +49,9 @@ class PINGTest
 
 
     #
-    # Find the binary
+    # Find the binary we're going to invoke.
     #
     binary = nil
-    binary = "./bin/multi-ping"  if ( File.exists?( "./bin/multi-ping" ) )
-    binary = "../bin/multi-ping" if ( File.exists?( "../bin/multi-ping" ) )
-    binary = "../../bin/multi-ping" if ( File.exists?( "../../bin/multi-ping" ) )
-    binary = "../../../bin/multi-ping" if ( File.exists?( "../../../bin/multi-ping" ) )
-    binary = "../../../../bin/multi-ping" if ( File.exists?( "../../../../bin/multi-ping" ) )
-    #
-    #  System-wide.
-    #
     binary = "/usr/bin/multi-ping"  if ( File.exists?( "/usr/bin/multi-ping" ) )
 
     if ( binary.nil? )
