@@ -1,6 +1,5 @@
 custodian (2012:1120-2) stable; urgency=low
 
-  * Removed manpages.
   * Increased timeout period and retry period
     - To avoid flaps until we rework the alerting with mauve.
   * Fixed most scripts to be ready for ruby 1.9.
