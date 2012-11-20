@@ -146,7 +146,7 @@ class MonitorConfig
     #
     #  Get the name of the macro.
     #
-    name = $1.dup if ( line =~ /^([1-2A-Z_]+)\s+/ )
+    name = $1.dup if ( line =~ /^([0-9A-Z_]+)\s+/ )
 
 
     #
