@@ -1,3 +1,11 @@
+custodian (2012:1120-3) stable; urgency=low
+
+  * Refactor alert code.
+  * Ensure that alert-subjects are solely one of : a) hostname b) IP address
+    c) a URL.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 20 Nov 2012 15:40:30 +0000
+
 custodian (2012:1120-2) stable; urgency=low
 
   * Increased timeout period and retry period
