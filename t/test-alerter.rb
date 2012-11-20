@@ -86,6 +86,7 @@ class TestAlerter < Test::Unit::TestCase
       if ( text =~ /OUTSIDE/ )
         assert( inside == false )
       end
+
     end
 
     #
@@ -100,6 +101,45 @@ class TestAlerter < Test::Unit::TestCase
 
   end
 
+
+
+  #
+  #  Test inside_bytemark?
+  #
+  def test_inside_bytemark
+
+    #
+    #  Hash of hostnames and version of address.
+    #
+    to_test = {
+
+      #
+      # Hosts inside the Bytemark network
+      #
+      "80.68.85.48"               => true,
+      "2001:41c8:125:46::10"      => true,
+
+      #
+      # Hosts outside the Bytemark network
+      #
+      "127.0.0.1"                 => false,
+      "192.168.1.1"               => false,
+      "2a00:1450:400c:c00::93"    => false,
+    }
+
+
+    to_test.each do |name,inside|
+
+      obj = Alerter.new( nil )
+
+      if ( inside )
+        assert( obj.inside_bytemark?( name ) == true  )
+      else
+        assert( obj.inside_bytemark?( name ) == false )
+      end
+    end
+
+  end
 
 
 end
