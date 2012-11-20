@@ -252,7 +252,7 @@ class Alerter
     alert         = Mauve::Proto::Alert.new
     alert.id      = "#{@details['test_type']}-#{@details['target_host']}"
     alert.subject = subject
-    alert.summary = @details['test_alert']
+    alert.summary = "#{@details['test_alert']} to #{subject} failed #{detail}"
     alert.detail  = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
 
     #
