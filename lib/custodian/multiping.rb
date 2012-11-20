@@ -1,8 +1,6 @@
 
 require 'getoptlong'
-require 'socket'
-require 'timeout'
-
+require 'custodian/dnsutil'
 
 #
 # This class has methods to determine whether the target
@@ -23,32 +21,8 @@ class MultiPing
   #
   def initialize( hostname )
     @hostname = hostname
-    @resolved = resolve_hostname( hostname )
+    @resolved = DNSUtil.hostname_to_ip( hostname )
   end
-
-
-  #
-  # TODO:  Use custodian/dnsutil now it exists.
-  #
-  def resolve_hostname( hostname )
-    res = nil
-
-    begin
-      timeout( 4 ) do
-        begin
-          Socket.getaddrinfo(hostname, 'echo').each do |a|
-            res = a[3]
-          end
-        rescue SocketError
-        end
-      end
-    rescue Timeout::Error => e
-      resolved = nil
-    end
-
-    res
-  end
-
 
 
   #
