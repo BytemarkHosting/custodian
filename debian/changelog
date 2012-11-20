@@ -1,4 +1,4 @@
-custodian (2012:1119-x) stable; urgency=low
+custodian (2012:1120-1) stable; urgency=low
 
   * Added dnsutil.rb - Updated multiping to use it, along with the alerter.
   * Added ruby1.8 as a build-dep to hopefully fix the man-page generation.
