@@ -1,10 +1,11 @@
 
+require 'custodian/dnsutil'
 
 require 'mauve/sender'
 require 'mauve/proto'
 
+
 require 'ipaddr'
-require 'socket'
 
 
 
@@ -26,27 +27,6 @@ class Alerter
     @details = test_details
   end
 
-
-  #
-  # Return the reverse DNS for the specified IP address, nil on failure.
-  #
-  def resolve_ip( target )
-    resolved = nil
-    begin
-      timeout( 4 ) do
-        begin
-          Socket.getaddrinfo(target, 'echo').each do |a|
-            resolved = a[2] if ( a )
-          end
-        rescue SocketError
-          resolved = nil
-        end
-      end
-    rescue Timeout::Error => e
-      resolved = nil
-    end
-    resolved
-  end
 
 
 
@@ -75,21 +55,9 @@ class Alerter
          ( target =~ /^([0-9a-f:]+)$/ ) )
       resolved = target
     else
-      begin
-        timeout( 4 ) do
-
-          begin
-            Socket.getaddrinfo(target, 'echo').each do |a|
-              resolved = a[3] if ( a )
-            end
-          rescue SocketError
-            resolved = nil
-          end
-        end
-      rescue Timeout::Error => e
-        resolved = nil
-      end
+      resolved = DNSUtil.hostname_to_ip( target )
     end
+
 
     #
     # Did we get an error?
@@ -131,28 +99,6 @@ class Alerter
 
 
   #
-  # Resolve an IP address
-  #
-  def document_address( address )
-
-    raise ArgumentError, "Address must not be nil" if ( address.nil? )
-
-    begin
-      timeout( 4 ) do
-        begin
-          Resolv.new.getname(address)
-        rescue
-          nil
-        end
-      end
-    rescue Timeout::Error => e
-      resolved = nil
-    end
-  end
-
-
-
-  #
   # Raise the alert.
   #
   def raise( detail )
@@ -171,7 +117,7 @@ class Alerter
     subject = @details['target_host']
     if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( subject =~ /^([0-9a-f:]+)$/ ) )
-      res = resolve_ip( subject )
+      res = DNSUtil.ip_to_hostname( subject )
 
       if ( res )
         subject = "#{subject} [#{res}]"
@@ -187,7 +133,7 @@ class Alerter
     if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
 
-      resolved = document_address( @details["target_host"] )
+      resolved = DNSUtil.ip_to_hostname( @details["target_host"] )
       if ( resolved.nil? )
         resolved = ""
       else
@@ -237,7 +183,7 @@ class Alerter
     subject = @details['target_host']
     if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( subject =~ /^([0-9a-f:]+)$/ ) )
-      res = resolve_ip( subject )
+      res = DNSUtil.ip_to_hostname( subject )
 
       if ( res )
         subject = "#{subject} [#{res}]"
@@ -252,7 +198,7 @@ class Alerter
     if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
 
-      resolved = document_address( @details["target_host"] )
+      resolved = DNSUtil.ip_to_hostname( @details["target_host"] )
       if ( resolved.nil? )
         resolved = ""
       else
