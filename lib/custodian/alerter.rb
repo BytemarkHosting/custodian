@@ -146,7 +146,7 @@ class Alerter
     #
     # Construct an alert with our test details.
     #
-    alert = get_alert()
+    alert = get_alert(detail)
 
     #
     #  We're raising this alert.
@@ -179,7 +179,7 @@ class Alerter
     #
     # Construct an alert with our test details.
     #
-    alert = get_alert()
+    alert = get_alert( "" )
 
     #
     #  We're clearing this alert.
@@ -203,7 +203,7 @@ class Alerter
   # Most of the mess of this method is ensuring there is some
   # "helpful" data in the detail-field of the alert.
   #
-  def get_alert
+  def get_alert( detail )
 
     #
     # Is this alert affecting a machine inside/outside our network?
@@ -253,7 +253,7 @@ class Alerter
     alert.id      = "#{@details['test_type']}-#{@details['target_host']}"
     alert.subject = subject
     alert.summary = "#{@details['test_alert']} to #{subject} failed #{detail}"
-    alert.detail  = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
+    alert.detail  = "#{inside} <p>The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}</p><p>#{resolved}</p>"
 
     #
     # Return the alert to the caller.
