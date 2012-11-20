@@ -59,7 +59,7 @@ class MonitorConfig
     @MACROS  = Hash.new()
     @queue   = Beanstalk::Pool.new(['127.0.0.1:11300'])
     @file    = filename
-    @timeout = 15
+    @timeout = 60
 
     raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
     raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
