@@ -67,17 +67,17 @@ if __FILE__ == $0 then
                           )
     opts.each do |opt, arg|
       case opt
-      when "--monitor":
+      when "--monitor" then
           $MONITOR = true
-      when "--stats":
+      when "--stats" then
           $STATS = true
-      when "--flush":
+      when "--flush" then
           $FLUSH = true
-      when "--server":
+      when "--server" then
           $SERVER = arg
-      when "--help":
+      when "--help" then
           $help = true
-      when "--manual":
+      when "--manual" then
           $manual = true
       end
     end

@@ -50,9 +50,9 @@ opts = GetoptLong.new(
 begin
   opts.each do |opt,arg|
     case opt
-    when '--help'
+    when '--help' then
       $help = true
-    when '--manual'
+    when '--manual' then
       $manual = true
     end
   end
