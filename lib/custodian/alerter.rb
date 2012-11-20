@@ -124,7 +124,10 @@ class Alerter
       end
     end
 
-
+    #
+    # Add the test-type to the subject
+    #
+    subject = "#{subject} #{@details['test_type']}"
 
     #
     # Document the hostname if the alert relates to an IP address.
@@ -190,6 +193,10 @@ class Alerter
       end
     end
 
+    #
+    # Add the test-type to the subject
+    #
+    subject = "#{subject} #{@details['test_type']}"
 
     #
     # Document the hostname if the alert relates to an IP address.
