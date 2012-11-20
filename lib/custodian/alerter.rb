@@ -19,10 +19,27 @@ require 'ipaddr'
 class Alerter
 
 
+  #
+  # Details of the test case which we're going to raise/clear.
+  #
   attr_reader :details
 
+
+  #
+  # The currently allocated IP-ranges which belong to Bytemark.
+  #
+  # These are used to test if an alert refers to a machine outwith our
+  # network.
+  #
   BYTEMARK_RANGES = %w(80.68.80.0/20 89.16.160.0/19 212.110.160.0/19 46.43.0.0/18 91.223.58.0/24 213.138.96.0/19 5.153.224.0/21 2001:41c8::/32).collect{|i| IPAddr.new(i)}
 
+
+
+  #
+  # Constructor.
+  #
+  # Save the details away.
+  #
   def initialize( test_details )
     @details = test_details
   end
@@ -32,7 +49,8 @@ class Alerter
 
 
   #
-  # Expand to a message indicating whether a hostname is inside bytemark.
+  # Expand to a message indicating whether a hostname is inside
+  # the Bytemark network.
   #
   def expand_inside_bytemark( host )
 
@@ -98,8 +116,13 @@ class Alerter
   end
 
 
+
+
+
   #
-  # Raise the alert.
+  # Generate an alert-message which will be raised via mauve.
+  #
+  # TODO: Refactor into common code: raise/clear duplicate too much.
   #
   def raise( detail )
 
@@ -168,8 +191,12 @@ class Alerter
 
   end
 
+
+
   #
-  #  Clear the alert.
+  # Generate an alert-message which will be cleared via mauve.
+  #
+  # TODO: Refactor into common code: raise/clear duplicate too much.
   #
   def clear
 
