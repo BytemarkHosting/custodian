@@ -75,7 +75,7 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
      FOO_HOSTS are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
 
   We accept each of these, with the caveat that macro-names must match
-  the regular expression ^[1-9A-Z_]$.
+  the regular expression ^[0-9A-Z_]$.
 
 
   3.  Service Tests
