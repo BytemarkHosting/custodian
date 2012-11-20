@@ -1,9 +1,8 @@
 #!/usr/bin/ruby1.8 -I./lib/ -I../lib/
 
 
-
-require 'test/unit'
 require 'custodian/dnsutil'
+require 'test/unit'
 
 
 
@@ -11,7 +10,7 @@ require 'custodian/dnsutil'
 # Unit test for our DNS utility class.
 #
 #
-class TestAlerter < Test::Unit::TestCase
+class TestDNSUtil < Test::Unit::TestCase
 
   #
   # Create the test suite environment: NOP.
@@ -74,6 +73,6 @@ class TestAlerter < Test::Unit::TestCase
     #
     details = DNSUtil.ip_to_hostname( "800.683.853.348" )
     assert( details.nil? )
-
   end
+
 end
