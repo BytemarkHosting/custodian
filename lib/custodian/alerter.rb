@@ -154,14 +154,9 @@ class Alerter
       res = DNSUtil.ip_to_hostname( subject )
 
       if ( res )
-        subject = "#{subject} [#{res}]"
+        subject = res
       end
     end
-
-    #
-    # Add the test-type to the subject
-    #
-    subject = "#{subject} #{@details['test_type']}"
 
     #
     # Document the hostname if the alert relates to an IP address.
@@ -225,16 +220,10 @@ class Alerter
     if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( subject =~ /^([0-9a-f:]+)$/ ) )
       res = DNSUtil.ip_to_hostname( subject )
-
       if ( res )
-        subject = "#{subject} [#{res}]"
+        subject = res
       end
     end
-
-    #
-    # Add the test-type to the subject
-    #
-    subject = "#{subject} #{@details['test_type']}"
 
     #
     # Document the hostname if the alert relates to an IP address.
