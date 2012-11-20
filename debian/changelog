@@ -1,3 +1,9 @@
+custodian (2012:1119-x) stable; urgency=low
+
+  * Added dnsutil.rb - Updated multiping to use it, along with the alerter.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 20 Nov 2012 10:24:26 +0000
+
 custodian (2012:1119-3) stable; urgency=low
 
   * Many service probes read a banner from a remote server, and then test it
