@@ -1,0 +1,14 @@
+
+1.  Decouple the parsing from the queue insertion.
+   Use a callback in the driver + yield to push items into the queue.
+
+
+2.  Don't use beanstalk client directly, subclass custodian/queue, or similar
+   to allow us to swap out the queue and stub it for testing.
+
+3.  Use a class factory to instantiate tests on the worker-side.
+
+4.  Use either a proper grammer, or use the protocol-tests when parsing.
+
+5.  Rewrite rsync/ssh/ftp, etc, as a subclass of tcp.rb
+
