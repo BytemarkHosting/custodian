@@ -133,68 +133,31 @@ class Alerter
   #
   # Generate an alert-message which will be raised via mauve.
   #
-  # TODO: Refactor into common code: raise/clear duplicate too much.
-  #
   def raise( detail )
 
     #
-    # Is this alert affecting a machine inside/outside our network
+    #  Get ready to send to mauve.
     #
-    inside = expand_inside_bytemark( @details["target_host"] )
-
-
-    #
-    # Subject of the alert.
-    #
-    # If it is purely numeric then resolve it
-    #
-    subject = @details['target_host']
-    if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
-         ( subject =~ /^([0-9a-f:]+)$/ ) )
-      res = DNSUtil.ip_to_hostname( subject )
-
-      if ( res )
-        subject = res
-      end
-    end
-
-    #
-    # Document the hostname if the alert relates to an IP address.
-    #
-    resolved = ""
-    if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
-         ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
-
-      resolved = DNSUtil.ip_to_hostname( @details["target_host"] )
-      if ( resolved.nil? )
-        resolved = ""
-      else
-        resolved = "The IP address #{@details["target_host"]} resolves to #{resolved}."
-      end
-    end
-
-
-    update = Mauve::Proto::AlertUpdate.new
+    update         = Mauve::Proto::AlertUpdate.new
     update.alert   = []
     update.source  = "custodian"
-
-    # be explicit about raising/clearing
     update.replace = false
 
-    alert            = Mauve::Proto::Alert.new
+    #
+    # Construct an alert with our test details.
+    #
+    alert = get_alert()
 
-    # e.g. ping-example.vm.bytemark.co.uk
-    # e.g. http-http://example.com/page1
-    alert.id         = "#{@details['test_type']}-#{@details['target_host']}"
-
-    alert.subject    = subject
-    alert.summary    = @details['test_alert']
-    alert.detail     = "#{inside} <p>The #{@details['test_type']} test failed against #{@details['target_host']}: #{detail}</p><p>#{resolved}</p>"
+    #
+    #  We're raising this alert.
+    #
     alert.raise_time = Time.now.to_i
+
+    #
+    #  Update it and send it
+    #
     update.alert << alert
-
     Mauve::Sender.new("alert.bytemark.co.uk").send(update)
-
   end
 
 
@@ -202,19 +165,64 @@ class Alerter
   #
   # Generate an alert-message which will be cleared via mauve.
   #
-  # TODO: Refactor into common code: raise/clear duplicate too much.
-  #
   def clear
 
     #
-    # Is this alert affecting a machine inside/outside our network
+    #  Get ready to send to mauve.
+    #
+    update = Mauve::Proto::AlertUpdate.new
+    update.alert   = []
+    update.source  = "custodian"
+    update.replace = false
+
+
+    #
+    # Construct an alert with our test details.
+    #
+    alert = get_alert()
+
+    #
+    #  We're clearing this alert.
+    #
+    alert.clear_time = Time.now.to_i
+
+    #
+    #  Update it and send it
+    #
+    update.alert << alert
+    Mauve::Sender.new("alert.bytemark.co.uk").send(update)
+  end
+
+
+
+
+  #
+  # Using the test-data-hash which was set in the constructor
+  # generate a useful alert that can be fired off to mauve.
+  #
+  # Most of the mess of this method is ensuring there is some
+  # "helpful" data in the detail-field of the alert.
+  #
+  def get_alert
+
+    #
+    # Is this alert affecting a machine inside/outside our network?
     #
     inside = expand_inside_bytemark( @details["target_host"] )
 
+
     #
-    # Subject of the alert.
+    # The subject of an alert should be one of:
     #
-    # If it is purely numeric then resolve it
+    #   1.  Hostname.
+    #
+    #   2.  IP address
+    #
+    #   3.  A URL.
+    #
+    #
+    # We attempt to resolve the alert to the hostname, as that is readable.
+    #
     #
     subject = @details['target_host']
     if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
@@ -241,27 +249,17 @@ class Alerter
     end
 
 
-    update = Mauve::Proto::AlertUpdate.new
-    update.alert   = []
-    update.source  = "custodian"
+    alert         = Mauve::Proto::Alert.new
+    alert.id      = "#{@details['test_type']}-#{@details['target_host']}"
+    alert.subject = subject
+    alert.summary = @details['test_alert']
+    alert.detail  = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
 
-    # be explicit about raising/clearing
-    update.replace = false
-
-
-    alert            = Mauve::Proto::Alert.new
-
-    # e.g. ping-example.vm.bytemark.co.uk
-    # e.g. http-http://example.com/page1
-    alert.id         = "#{@details['test_type']}-#{@details['target_host']}"
-
-    alert.subject    = subject
-    alert.summary    = @details['test_alert']
-    alert.detail     = "#{inside} <p>The #{@details['test_type']} test succeeded against #{@details['target_host']}</p><p>#{resolved}</p>"
-    alert.clear_time = Time.now.to_i
-    update.alert << alert
-
-    Mauve::Sender.new("alert.bytemark.co.uk").send(update)
+    #
+    # Return the alert to the caller.
+    #
+    alert
   end
+
 
 end
