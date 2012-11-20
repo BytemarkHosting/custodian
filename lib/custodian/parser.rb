@@ -257,7 +257,7 @@ class MonitorConfig
     elsif ( line =~ /^([0-9A-Z_]+)\s+(is|are)\s+/ )
       define_macro( line )
 
-    elsif ( line =~ /(.*)\s+must\s+ping(.*)/ )
+    elsif ( line =~ /^(\S+)\s+must\s+ping(.*)/ )
 
       #
       #  Ping is a special case because the configuration file entry
@@ -280,7 +280,7 @@ class MonitorConfig
       new_line = "#{pre} must run ping #{post}"
       return( parse_line( new_line ) )
 
-    elsif ( line =~ /\s+must\s+run\s+([^\s]+)(\s+|\.|$)/i )
+    elsif ( line =~ /^\S+\s+must\s+run\s+([^\s]+)(\s+|\.|$)/i )
 
       #
       # Get the service we're testing, and remove any trailing "."
