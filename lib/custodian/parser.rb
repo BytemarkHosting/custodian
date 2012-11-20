@@ -428,20 +428,23 @@ class MonitorConfig
         #
         #
         if ( test[:test_type] =~ /^https?/ )
-          found = 0
 
+          #
+          #  If a status code is specified use it; otherwise default
+          # to 200.
           if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
-            test[:http_status]=$1.dup
-            found += 1
+            test[:http_status] = $1.dup
+          else
+            test[:http_status] = 200
           end
+
+          #
+          #  If a content-check is in place then use it.
+          #
           if ( line =~ /\s+with\s+content\s+'([^']+)'/ )
             test[:http_text]=$1.dup
-            found += 1
           end
 
-          if ( found == 0 )
-            puts "WARNING: Neither an expected text, or a status code, were specified in the line: #{line}"
-          end
         end
 
 
