@@ -12,3 +12,8 @@
 
 5.  Rewrite rsync/ssh/ftp, etc, as a subclass of tcp.rb
 
+
+6.  The HTTP-test should default to "with status 200" if not otherwise
+   specified.  TODO: Remove such orphaned lines from /home/managed/*/sentinel-checks.cfg
+
+7.  The HTTP/HTTPS-probe should be pure Ruby.  Patrick will give me a stub.
