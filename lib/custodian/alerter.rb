@@ -46,17 +46,42 @@ class Alerter
 
 
 
+  #
+  # Is the named target inside the Bytemark IP-range?
+  #
+  def inside_bytemark?( target )
+
+    #
+    #  Test trange, and format the appropriate message.
+    #
+    inside = false
+
+    if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(target))} )
+      inside = true
+    end
+
+    inside
+  end
+
+
 
 
   #
-  # Expand to a message indicating whether a hostname is inside
-  # the Bytemark network.
+  # Expand to a message indicating whether a hostname is inside the Bytemark network.
+  # or not.
+  #
   #
   def expand_inside_bytemark( host )
 
+    #
+    #  If the host is a URL then we need to work with the hostname component alone.
+    #
+    #  We'll also make the host a link that can be clicked in the alert we raise.
+    #
     target = host
     if ( target =~ /https?:\/\/([^\/]+)/ )
       target = $1.dup
+      host   = "<a href=\"#{host}\">#{host}</a>"
     end
 
 
@@ -64,7 +89,6 @@ class Alerter
     #  Resolved IP of the target
     #
     resolved = nil
-
 
     #
     #  Resolve the target to an IP, unless it is already an address.
@@ -84,22 +108,9 @@ class Alerter
 
 
     #
-    # Make any HTTP target a link in the details.
+    #  Return the formatted message
     #
-    if ( host =~ /^http/ )
-        host = "<a href=\"#{host}\">#{host}</a>"
-    end
-
-    #
-    #  Test trange, and format the appropriate message.
-    #
-    inside = false;
-    if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(resolved.to_s))} )
-      inside = true
-    end
-
-
-    if ( inside )
+    if ( inside_bytemark?( resolved.to_s ) )
       if ( resolved == target )
         return "<p>#{host} is inside the Bytemark network.</p>"
       else
