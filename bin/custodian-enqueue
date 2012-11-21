@@ -50,9 +50,11 @@
 
 
 #
-#  Implementation of our parser.
+#  Modules we require
 #
+require 'beanstalk-client'
 require 'custodian/parser'
+require 'getoptlong'
 
 
 
@@ -63,11 +65,13 @@ if __FILE__ == $0 then
 
   $help   = false
   $manual = false
+  $SERVER = "127.0.0.1:11300"
 
   begin
     opts = GetoptLong.new(
                           [ "--dump",  "-d", GetoptLong::NO_ARGUMENT ],
                           [ "--test",   GetoptLong::NO_ARGUMENT ],
+                          [ "--server",   GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--file",  "-f", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--help",  "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual","-m", GetoptLong::NO_ARGUMENT ],
@@ -79,6 +83,8 @@ if __FILE__ == $0 then
           ENV["DUMP"] = "1"
       when "--test" then
           ENV["TEST"] = "1"
+      when "--server" then
+          $SERVER = arg
       when "--file" then
           ENV["FILE"] = arg
       when "--timeout" then
@@ -126,6 +132,16 @@ if __FILE__ == $0 then
 
 
   #
+  # Connected to the server
+  #
+  queue = Beanstalk::Pool.new([$SERVER])
+  if ( ! queue )
+    puts "Failed to connect to beanstalk server: #{$SERVER}"
+    exit 1
+  end
+
+
+  #
   # Create the parser
   #
   mon = MonitorConfig.new( ENV['FILE'] )
@@ -138,9 +154,19 @@ if __FILE__ == $0 then
   end
 
   #
-  # Run
+  # Run the parser - and get callbacks when a new job is added.
   #
-  mon.parse_file()
+  mon.parse_file do |test|
+
+    if ( ENV['TEST'] )
+      # nop
+    elsif ( ENV['DUMP'] )
+      puts test.to_json
+    else
+      queue.put( test.to_json )
+    end
+  end
+
 
   #
   # If there were errors then we'll not get this far.

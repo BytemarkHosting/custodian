@@ -1,6 +1,4 @@
 
-require 'beanstalk-client'
-require 'getoptlong'
 require 'json'
 require 'net/http'
 require 'net/https'
@@ -34,11 +32,6 @@ class MonitorConfig
   attr_reader :MACROS
 
   #
-  # A handle to the beanstalkd queue.
-  #
-  attr_reader :queue
-
-  #
   # The filename that we're going to parse.
   #
   attr_reader :filename
@@ -47,6 +40,13 @@ class MonitorConfig
   # Timeout period, in seconds, that we encode into test objects.
   #
   attr_reader :timeout
+
+  #
+  # An array of job-objects.
+  #
+  #  TODO:  This is just an array of hashes at the moment.
+  #
+  attr_reader :jobs
 
 
 
@@ -57,7 +57,7 @@ class MonitorConfig
 
 
     @MACROS  = Hash.new()
-    @queue   = Beanstalk::Pool.new(['127.0.0.1:11300'])
+    @jobs    = Array.new()
     @file    = filename
     @timeout = 60
 
@@ -466,23 +466,10 @@ class MonitorConfig
           end
         end
 
-
         #
-        #  Just testing syntax?  At this point we're done
+        #  Add the job to the results.
         #
-        next if ( ENV['TEST'] )
-
-        #
-        # We've now parsed the line.  Either output the JSON to the console
-        # or add to the queue.
-        #
-        if ( !ENV['DUMP'].nil? )
-          puts ( test.to_json )
-        else
-          @queue.put( test.to_json )
-        end
-
-        ret.push( test.to_json )
+        ret.push( test )
       end
 
       ret
@@ -497,15 +484,61 @@ class MonitorConfig
   #
   # Parse the configuration file which was named in our constructor.
   #
-  def parse_file()
+  # This updates our @jobs array with the tests - and optionally
+  # invokes our callback.
+  #
+  def parse_file( &callback )
+
     #
     #  Parse the configuration file on the command line
     #
     File.open( @file, "r").each_line do |line|
-      parse_line( line)
+
+      ret = parse_line( line)
+
+      #
+      #  The return value from the parse_line method
+      # is either:
+      #
+      #  Array -> An array of test-objects.
+      #
+      #  nil   -> The line was a macro.
+      #         or
+      #           The line was a comment.
+      #
+      #
+      if ( ret.kind_of?( Array ) )
+        ret.each do |probe|
+          @jobs.push( probe )
+        end
+      end
+
+      #
+      # If there was an optional callback then invoke it
+      # with the newly added job/jobs.
+      #
+      if ( block_given? )
+        if ( ret.kind_of?( Array ) )
+          ret.each do |probe|
+            yield probe
+          end
+        end
+      end
     end
   end
 
 
 end
 
+
+
+if __FILE__ == $0 then
+  p = MonitorConfig.new( "/home/steve/hg/custodian/cfg/steve.cfg" );
+  p.parse_file do |test|
+    puts "Test: #{test} received"
+  end
+
+  p.jobs.each do |job|
+    puts "Job: #{job}"
+  end
+end
