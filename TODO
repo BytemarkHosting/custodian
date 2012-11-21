@@ -3,9 +3,10 @@ Don't use beanstalk client directly, subclass custodian/queue, or similar
 to allow us to swap out the queue and stub it for testing.
 
 Use a class factory to instantiate tests on the worker-side.
-
-Use either a proper grammer, or use the protocol-tests when parsing.
+-> This is in-progress.  Test it with:
+     ./bin/custodian-parse-execute "kvm1.vm must run smtp."
 
 Rewrite rsync/ssh/ftp, etc, as a subclass of tcp.rb
+-> This is in-progress.
 
 The HTTP/HTTPS-probe should be pure Ruby.  Patrick will give me a stub.
