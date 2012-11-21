@@ -59,6 +59,21 @@ class RSYNCTest < TCPTest
 
 
   #
+  # Convert this class to JSON such that it may be serialized.
+  #
+  def to_json
+    hash = {
+            :test_type   => 'rsync',
+            :test_target => @host,
+            :test_port   => @port,
+    }
+    hash.to_json
+  end
+
+
+
+
+  #
   # Run the protocol test.
   #
   def run_test

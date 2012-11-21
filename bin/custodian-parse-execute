@@ -38,7 +38,9 @@ end
 begin
   c = ProtocolTest.create( txt )
 
-  puts "created object: #{c.to_s}"
+  puts "created object of class type #{c.class}"
+  puts ".to_s    : #{c.to_s}"
+  puts ".to_json : #{c.to_json}"
 
   if ( c.run_test )
     puts "Test succeeded"
