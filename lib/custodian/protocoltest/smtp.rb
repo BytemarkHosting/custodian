@@ -46,12 +46,16 @@ class SMTPTest < TCPTest
   end
 
 
+
+
   #
   # Helper for development.
   #
   def to_s
     "smtp-test of #{@host}:#{@port}."
   end
+
+
 
 
   #
@@ -66,6 +70,8 @@ class SMTPTest < TCPTest
   end
 
 
+
+
   #
   # If the test fails then report the error.
   #
@@ -73,6 +79,12 @@ class SMTPTest < TCPTest
     @error
   end
 
+
+
+
   register_test_type "smtp"
+
+
+
 
 end
