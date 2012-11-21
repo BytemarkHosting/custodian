@@ -13,6 +13,12 @@ class SMTPTest < TCPTest
 
 
   #
+  # The line from which we were constructed.
+  #
+  attr_reader :line
+
+
+  #
   # The host to test against.
   #
   attr_reader :host
@@ -30,6 +36,12 @@ class SMTPTest < TCPTest
   # Constructor
   #
   def initialize( line )
+
+    #
+    # Save the line.
+    #
+    @line = line
+
     #
     # Save the host
     #
@@ -62,11 +74,7 @@ class SMTPTest < TCPTest
   # Convert this class to JSON such that it may be serialized.
   #
   def to_json
-    hash = {
-            :test_type   => 'smtp',
-            :test_target => @host,
-            :test_port   => @port,
-    }
+    hash = { :line => @line }
     hash.to_json
   end
 

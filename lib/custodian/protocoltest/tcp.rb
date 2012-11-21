@@ -17,6 +17,12 @@ class TCPTest < ProtocolTest
 
 
   #
+  # The input line
+  #
+  attr_reader :line
+
+
+  #
   # The host to test against.
   #
   attr_reader :host
@@ -42,6 +48,11 @@ class TCPTest < ProtocolTest
   # Ensure we received a port to run the TCP-test against.
   #
   def initialize( line )
+
+    #
+    # Save the line
+    #
+    @line = line
 
     #
     # Save the host
@@ -90,12 +101,7 @@ class TCPTest < ProtocolTest
   # Convert this class to JSON such that it may be serialized.
   #
   def to_json
-    hash = {
-            :test_type   => 'tcp',
-            :test_target => @host,
-            :test_port   => @port,
-            :banner      => @banner
-    }
+    hash = { :line => @line }
     hash.to_json
   end
 

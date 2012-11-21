@@ -30,6 +30,15 @@ class ProtocolTest
   #
   #
   def self.create( line )
+
+    #
+    # JSON ?
+    #
+    if ( line =~ /^\{(.*)\}$/ )
+      obj = JSON.parse( line );
+      line = obj["line"]
+    end
+
     if ( line =~ /must\s+run\s+(\S+)(\s+|\.|$)/ )
       test_type = $1.dup
       test_type.chomp!( "." )

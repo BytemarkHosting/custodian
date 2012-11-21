@@ -13,6 +13,12 @@ class SSHTest < TCPTest
 
 
   #
+  # The line from which we were constructed.
+  #
+  attr_reader :line
+
+
+  #
   # The host to test against.
   #
   attr_reader :host
@@ -31,6 +37,12 @@ class SSHTest < TCPTest
   # Ensure we received a port to run the test against.
   #
   def initialize( line )
+
+    #
+    # Save the line
+    #
+    @line = line
+
     #
     # Save the host
     #
@@ -64,11 +76,7 @@ class SSHTest < TCPTest
   # serialized.
   #
   def to_json
-    hash = {
-            :test_type   => 'ssh',
-            :test_target => @host,
-            :test_port   => @port
-    }
+    hash = { :line => @line }
     hash.to_json
   end
 

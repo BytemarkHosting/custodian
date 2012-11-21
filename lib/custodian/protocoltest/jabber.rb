@@ -11,6 +11,11 @@
 #
 class JABBERTest < TCPTest
 
+  #
+  # The line from which we were constructed.
+  #
+  attr_reader :line
+
 
   #
   # The host to test against.
@@ -29,6 +34,12 @@ class JABBERTest < TCPTest
   # Constructor
   #
   def initialize( line )
+
+    #
+    # Save the line
+    #
+    @line = line
+
     #
     # Save the host
     #
@@ -61,11 +72,7 @@ class JABBERTest < TCPTest
   # Convert this class to JSON such that it may be serialized.
   #
   def to_json
-    hash = {
-            :test_type   => 'jabber',
-            :test_target => @host,
-            :test_port   => @port,
-    }
+    hash = { :line => @line }
     hash.to_json
   end
 
