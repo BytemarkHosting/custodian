@@ -1,19 +1,11 @@
 
-1.  Decouple the parsing from the queue insertion.
-   Use a callback in the driver + yield to push items into the queue.
+Don't use beanstalk client directly, subclass custodian/queue, or similar
+to allow us to swap out the queue and stub it for testing.
 
+Use a class factory to instantiate tests on the worker-side.
 
-2.  Don't use beanstalk client directly, subclass custodian/queue, or similar
-   to allow us to swap out the queue and stub it for testing.
+Use either a proper grammer, or use the protocol-tests when parsing.
 
-3.  Use a class factory to instantiate tests on the worker-side.
+Rewrite rsync/ssh/ftp, etc, as a subclass of tcp.rb
 
-4.  Use either a proper grammer, or use the protocol-tests when parsing.
-
-5.  Rewrite rsync/ssh/ftp, etc, as a subclass of tcp.rb
-
-
-6.  The HTTP-test should default to "with status 200" if not otherwise
-   specified.  TODO: Remove such orphaned lines from /home/managed/*/sentinel-checks.cfg
-
-7.  The HTTP/HTTPS-probe should be pure Ruby.  Patrick will give me a stub.
+The HTTP/HTTPS-probe should be pure Ruby.  Patrick will give me a stub.
