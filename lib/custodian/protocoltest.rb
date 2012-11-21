@@ -38,7 +38,7 @@ class ProtocolTest
         raise ArgumentError, "Bad test type: #{test_type}"
       end
     else
-      raise "Uknown line given"
+      raise "Unknown line given - Failed to instantiate a suitable protocol-test."
     end
   end
 
