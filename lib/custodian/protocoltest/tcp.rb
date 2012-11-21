@@ -87,6 +87,22 @@ class TCPTest < ProtocolTest
 
 
   #
+  # Convert this class to JSON such that it may be serialized.
+  #
+  def to_json
+    hash = {
+            :test_type   => 'tcp',
+            :test_target => @host,
+            :test_port   => @port,
+            :banner      => @banner
+    }
+    hash.to_json
+  end
+
+
+
+
+  #
   # Run the TCP-protocol test.
   #
   def run_test

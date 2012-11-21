@@ -1,3 +1,5 @@
+require 'json'
+
 
 #
 #
@@ -10,6 +12,7 @@
 # derived class for a given line from our configuration
 # file.
 #
+# TODO: We also wish to create from json.
 #
 class ProtocolTest
 

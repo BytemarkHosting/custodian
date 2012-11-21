@@ -58,6 +58,21 @@ class JABBERTest < TCPTest
 
 
   #
+  # Convert this class to JSON such that it may be serialized.
+  #
+  def to_json
+    hash = {
+            :test_type   => 'jabber',
+            :test_target => @host,
+            :test_port   => @port,
+    }
+    hash.to_json
+  end
+
+
+
+
+  #
   # Run the TCP-protocol test.
   #
   def run_test
