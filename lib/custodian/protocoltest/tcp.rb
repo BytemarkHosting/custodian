@@ -129,7 +129,7 @@ class TCPTest < ProtocolTest
   # send the string "quit".
   #
   #
-  def run_test_internal( host, port, banner = nil )
+  def run_test_internal( host, port, banner = nil, do_read = true )
     begin
       timeout(30) do
         begin
@@ -137,7 +137,8 @@ class TCPTest < ProtocolTest
           socket.puts( "QUIT")
 
           # read a banner from the remote server
-          read = socket.gets(nil)
+          read = nil
+          read = socket.gets(nil) if ( do_read )
 
           # trim to a sane length & strip newlines.
           read = read[0,255] unless ( read.nil? )
