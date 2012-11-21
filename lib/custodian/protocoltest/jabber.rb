@@ -7,7 +7,7 @@
 ### foo.vm.bytemark.co.uk must run jabber otherwise 'chat failure'.
 ###
 #
-#  The specification of the port is optional.
+#  The specification of the port is optional, and defaults to 5222.
 #
 class JABBERTest < TCPTest
 

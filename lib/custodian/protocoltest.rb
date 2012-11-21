@@ -10,9 +10,8 @@ require 'json'
 #
 # This class is a factory that will return the correct
 # derived class for a given line from our configuration
-# file.
+# file - or that line encoded as a JSON string.
 #
-# TODO: We also wish to create from json.
 #
 class ProtocolTest
 
@@ -39,6 +38,10 @@ class ProtocolTest
       line = obj["line"]
     end
 
+
+    #
+    # If this is an obvious protocol test.
+    #
     if ( line =~ /must\s+run\s+(\S+)(\s+|\.|$)/ )
       test_type = $1.dup
       test_type.chomp!( "." )
