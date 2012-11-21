@@ -7,9 +7,10 @@
 ### foo.vm.bytemark.co.uk must run ssh on 22 otherwise 'ssh fail'.
 ###
 #
-#  The specification of the port is mandatory.
+#  The specification of the port is optional.
 #
 class SSHTest < TCPTest
+
 
   #
   # The host to test against.
@@ -46,12 +47,16 @@ class SSHTest < TCPTest
   end
 
 
+
+
   #
   # Helper for development.
   #
   def to_s
     "ssh-test of #{@host}:#{@port}."
   end
+
+
 
 
   #
@@ -66,6 +71,8 @@ class SSHTest < TCPTest
   end
 
 
+
+
   #
   # If the test fails then report the error.
   #
@@ -73,6 +80,12 @@ class SSHTest < TCPTest
     @error
   end
 
+
+
+
   register_test_type "ssh"
+
+
+
 
 end

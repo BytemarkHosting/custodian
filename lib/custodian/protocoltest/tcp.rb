@@ -84,6 +84,8 @@ class TCPTest < ProtocolTest
   end
 
 
+
+
   #
   # Run the TCP-protocol test.
   #
@@ -96,10 +98,16 @@ class TCPTest < ProtocolTest
   end
 
 
+
+
+  #
+  # Run the connection test - optionally matching against the banner.
+  #
+  # If the banner is nil then we're merely testing we can connect and
+  # send the string "quit".
   #
   #
-  #
-  def run_test_internal( host, port, banner )
+  def run_test_internal( host, port, banner = nil )
     begin
       timeout(30) do
         begin
@@ -141,6 +149,8 @@ class TCPTest < ProtocolTest
   end
 
 
+
+
   #
   # If the test fails then report the error.
   #
@@ -148,6 +158,12 @@ class TCPTest < ProtocolTest
     @error
   end
 
+
+
+
   register_test_type "tcp"
+
+
+
 
 end
