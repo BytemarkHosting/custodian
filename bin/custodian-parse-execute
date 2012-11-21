@@ -1,0 +1,48 @@
+#!/usr/bin/ruby -Ilib/ -I../lib
+#
+#  This is simple test code which will parse a line from the configuration
+# file and execute it via our class-factory
+#
+#
+#  Simple test code.  Will be folded into the test-suite.
+#
+#
+
+require 'custodian/protocoltest.rb'
+require 'custodian/protocoltest/tcp.rb'
+require 'custodian/protocoltest/ftp.rb'
+require 'custodian/protocoltest/rsync.rb'
+require 'custodian/protocoltest/ssh.rb'
+
+
+
+
+#
+# The line is in the first agument
+#
+txt = ARGV.shift
+
+
+if ( txt.nil? )
+  puts "#{$0} 'foo must run service ..'"
+  exit 1
+end
+
+
+
+#
+# Create the object
+#
+begin
+  c = ProtocolTest.create( txt )
+
+  puts "created object: #{c.to_s}"
+
+  if ( c.run_test )
+    puts "Test succeeded"
+  else
+    puts "Test failed: #{c.error()}"
+  end
+rescue => ex
+  puts "Exception: #{ex}"
+end
