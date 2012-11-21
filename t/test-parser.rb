@@ -1,7 +1,6 @@
 #!/usr/bin/ruby1.8 -I./lib/ -I../lib/
 
 
-require 'json'
 require 'test/unit'
 require 'custodian/parser'
 
@@ -362,7 +361,7 @@ class TestParser < Test::Unit::TestCase
     parser = MonitorConfig.new("/dev/null" )
 
     #
-    # Adding a test should return an array - an array of JSON strings.
+    # Adding a test should return an array - an array of hashes.
     #
     ret = parser.parse_line( "example.vm.bytemark must run ssh otherwise 'I hate you'." )
     assert_equal( ret.class.to_s, "Array" )
@@ -381,23 +380,24 @@ class TestParser < Test::Unit::TestCase
     ret = parser.parse_line( "MACRO must run ping otherwise 'ping failure'." )
 
     #
-    # The resulting array should contain three JSON strings.
+    # The resulting array should contain three entries.
     #
     assert_equal( ret.class.to_s, "Array" )
     assert_equal( ret.size(), 3 )
 
     #
-    # Ensure we look like valid JSON, and contains the correct hostnames.
+    # Ensure we look like a valid hash, and contains the correct hostnames.
     #
     ret.each do |test|
-      assert( test =~ /^\{/ )
-      assert( test =~ /(kvm1|kvm2|kvm3)\.vm.bytemark.co.uk/ )
+      assert( test.kind_of?(Hash) )
+      assert( test[:target_host]  =~ /(kvm1|kvm2|kvm3)\.vm.bytemark.co.uk/ )
     end
+
 
     #
     #  Now add more alerts, and ensure we find something sane:
     #
-    #   1.  The addition should be JSON.
+    #   1.  The addition should be arrays of hashes.
     #
     #   2.  The addition should have the correct test-type
     #
@@ -418,16 +418,11 @@ class TestParser < Test::Unit::TestCase
       ret.each do |test|
 
         #
-        #  Look for valid-seeming JSON with a string match
+        #  Look for valid-seeming hash for the test - and the right type
         #
-        assert( test =~ /^\{/ )
-        assert( test =~ /"test_type":"#{name}"/ )
+        assert( test.kind_of?(Hash) )
+        assert( test[:test_type]  = name )
 
-        #
-        #  Deserialize and look for a literal match
-        #
-        hash = JSON.parse( test )
-        assert( hash['test_type'] == name )
       end
     end
   end
@@ -465,7 +460,7 @@ class TestParser < Test::Unit::TestCase
     expected.each do |test,port|
 
       #
-      # Adding a test should return an array - an array of JSON strings.
+      # Adding a test should return an array - an array of hashes.
       #
       ret = parser.parse_line( "example.vm.bytemark must run #{test} otherwise 'fail'." )
       assert_equal( ret.class.to_s, "Array" )
@@ -477,15 +472,9 @@ class TestParser < Test::Unit::TestCase
       addition = ret[0]
 
       #
-      # Look for the correct port in our JSON.
+      # Look for the correct port in our hash.
       #
-      assert( addition =~ /"test_port":#{port}/ )
-
-      #
-      # Deserialize and look for a literal match.
-      #
-      hash = JSON.parse( addition )
-      assert( hash['test_port'] == port )
+      assert( addition[:test_port] == port )
     end
   end
 
@@ -585,26 +574,16 @@ class TestParser < Test::Unit::TestCase
     ret = parser.parse_line( "MACRO must run ping." )
 
     #
-    # The resulting array should contain three JSON strings.
+    # The resulting array should contain three hashes.
     #
     assert_equal( ret.class.to_s, "Array" )
     assert_equal( ret.size(), 3 )
 
     #
-    # Ensure we look like valid JSON, and contains the correct hostnames.
+    # Ensure we have the correct test_alert.
     #
     ret.each do |test|
-      #
-      #  Looks like JSON?
-      #
-      assert( test =~ /^\{/ )
-      assert( test =~ /(kvm1|kvm2|kvm3)\.vm.bytemark.co.uk/ )
-
-      #
-      #  Decode and look for $hostname in the alert text.
-      #
-      hash = JSON.parse( test )
-      assert( hash['test_alert'] =~ /kvm/ )
+      assert( test[:test_alert] =~ /kvm/ )
     end
   end
 
