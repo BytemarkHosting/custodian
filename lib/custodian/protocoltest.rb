@@ -34,8 +34,14 @@ class ProtocolTest
     # JSON ?
     #
     if ( line =~ /^\{(.*)\}$/ )
-      obj = JSON.parse( line );
-      line = obj["line"]
+      begin
+        obj = JSON.parse( line );
+        raise ArgumentError, "JSON object was not a hash" unless obj.kind_of?(Hash)
+        line = obj["line"]
+        raise ArgumentError, "obj[:line] was nil" unless (!line.nil?)
+      rescue =>ex
+        raise ArgumentError, "Line did not deserialize from JSON: #{line} - #{ex}"
+      end
     end
 
 
