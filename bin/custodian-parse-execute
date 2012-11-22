@@ -8,7 +8,7 @@
 #
 #
 
-require 'custodian/protocoltest.rb'
+require 'custodian/testfactory.rb'
 require 'custodian/protocoltest/tcp.rb'
 require 'custodian/protocoltest/ftp.rb'
 require 'custodian/protocoltest/jabber.rb'
@@ -37,7 +37,7 @@ end
 # Create the object
 #
 begin
-  c = ProtocolTest.create( txt )
+  c = TestFactory.create( txt )
 
   puts "created object of class type #{c.class}"
   puts ".to_s    : #{c.to_s}"
