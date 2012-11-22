@@ -13,6 +13,7 @@ require 'custodian/protocoltest/tcp'
 #  The specification of the port is optional and defaults to 25.
 #
 module Custodian
+
   module ProtocolTest
 
     class SMTPTest < TCPTest

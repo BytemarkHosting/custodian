@@ -11,7 +11,9 @@ require 'custodian/util/dns'
 # it can invoke on of /usr/bin/ping or /usr/bin/ping6 appropriately.
 #
 module Custodian
+
   module Util
+
     class Ping
 
       #

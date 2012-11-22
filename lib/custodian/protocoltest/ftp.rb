@@ -12,6 +12,7 @@ require 'custodian/protocoltest/tcp'
 #  The specification of the port is optional and defaults to 21
 #
 module Custodian
+
   module ProtocolTest
 
     class FTPTest < TCPTest

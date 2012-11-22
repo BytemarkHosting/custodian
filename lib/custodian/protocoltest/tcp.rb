@@ -16,6 +16,7 @@ require 'timeout'
 #  The specification of the port is mandatory, the banner is optional.
 #
 module Custodian
+
   module ProtocolTest
 
     class TCPTest < TestFactory

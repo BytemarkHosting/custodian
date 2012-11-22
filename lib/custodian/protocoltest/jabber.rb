@@ -13,8 +13,8 @@ require 'custodian/protocoltest/tcp'
 #  The specification of the port is optional, and defaults to 5222.
 #
 module Custodian
-  module ProtocolTest
 
+  module ProtocolTest
 
     class JABBERTest < TCPTest
 
