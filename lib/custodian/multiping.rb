@@ -1,6 +1,6 @@
 
 require 'getoptlong'
-require 'custodian/dnsutil'
+require 'custodian/util/dns'
 
 #
 # This class has methods to determine whether the target
@@ -21,7 +21,7 @@ class MultiPing
   #
   def initialize( hostname )
     @hostname = hostname
-    @resolved = DNSUtil.hostname_to_ip( hostname )
+    @resolved = Custodian::Util::DNS.hostname_to_ip( hostname )
   end
 
 
