@@ -141,7 +141,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = CustodianWorker.new( $SERVER, $LOGFILE )
+  worker = Custodian::Worker.new( $SERVER, $LOGFILE )
 
 
   #
