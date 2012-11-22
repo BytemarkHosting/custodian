@@ -4,7 +4,6 @@
 # Standard modules
 #
 require 'beanstalk-client'
-require 'json'
 require 'logger'
 
 
