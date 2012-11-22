@@ -86,9 +86,26 @@ module Custodian
 
 
 
+
+    #
+    # Return the target of this test.
+    #
     def target
       @host
     end
+
+
+
+
+    #
+    #  Return the port of this test.
+    #
+    def port
+      @port
+    end
+
+
+
 
   end
 
