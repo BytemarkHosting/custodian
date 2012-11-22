@@ -161,9 +161,9 @@ if __FILE__ == $0 then
     if ( ENV['TEST'] )
       # nop
     elsif ( ENV['DUMP'] )
-      puts test.to_json
+      puts test
     else
-      queue.put( test.to_json )
+      queue.put( test.to_s )
     end
   end
 

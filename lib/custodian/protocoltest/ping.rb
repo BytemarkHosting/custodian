@@ -52,21 +52,10 @@ module Custodian
 
 
       #
-      # Helper for development.
+      # Allow this test to be serialized.
       #
       def to_s
-        "ping-test - #{@host}."
-      end
-
-
-
-
-      #
-      # Convert this class to JSON such that it may be serialized.
-      #
-      def to_json
-        hash = { :line => @line }
-        hash.to_json
+        @line
       end
 
 

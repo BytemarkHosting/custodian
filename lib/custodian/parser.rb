@@ -1,10 +1,20 @@
 
-require 'json'
 require 'net/http'
 require 'net/https'
 require 'uri'
 
 
+require 'custodian/protocoltest/tcp.rb'
+require 'custodian/protocoltest/dns.rb'
+require 'custodian/protocoltest/ftp.rb'
+require 'custodian/protocoltest/http.rb'
+require 'custodian/protocoltest/jabber.rb'
+require 'custodian/protocoltest/ldap.rb'
+require 'custodian/protocoltest/ping.rb'
+require 'custodian/protocoltest/rsync.rb'
+require 'custodian/protocoltest/ssh.rb'
+require 'custodian/protocoltest/smtp.rb'
+require 'custodian/testfactory'
 
 
 
@@ -42,9 +52,7 @@ class MonitorConfig
   attr_reader :timeout
 
   #
-  # An array of job-objects.
-  #
-  #  TODO:  This is just an array of hashes at the moment.
+  # An array of test-objects, which are subclasses of our test-factory.
   #
   attr_reader :jobs
 
@@ -66,20 +74,6 @@ class MonitorConfig
   end
 
 
-  #
-  # Get the current value of the timeout figure.
-  #
-  def get_timeout()
-    @timeout
-  end
-
-
-  #
-  # Set the timeout value.
-  #
-  def set_timeout( new_val )
-    @timeout = new_val
-  end
 
 
   #
@@ -185,8 +179,6 @@ class MonitorConfig
         #
         val.push( hosts )
       end
-
-
     end
 
     if ( is_macro?( name ) )
@@ -194,6 +186,8 @@ class MonitorConfig
     end
 
     @MACROS[name] = val
+
+    true
   end
 
 
@@ -229,6 +223,30 @@ class MonitorConfig
 
 
 
+  #
+  #  Return multiple copies of a line for each macro-target
+  #
+  def expand_macro( input )
+
+    r = Array.new()
+
+    if ( input =~ /^(\S+)\s+(.*)$/ )
+      macro=$1.dup
+      rest=$2.dup
+    end
+
+
+    if ( is_macro?( macro ) )
+      get_macro_targets(macro).each do |host|
+        r.push( "#{host} #{rest}" )
+      end
+    else
+      r.push( input )
+    end
+
+    r
+  end
+
 
   #
   # Parse a single line from the configuration file.
@@ -258,7 +276,6 @@ class MonitorConfig
       define_macro( line )
 
     elsif ( line =~ /^(\S+)\s+must\s+ping(.*)/ )
-
       #
       #  Ping is a special case because the configuration file entry
       # would read:
@@ -283,193 +300,29 @@ class MonitorConfig
     elsif ( line =~ /^\S+\s+must\s+run\s+([^\s]+)(\s+|\.|$)/i )
 
       #
-      # Get the service we're testing, and remove any trailing "."
+      # Expand the macro if we should
       #
-      # This handles the case of:
-      #
-      #  LINN_HOSTS must run ssh.
-      #
-      service = $1.dup
-      service.chomp!(".")
+      tests = expand_macro( line )
 
       #
-      #  Target of the service-test.
-      #
-      targets = Array.new
-      target  = line.split( /\s+/)[0]
-
-      #
-      #  If the target is a macro then get the list of hosts to
-      # which the test will apply.
-      #
-      if ( is_macro?( target ) )
-        targets = get_macro_targets( target )
-      else
-
-        #
-        # Otherwise a list of one, literal, entry.
-        #
-        targets.push( target )
-      end
-
-      #
-      # All our service tests, except ping, require a port - we setup the defaults here,
-      # but the configuration file will allow users to specify an alternative
-      # via " on XXX ".
-      #
-      case service
-      when /ssh/ then
-        port=22
-      when /jabber/ then
-        port=5222
-      when /ldap/ then
-        port=389
-      when /^https$/ then
-        port=443
-      when /^http$/ then
-        port=80
-      when /rsync/i then
-        port=873
-      when /ftp/i then
-        port=21
-      when /telnet/i then
-        port=23
-      when /smtp/i then
-        port=25
-      when /dns/i then
-        port=53
-      end
-
-      #
-      # Allow the port to be changed, for example:
-      #
-      #  must run ssh  on   33 otherwise ..
-      #  must run ftp  on   44 otherwise ..
-      #  must run http on 8000 otherwise ..
-      #
-      if ( line =~ /\s+on\s+([0-9]+)/ )
-        port = $1.dup
-      end
-
-
-      #
-      # The array of JSON objects we will return to the caller.
+      # The array of objects we will return to the caller.
       #
       ret = Array.new()
 
       #
       # For each host in our possibly-macro-expanded list:
       #
-      targets.each do |host|
+      tests.each do |macro_expanded|
 
-        #
-        # The test we'll apply.
-        #
-        test = {
-          :target_host => host,
-          :test_type   => service,
-          :test_port   => port,
-          :verbose     => true,
-          :timeout     => @timeout
-        }
+        job = nil
 
-        #
-        # Sanity check the hostname for ping-tests, to
-        # avoid this security hole:
-        #
-        #   $(/tmp/exploit.sh) must run ping ..
-        #
-        if ( service == "ping" )
-          raise ArgumentError, "Invalid hostname for ping-test: #{host}" unless( host =~ /^([a-zA-Z0-9:\-\.]+)$/ )
+        begin
+          job = Custodian::TestFactory.create( macro_expanded )
+          ret.push( job )
+        rescue => ex
+          puts "ERROR: #{ex}"
+          return nil
         end
-
-
-        #
-        #  Alert text will have a default, which may be overridden.
-        #
-        alert = "#{service} failed on #{host}"
-        if ( line =~ /otherwise '([^']+)'/ )
-          alert=$1.dup
-        end
-
-        #
-        # Store the alert
-        #
-        # Note: We do this in the loop so that we can have "on $host" with
-        # the per-test hostname inserted.
-        #
-        test[:test_alert] = alert
-
-        #
-        # TCP-tests will include a banner, optionally
-        #
-        if ( test[:test_type] =~ /tcp/ )
-          if ( line =~ /\s+with\s+banner\s+'([^']+)'/ )
-            test[:banner]=$1.dup
-          else
-            puts "You did not specify a banner to match against in line: #{line}"
-          end
-        end
-
-
-        #
-        # HTTP-tests will include the expected result in one of two forms:
-        #
-        #    must run http with status 200
-        #
-        #    must run http with content 'text'
-        #
-        # If those are sepcified then include them here.
-        #
-        # Note we're deliberately fast and loose here - which allows both to
-        # be specified:
-        #
-        # http://example.vm/ must run http with status 200 and content 'OK'.
-        #
-        #
-        if ( test[:test_type] =~ /^https?/ )
-
-          #
-          #  If a status code is specified use it; otherwise default
-          # to 200.
-          if ( line =~ /\s+with\s+status\s+([0-9]+)\s+/ )
-            test[:http_status] = $1.dup
-          else
-            test[:http_status] = 200
-          end
-
-          #
-          #  If a content-check is in place then use it.
-          #
-          if ( line =~ /\s+with\s+content\s+'([^']+)'/ )
-            test[:http_text]=$1.dup
-          end
-
-        end
-
-
-        #
-        # These are special cased for the DNS types
-        #
-        if ( test[:test_type] =~ /dns/ )
-
-          #
-          #  Sample line:
-          #
-          # DNSHOSTS must run dns for www.bytemark.co.uk resolving A as '212.110.161.144'.
-          #
-          #
-          if ( line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/ )
-            test[:resolve_name]     = $1.dup
-            test[:resolve_type]     = $2.dup
-            test[:resolve_expected] = $3.dup
-          end
-        end
-
-        #
-        #  Add the job to the results.
-        #
-        ret.push( test )
       end
 
       ret
@@ -520,7 +373,7 @@ class MonitorConfig
       if ( block_given? )
         if ( ret.kind_of?( Array ) )
           ret.each do |probe|
-            yield probe
+            yield probe.to_s
           end
         end
       end
@@ -531,14 +384,3 @@ class MonitorConfig
 end
 
 
-
-if __FILE__ == $0 then
-  p = MonitorConfig.new( "/home/steve/hg/custodian/cfg/steve.cfg" );
-  p.parse_file do |test|
-    puts "Test: #{test} received"
-  end
-
-  p.jobs.each do |job|
-    puts "Job: #{job}"
-  end
-end

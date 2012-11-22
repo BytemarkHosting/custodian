@@ -94,28 +94,16 @@ module Custodian
 
 
       #
-      # Helper for development.
+      # Allow this test to be serialized.
       #
       def to_s
-        "tcp-test of #{@host}:#{@port} looking for banner '#{@banner}'."
+        return( @line )
       end
 
 
 
-
       #
-      # Convert this class to JSON such that it may be serialized.
-      #
-      def to_json
-        hash = { :line => @line }
-        hash.to_json
-      end
-
-
-
-
-      #
-      # Run the TCP-protocol test.
+      # Run the test.
       #
       def run_test
 
