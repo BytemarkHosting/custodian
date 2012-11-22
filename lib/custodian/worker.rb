@@ -12,18 +12,18 @@ require 'logger'
 #
 # Implementation of our protocol tests.
 #
-require 'custodian/alerter.rb'
-require 'custodian/protocol-tests/dns.rb'
-require 'custodian/protocol-tests/ftp.rb'
-require 'custodian/protocol-tests/http.rb'
-require 'custodian/protocol-tests/jabber.rb'
-require 'custodian/protocol-tests/ldap.rb'
-require 'custodian/protocol-tests/ping.rb'
-require 'custodian/protocol-tests/rsync.rb'
-require 'custodian/protocol-tests/smtp.rb'
-require 'custodian/protocol-tests/ssh.rb'
-require 'custodian/protocol-tests/tcp.rb'
-
+#require 'custodian/alerter.rb'
+require 'custodian/protocoltest/tcp.rb'
+require 'custodian/protocoltest/dns.rb'
+require 'custodian/protocoltest/ftp.rb'
+require 'custodian/protocoltest/http.rb'
+require 'custodian/protocoltest/jabber.rb'
+require 'custodian/protocoltest/ldap.rb'
+require 'custodian/protocoltest/ping.rb'
+require 'custodian/protocoltest/rsync.rb'
+require 'custodian/protocoltest/ssh.rb'
+require 'custodian/protocoltest/smtp.rb'
+require 'custodian/testfactory'
 
 
 
@@ -114,39 +114,17 @@ module Custodian
 
         log_message( "Job aquired - Job ID : #{job.id}" )
 
-
         #
         #  Get the job body
         #
-        json = job.body
-        raise ArgumentError, "Body doesn't look like JSON" unless( json =~ /[{}]/ )
-
-
-        #
-        # Decode the JSON body - it should return a non-empty hash.
-        #
-        hash = JSON.parse( json )
+        body = job.body
+        raise ArgumentError, "Job was empty" if (body.nil?)
+        raise ArgumentError, "Job was not a string" unless body.kind_of?(String)
 
         #
-        # Ensure we got a non-empty hash.
+        #  Output the job.
         #
-        raise ArgumentError, "JSON didn't decode to a hash" unless hash.kind_of?(Hash)
-        raise ArgumentError, "JSON hash is empty" if (hash.empty?)
-
-        #
-        # Are we being verbose?
-        #
-        hash['verbose'] = 1 if ( ENV['VERBOSE'] )
-
-
-        #
-        #  Output the details.
-        #
-        log_message( "Job body contains the following keys & values:")
-        hash.keys.each do |key|
-          log_message( "   #{key} => #{hash[key]}" )
-        end
-
+        log_message( "Job: #{body}" )
 
 
         #
@@ -156,41 +134,19 @@ module Custodian
         success = false
         count   = 0
 
+
+        #
+        # Create the test-object.
+        #
+        test = Custodian::TestFactory.create( body )
+
+
         #
         # As a result of this test we'll either raise/clear with mauve.
         #
         # This helper will do that job.
         #
-        alert = Alerter.new( hash )
-
-
-        #
-        # Convert the test-type to a class name, to do the protocol test.
-        #
-        # Given a test-type "foo" we'll attempt to instantiate a class called FOOTest.
-        #
-        test  = hash['test_type']
-        test  = "http" if ( test == "https" )
-        clazz = test.upcase
-        clazz = "#{clazz}Test"
-
-
-        #
-        # Create the test object.
-        #
-        obj = eval(clazz).new( hash )
-
-
-        #
-        # Ensure that the object we load implements the two methods
-        # we expect.
-        #
-        if ( ( ! obj.respond_to?( "error") ) ||
-             ( ! obj.respond_to?( "run_test" ) ) )
-          puts "Class #{clazz} doesn't implement the full protocol-test API"
-        end
-
-
+        alert = Alerter.new( test )
 
         #
         #  We'll run no more than MAX times.
@@ -201,7 +157,7 @@ module Custodian
 
           log_message( "Running test - [#{count}/#{@retry_count}]" )
 
-          if ( obj.run_test() )
+          if ( test.run_test )
             log_message( "Test succeeed - clearing alert" )
             success = true
             alert.clear()
@@ -218,8 +174,8 @@ module Custodian
           #
           # Raise the alert, passing the error message.
           #
-          log_message( "Test failed - alerting with #{obj.error()}" )
-          alert.raise( obj.error() )
+          log_message( "Test failed - alerting with #{test.error()}" )
+          alert.raise( test.error() )
         end
 
       rescue => ex
