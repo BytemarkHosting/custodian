@@ -144,7 +144,7 @@ if __FILE__ == $0 then
   #
   # Create the parser
   #
-  mon = MonitorConfig.new( ENV['FILE'] )
+  mon = Custodian::Parser.new( ENV['FILE'] )
 
   #
   # Set the timeout
