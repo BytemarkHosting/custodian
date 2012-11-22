@@ -56,7 +56,6 @@ require 'getoptlong'
 # Our code.
 #
 require 'custodian/worker.rb'
-require 'custodian/alerter.rb'
 
 
 
