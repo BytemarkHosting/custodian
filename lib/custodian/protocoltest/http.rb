@@ -9,8 +9,7 @@
 ###
 #
 #
-class HTTPTest < TCPTest
-
+class HTTPTest < Testfactory
 
   #
   # The line from which we were constructed.
