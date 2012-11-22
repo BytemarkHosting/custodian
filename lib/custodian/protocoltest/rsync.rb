@@ -1,3 +1,6 @@
+require 'custodian/protocoltest/tcp'
+
+
 #
 #  The RSYNC-protocol test.
 #
