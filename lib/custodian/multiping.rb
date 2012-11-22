@@ -1,5 +1,4 @@
 
-require 'getoptlong'
 require 'custodian/util/dns'
 
 #
