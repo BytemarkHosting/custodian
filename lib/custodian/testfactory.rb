@@ -13,75 +13,79 @@ require 'json'
 # file - or that line encoded as a JSON string.
 #
 #
-class TestFactory
+module Custodian
 
 
-  #
-  # The subclasses we have.
-  #
-  @@subclasses = { }
+  class TestFactory
 
-
-  #
-  # Create a test-type object given a line of text from our parser.
-  #
-  # The line will be like "target must run tcp|ssh|ftp|smtp .."
-  #
-  #
-  def self.create( line )
 
     #
-    # JSON ?
+    # The subclasses we have.
     #
-    if ( line =~ /^\{(.*)\}$/ )
-      begin
-        obj = JSON.parse( line );
-        raise ArgumentError, "JSON object was not a hash" unless obj.kind_of?(Hash)
-        line = obj["line"]
-        raise ArgumentError, "obj[:line] was nil" unless (!line.nil?)
-      rescue =>ex
-        raise ArgumentError, "Line did not deserialize from JSON: #{line} - #{ex}"
+    @@subclasses = { }
+
+
+    #
+    # Create a test-type object given a line of text from our parser.
+    #
+    # The line will be like "target must run tcp|ssh|ftp|smtp .."
+    #
+    #
+    def self.create( line )
+
+      #
+      # JSON ?
+      #
+      if ( line =~ /^\{(.*)\}$/ )
+        begin
+          obj = JSON.parse( line );
+          raise ArgumentError, "JSON object was not a hash" unless obj.kind_of?(Hash)
+          line = obj["line"]
+          raise ArgumentError, "obj[:line] was nil" unless (!line.nil?)
+        rescue =>ex
+          raise ArgumentError, "Line did not deserialize from JSON: #{line} - #{ex}"
+        end
       end
-    end
 
 
-    #
-    # If this is an obvious protocol test.
-    #
-    if ( line =~ /must\s+run\s+(\S+)(\s+|\.|$)/ )
-      test_type = $1.dup
-      test_type.chomp!( "." )
+      #
+      # If this is an obvious protocol test.
+      #
+      if ( line =~ /must\s+run\s+(\S+)(\s+|\.|$)/ )
+        test_type = $1.dup
+        test_type.chomp!( "." )
 
-      c = @@subclasses[test_type]
-      if c
-        c.new( line )
+        c = @@subclasses[test_type]
+        if c
+          c.new( line )
+        else
+          raise ArgumentError, "Bad test type: #{test_type}"
+        end
       else
-        raise ArgumentError, "Bad test type: #{test_type}"
+        raise "Unknown line given - Failed to instantiate a suitable protocol-test."
       end
-    else
-      raise "Unknown line given - Failed to instantiate a suitable protocol-test."
     end
+
+
+    #
+    # Register a new test type - this must be called by our derived classes
+    #
+    def self.register_test_type name
+      @@subclasses[name] = self
+    end
+
+
+    #
+    # Return an array of test-types we know about
+    #
+    # i.e. Derived classes that have registered themselves.
+    #
+    #
+    def types
+      @@subclasses
+    end
+
+
   end
-
-
-  #
-  # Register a new test type - this must be called by our derived classes
-  #
-  def self.register_test_type name
-    @@subclasses[name] = self
-  end
-
-
-  #
-  # Return an array of test-types we know about
-  #
-  # i.e. Derived classes that have registered themselves.
-  #
-  #
-  def types
-    @@subclasses
-  end
-
 
 end
-
