@@ -13,6 +13,7 @@ require 'custodian/protocoltest/tcp'
 #  The specification of the port is optional and defaults to 873
 #
 module Custodian
+
   module ProtocolTest
 
     class RSYNCTest < TCPTest

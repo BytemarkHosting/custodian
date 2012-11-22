@@ -12,6 +12,7 @@ require 'custodian/protocoltest/tcp'
 #  The specification of the port is optional.
 #
 module Custodian
+
   module ProtocolTest
 
     class SSHTest < TCPTest

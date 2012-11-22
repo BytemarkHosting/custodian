@@ -10,7 +10,9 @@ require 'timeout'
 #  This class is responsible for doing forward/reverse DNS lookups
 #
 module Custodian
+
   module Util
+
     class DNS
 
 

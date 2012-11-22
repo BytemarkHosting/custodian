@@ -10,6 +10,7 @@
 #
 #
 module Custodian
+
   module ProtocolTest
 
     class DNSTest < TestFactory
