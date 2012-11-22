@@ -13,7 +13,7 @@ require 'json'
 # file - or that line encoded as a JSON string.
 #
 #
-class ProtocolTest
+class TestFactory
 
 
   #
