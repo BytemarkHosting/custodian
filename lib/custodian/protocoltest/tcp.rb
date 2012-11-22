@@ -13,7 +13,7 @@ require 'timeout'
 #
 #  The specification of the port is mandatory, the banner is optional.
 #
-class TCPTest < ProtocolTest
+class TCPTest < TestFactory
 
 
   #
