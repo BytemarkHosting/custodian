@@ -1,3 +1,6 @@
+require 'custodian/protocoltest/tcp'
+
+
 #
 #  The SMTP-protocol test.
 #

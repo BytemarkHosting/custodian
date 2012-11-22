@@ -1,3 +1,5 @@
+require 'custodian/protocoltest/tcp'
+
 #
 #  The FTP-protocol test.
 #

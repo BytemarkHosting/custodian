@@ -1,3 +1,5 @@
+
+require 'custodian/testfactory.rb'
 require 'socket'
 require 'timeout'
 
