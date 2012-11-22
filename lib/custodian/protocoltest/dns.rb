@@ -9,7 +9,7 @@
 ###
 #
 #
-class DNSTest < Testfactory
+class DNSTest < TestFactory
 
 
   #
