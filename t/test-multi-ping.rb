@@ -3,7 +3,7 @@
 
 
 require 'test/unit'
-require 'custodian/multiping'
+require 'custodian/util/ping'
 
 
 
@@ -35,14 +35,14 @@ class TestMultiPing < Test::Unit::TestCase
     #  Calling without a hostname is a mistake.
     #
     assert_raise ArgumentError do
-      obj = MultiPing.new()
+      obj = Custodian::Util::Ping.new()
     end
 
     #
     #  Calling with a hostname should be fine mistake.
     #
     assert_nothing_raised do
-      obj = MultiPing.new( "some.host.anme" )
+      obj = Custodian::Util::Ping.new( "some.host.anme" )
     end
   end
 
@@ -66,7 +66,7 @@ class TestMultiPing < Test::Unit::TestCase
 
     to_test.each do |name,version|
 
-      a = MultiPing.new( name )
+      a = Custodian::Util::Ping.new( name )
 
       if ( version == 6 )
         assert_equal( a.is_ipv6?, true, "#{name} is IPv6" )
@@ -88,7 +88,7 @@ class TestMultiPing < Test::Unit::TestCase
   def test_bogus
 
     %w( tessf.dfsdf.sdf.sdfsdf fdsfkljflj3.fdsfds.f3.dfs ).each do |name|
-      helper = MultiPing.new( name )
+      helper = Custodian::Util::Ping.new( name )
 
       assert( ! helper.is_ipv4? )
       assert( ! helper.is_ipv6? )
