@@ -85,6 +85,11 @@ module Custodian
     end
 
 
+
+    def target
+      @host
+    end
+
   end
 
 end
