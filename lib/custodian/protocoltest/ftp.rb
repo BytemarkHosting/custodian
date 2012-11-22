@@ -53,6 +53,9 @@ module Custodian
         # Save the host
         #
         @host  = line.split( /\s+/)[0]
+        if ( @host =~ /^ftp:\/\/([^\/]+)\/?/ )
+          @host = $1.dup
+        end
 
         #
         # Save the port
