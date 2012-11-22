@@ -47,6 +47,11 @@ class TestTestFactory < Test::Unit::TestCase
     assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." ).target() == "ftp.example.com"  )
 
 
+
+    assert( Custodian::TestFactory.create( "rsync.example.com        must run rsync." ).target() == "rsync.example.com"  )
+    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." ).target() == "rsync.example.com"  )
+
+
   end
 
 
