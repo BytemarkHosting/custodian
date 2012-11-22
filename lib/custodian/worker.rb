@@ -36,7 +36,7 @@ require 'custodian/protocol-tests/tcp.rb'
 # This class contains the code for connecting to a Beanstalk queue,
 # fetching tests from it, and executing them
 #
-class Custodian
+class CustodianWorker
 
   #
   # The beanstalk queue.
