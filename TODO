@@ -7,3 +7,10 @@ Use a class factory to instantiate tests on the worker-side.
      ./bin/custodian-parse-execute "kvm1.vm must run smtp."
 
 The HTTP/HTTPS-probe should be pure Ruby.  Patrick will give me a stub.
+
+
+allow rsync://hostnaem for rsync test
+
+allow ftp://ftp.uk.mirror.bytarmk.co.uk for ftp test
+
+
