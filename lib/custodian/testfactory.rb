@@ -1,4 +1,3 @@
-require 'json'
 
 
 #
@@ -10,7 +9,7 @@ require 'json'
 #
 # This class is a factory that will return the correct
 # derived class for a given line from our configuration
-# file - or that line encoded as a JSON string.
+# file.
 #
 #
 module Custodian
@@ -31,21 +30,6 @@ module Custodian
     #
     #
     def self.create( line )
-
-      #
-      # JSON ?
-      #
-      if ( line =~ /^\{(.*)\}$/ )
-        begin
-          obj = JSON.parse( line );
-          raise ArgumentError, "JSON object was not a hash" unless obj.kind_of?(Hash)
-          line = obj["line"]
-          raise ArgumentError, "obj[:line] was nil" unless (!line.nil?)
-        rescue =>ex
-          raise ArgumentError, "Line did not deserialize from JSON: #{line} - #{ex}"
-        end
-      end
-
 
       #
       # If this is an obvious protocol test.
