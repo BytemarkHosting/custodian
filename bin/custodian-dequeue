@@ -55,7 +55,7 @@ require 'getoptlong'
 #
 # Our code.
 #
-require 'custodian.rb'
+require 'custodian/worker.rb'
 require 'custodian/alerter.rb'
 
 
@@ -141,7 +141,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = Custodian.new( $SERVER, $LOGFILE )
+  worker = CustodianWorker.new( $SERVER, $LOGFILE )
 
 
   #
