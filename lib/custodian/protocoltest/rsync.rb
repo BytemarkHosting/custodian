@@ -67,28 +67,17 @@ module Custodian
 
 
       #
-      # Helper for development.
+      # Allow this test to be serialized.
       #
       def to_s
-        "rsync-test of #{@host}:#{@port}."
+        @line
       end
 
 
 
 
       #
-      # Convert this class to JSON such that it may be serialized.
-      #
-      def to_json
-        hash = { :line => @line }
-        hash.to_json
-      end
-
-
-
-
-      #
-      # Run the protocol test.
+      # Run the test.
       #
       def run_test
 
