@@ -33,7 +33,7 @@
 
 
 require 'getoptlong'
-require 'custodian/multiping'
+require 'custodian/util/ping'
 
 
 
@@ -115,7 +115,7 @@ end
 #
 #  Create the object
 #
-helper = MultiPing.new( hostname )
+helper = Custodian::Util::Ping.new( hostname )
 
 
 #
