@@ -39,7 +39,7 @@ end
 # Create the object
 #
 begin
-  c = TestFactory.create( txt )
+  c = Custodian::TestFactory.create( txt )
 
   puts "created object of class type #{c.class}"
   puts ".to_s    : #{c.to_s}"
