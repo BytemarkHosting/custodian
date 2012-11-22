@@ -1,3 +1,15 @@
+custodian (2012:1122-1) stable; urgency=low
+
+  * Overhauled much of the code:
+    - Test cases are now instantiated via a class-factory pattern.
+    - JSON is not used to serialize tests in the queue.
+    - The parser and the queue insertion are now decoupled.
+    - The test-suite is updated.
+    - Many classes were moved into the custodian name-space, and renamed.
+    - Many of the protocol tests were re-written to derive from the tcp-test.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 22 Nov 2012 16:44:16 +0000
+
 custodian (2012:1121-1) stable; urgency=low
 
   * The parsing of the configuration file(s) is now decoupled from
