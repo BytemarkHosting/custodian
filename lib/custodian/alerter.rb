@@ -1,5 +1,5 @@
 
-require 'custodian/dnsutil'
+require 'custodian/util/dns'
 
 require 'mauve/sender'
 require 'mauve/proto'
@@ -97,7 +97,7 @@ class Alerter
          ( target =~ /^([0-9a-f:]+)$/ ) )
       resolved = target
     else
-      resolved = DNSUtil.hostname_to_ip( target )
+      resolved = Custodian::Util::DNS.hostname_to_ip( target )
     end
 
 
@@ -227,7 +227,7 @@ class Alerter
     subject = @details['target_host']
     if ( ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( subject =~ /^([0-9a-f:]+)$/ ) )
-      res = DNSUtil.ip_to_hostname( subject )
+      res = Custodian::Util::DNS.ip_to_hostname( subject )
       if ( res )
         subject = res
       end
@@ -240,7 +240,7 @@ class Alerter
     if ( ( @details["target_host"] =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
          ( @details["target_host"] =~ /^([0-9a-f:]+)$/ ) )
 
-      resolved = DNSUtil.ip_to_hostname( @details["target_host"] )
+      resolved = Custodian::Util::DNS.ip_to_hostname( @details["target_host"] )
       if ( resolved.nil? )
         resolved = ""
       else
