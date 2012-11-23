@@ -22,14 +22,15 @@ require 'custodian/testfactory'
 
 
 #
-# This is a simple class which will parse a sentinel configuration file.
+# This is a simple class which will parse a configuration file.
 #
-# Unlike Sentinel it is not built using a real parser, instead it peels off lines
-# via a small number of very simple regular expressions - this should be flaky,
-# but in practice it manages to successfully parse each of the configuration
-# files that we currently maintain @ Bytemark.
+# The class peels off lines via a small number of very simple regular
+# expressions - this should be flaky,  but in practice it manages to
+# successfully parse each of the configuration files that we currently
+# maintain @ Bytemark.
 #
 # If there are any lines which are not recognized the class will raise an exception.
+#
 #
 # Steve
 # --
