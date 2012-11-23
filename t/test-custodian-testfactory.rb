@@ -126,6 +126,28 @@ class TestTestFactory < Test::Unit::TestCase
 
 
 
+
+  #
+  # Test the DNS test may be created
+  #
+  def test_dns_handler
+
+    assert_nothing_raised do
+      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'." ) )
+    end
+
+    #
+    #  Missing record-type
+    #
+    assert_raise ArgumentError do
+      Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk as '80.68.80.26;85.17.170.78;80.68.80.27'." )
+    end
+
+  end
+
+
+
+
   #
   # Test the creation of inverted tests.
   #
@@ -177,12 +199,18 @@ class TestTestFactory < Test::Unit::TestCase
 
     registered.each do |obj|
 
+
       #
       #  Try to get the name
       #
       name=obj.to_s
       if ( name =~ /protocoltest::(.*)Test$/i )
         tst = $1.dup.downcase
+
+        #
+        # NOTE: Skip the DNS test - it is more complex.
+        #
+        next if ( tst =~ /dns/ )
 
         # normal
         test_one = "http://foo/ must run #{tst} on 1234"
