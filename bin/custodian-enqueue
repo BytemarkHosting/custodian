@@ -17,7 +17,7 @@
 #
 #  -m, --manual        Show this manual, and exit.
 #
-#  -d, --dump          Dump the generated JSON to the console; don't insert in the queue.
+#  -d, --dump          Dump the parsed tests to the console; don't insert in the queue.
 #
 #  --test              Test the parsing of the given file, alert on errors.
 #
@@ -29,8 +29,8 @@
 # ABOUT
 #
 #  This tool reads a single configuration file and parses it into a
-# series of network & protocol tests.   These tests are serialized
-# into JSON, and stored in a beanstalkd queue.
+# series of network & protocol tests.   These tests are then stored in
+# a beanstalkd queue.
 #
 #  The intention is that the tests will be pulled from the queue and
 # executed by the companion program custodian-dequeue.  The dequeing

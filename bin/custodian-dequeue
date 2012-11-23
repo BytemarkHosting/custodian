@@ -31,8 +31,8 @@
 #
 # ABOUT
 #
-#  This tool is designed to pull JSON-encoded network/protocol-tests from
-# a beanstalkd server and execute them, in series.
+#  This tool is designed to pull network/protocol-tests from a beanstalkd server and execute
+# them, in series.
 #
 #  The tests are created, via custodian-enqueue, by parsing a configuration
 # file largely compatible with that used for our obsolete sentinel tool.
