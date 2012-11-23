@@ -63,7 +63,7 @@ module Custodian
     # i.e. Derived classes that have registered themselves.
     #
     #
-    def types
+    def self.known_tests
       @@subclasses
     end
 
