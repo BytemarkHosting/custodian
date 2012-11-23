@@ -55,6 +55,7 @@ require 'getoptlong'
 #
 # Our code.
 #
+require 'custodian/settings.rb'
 require 'custodian/worker.rb'
 
 
@@ -65,10 +66,15 @@ require 'custodian/worker.rb'
 #
 if __FILE__ == $0 then
 
-  $SERVER  = "127.0.0.1:11300"
-  $LOGFILE = "custodian-dequeue.log"
   $help    = false
   $manual  = false
+
+  #
+  #  The beanstalkd server address, and logfile.
+  #
+  settings = Custodian::Settings.instance()
+  $SERVER  = settings.queue_server
+  $LOGFILE = setttings.log_file
 
   begin
     opts = GetoptLong.new(
