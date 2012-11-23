@@ -252,6 +252,8 @@ module Custodian
     #
     def parse_line( line )
 
+      raise ArgumentError, "Line is not a string: #{line}" unless( line.kind_of? String )
+
       line.chomp! if ( !line.nil? )
 
       #
@@ -341,10 +343,11 @@ module Custodian
       # If we're given a string then split it on newline
       #
       if ( text.kind_of?( String )  )
-        a = text.split( /[\r\n]/ )
+        a    = text.split( /[\r\n]/ )
         text = a
       end
 
+      ret = nil
 
       #
       # Split on newline
@@ -369,6 +372,8 @@ module Custodian
           end
         end
       end
+
+      ret
     end
 
 
