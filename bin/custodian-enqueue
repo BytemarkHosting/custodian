@@ -144,7 +144,7 @@ if __FILE__ == $0 then
   #
   # Create the parser
   #
-  mon = Custodian::Parser.new( ENV['FILE'] )
+  mon = Custodian::Parser.new()
 
   #
   # Set the timeout
@@ -156,7 +156,9 @@ if __FILE__ == $0 then
   #
   # Run the parser - and get callbacks when a new job is added.
   #
-  mon.parse_file do |test|
+  mon.parse_file( ENV['FILE'] )
+
+  mon.jobs.each do |test|
 
     if ( ENV['TEST'] )
       # nop

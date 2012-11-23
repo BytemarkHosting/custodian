@@ -63,16 +63,13 @@ module Custodian
     #
     # Constructor
     #
-    def initialize( filename )
+    def initialize( )
 
 
       @MACROS  = Hash.new()
       @jobs    = Array.new()
-      @file    = filename
       @timeout = 60
 
-      raise ArgumentError, "Missing configuration file!" if ( @file.nil? )
-      raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( @file) )
     end
 
 
@@ -327,7 +324,7 @@ module Custodian
           end
         end
 
-        ret
+        return ret
       else
         raise ArgumentError, "Unknown line: '#{line}'"
       end
@@ -335,21 +332,16 @@ module Custodian
 
 
 
-
     #
-    # Parse the configuration file which was named in our constructor.
+    # Parse a text-snippet, with multiple lines.
     #
-    # This updates our @jobs array with the tests - and optionally
-    # invokes our callback.
-    #
-    def parse_file( &callback )
+    def parse_lines( text )
 
       #
-      #  Parse the configuration file on the command line
+      # Split on newline
       #
-      File.open( @file, "r").each_line do |line|
-
-        ret = parse_line( line)
+      text.each do |line|
+        ret = parse_line( line )
 
         #
         #  The return value from the parse_line method
@@ -367,19 +359,30 @@ module Custodian
             @jobs.push( probe )
           end
         end
-
-        #
-        # If there was an optional callback then invoke it
-        # with the newly added job/jobs.
-        #
-        if ( block_given? )
-          if ( ret.kind_of?( Array ) )
-            ret.each do |probe|
-              yield probe.to_s
-            end
-          end
-        end
       end
+    end
+
+
+
+    #
+    # Parse the configuration file specified.
+    #
+    # This updates our @jobs array with the tests.
+    #
+    def parse_file( filename )
+
+      raise ArgumentError, "Missing configuration file!" if ( filename.nil? )
+      raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( filename) )
+
+      #
+      #  Read the configuration file.
+      #
+      out = File.open( filename, 'r') {|file| file.readlines.collect}
+
+      #
+      #  Parse it
+      #
+      parse_lines( out )
     end
 
 
