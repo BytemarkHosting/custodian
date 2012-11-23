@@ -1,11 +1,9 @@
 
+require 'custodian/util/bytemark'
 require 'custodian/util/dns'
 
 require 'mauve/sender'
 require 'mauve/proto'
-
-
-require 'ipaddr'
 
 
 
@@ -25,14 +23,6 @@ class Alerter
   attr_reader :details
 
 
-  #
-  # The currently allocated IP-ranges which belong to Bytemark.
-  #
-  # These are used to test if an alert refers to a machine outwith our
-  # network.
-  #
-  BYTEMARK_RANGES = %w(80.68.80.0/20 89.16.160.0/19 212.110.160.0/19 46.43.0.0/18 91.223.58.0/24 213.138.96.0/19 5.153.224.0/21 2001:41c8::/32).collect{|i| IPAddr.new(i)}
-
 
 
   #
@@ -42,25 +32,6 @@ class Alerter
   #
   def initialize( test_details )
     @details = test_details
-  end
-
-
-
-  #
-  # Is the named target inside the Bytemark IP-range?
-  #
-  def inside_bytemark?( target )
-
-    #
-    #  Test trange, and format the appropriate message.
-    #
-    inside = false
-
-    if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(target))} )
-      inside = true
-    end
-
-    inside
   end
 
 
@@ -110,7 +81,7 @@ class Alerter
     #
     #  Return the formatted message
     #
-    if ( inside_bytemark?( resolved.to_s ) )
+    if ( Custodian::Util::Bytemark.inside?( resolved.to_s ) )
       if ( resolved == target )
         return "<p>#{host} is inside the Bytemark network.</p>"
       else
