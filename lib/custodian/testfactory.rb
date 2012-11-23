@@ -79,6 +79,13 @@ module Custodian
 
 
 
+    #
+    #  Is this test inverted?
+    #
+    def inverted
+      @inverted
+    end
+
 
     #
     #  Return the port of this test.

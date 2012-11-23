@@ -137,6 +137,36 @@ class TestTestFactory < Test::Unit::TestCase
       assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync." ) )
       assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync on 333." ) )
     end
+
+
+    #
+    #  Test some inversions
+    #
+    data = {
+      "foo must run rsync."              => false,
+      "rsync://foo/ must run rsync."     => false,
+      "foo must run ping otherwise"      => false,
+      "foo must not run ping otherwise"  => true,
+      "foo must not run ssh otherwise"   => true,
+      "foo must not run ldap otherwise"  => true,
+    }
+
+    #
+    #  Run each test
+    #
+    data.each do |str,inv|
+      assert_nothing_raised do
+
+        obj = Custodian::TestFactory.create( str )
+
+        #
+        #  Ensure we got the object, and the port was correct.
+        #
+        assert(obj, "created object via TestFactory.create('#{str}')")
+        assert( obj.inverted() == inv, "#{str} -> #{inv}" )
+      end
+    end
+
   end
 end
 

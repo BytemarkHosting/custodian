@@ -23,7 +23,7 @@ module Custodian
 
 
       #
-      # The input line
+      # The input line from which we were constructed.
       #
       attr_reader :line
 
@@ -38,6 +38,12 @@ module Custodian
       # The port to connect to.
       #
       attr_reader :port
+
+
+      #
+      # Is this test inverted?
+      #
+      attr_reader :inverted
 
 
       #
@@ -64,6 +70,16 @@ module Custodian
         # Save the host
         #
         @host  = line.split( /\s+/)[0]
+
+
+        #
+        # Is this test inverted?
+        #
+        if ( line =~ /must\s+not\s+run\s+/ )
+          @inverted = true
+        else
+          @inverted = false
+        end
 
         #
         # Save the port
