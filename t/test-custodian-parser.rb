@@ -210,4 +210,54 @@ EOF
   end
 
 
+
+
+  #
+  # Test the expansion of macros.
+  #
+  def test_macro_expansion
+
+    #
+    #  Create a parser - validate it is free of macros.
+    #
+    parser = Custodian::Parser.new()
+    macros = parser.macros
+    assert( macros.empty? )
+
+    #
+    #  Expand a line - which should result in no change
+    # as the line does not involve a known-macro
+    #
+    in_txt  = "example.bytemark.co.uk must run smtp."
+    out_txt = parser.expand_macro( in_txt )
+    
+    #
+    #  The difference is the return value will be an array
+    #
+    assert( out_txt.kind_of? Array )
+    assert( out_txt.size() == 1 )
+    assert( out_txt[0] == in_txt )
+
+
+    #
+    #  Now define a macro
+    #
+    parser.parse_line( "TARGET is example1.bytemark.co.uk and example2.bytemark.co.uk." )
+    macros = parser.macros
+    assert( !macros.empty? )
+
+    #
+    # Now we have a two-host macro, repeat the expansion
+    #
+    ret = parser.expand_macro( "TARGET must run smtp on 25." )
+
+    #
+    # The result should be an array
+    #
+    assert( ret.kind_of? Array )
+    assert_equal( ret.size(), 2 )
+    assert( ret[0] =~ /example1/)
+    assert( ret[1] =~ /example2/)
+
+  end
 end
