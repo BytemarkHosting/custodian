@@ -90,9 +90,15 @@ class TestPingUtil < Test::Unit::TestCase
   #  Test lookup of hosts that don't work
   #
   def test_lookup_fail
-    helper = Custodian::Util::Ping.new( "steve.steve.steve" );
-    assert( ! helper.is_ipv6? )
-    assert( ! helper.is_ipv4? )
+    %w( tessf.dfsdf.sdf.sdfsdf fdsfkljflj3.fdsfds.f3.dfs ).each do |name|
+      assert_nothing_raised do
+        helper = Custodian::Util::Ping.new( name )
+
+        assert( ! helper.is_ipv4? )
+        assert( ! helper.is_ipv6? )
+      end
+    end
+
   end
 
 
