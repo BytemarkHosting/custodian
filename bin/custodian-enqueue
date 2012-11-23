@@ -50,11 +50,16 @@
 
 
 #
-#  Modules we require
+# Standard modules
 #
 require 'beanstalk-client'
-require 'custodian/parser'
 require 'getoptlong'
+
+#
+# Our code.
+#
+require 'custodian/parser'
+require 'custodian/settings'
 
 
 
@@ -65,7 +70,12 @@ if __FILE__ == $0 then
 
   $help   = false
   $manual = false
-  $SERVER = "127.0.0.1:11300"
+
+  #
+  #  The beanstalkd server address.
+  #
+  settings = Custodian::Settings.instance()
+  $SERVER  = settings.queue_server
 
   begin
     opts = GetoptLong.new(
