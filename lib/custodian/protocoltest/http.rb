@@ -1,8 +1,4 @@
-require 'openssl'
-require 'socket'
 require 'timeout'
-require 'uri'
-
 
 
 #
@@ -39,7 +35,7 @@ module Custodian
 
 
       #
-      # The actual status & content
+      # The actual status & content received.
       #
       attr_reader :status, :content
 
@@ -91,9 +87,6 @@ module Custodian
           @expected_content = nil
         end
 
-        @status  = nil
-        @content = nil
-
       end
 
 
@@ -114,46 +107,52 @@ module Custodian
       def run_test
 
         #  Reset state, in case we've previously run.
-        @error = nil
+        @error    = nil
+        @status   = nil
+        @content  = nil
 
-        #  Parse the URL
-        uri = URI.parse(@url)
+        begin
+          require 'rubygems'
+          require 'curb'
+        rescue LoadError
+          @error = "The required rubygem 'curb' was not found."
+          return false
+        end
 
-        #
-        # Ensure we have a path to request - to cover people who write:
-        #
-        #   http://example.com must run http ..
-        #
-        if ( uri.path.empty? )
-          uri.path = "/"
+        begin
+          timeout( 20 ) do
+            begin
+              c = Curl::Easy.new(@url)
+              c.follow_location = true
+              c.max_redirects   = 3
+              c.timeout         = 20
+              c.perform
+              @status = c.response_code
+              @content = c.body_str
+            rescue Curl::Err::TimeoutError
+              @error = "Timed out fetching page."
+              return nil
+            rescue => x
+              @error = "Exception: #{x}"
+              return false
+            end
+          end
+        rescue Timeout::Error => e
+          @error = "Timed out during fetch."
+          return false
         end
 
         #
-        #  Connect a socket to the host.
+        # A this point we've either had an exception, or we've
+        # got a result
         #
-        socket = connect( uri.host, uri.port, uri.scheme == "https" )
-
-        path = uri.path
-        if ( uri.query )
-          path = "#{url.path}?#{url.query}"
-        end
-
-        req =<<EOF
-GET #{path} HTTP/1.1
-Host: #{uri.host}
-Connection: close
-
-EOF
-
-        do_check( socket, req )
-
         if ( @expected_status.to_i != @status.to_i )
           @error = "Status code was #{@status} not the expected #{@expected_status}"
           return false
         end
 
         if ( !@expected_content.nil? )
-          if (! @content.match(/#{@expected_content}/i) )
+          if ( @content && (! @content.match(/#{@expected_content}/i) ) )
             @error = "<p>The response did not contain our expected text '#{@expected_content}'</p>"
           end
         end
@@ -167,70 +166,7 @@ EOF
 
 
       #
-      # Create a socket to the appropriate host - configuring
-      # SSL if appropriate.
-      #
-      def connect( host, port, ssl )
-        sock = TCPSocket.new(host, port)
-        if ( ssl)
-          ssl_sock = OpenSSL::SSL::SSLSocket.new(
-                                                 sock,
-                                                 OpenSSL::SSL::SSLContext.new("SSLv3_client")
-                                                 )
-          ssl_sock.sync_close = true
-          ssl_sock.connect
-          return ssl_sock
-        else
-          return sock
-        end
-      end
-
-
-
-      #
-      # Send the request and get back the response.
-      #
-      def do_check( socket, script )
-        header = true
-
-        begin
-          Timeout.timeout(30, Errno::ETIMEDOUT) do
-            script.each do |line|
-              if line.is_a?(String)
-                socket.print line
-              end
-            end
-
-            loop do
-              trans = socket.gets
-
-              if ( header && trans =~ /HTTP\/[0-9]\.[0-9] ([0-9]+) OK/ )
-                @status = $1.dup
-              end
-              if ( header && trans =~ /^$/ )
-                header = false
-                next
-              end
-
-              if ( !header )
-                @content = "#{@content}#{trans}"
-              end
-              break if trans.nil?
-            end
-            socket.close
-          end
-        rescue => err
-          @error = err
-        ensure
-          socket.close if socket.is_a?(Socket) and not socket.closed?
-        end
-
-      end
-
-
-
-      #
-      # If the test fails then report the error.
+      # If the test fails then report the error../
       #
       def error
         @error
