@@ -338,6 +338,15 @@ module Custodian
     def parse_lines( text )
 
       #
+      # If we're given a string then split it on newline
+      #
+      if ( text.kind_of?( String )  )
+        a = text.split( /[\r\n]/ )
+        text = a
+      end
+
+
+      #
       # Split on newline
       #
       text.each do |line|
