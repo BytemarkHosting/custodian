@@ -11,7 +11,7 @@ require 'logger'
 #
 # Implementation of our protocol tests.
 #
-#require 'custodian/alerter.rb'
+require 'custodian/alerter.rb'
 require 'custodian/protocoltest/tcp.rb'
 require 'custodian/protocoltest/dns.rb'
 require 'custodian/protocoltest/ftp.rb'
@@ -145,7 +145,7 @@ module Custodian
         #
         # This helper will do that job.
         #
-        alert = Alerter.new( test )
+        alert = Custodian::Alerter.new( test )
 
         #
         #  We'll run no more than MAX times.
