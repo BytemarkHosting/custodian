@@ -41,7 +41,6 @@ class TestMultiPing < Test::Unit::TestCase
     #
     #  Calling with a hostname should be fine mistake.
     #
-    assert_nothing_raised do
       obj = Custodian::Util::Ping.new( "some.host.anme" )
     end
   end
