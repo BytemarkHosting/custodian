@@ -168,5 +168,33 @@ class TestTestFactory < Test::Unit::TestCase
     end
 
   end
+
+  #
+  # Get all the types we know about.
+  #
+  def test_types
+    registered = Custodian::TestFactory.known_tests()
+
+    registered.each do |obj|
+
+      #
+      #  Try to get the name
+      #
+      name=obj.to_s
+      if ( name =~ /protocoltest::(.*)Test$/i )
+        tst = $1.dup.downcase
+
+        # normal
+        test_one = "http://foo/ must run #{tst} on 1234"
+        test_two = "http://foo/ must not run #{tst} on 12345"
+
+        assert_nothing_raised do
+          assert( Custodian::TestFactory.create( test_one ) )
+          assert( Custodian::TestFactory.create( test_two ) )
+        end
+      end
+    end
+  end
+
 end
 
