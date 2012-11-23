@@ -124,7 +124,7 @@ module Custodian
             begin
               c = Curl::Easy.new(@url)
               c.follow_location = true
-              c.max_redirects   = 3
+              c.max_redirects   = 5
               c.timeout         = 20
               c.perform
               @status = c.response_code
