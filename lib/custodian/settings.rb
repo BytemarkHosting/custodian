@@ -90,7 +90,19 @@ module Custodian
     def queue_server
       _load() unless( _loaded? )
 
-      @settings['queue'] || "127.0.0.1:13300"
+      @settings['queue_server'] || "127.0.0.1:11300"
+    end
+
+
+
+
+    #
+    # The filename for the logfile.
+    #
+    def log_file
+      _load() unless( _loaded? )
+
+      @settings['log_file'] || "custodian-dequeue.log"
     end
 
 
