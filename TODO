@@ -6,3 +6,7 @@ The alerter needs to be overhauled since it relies upon the old hash-based appro
 
 make Custodian::Parser::Macro a class.
 Use that, and make sure that we return such a thing when we define a new one.
+
+Look at certificate validation with curb.
+
+Update README to be polite, accurate, and make no mention of JSON.
