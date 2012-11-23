@@ -10,25 +10,23 @@ custodian-enqueue
 
 
 
+
 custodian-dequeue
 -----------------
 
-Two tests pass arguments from the configuration file to the shell:
+One test passes arguments from the configuration file to the shell:
 
     ping
-    http/https
 
-The hostname used to ping, and the URL for web-tests, are both passed directly to the shell assuming they match the following regular expression:
+The hostname used to ping will be used assuming it matches the following regular expression:
 
 ^([^\s]+)\s+
 
-So the following configuration file potentially allows a command to be executed by our worker:
+So the following configuration file snippet potentially allows a command to be executed by our worker:
 
     $(/home/steve/hg/custodian/exploit.sh) must ping otherwise "Owned".
 
-    http://$(/tmp/exploit.sh)/ must run http with status 200 otherwise "Owned".
-
-Given that anybody who can talk to the beanstalkd server can submit JSON-encoded-jobs we cannot rely on catching this solely in the parser.
+Given that anybody who can talk to the beanstalkd server can submit jobs we cannot rely on catching this solely in the parser.
 
 For the moment we've solved the case of the ping-exploitation, by validating
 that hostnames passed to the multi-ping command match ^[a-z0-9.-]$ - both forms
@@ -39,24 +37,12 @@ of input are validated:
   * Ensure the hostname is valid before adding the job to the queue.
 
 
-For HTTP-testing we're avoiding the shell by using the array-based invokation
-of the curl command.  We don't perform validation on the URL though, because
-that is a significantly harder jhob.
-
-
 
 
 General
 -------
 
-We decode arbitrary JSON from the queue.  We should sign it, or validate it to  will prevent trojan malformed
-JSON from being added.
-
-At the moment we ensure that the job-body we retrieve looks JSON-like, and decodes to a non-empty hash.
-
-Problem: We cannot sign the body without giving away our key details.
-
-Solution: Read /etc/custodian/salt, and store the checksum of all keys + values with that salt?
+We decode arbitrary jobs from the queue.  We should sign them, or validate them to prevent trojan malformed lines from being added.
 
 
 
