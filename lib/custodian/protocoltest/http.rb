@@ -131,7 +131,7 @@ module Custodian
               @content = c.body_str
             rescue Curl::Err::TimeoutError
               @error = "Timed out fetching page."
-              return nil
+              return false
             rescue => x
               @error = "Exception: #{x}"
               return false
@@ -158,7 +158,7 @@ module Custodian
         end
 
         #
-        #  Done?
+        #  All done.
         #
         true
       end
