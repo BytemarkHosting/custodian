@@ -25,6 +25,10 @@ module Custodian
       # Save the hostname away, resolve it if possible.
       #
       def initialize( hostname )
+
+        raise ArgumentError, "Hostname must not be nil" if ( hostname.nil? )
+        raise ArgumentError, "Hostname must be a String" unless  hostname.kind_of?( String )
+
         @hostname = hostname
         @resolved = Custodian::Util::DNS.hostname_to_ip( hostname )
       end
