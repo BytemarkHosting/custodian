@@ -143,6 +143,19 @@ class TestTestFactory < Test::Unit::TestCase
       Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk as '80.68.80.26;85.17.170.78;80.68.80.27'." )
     end
 
+    #
+    #  Missing target
+    #
+    assert_raise ArgumentError do
+      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'." ) )
+    end
+
+    #
+    #  Missing expected results
+    #
+    assert_raise ArgumentError do
+      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for www.bytemark.co.uk resolving NS " ) )
+    end
   end
 
 
