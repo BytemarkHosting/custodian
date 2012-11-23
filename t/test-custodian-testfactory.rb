@@ -189,8 +189,12 @@ class TestTestFactory < Test::Unit::TestCase
         test_two = "http://foo/ must not run #{tst} on 12345"
 
         assert_nothing_raised do
-          assert( Custodian::TestFactory.create( test_one ) )
-          assert( Custodian::TestFactory.create( test_two ) )
+
+          test_one_obj = Custodian::TestFactory.create( test_one )
+          assert( !test_one_obj.inverted() )
+
+          test_two_obj = Custodian::TestFactory.create( test_two )
+          assert( test_two_obj.inverted(), "Found inverted test for #{tst}" )
         end
       end
     end

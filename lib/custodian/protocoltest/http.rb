@@ -47,6 +47,15 @@ module Custodian
           raise ArgumentError, "The target wasn't an URL"
         end
 
+        #
+        # Is this test inverted?
+        #
+        if ( line =~ /must\s+not\s+run\s+/ )
+          @inverted = true
+        else
+          @inverted = false
+        end
+
       end
 
 
