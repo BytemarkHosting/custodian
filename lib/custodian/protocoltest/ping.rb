@@ -19,20 +19,6 @@ module Custodian
 
 
       #
-      # The line from which we were constructed.
-      #
-      attr_reader :line
-
-
-      #
-      # The host to test against.
-      #
-      attr_reader :host
-
-
-
-
-      #
       # Constructor
       #
       def initialize( line )
@@ -46,6 +32,16 @@ module Custodian
         # Save the host
         #
         @host  = line.split( /\s+/)[0]
+
+        #
+        # Is this test inverted?
+        #
+        if ( line =~ /must\s+not\s+run\s+/ )
+          @inverted = true
+        else
+          @inverted = false
+        end
+
       end
 
 

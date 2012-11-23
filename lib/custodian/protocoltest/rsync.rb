@@ -18,25 +18,6 @@ module Custodian
 
     class RSYNCTest < TCPTest
 
-      #
-      # The line from which we were constructed.
-      #
-      attr_reader :line
-
-
-      #
-      # The host to test against.
-      #
-      attr_reader :host
-
-
-      #
-      # The port to connect to.
-      #
-      attr_reader :port
-
-
-
 
       #
       # Constructor
@@ -49,11 +30,20 @@ module Custodian
         @line = line
 
         #
-        # Save the host
+        # If the target is an URL then strip to the hostname.
         #
         @host  = line.split( /\s+/)[0]
         if ( @host =~ /^rsync:\/\/([^\/]+)\/?/ )
           @host = $1.dup
+        end
+
+        #
+        # Is this test inverted?
+        #
+        if ( line =~ /must\s+not\s+run\s+/ )
+          @inverted = true
+        else
+          @inverted = false
         end
 
 
