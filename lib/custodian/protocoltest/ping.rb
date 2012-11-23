@@ -31,7 +31,7 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split( /\s+/)[0]
+        @host = line.split( /\s+/)[0]
 
         #
         # Is this test inverted?
@@ -86,9 +86,9 @@ module Custodian
 
 
         #
-        # Run the test.
+        # Run the test: Avoiding the use of the shell.
         #
-        if ( system( "#{binary} #{host}" ) == true )
+        if ( system( binary, host ) == true )
           return true
         else
           @error = "Ping failed."
