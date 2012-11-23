@@ -4,8 +4,6 @@ to allow us to swap out the queue and stub it for testing.
 
 The HTTP/HTTPS-probe should be pure Ruby.  Patrick will point me at symbiosis-monit
 
-The DNS-probe needs to be written.
-
 The alerter needs to be overhauled since it relies upon the old hash-based approach.
 
 make Custodian::Parser::Macro a class.
