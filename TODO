@@ -7,3 +7,6 @@ The HTTP/HTTPS-probe should be pure Ruby.  Patrick will point me at symbiosis-mo
 The DNS-probe needs to be written.
 
 The alerter needs to be overhauled since it relies upon the old hash-based approach.
+
+make Custodian::Parser::Macro a class.
+Use that, and make sure that we return such a thing when we define a new one.
