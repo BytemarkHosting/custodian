@@ -125,5 +125,18 @@ class TestTestFactory < Test::Unit::TestCase
   end
 
 
+
+  #
+  # Test the creation of inverted tests.
+  #
+  def test_inverted_tests
+
+
+    assert_nothing_raised do
+      assert( Custodian::TestFactory.create( "example.com must not run rsync." ) )
+      assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync." ) )
+      assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync on 333." ) )
+    end
+  end
 end
 

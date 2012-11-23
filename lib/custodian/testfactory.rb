@@ -34,10 +34,9 @@ module Custodian
       #
       # If this is an obvious protocol test.
       #
-      if ( line =~ /must\s+run\s+(\S+)(\s+|\.|$)/ )
-        test_type = $1.dup
+      if ( line =~ /must\s+(not\s+)?run\s+(\S+)(\s+|\.|$)/ )
+        test_type = $2.dup
         test_type.chomp!( "." )
-
         c = @@subclasses[test_type]
         if c
           c.new( line )
@@ -45,7 +44,7 @@ module Custodian
           raise ArgumentError, "Bad test type: #{test_type}"
         end
       else
-        raise "Unknown line given - Failed to instantiate a suitable protocol-test."
+        raise "Unknown line given - Failed to instantiate a suitable protocol-test: '#{line}'"
       end
     end
 
