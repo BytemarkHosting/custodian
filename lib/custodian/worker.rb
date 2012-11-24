@@ -89,7 +89,7 @@ module Custodian
     #
     def log_message( msg )
       @logger.info( msg )
-      puts msg if ( ENV['VERBOSE'] )
+      puts msg
     end
 
 
@@ -139,11 +139,9 @@ module Custodian
 
 
         #
-        # Did the test succeed?  If not count the number of times it failed in
-        # a row.  We'll repeat several times
+        # The count of times this test has run.
         #
-        success = false
-        count   = 0
+        count = 1
 
 
         #
@@ -165,7 +163,7 @@ module Custodian
         #
         #  We stop the execution on a single success.
         #
-        while ( ( count < @retry_count ) && ( success == false ) )
+        while ( ( count < @retry_count ) && ( result == false ) )
 
           log_message( "Running test - [#{count}/#{@retry_count}]" )
 
@@ -179,7 +177,6 @@ module Custodian
             log_message( "Test succeeed - clearing alert" )
             success = true
             alert.clear()
-            result = true
           end
           count += 1
         end
@@ -187,7 +184,7 @@ module Custodian
         #
         #  If we didn't succeed on any of the attempts raise the alert.
         #
-        if ( ! success )
+        if ( ! result )
 
           #
           # Raise the alert, passing the error message.
