@@ -23,6 +23,23 @@ class TestTestFactory < Test::Unit::TestCase
 
 
   #
+  # Test bogus creation
+  #
+  def test_init
+
+    assert_raise ArgumentError do
+      obj = Custodian::TestFactory.create( nil, nil )
+    end
+
+    assert_raise ArgumentError do
+      obj = Custodian::TestFactory.create( Array.new, nil )
+    end
+
+
+  end
+
+
+  #
   # Test the FTP-test may be created
   #
   def test_ftp_uri
