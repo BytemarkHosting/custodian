@@ -11,7 +11,7 @@ require 'logger'
 #
 # Our modules.
 #
-require 'custodian/alerter.rb'
+require 'custodian/alerts'
 
 #
 # This list of all our protocol tests.
@@ -41,6 +41,12 @@ module Custodian
 
 
     #
+    # The name of the alerter to use.
+    #
+    attr_reader :alerter
+
+
+    #
     # How many times we re-test before we detect a failure
     #
     attr_reader :retry_count
@@ -57,10 +63,13 @@ module Custodian
     #
     # Constructor: Connect to the queue
     #
-    def initialize( server, logfile )
+    def initialize( server, alerter, logfile )
 
       # Connect to the queue
       @queue = Beanstalk::Pool.new([server])
+
+      # Get the alerter-type to instantiate
+      @alerter = alerter
 
       # Instantiate the logger.
       @logger = Logger.new( logfile, "daily" )
@@ -144,12 +153,12 @@ module Custodian
 
 
         #
-        # As a result of this test we'll either raise/clear with mauve.
+        # As a result of this test we'll either raise/clear with one
+        # of our alerter classes.
         #
-        # This helper will do that job.
+        # Here we create one of the correct type.
         #
-        alert = Custodian::Alerter.new( test )
-
+        alert = Custodian::AlertFactory.create( @alerter, test )
 
         #
         #  We'll run no more than MAX times.
@@ -183,7 +192,7 @@ module Custodian
           # Raise the alert, passing the error message.
           #
           log_message( "Test failed - alerting with #{test.error()}" )
-          alert.raise( test.error() )
+          alert.raise()
         end
 
       rescue => ex
