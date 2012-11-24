@@ -3,7 +3,7 @@
 
 require 'test/unit'
 
-require 'custodian/protocoltest'
+require 'custodian/protocoltests'
 
 
 
