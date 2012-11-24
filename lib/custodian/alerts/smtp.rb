@@ -30,6 +30,7 @@ module Custodian
       def raise
         puts "Sould raise an alert via EMAIL"
         puts "Subject: #{test.target} failed #{test.get_type}-test - #{test.error()}"
+        puts "TO: #{@target}"
       end
 
 
@@ -38,6 +39,7 @@ module Custodian
       def clear
         puts "Should clear an alert via EMAIL"
         puts "Subject: #{test.target} passed #{test.get_type}-test"
+        puts "TO: #{@target}"
       end
 
 
