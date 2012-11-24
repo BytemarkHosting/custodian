@@ -2,12 +2,12 @@
 default:
 	@echo "Utility makefile - valid targets are"
 	@echo ""
-	@echo "  docs - Generate manpages."
-	@echo "  test - Run the test suite"
-	@echo "  tidy - Clean debian-package files"
+	@echo "  clean - Clean debian-package files"
+	@echo "  docs  - Generate manpages."
+	@echo "  test  - Run the test suite"
 
 
-tidy:
+clea:
 	rm -rf ./debian/custodian
 	rm -rf ./man
 	rm -f ./debian/custodian.debhelper.log
