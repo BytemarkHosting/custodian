@@ -112,7 +112,7 @@ module Custodian
     def alerter
       _load() unless( _loaded? )
 
-      @settings['alerter'] || "smtp"
+      @settings['alerter'] || "file"
     end
 
 
