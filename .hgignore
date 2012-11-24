@@ -8,3 +8,4 @@ debian/custodian/DEBIAN
 debian/custodian/usr
 debian/files
 man/*.man
+custodian-dequeue.log*
