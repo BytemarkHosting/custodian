@@ -31,6 +31,10 @@ class TestAlertFactory < Test::Unit::TestCase
     # Ensure we can create each of the two alert types we care about
     #
     %w( mauve smtp ).each do |name|
+
+      #
+      #  Use the factory to instantiate the correct object.
+      #
       obj = Custodian::AlertFactory.create( name, nil )
 
       #
@@ -39,6 +43,13 @@ class TestAlertFactory < Test::Unit::TestCase
       #
       a_type = obj.get_type
       assert_equal( name, a_type)
+
+      #
+      # Ensure that the object implements the raise() + clear()
+      # methods we mandate.
+      #
+      assert( obj.respond_to? "raise" )
+      assert( obj.respond_to? "clear" )
     end
   end
 
