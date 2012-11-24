@@ -322,7 +322,7 @@ module Custodian
             job = Custodian::TestFactory.create( macro_expanded )
             ret.push( job )
           rescue => ex
-            puts "ERROR: #{ex}"
+            raise ArgumentError, "Parsing a line to a protocol test gave the error: #{ex}"
             return nil
           end
         end
