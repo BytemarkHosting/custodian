@@ -55,8 +55,8 @@ require 'getoptlong'
 #
 # Our code.
 #
-require 'custodian/settings.rb'
-require 'custodian/worker.rb'
+require 'custodian/settings'
+require 'custodian/worker'
 
 
 
