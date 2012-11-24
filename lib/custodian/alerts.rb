@@ -14,6 +14,7 @@ require 'custodian/alertfactory'
 #
 # The individual alert-types.
 #
+require 'custodian/alerts/file'
 require 'custodian/alerts/mauve'
 require 'custodian/alerts/smtp'
 
