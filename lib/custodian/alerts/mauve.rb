@@ -42,7 +42,7 @@ module Custodian
           require 'mauve/sender'
           require 'mauve/proto'
         rescue LoadError
-          puts "ERROR Loading mauvealert libraries"
+          raise  "ERROR Loading mauvealert libraries!"
         end
       end
 
@@ -148,7 +148,7 @@ module Custodian
 
 
         #
-        #  The test type
+        #  The test type + test target
         #
         test_host = test.target
         test_type = test.get_type
