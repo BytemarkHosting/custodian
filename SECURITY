@@ -59,12 +59,14 @@ not yet done.  (It isn't obvious if this would be a sensible addition either.)
 
 
 
-TODO
-----
 
-Anything else?  DoS attacks?
+Anything else?
+--------------
+
+DoS attacks seem likely - the simple case would be to stuff the queue with sufficiently many
+"bogus" jobs that "real" jobs are never completed.
 
 
 
 Steve
--- 
+--
