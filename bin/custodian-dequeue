@@ -70,10 +70,11 @@ if __FILE__ == $0 then
   $manual  = false
 
   #
-  #  The beanstalkd server address, and logfile.
+  #  The beanstalkd server address, alerting method, and logfile.
   #
   settings = Custodian::Settings.instance()
   $SERVER  = settings.queue_server
+  $ALERTER = settings.alerter
   $LOGFILE = settings.log_file
 
   begin
@@ -84,6 +85,7 @@ if __FILE__ == $0 then
                           [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--alerter", "-a", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
                           [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
                           )
@@ -97,6 +99,8 @@ if __FILE__ == $0 then
           ENV["REPEAT"] = arg
       when "--server" then
           $SERVER = arg
+      when "--alerter" then
+          $ALERTER = arg
       when "--single" then
           ENV["SINGLE"] = "1"
       when "--fail" then
@@ -146,7 +150,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = Custodian::Worker.new( $SERVER, $LOGFILE )
+  worker = Custodian::Worker.new( $SERVER, $ALERTER, $LOGFILE )
 
 
   #
