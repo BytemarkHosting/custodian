@@ -2,6 +2,7 @@
 default:
 	@echo "Utility makefile - valid targets are"
 	@echo ""
+	@echo "  docs - Generate manpages."
 	@echo "  test - Run the test suite"
 	@echo "  tidy - Clean debian-package files"
 
