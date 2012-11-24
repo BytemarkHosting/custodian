@@ -31,6 +31,10 @@ module Custodian
     #
     def self.create( line )
 
+
+      raise ArgumentError, "The type of test to create cannot be nil" if ( line.nil? )
+      raise ArgumentError, "The type of test to create must be a string" unless ( line.kind_of? String )
+
       #
       # If this is an obvious protocol test.
       #

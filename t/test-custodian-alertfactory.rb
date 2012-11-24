@@ -51,6 +51,25 @@ class TestAlertFactory < Test::Unit::TestCase
       assert( obj.respond_to? "raise" )
       assert( obj.respond_to? "clear" )
     end
+
+
+    #
+    # Creating an alert we don't know about is an error
+    #
+    assert_raise ArgumentError do
+      obj = Custodian::AlertFactory.create( "not found", nil )
+    end
+
+    #
+    # A string is mandatory
+    #
+    assert_raise ArgumentError do
+      obj = Custodian::AlertFactory.create( nil, nil )
+    end
+    assert_raise ArgumentError do
+      obj = Custodian::AlertFactory.create( Array.new, nil )
+    end
+
   end
 
 end
