@@ -4,53 +4,65 @@
 custodian-enqueue
 -----------------
 
-  We open named files from the user to parse tests.  The configuration file(s)
- are currently opened by root, via /etc/service/custodian-enqueue.  This should
- be changed to run as a lower-privileged user.
+We open a single named file so that we may parse tests.  There seems no harm in this,
+because the user must have permission to parse the file.
 
+To successfully enqueue jobs that have been parsed the user must be able to talk to the
+beanstalkd queue - but this happens over TCP, so there is no need to run the parsing
+tool as root, and this is generally discouraged.
+
+Conclusion: The enqueuing process contains no security risks.
 
 
 
 custodian-dequeue
 -----------------
 
-One test passes arguments from the configuration file to the shell:
+Only one test ultimately passes arguments from the queue/configuration file to a system command:
 
     ping
 
-The hostname used to ping will be used assuming it matches the following regular expression:
+The hostname passed to the ping-tool will initially be matched against the regular expression:
 
-^([^\s]+)\s+
+    ^([^\s]+)\s+
 
 So the following configuration file snippet potentially allows a command to be executed by our worker:
 
     $(/home/steve/hg/custodian/exploit.sh) must ping otherwise "Owned".
 
-Given that anybody who can talk to the beanstalkd server can submit jobs we cannot rely on catching this solely in the parser.
+Given that anybody who can talk to the beanstalkd server can submit jobs we cannot rely on catching
+this solely in the parser.
 
 For the moment we've solved the case of the ping-exploitation, by validating
-that hostnames passed to the multi-ping command match ^[a-z0-9.-]$ - both forms
-of input are validated:
+that hostnames passed to the multi-ping command match ^[a-z0-9.-]$ - in both
+possible forms:
 
   * Ensuring the hostname is valid prior to executing the shell command.
 
   * Ensure the hostname is valid before adding the job to the queue.
 
+We are careful to run the system command in the Ruby array-format, which will bypass shell
+exploitation.
+
+Conclusion: There are no obvious security implications in the dequeuing process.
 
 
 
 General
 -------
 
-We decode arbitrary jobs from the queue.  We should sign them, or validate them to prevent trojan malformed lines from being added.
+We pull arbitrary jobs from the queue, and it is possible an attacker could add malicious
+entries.
 
+We could sign tests to prevent trojan malformed lines from being processed, but this is
+not yet done.  (It isn't obvious if this would be a sensible addition either.)
 
 
 
 TODO
 ----
 
-  Anything else?  DoS attacks?
+Anything else?  DoS attacks?
 
 
 
