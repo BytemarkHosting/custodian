@@ -15,6 +15,10 @@ module Custodian
 
   class AlertFactory
 
+    #
+    # The target for the alert.
+    #
+    attr_reader :target
 
     #
     # The subclasses we have.
@@ -69,6 +73,15 @@ module Custodian
 
 
 
+    #
+    # Set the target for this alert.
+    #
+    def set_target( target )
+      @target = target
+    end
+
+
+
     def raise
       puts "NOP"
     end
@@ -78,6 +91,8 @@ module Custodian
     def clear
       puts "NOP"
     end
+
+
   end
 
 end
