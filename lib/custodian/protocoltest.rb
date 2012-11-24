@@ -1,7 +1,8 @@
 #
 # This is just a helper which means that you'll only need to
-# update the list of requires in one-place if you add a new
-# protocol test-type
+# update the list of requires in one place if you add a new
+# test-type.
+#
 #
 
 
