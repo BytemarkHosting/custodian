@@ -4,17 +4,10 @@ require 'net/https'
 require 'uri'
 
 
-require 'custodian/protocoltest/tcp'
-require 'custodian/protocoltest/dns'
-require 'custodian/protocoltest/ftp'
-require 'custodian/protocoltest/http'
-require 'custodian/protocoltest/jabber'
-require 'custodian/protocoltest/ldap'
-require 'custodian/protocoltest/ping'
-require 'custodian/protocoltest/rsync'
-require 'custodian/protocoltest/ssh'
-require 'custodian/protocoltest/smtp'
-require 'custodian/testfactory'
+#
+# This list of all our protocol tests.
+#
+require 'custodian/protocoltest'
 
 
 
