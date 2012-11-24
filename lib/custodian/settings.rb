@@ -106,5 +106,15 @@ module Custodian
     end
 
 
+    #
+    # The alerter to use
+    #
+    def alerter
+      _load() unless( _loaded? )
+
+      @settings['alerter'] || "smtp"
+    end
+
+
   end
 end
