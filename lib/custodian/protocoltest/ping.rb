@@ -1,4 +1,4 @@
-require 'custodian/testfactory.rb'
+require 'custodian/testfactory'
 
 
 #
