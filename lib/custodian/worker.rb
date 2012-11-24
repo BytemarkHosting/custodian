@@ -12,18 +12,11 @@ require 'logger'
 # Our modules.
 #
 require 'custodian/alerter.rb'
-require 'custodian/testfactory'
 
-require 'custodian/protocoltest/tcp.rb'
-require 'custodian/protocoltest/dns.rb'
-require 'custodian/protocoltest/ftp.rb'
-require 'custodian/protocoltest/http.rb'
-require 'custodian/protocoltest/jabber.rb'
-require 'custodian/protocoltest/ldap.rb'
-require 'custodian/protocoltest/ping.rb'
-require 'custodian/protocoltest/rsync.rb'
-require 'custodian/protocoltest/ssh.rb'
-require 'custodian/protocoltest/smtp.rb'
+#
+# This list of all our protocol tests.
+#
+require 'custodian/protocoltest'
 
 
 
