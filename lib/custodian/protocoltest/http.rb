@@ -55,6 +55,7 @@ module Custodian
         #  Save the URL
         #
         @url  = line.split( /\s+/)[0]
+        @host = @url
 
         if ( @url !~ /^https?:/ )
           raise ArgumentError, "The target wasn't an URL"
