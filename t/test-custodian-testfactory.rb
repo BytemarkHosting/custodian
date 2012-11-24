@@ -214,7 +214,9 @@ class TestTestFactory < Test::Unit::TestCase
         #
         # NOTE: Skip the DNS test - it is more complex.
         #
-        next if ( tst =~ /dns/ )
+        # Skip the HTTP test because the HTTPS test is a super-set.
+        #
+        next if ( tst =~ /^(dns|http)$/ )
 
         # normal
         test_one = "http://foo/ must run #{tst} on 1234"
@@ -227,6 +229,9 @@ class TestTestFactory < Test::Unit::TestCase
 
           test_two_obj = Custodian::TestFactory.create( test_two )
           assert( test_two_obj.inverted(), "Found inverted test for #{tst}" )
+
+          assert_equal( tst, test_one_obj.get_type )
+          assert_equal( tst, test_two_obj.get_type )
         end
       end
     end
