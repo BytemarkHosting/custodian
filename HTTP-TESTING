@@ -1,9 +1,13 @@
 
 To avoid issues with timeouts we've written our HTTP/HTTPS protocol testers using
-the curb extension.
+the curb rubgem.
 
 Upon a Debian GNU/Linux system this may be installed via:
 
-
   apt-get install build-essential libcurl4-gnutls-dev rubygems1.8
   gem install curb
+
+If you prefer to install from source you can find the project code
+hosted on github:
+
+  https://github.com/taf2/curb
