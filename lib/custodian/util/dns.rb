@@ -65,17 +65,3 @@ module Custodian
 
   end
 end
-
-
-
-
-if __FILE__ == $0 then
-
-  %w( ssh.steve.org.uk ipv6.steve.org.uk ).each do |name|
-    puts "Hostname test: #{name} #{Custodian::Util::DNS.hostname_to_ip(name) }"
-  end
-
-  %w( 80.68.85.46 80.68.85.48 2001:41c8:125:46::22 ).each do |name|
-    puts "Hostname test: #{name} #{Custodian::Util::DNS.ip_to_hostname(name) }"
-  end
-end
