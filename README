@@ -48,14 +48,13 @@ Implementation
 
   2. Macro Definitions
   ---------------------
-  There are three types of macros:
+  There are two types of macros:
 
-     FOO_HOSTS is 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
      FOO_HOSTS are 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
      FOO_HOSTS are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
 
-  We accept each of these, with the caveat that macro-names must match
-  the regular expression ^[0-9A-Z_]$.
+  We accept each of these, with the caveat that macro-names must match the regular
+ expression ^[0-9A-Z_]$.  Note that it is an error to redefine an existing macro-name.
 
 
   3.  Service Tests
@@ -67,18 +66,10 @@ Implementation
 
   The general case is:
 
-     hostname|macro must run XXX [on NN] otherwise 'alert'.
+     url|ip|hostname|macro must run XXX (extra args) otherwise 'alert'.
 
-  If we restrict ourself to saying that every test must be named by the service that is
-  under test then we can generalize them.  This means we'll invoke the ftp-handler for
-
-     foo.vm must run ftp otherwise 'alert text'.
-
-  The bar-handler for the line:
-
-     example.vm.bytemark.co.uk must run bar otherwise 'alert text'.
-
-  The JSON which we serialize will also have "test_type:ftp", and "test_type:bar", respectively.
+  We use a class-factory to instantiate tests, so the service name being tested  corresponds
+  directly to the protocol-tester in our source tree.
 
 
   4. Ping Tests
