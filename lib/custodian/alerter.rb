@@ -122,6 +122,7 @@ module Custodian
 
       if ( !@available )
         puts "Should raise alert for test: #{test}"
+        exit(3)
         return
       end
 
