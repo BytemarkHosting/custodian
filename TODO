@@ -1,3 +1,0 @@
-The alerter needs to be overhauled since it relies upon the old hash-based approach.
-
-Update README to be polite, accurate, and make no mention of JSON.
