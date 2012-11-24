@@ -119,20 +119,21 @@ module Custodian
     #
     # The target for the alert.
     #
-    # When the alerter is "file" the target is the mail address.
+    # When the alerter is "smtp" the target is the mail address.
     #
     # When the alerter is "file" the target is the logfile.
     #
-    # When the alerter is "mauve" the target is the destination for the
-    # alerts.
+    # When the alerter is "mauve" the target is the destination for the alerts.
     #
     def alerter_target
       _load() unless( _loaded? )
 
+      # if we have something setup then use it.
       if ( @settings['alerter_target'] )
         return( @settings['alerter_target'] )
       end
 
+      # otherwise per-test defaults.
       case alerter()
       when "smtp":
           "root"
