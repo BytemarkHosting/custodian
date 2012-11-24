@@ -7,7 +7,7 @@ default:
 	@echo "  test  - Run the test suite"
 
 
-clea:
+clean:
 	rm -rf ./debian/custodian
 	rm -rf ./man
 	rm -f ./debian/custodian.debhelper.log
