@@ -3,6 +3,11 @@ require 'custodian/util/bytemark'
 require 'custodian/util/dns'
 
 
+####
+#### NOTE:  This class will go away, once I've moved the implementation
+####       over to alerts/mauve.rb
+####
+####
 
 #
 #  This class encapsulates the raising and clearing of alerts via Mauve.
