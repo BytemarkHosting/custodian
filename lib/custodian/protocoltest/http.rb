@@ -125,7 +125,7 @@ module Custodian
             begin
               c = Curl::Easy.new(@url)
               c.follow_location = true
-              c.max_redirects   = 5
+              c.max_redirects   = 10
               c.timeout         = 20
               c.perform
               @status = c.response_code
@@ -135,6 +135,9 @@ module Custodian
               return false
             rescue Curl::Err::TimeoutError
               @error = "Timed out fetching page."
+              return false
+            rescue Curl::Err::TooManyRedirectsError
+              @error = "Too many redirections (more than 10)"
               return false
             rescue => x
               @error = "Exception: #{x}"
