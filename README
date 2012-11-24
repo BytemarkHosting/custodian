@@ -33,6 +33,10 @@ main scripts:
       raises/clears alerts based upon the result of the test.
 
 
+Custodian uses class-factories to ensure that protocol tests, and notification
+objects are only losely tied to the core.  This is done so that custodian
+may be extended or adapted more easily to your environment.
+
 
 
 Configuration
