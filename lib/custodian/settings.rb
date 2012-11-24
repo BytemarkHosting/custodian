@@ -116,5 +116,35 @@ module Custodian
     end
 
 
+    #
+    # The target for the alert.
+    #
+    # When the alerter is "file" the target is the mail address.
+    #
+    # When the alerter is "file" the target is the logfile.
+    #
+    # When the alerter is "mauve" the target is the destination for the
+    # alerts.
+    #
+    def alerter_target
+      _load() unless( _loaded? )
+
+      if ( @settings['alerter_target'] )
+        return( @settings['alerter_target'] )
+      end
+
+      case alerter()
+      when "smtp":
+          "root"
+      when "mauve":
+          "alert.bytemark.co.uk"
+      when "file":
+          "alerts.log"
+      else
+        nil
+      end
+    end
+
+
   end
 end
