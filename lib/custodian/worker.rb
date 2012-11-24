@@ -12,6 +12,9 @@ require 'logger'
 # Our modules.
 #
 require 'custodian/alerts'
+require 'custodian/settings'
+
+
 
 #
 # This list of all our protocol tests.
@@ -159,6 +162,15 @@ module Custodian
         # Here we create one of the correct type.
         #
         alert = Custodian::AlertFactory.create( @alerter, test )
+
+        #
+        # Set the target for the alert, which might be nil.
+        #
+        alert.set_target( Custodian::Settings.instance().alerter_target() )
+
+
+
+
 
         #
         #  We'll run no more than MAX times.
