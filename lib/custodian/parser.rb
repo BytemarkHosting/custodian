@@ -299,7 +299,7 @@ module Custodian
         new_line = "#{pre} must run ping #{post}"
         return( parse_line( new_line ) )
 
-      elsif ( line =~ /^\S+\s+must\s+run\s+([^\s]+)(\s+|\.|$)/i )
+      elsif ( line =~ /^\S+\s+must(\s+not)?\s+run\s+([^\s]+)(\s+|\.|$)/i )
 
         #
         # Expand the macro if we should
