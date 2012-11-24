@@ -41,7 +41,7 @@ module Custodian
         if c
           c.new( line )
         else
-          raise ArgumentError, "Bad test type: #{test_type}"
+          raise ArgumentError, "Bad test type: '#{test_type}'"
         end
       else
         raise "Unknown line given - Failed to instantiate a suitable protocol-test: '#{line}'"
