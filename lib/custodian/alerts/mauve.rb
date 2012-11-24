@@ -21,7 +21,7 @@ module Custodian
 
   module Alerter
 
-    class Mauve < AlertFactory
+    class AlertMauve < AlertFactory
 
 
       #
