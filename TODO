@@ -1,12 +1,3 @@
-
-Don't use beanstalk client directly, subclass custodian/queue, or similar
-to allow us to swap out the queue and stub it for testing.
-
 The alerter needs to be overhauled since it relies upon the old hash-based approach.
-
-make Custodian::Parser::Macro a class.
-Use that, and make sure that we return such a thing when we define a new one.
-
-Look at certificate validation with curb.
 
 Update README to be polite, accurate, and make no mention of JSON.
