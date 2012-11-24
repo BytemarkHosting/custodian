@@ -44,7 +44,7 @@ possible forms:
 We are careful to run the system command in the Ruby array-format, which will bypass shell
 exploitation.
 
-Conclusion: There are no obvious security implications in the dequeuing process.
+Conclusion: There are no obvious security concerns in the dequeuing process.
 
 
 
