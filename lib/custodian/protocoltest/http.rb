@@ -129,6 +129,9 @@ module Custodian
               c.perform
               @status = c.response_code
               @content = c.body_str
+            rescue Curl::Err::SSLCACertificateError => x
+              @error = "SSL-Validation error"
+              return false
             rescue Curl::Err::TimeoutError
               @error = "Timed out fetching page."
               return false
