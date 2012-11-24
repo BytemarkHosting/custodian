@@ -55,15 +55,28 @@ module Custodian
     end
 
 
+    #
+    # Get the friendly-type of this class
+    #
+    def get_type
+      @@subclasses.each do |name,value|
+        if ( value == self.class  )
+          return name
+        end
+      end
+      nil
+    end
+
+
 
     def raise
-      raise NoMethod, "This should be implemented in a derived class"
+      puts "NOP"
     end
 
 
 
     def clear
-      raise NoMethod, "This should be implemented in a derived class"
+      puts "NOP"
     end
   end
 
