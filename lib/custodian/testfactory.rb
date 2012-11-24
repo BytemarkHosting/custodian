@@ -68,6 +68,17 @@ module Custodian
     end
 
 
+    #
+    # Get the friendly-type of this class
+    #
+    def get_type
+      @@subclasses.each do |name,value|
+        if ( value == self.class  )
+          return name
+        end
+      end
+      nil
+    end
 
 
     #
