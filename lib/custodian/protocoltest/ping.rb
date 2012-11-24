@@ -88,7 +88,7 @@ module Custodian
         #
         # Run the test: Avoiding the use of the shell.
         #
-        if ( system( binary, host ) == true )
+        if ( system( binary, @host ) == true )
           return true
         else
           @error = "Ping failed."
