@@ -1,62 +1,42 @@
 
+Source:
+    https://projects.bytemark.co.uk/projects/custodian
 
-About
------
+Copyright:
+    Copyright (c) 2012 Bytemark Computer Consulting Ltd
 
-  We have a existing monitoring solution which suffers several problems:
-
-    * It is hard to scale, because all tests are executed upon one machine.
-
-    * It is over-engineered, hard to modify, and suffers from threading-related
-      stability issues.
-
-    * It is heavy-weight.  Each time an alert is raised/cleared this is done by
-      executing a "mauvesend" command.
+Licence:
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
 
-Proposal
---------
 
-  Steve proposes we throw this away and replace with something that is
- both simpler in implementation, and easier to modify.  We'll keep in mind the
- aim of allowing multiple monitoring stations - although we note that we will
- need to update firewalls to allow probes from more hosts than our single current
- one.
 
-  The core design is based upon a work queue.  There are two parts to the system:
+About Custodian
+---------------
 
+Custodian is a simple, scalable, and reliable protocol-tester that allows
+a number of services to be tested across a network.
+
+The core design is based upon a work queue, which has manipulated by
+two main scripts:
+
+  custodian-enqueue
     * A parser that reads a list of hosts and tests to apply.  These
-      tests are broken down into individual jobs, serialized to JSON,
-      and stored in a queue.
+      tests are broken down into individual jobs, serialized and stored
+      in a central queue.
 
-    * An arbitrary number of monitoring hosts, which pull jobs from the
-      work queue and execute them.
-
+  custodian-dequeue
+    * A tool that pulls jobs from the queue, executing them in turn, and
+      raises/clears alerts based upon the result of the test.
 
 
 
 
 Implementation
 --------------
-
-  Because we have an existing tool deployed, sentinel, which has a
- reasonably well-defined configuration file I propose that the new
- solution will be 100% compatible with it.
-
-  This means we must accept lines of the following form:
-
---
-
-LINN_HOSTS is 89.16.185.172 and 46.43.50.217 and 89.16.185.171 and 89.16.185.173 and 89.16.185.174 and 46.43.50.216 and 46.43.50.212 and 46.43.50.217 and 89.16.185.171.
-
-LINN_HOSTS must run ssh on 22 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/linn ssh failure'.
-
-http://acerecords.co.uk/ must run http with status 200 otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
-
-http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Managed client*: "[Goto Redmine]":https://managed.bytemark.co.uk/projects/acerecords/wiki/Wiki HTTP failure'.
---
-
-
 
   In brief we accept four distinct kinds of line:
 
@@ -120,56 +100,5 @@ http://acerecords.co.uk/ must run http with content 'Ace Records' otherwise '*Ma
 
   This allows the line to be parsed by the previous service-test rules.
 
-
-
-
-Behaviour
----------
-
-There are two parts to our system:
-
-  a.  Parser:  ./bin/custodian-enqueue
-  b.  Worker:  ./bin/custodian-dequeue
-
-The parser will read the named configuration file, parse it, and submit the JSON-encoded tests
-to the queue.
-
-The worker will pull down these tests, and execute them.
-
-Sample JSON looks like this:
-
-  {"target_host":"46.43.37.199","test_type":"ssh","test_port":"22","test_alert":"*Managed client*: \"[Goto Redmine]\":https://managed.bytemark.co.uk/projects/wellinformed/wiki/Wiki ssh failure"}
-
-
-You'll see that the JSON-encoded data is merely a hash, with the following keys:
-
-   target_host:  The host that will be probed.
-   test_port:    The port number that will be queried.  i.e "22", or "222" for SSH probes.
-   test_type:    The type of test we're runnign "ssh", "http", "ftp", "imap", etc.
-   test_alert:   The text of the alert we'll raise, on failure.
-
-There are some test-specific extra fields which we might also expect to see:
-
-dns
----
-   resolve_name:     A name to lookup, via DNS.
-   resolve_type:     The type of record to lookup [A|AAAA|MX|NS]
-   resolve_expected: A semicolon-deliminated list of results whihc *must* be detected.
-
-http/https
-----------
-   http_text:        Expected HTTP/HTTPS contents.
-   http_status:      Expected HTTP/HTTPS response code.
-
-tcp
----
-   banner   Regular expression tested against the response from the remote TCP server.
-
-
-
-Bugs
-----
-
-Poke Steve
 
 
