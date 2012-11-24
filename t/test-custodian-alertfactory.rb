@@ -37,12 +37,8 @@ class TestAlertFactory < Test::Unit::TestCase
       # Get the name of the class, and ensure it matches
       # what we expect.
       #
-      nm = obj.class
-      if ( nm =~ /Alerter::(.*)$/i )
-        tst = $1.dup.downcase
-
-        assert_equal( name, nm )
-      end
+      a_type = obj.get_type
+      assert_equal( name, a_type)
     end
   end
 
