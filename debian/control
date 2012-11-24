@@ -11,8 +11,8 @@ Depends: ruby1.8, libbeanstalkclient-ruby1.8, rubygems, ${misc:Depends}
 Suggests: beanstalkd
 Description: This package provides remote monitoring
  This package allows you to setup a semi-distributed monitoring
- solution, using the Bytemark MauveAlert server for notication.
+ solution, using the Bytemark MauveAlert server for notification.
  .
- The monitoring will consist of a system to enqueue tests in
+ The monitoring consists of a system to enqueue tests in
  a beanstalkd server, and an agent that will fetch tests from
  that same queue and execute them.
