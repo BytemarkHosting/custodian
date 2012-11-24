@@ -9,9 +9,11 @@ require 'logger'
 
 
 #
-# Implementation of our protocol tests.
+# Our modules.
 #
 require 'custodian/alerter.rb'
+require 'custodian/testfactory'
+
 require 'custodian/protocoltest/tcp.rb'
 require 'custodian/protocoltest/dns.rb'
 require 'custodian/protocoltest/ftp.rb'
@@ -22,7 +24,6 @@ require 'custodian/protocoltest/ping.rb'
 require 'custodian/protocoltest/rsync.rb'
 require 'custodian/protocoltest/ssh.rb'
 require 'custodian/protocoltest/smtp.rb'
-require 'custodian/testfactory'
 
 
 
@@ -45,15 +46,20 @@ module Custodian
     #
     attr_reader :queue
 
+
     #
     # How many times we re-test before we detect a failure
     #
     attr_reader :retry_count
 
+
     #
     # The log-file object
     #
     attr_reader :logger
+
+
+
 
     #
     # Constructor: Connect to the queue
@@ -76,6 +82,7 @@ module Custodian
 
 
 
+
     #
     # Write the given message to our logfile - and show it to the console
     # if we're running with '--verbose' in play
@@ -84,6 +91,7 @@ module Custodian
       @logger.info( msg )
       puts msg if ( ENV['VERBOSE'] )
     end
+
 
 
 
@@ -101,6 +109,7 @@ module Custodian
 
 
 
+
     #
     # Fetch a single job from the queue, and process it.
     #
@@ -109,8 +118,11 @@ module Custodian
       result = false
 
       begin
-        job = @queue.reserve()
 
+        #
+        #  Acquire a job.
+        #
+        job = @queue.reserve()
         log_message( "Job aquired - Job ID : #{job.id}" )
 
         #
@@ -147,6 +159,7 @@ module Custodian
         #
         alert = Custodian::Alerter.new( test )
 
+
         #
         #  We'll run no more than MAX times.
         #
@@ -156,7 +169,13 @@ module Custodian
 
           log_message( "Running test - [#{count}/#{@retry_count}]" )
 
-          if ( test.run_test )
+          #
+          # Run the test - inverting the result if we should
+          #
+          result = test.run_test
+          result = ! result if ( test.inverted() )
+
+          if ( result )
             log_message( "Test succeeed - clearing alert" )
             success = true
             alert.clear()
@@ -194,8 +213,10 @@ module Custodian
     end
 
 
+
+
     #
-    #  Process jobs until we see a failure - stop then.
+    #  Process jobs until we see a failure, then stop.
     #
     def process_until_fail
       while( process_single_job() )
@@ -203,8 +224,9 @@ module Custodian
       end
     end
 
-  end
 
+
+  end
 
 
 end
