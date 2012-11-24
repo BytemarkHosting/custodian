@@ -1,5 +1,5 @@
 
-
+require 'net/smtp'
 
 #
 #  The SMTP-alerter.
@@ -8,7 +8,7 @@ module Custodian
 
   module Alerter
 
-    class SMTP < AlertFactory
+    class AlertSMTP < AlertFactory
 
       #
       # The test this alerter cares about
@@ -26,23 +26,47 @@ module Custodian
 
 
 
-
+      #
+      # Raise an alert by email.
+      #
       def raise
-        puts "Sould raise an alert via EMAIL"
-        puts "Subject: #{test.target} failed #{test.get_type}-test - #{test.error()}"
-        puts "TO: #{@target}"
+        subject = "#{test.target} failed #{test.get_type}-test - #{test.error()}"
+        body    = "The alert has cleared\nRegards\n";
+
+        _send_mail( @target, subject, body )
       end
 
 
 
-
+      #
+      # Clear an alert by email.
+      #
       def clear
-        puts "Should clear an alert via EMAIL"
-        puts "Subject: #{test.target} passed #{test.get_type}-test"
-        puts "TO: #{@target}"
+        subject = "#{test.target} failed #{test.get_type}-test"
+        body    = "The alert has raised, with the following details:\n#{test.error()}\nRegards\n";
+
+        _send_mail( @target, subject, body )
       end
 
 
+
+      #
+      # Send an email
+      #
+      def _send_mail( to, subject, body )
+        msg = <<END_OF_MESSAGE
+From: #{to}
+To: #{to}
+Subject: #{subject}
+
+#{body}
+END_OF_MESSAGE
+
+        Net::SMTP.start("127.0.0.1") do |smtp|
+          smtp.send_message( msg, to, to)
+        end
+
+      end
 
 
       register_alert_type "smtp"
