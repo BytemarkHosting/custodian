@@ -14,6 +14,7 @@ clean:
 	rm -f ./debian/custodian.substvars
 	rm -f ./debian/files
 	find . -name 'custodian-dequeue.log' -delete || true
+	find . -name 'alerts.log' -delete || true
 
 docs: ./man/custodian-dequeue.man ./man/custodian-enqueue.man ./man/custodian-queue.man ./man/multi-ping.man
 
