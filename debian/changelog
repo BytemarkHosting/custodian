@@ -7,6 +7,7 @@ custodian (2012:1122-1) stable; urgency=low
     - The test-suite is updated.
     - Many classes were moved into the custodian name-space, and renamed.
     - Many of the protocol tests were re-written to derive from the tcp-test.
+    - We use the curb rubygem for all http/https protocol tests.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Tue, 22 Nov 2012 16:44:16 +0000
 
