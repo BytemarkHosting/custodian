@@ -254,5 +254,31 @@ class TestTestFactory < Test::Unit::TestCase
     end
   end
 
+
+  #
+  # Test the target of each test is always what we expect.
+  #
+  def test_target_detection
+
+
+    a = Array.new()
+
+    a.push( "test.host.example.com must run ftp.")
+    a.push( "ftp://test.host.example.com/ must run ftp.")
+    a.push( "ftp://test.host.example.com/foo must run ftp.")
+    a.push( "test.host.example.com must run ping.")
+    a.push( "test.host.example.com  must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'.")
+    a.push( "rsync://test.host.example.com must run rsync.")
+    a.push( "rsync://test.host.example.com must run rsync.")
+
+    a.each do |entry|
+      assert_nothing_raised do
+        obj = Custodian::TestFactory.create( entry )
+        assert(obj)
+        assert_equal( "test.host.example.com", obj.target() )
+      end
+    end
+  end
+
 end
 
