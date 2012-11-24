@@ -20,8 +20,8 @@ About Custodian
 Custodian is a simple, scalable, and reliable protocol-tester that allows
 a number of services to be tested across a network.
 
-The core design is based upon a work queue, which has manipulated by
-two main scripts:
+The core design is based upon a work queue, which is manipulated by two
+main scripts:
 
   custodian-enqueue
     * A parser that reads a list of hosts and tests to apply.  These
@@ -35,61 +35,34 @@ two main scripts:
 
 
 
-Implementation
---------------
+Configuration
+-------------
 
-  In brief we accept four distinct kinds of line:
+The software is configured by a single main configuration file located at:
 
+   /etc/custodian/custodian.cfg
 
-  1. Comments
-  ------------
-  Comments are lines that are blank or which begin with the comment-character ("#").
+This file contains the alerting mechanism to use, the IP:port of the queue
+the two scripts mentioned above use, and similar static things.
 
-
-  2. Macro Definitions
-  ---------------------
-  There are two types of macros:
-
-     FOO_HOSTS are 1.2.3.4 and 2.3.4.5 and 4.5.6.6.
-     FOO_HOSTS are fetched from https://admin.bytemark.co.uk/network/monitor_ips/routers.
-
-  We accept each of these, with the caveat that macro-names must match the regular
- expression ^[0-9A-Z_]$.  Note that it is an error to redefine an existing macro-name.
+Each of the available configuration options has a sensible default which
+is documented in that same file.
 
 
-  3.  Service Tests
-  -----------------
-  Service tests are best explained by several examples:
-
-     SWITCHES must run ssh otherwise 'Bytemark networking infrastructure: switch'.
-     mirror.bytemark.co.uk must run ftp on 21 otherwise 'Bytemark Mirror: FTP failure'.
-
-  The general case is:
-
-     url|ip|hostname|macro must run XXX (extra args) otherwise 'alert'.
-
-  We use a class-factory to instantiate tests, so the service name being tested  corresponds
-  directly to the protocol-tester in our source tree.
 
 
-  4. Ping Tests
-  -------------
-  Ping tests are of the form:
+Documentation
+-------------
 
-     FOO must ping otherwise 'alert text'.
-     example.vm.bytemark.co.uk must ping otherwise 'alert text'.
+The software is documented online at the project home-page:
 
-  These are a simplification of the service tests, because the only real difference
-  is that we write "must ping" rather than "must run ping" - to that end we silently
-  rewrite any line which reads:
+    https://projects.bytemark.co.uk/projects/custodian/wiki
 
-    (.*) must ping (.*)
+Beyond that each script has a manpage which is installed when the
+package is installed - or which may be examined by invoking the
+script with the "--manual" flag.
 
-  This becomes:
 
-    $1 must run ping $2
-
-  This allows the line to be parsed by the previous service-test rules.
 
 
 
