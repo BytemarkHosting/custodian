@@ -9,7 +9,6 @@
 #                     [ -f | --file FILE]
 #                     [ -d | --dump ]
 #                     [    | --test ]
-#                     [ -t | --timeout N ]
 #
 # OPTIONS
 #
@@ -23,7 +22,6 @@
 #
 #  -f, --file FILE     Parse the given configuration file.
 #
-#  -t, --timeout N     Specify the timeout period for the tests.
 #
 #
 # ABOUT
@@ -84,8 +82,7 @@ if __FILE__ == $0 then
                           [ "--server",   GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--file",  "-f", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--help",  "-h", GetoptLong::NO_ARGUMENT ],
-                          [ "--manual","-m", GetoptLong::NO_ARGUMENT ],
-                          [ "--timeout","-t", GetoptLong::REQUIRED_ARGUMENT ]
+                          [ "--manual","-m", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
@@ -97,8 +94,6 @@ if __FILE__ == $0 then
           $SERVER = arg
       when "--file" then
           ENV["FILE"] = arg
-      when "--timeout" then
-          ENV["TIMEOUT"] = arg
       when "--help" then
           $help = true
       when "--manual" then
@@ -152,21 +147,22 @@ if __FILE__ == $0 then
 
 
   #
-  # Create the parser
+  # Create the parser object.
   #
   mon = Custodian::Parser.new()
 
-  #
-  # Set the timeout
-  #
-  if ( !ENV['TIMEOUT'].nil? )
-     mon.set_timeout( ENV['TIMEOUT'] )
-  end
 
   #
-  # Run the parser - and get callbacks when a new job is added.
+  # Parse our configuration file.  If there are errors then we'll
+  # exit this script.
   #
-  mon.parse_file( ENV['FILE'] )
+  begin
+    mon.parse_file( ENV['FILE'] )
+  rescue => e
+    puts "Failure in parsing the configuration file : #{ENV['FILE']}"
+    puts e.to_s
+    exit( 1 )
+  end
 
   mon.jobs.each do |test|
 
