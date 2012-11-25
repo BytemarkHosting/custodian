@@ -78,6 +78,7 @@ module Custodian
         #
         update.alert << alert
         Mauve::Sender.new( @target ).send(update)
+
       end
 
 
@@ -110,6 +111,7 @@ module Custodian
         #
         update.alert << alert
         Mauve::Sender.new( @target ).send(update)
+
       end
 
 
@@ -157,14 +159,28 @@ module Custodian
         alert         = Mauve::Proto::Alert.new
         alert.id      = "#{test_type}-#{test_host}"
         alert.subject = subject
-        alert.summary = "#{test_type}-#{test_host}"
+        alert.summary = "The #{test_type} test failed against #{test_host}"
         alert.detail  = "<p>The #{test_type} test failed against #{test_host}.</p>"
 
         #
         #  If we're raising then add the error
         #
         if ( failure )
-          alert.detail = "#{alert.detail}\n#{test.error()}"
+
+          #
+          #  The text from the job-defition
+          #
+          user_text = test.get_notification_text()
+
+          #
+          # Add the user-detail if present
+          #
+          alert.detail = "#{alert.detail}<p>#{user_text}</p>" if ( !user_text.nil? )
+
+          #
+          # Add the test-failure message
+          #
+          alert.detail = "#{alert.detail}<p>#{test.error()}</p>"
         end
 
         #
