@@ -70,9 +70,7 @@ module Custodian
 
 
     #
-    # Retrieve a HTTP page from the web - this is used for macro-expansion
-    #
-    # NOTE:  This came from sentinel.
+    # Retrieve a HTTP/HTTPS page from the web, which is used for macro-expansion.
     #
     def getURL (uri_str)
       begin
