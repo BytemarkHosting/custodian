@@ -32,12 +32,9 @@
 # ABOUT
 #
 #  This tool is designed to pull network/protocol-tests from a beanstalkd server and execute
-# them, in series.
+# them one by one.
 #
-#  The tests are created, via custodian-enqueue, by parsing a configuration
-# file largely compatible with that used for our obsolete sentinel tool.
-#
-#  The results of the testing will be sent to a mauvealert server.
+#  The results of the testing will be sent to a notifier, where they can later be acted upon.
 #
 #
 # AUTHOR
