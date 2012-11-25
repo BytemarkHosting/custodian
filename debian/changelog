@@ -1,3 +1,9 @@
+custodian (0.2-1) stable; urgency=low
+
+  * Updated to use the user-specified text on test-failure.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Sun, 25 Nov 2012 22:25:22 +0000
+
 custodian (0.2) stable; urgency=low
 
   * Removed epoch from all previous versions.
