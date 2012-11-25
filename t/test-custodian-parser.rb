@@ -230,7 +230,7 @@ EOF
     #
     in_txt  = "example.bytemark.co.uk must run smtp."
     out_txt = parser.expand_macro( in_txt )
-    
+
     #
     #  The difference is the return value will be an array
     #
@@ -259,5 +259,47 @@ EOF
     assert( ret[0] =~ /example1/)
     assert( ret[1] =~ /example2/)
 
+  end
+
+
+
+  #
+  # Test that the text we're going to use in alerters is present.
+  #
+  def test_alert_text
+
+    #
+    # test data
+    #
+    data = {
+      "foo must run rsync."                     => nil,
+      "foo must not run ping."                  => nil,
+      "foo must not run ssh otherwise 'fail'"   => "fail",
+      "foo must not run ssh otherwise 'fail'."  => "fail",
+      "foo must run ldap otherwise 'ldap dead?'" => "ldap dead?",
+      "foo must run ping otherwise 'don't you love me?'" => "don"
+    }
+
+    #
+    #  For each test
+    #
+    data.each do |str,fail|
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create( str )
+
+        assert(obj)
+
+        if ( fail.nil? )
+          assert( obj.get_notification_text().nil? )
+        else
+          assert_equal( obj.get_notification_text(), fail )
+        end
+
+      end
+    end
   end
 end

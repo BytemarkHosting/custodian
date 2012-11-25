@@ -43,7 +43,19 @@ module Custodian
         test_type.chomp!( "." )
         c = @@subclasses[test_type]
         if c
-          c.new( line )
+
+          obj = c.new( line )
+
+          #
+          # Get the notification text, which is not specific to the test-type
+          #
+          # We do this only after we've instantiated the test.
+          #
+          if ( line =~ /\s+otherwise\s+'([^']+)'/ )
+            obj.set_notification_text( $1.dup )
+          end
+
+          return obj
         else
           raise ArgumentError, "Bad test type: '#{test_type}'"
         end
@@ -94,12 +106,34 @@ module Custodian
 
 
 
+
+    #
+    # Return the user-text which is returned on error
+    #
+    def get_notification_text
+      @notification_text
+    end
+
+
+
+
+    #
+    # Set the user-text which is returned on error.
+    #
+    def set_notification_text( str )
+      @notification_text = str
+    end
+
+
+
+
     #
     #  Is this test inverted?
     #
     def inverted
       @inverted
     end
+
 
 
     #
