@@ -1,7 +1,7 @@
 #!/usr/bin/ruby1.8
 #
 # NAME
-#  custodian-enqueue - Insert sentinel-probes into a queue.
+#  custodian-enqueue - Parse tests from a file and enqueue to beanstalkd.
 #
 # SYNOPSIS
 #  custodian-enqueue  [ -h | --help ]
