@@ -1,4 +1,12 @@
-custodian (2012:1124-1) stable; urgency=low
+custodian (0.2) stable; urgency=low
+
+  * Removed epoch from all previous versions.
+  * Added homepage to the control file.
+  * New release.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Sun, 25 Nov 2012 21:00:21 +0000
+
+custodian (0.1124-1) stable; urgency=low
 
   * Overhauled much of the code:
     - Test cases are now instantiated via a class-factory pattern.
@@ -11,7 +19,7 @@ custodian (2012:1124-1) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Sat, 24 Nov 2012 16:00:16 +0000
 
-custodian (2012:1121-1) stable; urgency=low
+custodian (0.1121-1) stable; urgency=low
 
   * The parsing of the configuration file(s) is now decoupled from
     queue-insertion.
@@ -19,7 +27,7 @@ custodian (2012:1121-1) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Tue, 21 Nov 2012 14:55:41 +0000
 
-custodian (2012:1120-3) stable; urgency=low
+custodian (0.1120-3) stable; urgency=low
 
   * Refactor alert code.
   * Ensure that alert-subjects are solely one of : a) hostname b) IP address
@@ -27,7 +35,7 @@ custodian (2012:1120-3) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Tue, 20 Nov 2012 15:40:30 +0000
 
-custodian (2012:1120-2) stable; urgency=low
+custodian (0.1120-2) stable; urgency=low
 
   * Increased timeout period and retry period
     - To avoid flaps until we rework the alerting with mauve.
@@ -35,14 +43,14 @@ custodian (2012:1120-2) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Tue, 20 Nov 2012 14:00:41 +0000
 
-custodian (2012:1120-1) stable; urgency=low
+custodian (0.1120-1) stable; urgency=low
 
   * Added dnsutil.rb - Updated multiping to use it, along with the alerter.
   * Added ruby1.8 as a build-dep to hopefully fix the man-page generation.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Tue, 20 Nov 2012 10:24:26 +0000
 
-custodian (2012:1119-3) stable; urgency=low
+custodian (0.1119-3) stable; urgency=low
 
   * Many service probes read a banner from a remote server, and then test it
     is sane.  For example looking for "ssh", or "smtp" in the string we read.
@@ -51,71 +59,71 @@ custodian (2012:1119-3) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Mon, 19 Nov 2012 16:25:34 +0000
 
-custodian (2012:1119-2) stable; urgency=low
+custodian (0.1119-2) stable; urgency=low
 
   * Fixed the ping-test security hole.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Mon, 19 Nov 2012 14:15:16 +0000
 
-custodian (2012:1119-1) stable; urgency=low
+custodian (0.1119-1) stable; urgency=low
 
   * Added --error flag to custodian-dequeue.
   * Added SECURITY & README to the docs.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Mon, 19 Nov 2012 00:11:00 +0000
 
-custodian (2012:1118-1) stable; urgency=low
+custodian (0.1118-1) stable; urgency=low
 
   * The Sundey-before-release Release.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Sun, 18 Nov 2012 16:19:21 +0000
 
-custodian (2012:1117-2) stable; urgency=low
+custodian (0.1117-2) stable; urgency=low
 
   * Added 'tcp' test with the optional banner.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Sat, 17 Nov 2012 16:16:16 +0000
 
-custodian (2012:1117-1) stable; urgency=low
+custodian (0.1117-1) stable; urgency=low
 
   * Better alert text.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Fri, 16 Nov 2012 16:00:16 +0000
 
-custodian (2012:1116-1) stable; urgency=low
+custodian (0.1116-1) stable; urgency=low
 
   * Generate manpages via "make docs", and include those man-pages
     in the generated Debian package.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Fri, 16 Nov 2012 14:00:41 +0000
 
-custodian (2012:1115-4) stable; urgency=low
+custodian (0.1115-4) stable; urgency=low
 
   * Timeout DNS lookups for alerting purposes.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 14:00:41 +0000
 
-custodian (2012:1115-3) stable; urgency=low
+custodian (0.1115-3) stable; urgency=low
 
   * Change the timeouts and repeat counts slightly.
     - Rather than 5 x 10 seconds use 3 x 12 seconds.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 10:48:58 +0000
 
-custodian (2012:1115-2) stable; urgency=low
+custodian (0.1115-2) stable; urgency=low
 
   * A HTTP-request might result in a legitimately empty body.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 10:28:01 +0000
 
-custodian (2012:1115-2) stable; urgency=low
+custodian (0.1115-2) stable; urgency=low
 
   * Throw exceptions on bogus configuration file entries.
   * Throw exceptions if macros are redefinied.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 15 Nov 2012 08:28:08 +0000
 
-custodian (2012:1115-1) stable; urgency=low
+custodian (0.1115-1) stable; urgency=low
 
   * A new day, a new release:
     - Use curl for the HTTP fetching.
@@ -124,75 +132,75 @@ custodian (2012:1115-1) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 22:33:22 +0000
 
-custodian (2012:1114-11) stable; urgency=low
+custodian (0.1114-11) stable; urgency=low
 
   * Show if alerts are inside our network
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 19:30:32 +0000
 
-custodian (2012:1114-10) stable; urgency=low
+custodian (0.1114-10) stable; urgency=low
 
   * New release to pickup the timeout changes.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 16:10:12 +0000
 
-custodian (2012:1114-9) stable; urgency=low
+custodian (0.1114-9) stable; urgency=low
 
   * Added a "custodian-queue --monitor" option, to alert if our queue doesn't
     empty.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 15:05:00 +0000
 
-custodian (2012:1114-8) stable; urgency=low
+custodian (0.1114-8) stable; urgency=low
 
   * Macro definition work when they contain numbers.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 13:45:00 +0000
 
-custodian (2012:1114-7) stable; urgency=low
+custodian (0.1114-7) stable; urgency=low
 
   * Macro definition works for single hosts too.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 11:06:00 +0000
 
-custodian (2012:1114-6) stable; urgency=low
+custodian (0.1114-6) stable; urgency=low
 
   * HTTP/HTTPS tests should work with a missing path.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:54:00 +0000
 
-custodian (2012:1114-5) stable; urgency=low
+custodian (0.1114-5) stable; urgency=low
 
   * Removed the -low suffix from alerts.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:36:00 +0000
 
-custodian (2012:1114-4) stable; urgency=low
+custodian (0.1114-4) stable; urgency=low
 
   * Don't replace alerts.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:12:00 +0000
 
-custodian (2012:1114-3) stable; urgency=low
+custodian (0.1114-3) stable; urgency=low
 
   * Strings are not my friend - interpolate the ID correctly
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 10:00:00 +0000
 
-custodian (2012:1114-2) stable; urgency=low
+custodian (0.1114-2) stable; urgency=low
 
   * Use target_host, not test_host for alerting purposes.
   * Use the correct ID for generating alerts.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:51:55 +0000
 
-custodian (2012:1114-1) stable; urgency=low
+custodian (0.1114-1) stable; urgency=low
 
   * Updated alerting via mauve.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:13:55 +0000
 
-custodian (2012:1114) stable; urgency=low
+custodian (0.1114) stable; urgency=low
 
   * Promoted to live usage:
     - All scripts have a "--help"/"--manual" flag.
@@ -200,7 +208,7 @@ custodian (2012:1114) stable; urgency=low
 
  -- Steve Kemp <steve@bytemark.co.uk>  Wed, 14 Nov 2012 09:13:55 +0000
 
-custodian (2012:1113) stable; urgency=low
+custodian (0.1113) stable; urgency=low
 
   * Initial release
 
