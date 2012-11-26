@@ -39,7 +39,7 @@ module Custodian
           require 'rubygems'
           require 'redis'
 
-          @redis = Redis.new()
+          @redis = Redis.new(:host => @target )
 
         rescue
           puts "ERROR Loading redis rubygem!"
