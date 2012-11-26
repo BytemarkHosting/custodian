@@ -16,6 +16,7 @@ require 'custodian/alertfactory'
 #
 require 'custodian/alerts/file'
 require 'custodian/alerts/mauve'
+require 'custodian/alerts/redis-state'
 require 'custodian/alerts/smtp'
 
 
