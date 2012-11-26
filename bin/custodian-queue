@@ -129,9 +129,9 @@ if __FILE__ == $0 then
   end
 
   #
-  #  Create the object
+  #  Create the queue object.
   #
-  queue = Beanstalk::Pool.new([$SERVER])
+  queue = Beanstalk::Pool.new([$SERVER], "Custodian" )
 
   #
   # Alerting on a queue that is too-full?
@@ -169,11 +169,14 @@ if __FILE__ == $0 then
   #  Are we flushing the queue?
   #
   if ( $FLUSH )
+    count = 0
     while( true )
       begin
         job = queue.reserve(1)
         job.delete
+        count += 1
       rescue Beanstalk::TimedOut => ex
+        puts "Flushed #{count} pending jobs."
         exit( 0 )
       end
     end

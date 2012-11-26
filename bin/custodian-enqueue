@@ -139,7 +139,7 @@ if __FILE__ == $0 then
   #
   # Connected to the server
   #
-  queue = Beanstalk::Pool.new([$SERVER])
+  queue = Beanstalk::Pool.new([$SERVER], "Custodian")
   if ( ! queue )
     puts "Failed to connect to beanstalk server: #{$SERVER}"
     exit 1
