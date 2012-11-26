@@ -1,7 +1,4 @@
 
-require 'rubygems'
-require 'redis'
-
 
 #
 #  The redis-alerter.
@@ -35,6 +32,14 @@ module Custodian
       # the redis connection.
       #
       def initialize( obj )
+
+        begin
+          require 'rubygems'
+          require 'redis'
+        rescue LoadError
+          raise  "ERROR Loading redis rubygem!"
+        end
+
         @test = obj
         @redis = Redis.new
       end
