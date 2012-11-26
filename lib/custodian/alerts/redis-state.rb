@@ -1,5 +1,3 @@
-
-
 #
 #  The redis-alerter.
 #
@@ -14,7 +12,7 @@ module Custodian
 
   module Alerter
 
-    class AlertRedis < AlertFactory
+    class RedisAlert < AlertFactory
 
       #
       # The test this alerter cares about
@@ -26,22 +24,25 @@ module Custodian
       #
       attr_reader :redis
 
+      attr_reader :available
 
       #
       # Constructor - save the test-object away & instantiate
       # the redis connection.
       #
       def initialize( obj )
+	@available = true
 
-        begin
-          require 'rubygems'
-          require 'redis'
-        rescue LoadError
-          raise  "ERROR Loading redis rubygem!"
-        end
+	begin
+		require 'rubygems'
+		require 'redis'
+	rescue
+		puts "LOADING redis failed"
+		@available = false
+	end
 
-        @test = obj
-        @redis = Redis.new
+         @test = obj
+        @redis = Redis.new( ) if ( @available )
       end
 
 
@@ -50,6 +51,7 @@ module Custodian
       # Store an alert in redis
       #
       def raise
+	return if ( ! @available )
 
         # hostname + test-type
         host = @test.target
@@ -69,6 +71,7 @@ module Custodian
       # Clear an alert in redis
       #
       def clear
+	return if ( ! @available )
 
         # hostname + test-type
         host = @test.target
