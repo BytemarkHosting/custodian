@@ -1,3 +1,10 @@
+custodian (0.5-1) stable; urgency=low
+
+  * Each alerter has a specific destination now.
+  * The DNS resolving library is included appropriately.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 26 Nov 2012 16:00:00 +0000
+
 custodian (0.4-1) stable; urgency=low
 
   * Handle the loading of optional libraries more gracefully
