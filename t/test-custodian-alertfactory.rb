@@ -30,7 +30,7 @@ class TestAlertFactory < Test::Unit::TestCase
     #
     # Ensure we can create each of the two alert types we care about
     #
-    %w( file mauve smtp ).each do |name|
+    %w( file mauve redis smtp ).each do |name|
 
       #
       #  Use the factory to instantiate the correct object.
