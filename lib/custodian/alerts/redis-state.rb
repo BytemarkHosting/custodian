@@ -14,35 +14,38 @@ module Custodian
 
     class RedisAlert < AlertFactory
 
+
       #
       # The test this alerter cares about
       #
       attr_reader :test
+
 
       #
       # The redis-object
       #
       attr_reader :redis
 
-      attr_reader :available
+
+
 
       #
       # Constructor - save the test-object away & instantiate
       # the redis connection.
       #
       def initialize( obj )
-	@available = true
 
-	begin
-		require 'rubygems'
-		require 'redis'
-	rescue
-		puts "LOADING redis failed"
-		@available = false
-	end
+        begin
+          require 'rubygems'
+          require 'redis'
 
-         @test = obj
-        @redis = Redis.new( ) if ( @available )
+          @redis = Redis.new()
+
+        rescue
+          puts "ERROR Loading redis rubygem!"
+        end
+
+        @test  = obj
       end
 
 
@@ -51,7 +54,9 @@ module Custodian
       # Store an alert in redis
       #
       def raise
-	return if ( ! @available )
+
+        return unless( @redis )
+
 
         # hostname + test-type
         host = @test.target
@@ -71,7 +76,9 @@ module Custodian
       # Clear an alert in redis
       #
       def clear
-	return if ( ! @available )
+
+        return unless( @redis )
+
 
         # hostname + test-type
         host = @test.target
