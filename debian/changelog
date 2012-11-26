@@ -1,3 +1,10 @@
+custodian (0.2-2) stable; urgency=low
+
+  * Explicitly setup a "tube", which is a named queue.
+    This means we'll never stomp over the default queue
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Sun, 25 Nov 2012 23:44:32 +0000
+
 custodian (0.2-1) stable; urgency=low
 
   * Updated to use the user-specified text on test-failure.
