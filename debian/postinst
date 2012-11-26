@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Once we've installed the package explicitly flush the queue,
+# to cover cases when the format changes.
+#
+# If we're running @Bytemark restart the worker processes
+#
+
+set -e
+
+
+#
+# Skip, if we are not in "configure" state
+#
+if [ "$1" != "configure" ]; then
+        echo "I: Skipping configuration"
+        exit 0
+fi
+
+
+#
+# 1.  Flush the queue
+#
+custodian-queue --flush || true
+
+#
+# 2.  If we have agents then restart them
+#
+if [ -d /etc/service ]; then
+   test -d /etc/service/custodian-agent1 && sv restart /etc/service/custodian-agent1/
+   test -d /etc/service/custodian-agent2 && sv restart /etc/service/custodian-agent2/
+   test -d /etc/service/custodian-agent3 && sv restart /etc/service/custodian-agent3/
+   test -d /etc/service/custodian-agent4 && sv restart /etc/service/custodian-agent4/
+fi
+
+#DEBHELPER#
+exit 0
