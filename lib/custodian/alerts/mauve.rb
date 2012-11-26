@@ -29,6 +29,11 @@ module Custodian
       #
       attr_reader :test
 
+      #
+      # Was this class loaded correctly?
+      #
+      attr_reader :loaded
+
 
 
 
@@ -41,8 +46,10 @@ module Custodian
         begin
           require 'mauve/sender'
           require 'mauve/proto'
-        rescue LoadError
-          raise  "ERROR Loading mauvealert libraries!"
+          @loaded = true
+        rescue
+          puts "ERROR Loading mauve libraries!"
+          @loaded = false
         end
       end
 
@@ -54,6 +61,7 @@ module Custodian
       #
       def raise()
 
+        return unless( @loaded )
 
         #
         # Get ready to send to mauve.
@@ -87,6 +95,8 @@ module Custodian
       # Generate an alert-message which will be cleared via mauve.
       #
       def clear
+
+        return unless( @loaded )
 
         #
         # Get ready to send to mauve.
