@@ -155,22 +155,6 @@ module Custodian
         test = Custodian::TestFactory.create( body )
 
 
-        #
-        # As a result of this test we'll either raise/clear with one
-        # of our alerter classes.
-        #
-        # Here we create one of the correct type.
-        #
-        alert = Custodian::AlertFactory.create( @alerter, test )
-
-        #
-        # Set the target for the alert, which might be nil.
-        #
-        alert.set_target( Custodian::Settings.instance().alerter_target() )
-
-
-
-
 
         #
         #  We'll run no more than MAX times.
@@ -189,8 +173,8 @@ module Custodian
 
           if ( result )
             log_message( "Test succeeed - clearing alert" )
+            do_clear( test )
             success = true
-            alert.clear()
           end
           count += 1
         end
@@ -204,7 +188,7 @@ module Custodian
           # Raise the alert, passing the error message.
           #
           log_message( "Test failed - alerting with #{test.error()}" )
-          alert.raise()
+          do_raise( test )
         end
 
       rescue => ex
@@ -223,6 +207,31 @@ module Custodian
       return result
     end
 
+
+    #
+    # Raise an alert, with each registered alerter.
+    #
+    def do_raise( test )
+      @alerter.split( "," ).each do |alerter|
+        log_message( "Creating alerter: #{alerter}" )
+        alert = Custodian::AlertFactory.create( alerter, test )
+        alert.set_target( Custodian::Settings.instance().alerter_target() )
+        alert.raise()
+      end
+    end
+
+
+    #
+    # Clear an alert, with each registered alerter.
+    #
+    def do_clear( test )
+      @alerter.split( "," ).each do |alerter|
+        log_message( "Creating alerter: #{alerter}" )
+        alert = Custodian::AlertFactory.create( alerter, test )
+        alert.set_target( Custodian::Settings.instance().alerter_target() )
+        alert.clear()
+      end
+    end
 
 
 
