@@ -54,6 +54,7 @@ module Custodian
           val = $2.dup
           key.strip!
           val.strip!
+
           @settings[key] = val
         end
       end
@@ -125,24 +126,31 @@ module Custodian
     #
     # When the alerter is "mauve" the target is the destination for the alerts.
     #
-    def alerter_target
+    def alerter_target( alert )
       _load() unless( _loaded? )
 
+
+      #
+      # Find the alerting method.
+      #
       # if we have something setup then use it.
-      if ( @settings['alerter_target'] )
-        return( @settings['alerter_target'] )
+      if ( @settings["#{alert}_target"] )
+        return( @settings["#{alert}_target"] )
+      else
       end
 
       # otherwise per-test defaults.
-      case alerter()
-      when "smtp":
+      case alert
+        when "smtp":
           "root"
-      when "mauve":
+        when "mauve":
           "alert.bytemark.co.uk"
-      when "file":
+        when "file":
           "alerts.log"
-      else
-        nil
+        when "redis":
+          "127.0.0.1:6379"
+        else
+          nil
       end
     end
 
