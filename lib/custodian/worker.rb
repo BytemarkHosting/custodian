@@ -213,9 +213,14 @@ module Custodian
     #
     def do_raise( test )
       @alerter.split( "," ).each do |alerter|
+
         log_message( "Creating alerter: #{alerter}" )
         alert = Custodian::AlertFactory.create( alerter, test )
-        alert.set_target( Custodian::Settings.instance().alerter_target() )
+
+        target = Custodian::Settings.instance().alerter_target( alerter )
+        puts "Target for alert is #{target}"
+
+        alert.set_target( target )
         alert.raise()
       end
     end
@@ -228,7 +233,11 @@ module Custodian
       @alerter.split( "," ).each do |alerter|
         log_message( "Creating alerter: #{alerter}" )
         alert = Custodian::AlertFactory.create( alerter, test )
-        alert.set_target( Custodian::Settings.instance().alerter_target() )
+
+        target = Custodian::Settings.instance().alerter_target( alerter )
+        puts "Target for alert is #{target}"
+
+        alert.set_target( target )
         alert.clear()
       end
     end
