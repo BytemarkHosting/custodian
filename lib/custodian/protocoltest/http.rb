@@ -127,6 +127,7 @@ module Custodian
               c.follow_location = true
               c.max_redirects   = 10
               c.ssl_verify_host = false
+              c.ssl_verify_peer = false
               c.timeout         = 20
               c.perform
               @status = c.response_code

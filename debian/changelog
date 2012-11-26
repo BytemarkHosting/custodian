@@ -1,3 +1,10 @@
+custodian (0.3-2) stable; urgency=low
+
+  * Rejigged the HTTP/HTTPS test to avoid SSL validation.
+  * Show malformed lines when failing to parse HTTP hosts
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 26 Nov 2012 12:40:21 +0000
+
 custodian (0.3-1) stable; urgency=low
 
   * Added a new alerter-type, "redis", which will not raise any
