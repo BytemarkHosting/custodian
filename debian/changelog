@@ -1,3 +1,11 @@
+custodian (0.4-1) stable; urgency=low
+
+  * Handle the loading of optional libraries more gracefully
+    in the alerters.
+  * Flush the queue post-installation, or on upgrade.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 26 Nov 2012 15:00:51 +0000
+
 custodian (0.3-2) stable; urgency=low
 
   * Rejigged the HTTP/HTTPS test to avoid SSL validation.
