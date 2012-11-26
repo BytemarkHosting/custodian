@@ -1,4 +1,4 @@
-require 'timeout'
+
 
 
 #
@@ -58,7 +58,7 @@ module Custodian
         @host = @url
 
         if ( @url !~ /^https?:/ )
-          raise ArgumentError, "The target wasn't an URL"
+          raise ArgumentError, "The target wasn't an URL: #{line}"
         end
 
         #
@@ -126,6 +126,7 @@ module Custodian
               c = Curl::Easy.new(@url)
               c.follow_location = true
               c.max_redirects   = 10
+              c.ssl_verify_host = false
               c.timeout         = 20
               c.perform
               @status = c.response_code
@@ -140,7 +141,7 @@ module Custodian
               @error = "Too many redirections (more than 10)"
               return false
             rescue => x
-              @error = "Exception: #{x}"
+               @error = "Exception: #{x}"
               return false
             end
           end
