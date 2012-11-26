@@ -1,3 +1,11 @@
+custodian (0.3-1) stable; urgency=low
+
+  * Added a new alerter-type, "redis", which will not raise any
+    alerts itself, just store the state of all tests in a redis
+    queue.  This can be used to build a status-panel, or similar.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 26 Nov 2012 11:22:11 +0000
+
 custodian (0.2-2) stable; urgency=low
 
   * Explicitly setup a "tube", which is a named queue.
