@@ -1,3 +1,4 @@
+require 'resolv'
 
 #
 #  The DNS-protocol test.
