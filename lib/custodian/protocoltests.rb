@@ -21,6 +21,7 @@ require 'custodian/protocoltest/pop3'
 require 'custodian/protocoltest/rsync'
 require 'custodian/protocoltest/ssh'
 require 'custodian/protocoltest/smtp'
+require 'custodian/protocoltest/telnet'
 
 
 #
