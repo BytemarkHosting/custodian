@@ -62,9 +62,13 @@ module Custodian
         host = @test.target
         test = @test.get_type
 
-        # store the error
+        # store the error - set an expiry time of 5 minutes
         @redis.set( "#{host}-#{test}", "ERR")
+        @redis.expireat( "#{host}-#{test}", Time.now.to_i + 5 * 60 )
+
+        # Set the reason
         @redis.set( "#{host}-#{test}-reason", @test.error() )
+        @redis.expireat( "#{host}-#{test}-reason", Time.now.to_i + 5 * 60 )
 
         # make sure this alert is discoverable
         @redis.sadd( "hosts", "#{host}-#{test}" )
@@ -84,9 +88,14 @@ module Custodian
         host = @test.target
         test = @test.get_type
 
-        # store the OK
+        # store the OK - set the expiry time of five minutes
         @redis.set( "#{host}-#{test}", "OK")
+        @redis.expireat( "#{host}-#{test}", Time.now.to_i + 5 * 60 )
+
+        # clear the reason
         @redis.set( "#{host}-#{test}-reason", "")
+        @redis.expireat( "#{host}-#{test}-reason", Time.now.to_i + 5 * 60 )
+
 
         # make sure this alert is discoverable
         @redis.sadd( "hosts", "#{host}-#{test}" )
