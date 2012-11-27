@@ -1,3 +1,9 @@
+custodian (0.6-2) stable; urgency=low
+
+  * Set an expiry time on the keys we add to redis.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 27 Nov 2012 19:33:19 +0000
+
 custodian (0.6-1) stable; urgency=low
 
   * Added telnet protocol-test; some of our switches don't
