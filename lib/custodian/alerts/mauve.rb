@@ -82,6 +82,11 @@ module Custodian
         alert.raise_time = Time.now.to_i
 
         #
+        # We're going to suppress this alert for 7 minutes to suppress flaps.
+        #
+        alert.suppress_until = Time.now.to_i + 420
+
+        #
         #  Update it and send it
         #
         update.alert << alert
