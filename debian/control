@@ -10,7 +10,7 @@ Homepage: https://projects.bytemark.co.uk/projects/custodian/
 Package: custodian
 Architecture: all
 Depends: ruby1.8, libbeanstalkclient-ruby1.8, rubygems, ${misc:Depends}
-Suggests: beanstalkd
+Suggests: beanstalkd, mauvealert-client (>= 3.13.1)
 Description: This package provides remote monitoring
  This package allows you to setup a semi-distributed monitoring
  solution, using the Bytemark MauveAlert server for notification.
