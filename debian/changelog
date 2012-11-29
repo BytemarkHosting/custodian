@@ -1,3 +1,10 @@
+custodian (0.7-1) stable; urgency=low
+
+  * Set a supression time of 7 minutes on alerts via the mauve
+    alerter.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 27 Nov 2012 16:45:23 +0000
+
 custodian (0.6-2) stable; urgency=low
 
   * Set an expiry time on the keys we add to redis.
