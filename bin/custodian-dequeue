@@ -80,7 +80,6 @@ if __FILE__ == $0 then
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--fail",    "-f", GetoptLong::NO_ARGUMENT  ],
                           [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
-                          [ "--repeat",  "-r", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--alerter", "-a", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
@@ -92,8 +91,6 @@ if __FILE__ == $0 then
           ENV["VERBOSE"] = "1"
       when "--logfile" then
           $LOGFILE = arg
-      when "--repeat" then
-          ENV["REPEAT"] = arg
       when "--server" then
           $SERVER = arg
       when "--alerter" then
