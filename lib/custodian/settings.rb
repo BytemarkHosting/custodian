@@ -126,6 +126,8 @@ module Custodian
     #
     # When the alerter is "mauve" the target is the destination for the alerts.
     #
+    # When the alerter is "redis" the target is the redis-server address.
+    #
     def alerter_target( alert )
       _load() unless( _loaded? )
 
@@ -136,7 +138,6 @@ module Custodian
       # if we have something setup then use it.
       if ( @settings["#{alert}_target"] )
         return( @settings["#{alert}_target"] )
-      else
       end
 
       # otherwise per-test defaults.
