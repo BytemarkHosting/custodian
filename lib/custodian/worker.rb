@@ -77,11 +77,8 @@ module Custodian
       # Instantiate the logger.
       @logger = Logger.new( logfile, "daily" )
 
-      if ( ENV['REPEAT'] )
-        @retry_count=ENV['REPEAT'].to_i
-      else
-        @retry_count=5
-      end
+      # How many times to repeat a failing test
+      @retry_count=5
 
     end
 
