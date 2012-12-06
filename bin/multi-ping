@@ -5,7 +5,7 @@
 #
 #
 # SYNOPSIS
-#  multi-ping  [ -h | --help ] [-m | --manual] hostname1
+#  multi-ping  [ -h | --help ] [-m | --manual] hostname
 #
 #
 # OPTIONS
