@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Parse the two configuration files we use, and alert if there
+# is a failure.
+#
+
+for file in bytemark.cfg managed-clients.cfg ; do
+
+   if ( ! custodian-enqueue --test --file /etc/custodian/$file >/dev/null 2>/dev/null );  then
+       mauvesend alert.bytemark.co.uk -i custodian-enqueue-$file -r now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
+   else
+       mauvesend alert.bytemark.co.uk -i custodian-enqueue-$file -c now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
+
+   fi
+
+done

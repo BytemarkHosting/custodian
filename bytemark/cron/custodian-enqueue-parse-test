@@ -1,0 +1,6 @@
+#
+# Alert if our custodian parser sees a failure on any file.
+#
+# Run once an hour, during working hours.
+#
+2 09-18 * * 1-5 nobody /usr/bin/custodian-enqueue-parse-test
