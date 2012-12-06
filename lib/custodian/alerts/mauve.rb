@@ -175,12 +175,13 @@ module Custodian
         alert.id      = "#{test_type}-#{test_host}"
         alert.subject = subject
         alert.summary = "The #{test_type} test failed against #{test_host}"
-        alert.detail  = "<p>The #{test_type} test failed against #{test_host}.</p>"
 
         #
         #  If we're raising then add the error
         #
         if ( failure )
+
+          alert.detail  = "<p>The #{test_type} test failed against #{test_host}.</p>"
 
           #
           #  The text from the job-defition
@@ -196,14 +197,14 @@ module Custodian
           # Add the test-failure message
           #
           alert.detail = "#{alert.detail}<p>#{test.error()}</p>"
-        end
 
-        #
-        #  Determine if this is inside/outside the bytemark network
-        #
-        location = expand_inside_bytemark( test_host )
-        if ( !location.nil? && location.length )
-          alert.detail = "#{alert.detail}\n#{location}"
+          #
+          #  Determine if this is inside/outside the bytemark network
+          #
+          location = expand_inside_bytemark( test_host )
+          if ( !location.nil? && location.length )
+            alert.detail = "#{alert.detail}\n#{location}"
+          end
         end
 
         #
