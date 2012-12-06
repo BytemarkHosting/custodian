@@ -1,0 +1,6 @@
+#
+# Alert if our custodian queue has too many entries in it.
+#
+# That implies the queue isn't emptying because of either a bug or too many tests
+#
+*/2 09-18 * * 1-5 nobody /usr/bin/custodian-queue-monitor
