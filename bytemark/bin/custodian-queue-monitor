@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if ( custodian-queue --monitor ) ; then
+    echo "All OK"
+else
+    echo "Too large a queue"
+fi

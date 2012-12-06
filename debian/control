@@ -18,3 +18,14 @@ Description: This package provides remote monitoring
  The monitoring consists of a system to enqueue tests in
  a beanstalkd server, and an agent that will fetch tests from
  that same queue and execute them.
+
+Package: custodian-bytemark
+Architecture: all
+Depends: custodian
+Description: Bytemark-specific add-ons for Custodian.
+ This package contains some monitoring for the monitor,
+ to ensure that custodian isn't failing to parse configuration
+ files, or failing to empty the queue.
+ .
+ It might be useful reference material for others but it is
+ explicitly Bytemark-specific
