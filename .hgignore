@@ -1,12 +1,15 @@
 syntax: glob
 
 
-debian/custodian.debhelper.log
+debian/*.debhelper.log
 debian/custodian.install
 debian/custodian.substvars
 debian/custodian/DEBIAN
 debian/custodian/etc
 debian/custodian/usr
+debian/custodian-bytemark.install
+debian/custodian-bytemark.substvars
+debian/custodian-bytemark/
 debian/files
 man/*.man
 custodian-dequeue.log*
