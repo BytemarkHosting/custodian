@@ -61,7 +61,7 @@ if __FILE__ == $0 then
   $STATS   = false
   $help    = false
   $manual  = false
-  $MONITOR = false
+  $MONITOR = nil
 
   #
   #  The beanstalkd server address.
@@ -74,14 +74,18 @@ if __FILE__ == $0 then
                           [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
-                          [ "--monitor", "-M", GetoptLong::NO_ARGUMENT ],
+                          [ "--monitor", "-M", GetoptLong::OPTIONAL_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--stats",   "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
       when "--monitor" then
-          $MONITOR = true
+          if ( arg )
+              $MONITOR = arg.to_i
+          else
+              $MONITOR = 5000
+          end
       when "--stats" then
           $STATS = true
       when "--flush" then
@@ -136,7 +140,7 @@ if __FILE__ == $0 then
   #
   # Alerting on a queue that is too-full?
   #
-  if ( $MONITOR )
+  if ( !$MONITOR.nil? )
 
     #
     # Find the number of jobs
@@ -144,14 +148,11 @@ if __FILE__ == $0 then
     stats = queue.stats()
     jobs  = stats['current-jobs-ready'] || 0
 
-    max = 5000
-
-    if ( jobs > max )
-      system( "mauvesend alert.bytemark.co.uk -i custodian -r now -s \"Our queue has #{jobs} [alert-threshold is: #{max}]  in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers?  See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>\" " )
+    if ( jobs > $MONITOR )
+        exit 1
     else
-      system( "mauvesend alert.bytemark.co.uk -i custodian -c now -s \"Our queue has #{jobs} [alert-threshold is: #{max} in it\" --detail=\"<p>The custodian queue doesn't seem to be emptying.  Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>\" " )
+        exit 0
     end
-    exit( 0 )
   end
 
 
