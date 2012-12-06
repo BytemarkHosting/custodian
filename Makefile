@@ -8,10 +8,10 @@ default:
 
 
 clean:
-	rm -rf ./debian/custodian
+	rm -rf ./debian/custodian ./debian/custodian-bytemark
 	rm -rf ./man
-	rm -f ./debian/custodian.debhelper.log
-	rm -f ./debian/custodian.substvars
+	rm -f ./debian/*.debhelper.log
+	rm -f ./debian/*.substvars
 	rm -f ./debian/files
 	find . -name 'custodian-dequeue.log' -delete || true
 	find . -name 'alerts.log' -delete || true
