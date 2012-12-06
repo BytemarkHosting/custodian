@@ -1,7 +1,21 @@
 #!/bin/sh
+#
+# Use the exit code of:
+#
+#   custodian-queue --monitor=3000
+#
+# to determine if the queue is "too full".  If so alert, via mauve.
+#
 
-if ( custodian-queue --monitor ) ; then
-    echo "All OK"
+
+#
+# Maximum queue size.
+#
+max=5000
+
+
+if ( custodian-queue --monitor=$max ) ; then
+    mauvesend alert.bytemark.co.uk -i custodian -c now -s "Our queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
 else
-    echo "Too large a queue"
+    mauvesend alert.bytemark.co.uk -i custodian -r now -s "Our queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
 fi
