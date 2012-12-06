@@ -17,18 +17,19 @@
 #
 #  -m, --manual        Show this manual, and exit.
 #
-#  -M, --monitor       Alert, via mauve, if our queue is too full.
+#  -M, --monitor       If the queue size exceeds the threshold report that via an exit code.
 #
 #  -f, --flush         Flush the queue, removing all jobs.
 #
-#  -s, --stats         Show the pending jobs.
+#  -s, --stats         Show the count of pending jobs.
 #
 #  -S, --server        Specify the host:port for the beanstalkd queue.
 #
 #
 # ABOUT
 #
-#  This tool is designed to inspect the beanstalkd queue.
+#  This tool is designed to inspect the beanstalkd queue, or flush the pending
+# jobs from it.
 #
 #
 # AUTHOR
