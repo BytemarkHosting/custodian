@@ -15,7 +15,7 @@ max=5000
 
 
 if ( custodian-queue --monitor=$max ) ; then
-    mauvesend alert.bytemark.co.uk -i custodian -c now -s "Our queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
+    mauvesend alert.bytemark.co.uk -i custodian -c now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
 else
-    mauvesend alert.bytemark.co.uk -i custodian -r now -s "Our queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
+    mauvesend alert.bytemark.co.uk -i custodian -r now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
 fi
