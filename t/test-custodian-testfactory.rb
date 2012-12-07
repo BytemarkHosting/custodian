@@ -231,9 +231,7 @@ class TestTestFactory < Test::Unit::TestCase
         #
         # NOTE: Skip the DNS test - it is more complex.
         #
-        # Skip the HTTP test because the HTTPS test is a super-set.
-        #
-        next if ( tst =~ /^(dns|http)$/ )
+        next if ( tst =~ /^(dns)$/ )
 
         # normal
         test_one = "http://foo/ must run #{tst} on 1234"
