@@ -91,7 +91,19 @@ module Custodian
       end
 
 
-
+      #
+      #  Get the right type of this object, based on the
+      # URL
+      #
+      def get_type
+        if ( @url =~ /^https:/ )
+          "https"
+        elsif ( @url =~ /^http:/ )
+          "http"
+        else
+          raise ArgumentError, "URL isn't http/https: #{@url}"
+        end
+      end
 
       #
       # Allow this test to be serialized.
