@@ -1,3 +1,10 @@
+custodian (0.8-2) stable; urgency=low
+
+  * Updated the reporting of http/https failures to show the
+    correct protocol-testing type.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 6 Dec 2012 11:44:11 +0000
+
 custodian (0.8-1) stable; urgency=low
 
   * Produce a new package custodian-bytemark
