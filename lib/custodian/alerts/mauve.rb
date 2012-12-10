@@ -172,7 +172,7 @@ module Custodian
 
 
         alert         = Mauve::Proto::Alert.new
-        alert.id      = "#{test_type}-#{test_host}"
+        alert.id      = test.to_s
         alert.subject = subject
         alert.summary = "The #{test_type} test failed against #{test_host}"
 
