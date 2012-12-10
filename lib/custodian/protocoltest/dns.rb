@@ -141,7 +141,7 @@ module Custodian
                   dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.exchange.to_s()) }
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"
-                  return false
+                  return nil
                 end
               end
             rescue Exception => x
