@@ -1,0 +1,61 @@
+#!/usr/bin/ruby -Ilib/ -I../lib/
+
+
+require 'test/unit'
+
+require 'custodian/protocoltests'
+
+
+
+#
+# The DNS test is a complex one.
+#
+class TestDNSTypes < Test::Unit::TestCase
+
+  #
+  # Create the test suite environment: NOP.
+  #
+  def setup
+  end
+
+  #
+  # Destroy the test suite environment: NOP.
+  #
+  def teardown
+  end
+
+
+  #
+  # Test the known-record types: A, NS, MX, AAAA
+  #
+  def test_known_types
+
+    assert_nothing_raised do
+     test = Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving NS as 'foo'." )
+     test = Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving A as 'foo'." )
+     test = Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving MX as 'foo'." )
+     test = Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving AAAA as 'foo'." )
+    end
+
+  end
+
+
+
+  #
+  # Test that using random types fails.
+  #
+  def test_unknown_types
+
+    #
+    #  Each of these will fail
+    #
+    %w( a ns www example fdskfjdlfsj `` ).each do |res|
+      assert_raise ArgumentError do
+        Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving #{res} as 'foo'." )
+      end
+    end
+  end
+
+
+end
+
