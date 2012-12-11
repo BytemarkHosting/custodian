@@ -3,6 +3,7 @@ custodian (xxx) stable; urgency=low
   * Mave-alert IDs will be the line from the parser.
   * Updated to use stricter validation on the DNS tests, unknown record
     types will throw an exception.
+  * DNS-tests must match results exactly.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Mon, 10 Dec 2012 13:22:31 +0000
 
