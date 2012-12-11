@@ -102,7 +102,7 @@ module Custodian
         #
         expected = 0
         if ( results != @resolve_expected )
-          @error = "The expected result '#{resolve_expected}' didn't match the returned results '#{results}'"
+          @error = "The expected result '#{@resolve_expected}' didn't match the returned results '#{results}'"
           return false
         end
 
