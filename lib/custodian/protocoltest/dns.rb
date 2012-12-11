@@ -105,7 +105,7 @@ module Custodian
         #
         expected = 0
         if ( results != @resolve_expected )
-          @error = "The expected result '#{@resolve_expected}' didn't match the returned results '#{results}'"
+          @error = "When resolving the name #{@resolve_name} [#{resolve_type}-record lookup] against DNS-server #{@host} we received an error.  The expected result '#{@resolve_expected}' didn't match the returned results '#{results}'"
           return false
         end
 
@@ -150,7 +150,7 @@ module Custodian
             end
           end
         rescue Timeout::Error => e
-          @error = "Timed-out connecting #{e}"
+          @error = "Timed-out performing DNS lookups #{e}"
           return nil
         end
 
