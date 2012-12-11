@@ -100,16 +100,12 @@ module Custodian
         # OK we have an array of results.  If every one of the expected
         # results is contained in those results returned then we're good.
         #
-        @resolve_expected.split( /;/ ).each do |required|
-          if ( ! results.include?( required ) )
-            @error = "The expected result #{required} was not found in the results: #{results.join(",")}"
-            return false
-          end
+        expected = 0
+        if ( results != @resolve_expected )
+          @error = "The expected result '#{resolve_expected}' didn't match the returned results '#{results}'"
+          return false
         end
 
-        #
-        #  OK we've succeeded.
-        #
         true
       end
 
@@ -130,16 +126,16 @@ module Custodian
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push r.address.to_s() }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push(r.address.to_s()) }
 
                 when /^AAAA$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push r.address.to_s() }
+      dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s())  }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push Resolv.getaddresses(r.name.to_s()) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses(r.name.to_s())) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push Resolv.getaddresses(r.exchange.to_s()) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses(r.exchange.to_s())) }
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"
                   return nil
@@ -154,8 +150,21 @@ module Custodian
           @error = "Timed-out connecting #{e}"
           return nil
         end
-        results.flatten!
-        results
+
+        #
+        #  Flatten via a hash.
+        #
+        h = Hash.new()
+        results.sort.each do |key|
+          if ( key.kind_of? Array )
+            key.each do |n|
+              h[n]=1
+            end
+          else
+            h[key]=1
+          end
+        end
+        h.keys.sort!.join( "," )
       end
 
 
