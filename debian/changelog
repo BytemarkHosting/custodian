@@ -1,4 +1,4 @@
-custodian (xxx) stable; urgency=low
+custodian (0.8-3) stable; urgency=low
 
   * Mave-alert IDs will be the line from the parser.
   * Updated to use stricter validation on the DNS tests, unknown record
