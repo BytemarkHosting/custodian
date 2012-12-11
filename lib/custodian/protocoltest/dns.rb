@@ -6,8 +6,11 @@ require 'resolv'
 #  This object is instantiated if the parser sees a line such as:
 #
 ###
-### DNSHOSTS must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'.
+### DNSHOSTS must run dns for bytemark.co.uk resolving NS as '80.68.80.26,85.17.170.78,80.68.80.27'.
 ###
+#
+#  The test will fail if the results are not *exactly* as specified.  i.e. If there are too
+# many results, or too few, we'll alert.
 #
 #
 module Custodian
