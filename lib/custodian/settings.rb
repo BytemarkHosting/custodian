@@ -71,6 +71,10 @@ module Custodian
     end
 
 
+    def key( name )
+      _load() unless( _loaded? )
+      @settings[name]
+    end
 
 
     #
