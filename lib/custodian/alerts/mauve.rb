@@ -83,9 +83,45 @@ module Custodian
         alert.raise_time = Time.now.to_i
 
         #
-        # We're going to suppress this alert for 7 minutes to suppress flaps.
+        # The supression period varies depending on the time of day.
         #
-        alert.suppress_until = Time.now.to_i + 420
+        hour = Time.now.hour
+        wday = Time.now.wday
+
+        #
+        # Is this inside the working day?
+        #
+        working = false
+
+        #
+        # Lookup the start of the day.
+        #
+        day_start = @settings.key( "day_start" ) || 10
+        day_end   = @settings.key( "day_end" )   || 18
+
+        #
+        # If we're Monday-Friday, between the start & end time, then
+        # we're in the working day.
+        #
+        if ( ( ( wday != 0 ) && ( wday != 6 ) ) &&
+             ( hour >= day_start && < day_end ) )
+          working = true
+        end
+
+        #
+        # The suppression period can now be determined.
+        #
+        period = working ? 4 : 10
+
+        #
+        # And logged.
+        #
+        puts "Suppression period is #{period}m"
+
+        #
+        # We're going to suppress this alert now
+        #
+        alert.suppress_until = Time.now.to_i + ( period * 60 )
 
         #
         #  Update it and send it
