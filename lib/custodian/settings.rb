@@ -54,7 +54,6 @@ module Custodian
           val = $2.dup
           key.strip!
           val.strip!
-
           @settings[key] = val
         end
       end
@@ -71,6 +70,9 @@ module Custodian
     end
 
 
+    #
+    # Retrieve an arbitrary key
+    #
     def key( name )
       _load() unless( _loaded? )
       @settings[name]
