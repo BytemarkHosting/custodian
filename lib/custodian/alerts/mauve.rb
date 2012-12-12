@@ -100,18 +100,24 @@ module Custodian
         day_end   = @settings.key( "day_end" )   || 18
 
         #
+        #  In hour suppress
+        #
+        working_suppress = @settings.key( "working_suppress" ) || 4
+        oncall_suppress  = @settings.key( "oncall_suppress" ) || 10
+
+        #
         # If we're Monday-Friday, between the start & end time, then
         # we're in the working day.
         #
         if ( ( ( wday != 0 ) && ( wday != 6 ) ) &&
-             ( hour >= day_start && < day_end ) )
+             ( hour >= day_start && hour < day_end ) )
           working = true
         end
 
         #
         # The suppression period can now be determined.
         #
-        period = working ? 4 : 10
+        period = working ? working_suppress : oncall_suppress
 
         #
         # And logged.
