@@ -17,10 +17,17 @@ module Custodian
     # The target for the alert.
     #
     # The meaning of the target is notifier-specific.
+    #
     # In the case of the smtp-notifier the target is the
     # email address to notify, for example.
     #
     attr_reader :target
+
+
+    #
+    # The global configuration settings object.
+    #
+    attr_reader :settings
 
 
 
@@ -89,6 +96,15 @@ module Custodian
     #
     def set_target( target )
       @target = target
+    end
+
+
+
+    #
+    # Store a reference to the settings
+    #
+    def set_settings( obj )
+      @settings = obj
     end
 
 
