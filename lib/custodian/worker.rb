@@ -61,12 +61,18 @@ module Custodian
     attr_reader :logger
 
 
+    #
+    # The settings from the global configuration file
+    #
+    attr_reader :settings
+
+
 
 
     #
     # Constructor: Connect to the queue
     #
-    def initialize( server, alerter, logfile )
+    def initialize( server, alerter, logfile, settings )
 
       # Connect to the queue
       @queue = Beanstalk::Pool.new([server], "Custodian" )
@@ -76,6 +82,9 @@ module Custodian
 
       # Instantiate the logger.
       @logger = Logger.new( logfile, "daily" )
+
+      # Save the settings
+      @settings = settings
 
       # How many times to repeat a failing test
       @retry_count=5
@@ -214,10 +223,13 @@ module Custodian
         log_message( "Creating alerter: #{alerter}" )
         alert = Custodian::AlertFactory.create( alerter, test )
 
-        target = Custodian::Settings.instance().alerter_target( alerter )
+        target = @settings.alerter_target( alerter )
+        alert.set_target( target )
         puts "Target for alert is #{target}"
 
-        alert.set_target( target )
+        # give the alerter a reference to the settings object.
+        alert.set_settings( @settings )
+
         alert.raise()
       end
     end
@@ -229,12 +241,15 @@ module Custodian
     def do_clear( test )
       @alerter.split( "," ).each do |alerter|
         log_message( "Creating alerter: #{alerter}" )
-        alert = Custodian::AlertFactory.create( alerter, test )
+        alert  = Custodian::AlertFactory.create( alerter, test )
 
-        target = Custodian::Settings.instance().alerter_target( alerter )
+        target = @settings.alerter_target( alerter )
+        alert.set_target( target )
         puts "Target for alert is #{target}"
 
-        alert.set_target( target )
+        # give the alerter a reference to the settings object.
+        alert.set_settings( @settings )
+
         alert.clear()
       end
     end
