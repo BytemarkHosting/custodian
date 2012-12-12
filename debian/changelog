@@ -1,3 +1,10 @@
+custodian (0.8-6) stable; urgency=low
+
+  * The suppression period, for the mauve alerter, will now vary
+    depending upon the time of the day.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 12 Dec 2012 14:16:18 +0000
+
 custodian (0.8-5) stable; urgency=low
 
   * When sending alerts via Mauve the ID of the alert must be unique,
