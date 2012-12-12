@@ -3,6 +3,7 @@
 require 'custodian/util/bytemark'
 require 'custodian/util/dns'
 
+require 'digest/sha1'
 
 
 #
@@ -172,7 +173,13 @@ module Custodian
 
 
         alert         = Mauve::Proto::Alert.new
-        alert.id      = test.to_s
+
+        #
+        # Mauve only lets us use IDs which are <= 255 characters in length
+        # hash the line from the parser to ensure it is short enough.
+        # (IDs must be unique, per-source)
+        alert.id      = Digest::SHA1.hexdigest(test.to_s)
+
         alert.subject = subject
         alert.summary = "The #{test_type} test failed against #{test_host}"
 

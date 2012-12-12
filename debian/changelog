@@ -1,3 +1,12 @@
+custodian (0.8-5) stable; urgency=low
+
+  * When sending alerts via Mauve the ID of the alert must be unique,
+    per-source.  We thought we'd achieved this by using the input line
+    from the parser, but sadly there is a 255 character limit.
+    Use the SHA1 hash of the input to satisfy both constraints.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 12 Dec 2012 10:11:01 +0000
+
 custodian (0.8-4) stable; urgency=low
 
   * The error message is more explicit on DNS failures.
