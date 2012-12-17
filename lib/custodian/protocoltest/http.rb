@@ -175,13 +175,14 @@ module Custodian
         if ( !@expected_content.nil? )
           if ( @content && (! @content.match(/#{@expected_content}/i) ) )
             @error = "<p>The response did not contain our expected text '#{@expected_content}'</p>"
+            return false
           end
         end
 
         #
         #  All done.
         #
-        true
+        return true
       end
 
 
