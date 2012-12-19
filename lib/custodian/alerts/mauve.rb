@@ -96,14 +96,14 @@ module Custodian
         #
         # Lookup the start of the day.
         #
-        day_start = @settings.key( "day_start" ) || 10
-        day_end   = @settings.key( "day_end" )   || 18
+        day_start = @settings.key( "day_start" ).to_i || 10
+        day_end   = @settings.key( "day_end" ).to_i   || 18
 
         #
         #  In hour suppress
         #
-        working_suppress = @settings.key( "working_suppress" ) || 4
-        oncall_suppress  = @settings.key( "oncall_suppress" ) || 10
+        working_suppress = @settings.key( "working_suppress" ).to_i || 4
+        oncall_suppress  = @settings.key( "oncall_suppress" ).to_i  || 10
 
         #
         # If we're Monday-Friday, between the start & end time, then
