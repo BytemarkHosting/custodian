@@ -57,9 +57,40 @@ module Custodian
         @url  = line.split( /\s+/)[0]
         @host = @url
 
+
+        #
+        #  Ensure we've got a HTTP/HTTPS url.
+        #
         if ( @url !~ /^https?:/ )
-          raise ArgumentError, "The target wasn't an URL: #{line}"
+          raise ArgumentError, "The target wasn't a HTTP/HTTPS URL: #{line}"
         end
+
+
+        #
+        # Determine that the protocol of the URL matches the
+        # protocol-test we're running
+        #
+        test_type = nil
+
+        case line
+        when /\s+must\s(not\s+)?run\s+http(\s+|\.|$)/i
+        then
+          test_type = "http"
+        when /\s+must\s+(not\s+)?run\s+https(\s+|\.|$)/i
+        then
+          test_type = "https"
+        else
+          raise ArgumentError, "URL has invalid scheme: #{@line}"
+        end
+
+        #
+        #  Get the schema of the URL
+        #
+        u = URI.parse( @url )
+        if ( u.scheme != test_type )
+          raise ArgumentError, "The test case has a different protocol in the URI than that which we're testing: #{@line} - \"#{test_type} != #{u.scheme}\""
+        end
+
 
         #
         # Is this test inverted?
