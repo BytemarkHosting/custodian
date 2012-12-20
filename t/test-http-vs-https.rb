@@ -64,5 +64,30 @@ class TestTestName < Test::Unit::TestCase
     assert_equal( test.get_type, "https" )
   end
 
+
+  #
+  # It is a bug to have the protocol-test differ from the URI's protocol.
+  #
+  def test_protocol_mismatch
+
+
+    assert_raise ArgumentError do
+      Custodian::TestFactory.create( "https://example.com/ must run http." )
+    end
+
+    assert_raise ArgumentError do
+      Custodian::TestFactory.create( "http://example.com/ must run https." )
+    end
+
+
+    assert_nothing_raised do
+      Custodian::TestFactory.create( "http://example.com/ must run http." )
+    end
+    assert_nothing_raised do
+      Custodian::TestFactory.create( "https://example.com/ must run https." )
+    end
+
+  end
+
 end
 
