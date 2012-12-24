@@ -5,6 +5,9 @@ Source:
 Copyright:
     Copyright (c) 2012 Bytemark Computer Consulting Ltd
 
+Bug Tracker:
+    https://projects.bytemark.co.uk/projects/custodian/issues/new
+
 Licence:
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +24,7 @@ Custodian is a simple, scalable, and reliable protocol-tester that allows
 a number of services to be tested across a network.
 
 The core design is based upon a work queue, which is manipulated by two
-main scripts:
+main tools:
 
   custodian-enqueue
     * A parser that reads a list of hosts and tests to apply.  These
@@ -34,7 +37,7 @@ main scripts:
 
 
 Custodian uses class-factories to ensure that protocol tests, and notification
-objects are only losely tied to the core.  This is done so that custodian
+objects, are only losely tied to the core.  This is done so that custodian
 may be extended or adapted more easily to your environment.
 
 
@@ -42,7 +45,7 @@ may be extended or adapted more easily to your environment.
 Configuration
 -------------
 
-The software is configured by a single main configuration file located at:
+The software is configured by a the main configuration file located at:
 
    /etc/custodian/custodian.cfg
 
