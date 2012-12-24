@@ -1,3 +1,10 @@
+custodian (0.9-1) stable; urgency=low
+
+  * Updated to ensure that protocol tests and the URL-scheme match
+    for the case of http & https tests.  This is less surprising.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 24 Dec 2012 10:30:01 +0000
+
 custodian (0.8-8) stable; urgency=low
 
   * Ensure that our notification periods are always integers.
