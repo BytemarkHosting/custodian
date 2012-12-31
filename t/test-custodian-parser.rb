@@ -273,9 +273,11 @@ EOF
     #
     data = {
       "foo must run rsync."                     => nil,
+      "foo must run redis."                     => nil,
       "foo must not run ping."                  => nil,
       "foo must not run ssh otherwise 'fail'"   => "fail",
       "foo must not run ssh otherwise 'fail'."  => "fail",
+      "foo must run redis otherwise 'memorystorage service is dead'" => "memorystorage service is dead",
       "foo must run ldap otherwise 'ldap dead?'" => "ldap dead?",
       "foo must run ping otherwise 'don't you love me?'" => "don"
     }
