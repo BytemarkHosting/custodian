@@ -21,7 +21,7 @@ Description: This package provides remote monitoring
 
 Package: custodian-bytemark
 Architecture: all
-Depends: custodian
+Depends: custodian, ruby1.8, ${misc:Depends}
 Description: Bytemark-specific add-ons for Custodian.
  This package contains some monitoring for the monitor,
  to ensure that custodian isn't failing to parse configuration
