@@ -27,10 +27,10 @@ custodian-queue --flush || true
 # 2.  If we have agents then restart them
 #
 if [ -d /etc/service ]; then
-   test -d /etc/service/custodian-agent1 && sv restart /etc/service/custodian-agent1/
-   test -d /etc/service/custodian-agent2 && sv restart /etc/service/custodian-agent2/
-   test -d /etc/service/custodian-agent3 && sv restart /etc/service/custodian-agent3/
-   test -d /etc/service/custodian-agent4 && sv restart /etc/service/custodian-agent4/
+    echo "Restarting services"
+    for i in /etc/service/custodian-agent*; do
+        sv restart $i
+    done
 fi
 
 #DEBHELPER#
