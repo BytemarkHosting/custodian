@@ -1,0 +1,233 @@
+#!/usr/bin/ruby1.8
+#
+#  Add/Remove/List custodian workers
+#
+# Steve
+# --
+
+
+
+require 'etc'
+require 'fileutils'
+require 'getoptlong'
+
+
+
+
+#
+#  A single worker instance.
+#
+class CustodianWorker
+
+  attr_reader :path
+
+  #
+  # Constructor.
+  #
+  # Called with the path to a service directory.
+  #
+  def initialize( path )
+    @path = path
+  end
+
+
+  #
+  #  Does the service directory look like a worker?
+  #
+  def is_worker?
+
+    # the directory must exist.
+    return false unless( File.directory?( @path ) )
+
+    # There should be a ./run file in the directory.
+    return false unless( File.executable?( "#{@path}/run" ) )
+
+    # The run-file should invoke custodian-dequeue.
+    contents = read_file( "#{@path}/run" )
+    if ( contents !~ /exec su - ([\S]+)(.*)exec custodian-dequeue/ )
+      return false
+    end
+
+    # The name must be custodian-$LOGIN
+    if ( @path =~ /custodian-([.*])$/ )
+      user = $1.dup
+
+      data = Etc.getpwnam( user )
+      return false unless( data.name )
+      return false unless( File.directory?( data.dir ) )
+    end
+    true
+  end
+
+
+
+  #
+  #  Create a new worker-service.
+  #
+  def CustodianWorker.create( login )
+
+    #
+    #  Does the service directory already exist?
+    #
+    sv =  "/etc/service/custodian-#{login}"
+    if ( File.directory?( sv ) )
+      puts "Target already exists: #{sv}"
+      exit( 1 )
+    end
+
+    #
+    #  Does the user exist?
+    #
+    begin
+      data = Etc.getpwnam( login )
+      if ( login.name )
+        puts "Unix user already exists: #{login}"
+        exit( 1 )
+      end
+    rescue => ex
+    end
+
+    #
+    #  Create the directory
+    #
+    FileUtils.mkdir_p( sv )
+
+    #
+    #  Add the unix user.
+    #
+    system( "useradd --create-home #{login}" )
+
+    #
+    #  Create the run-script.
+    #
+    File.open( "#{sv}/run", "w" ) do |fh|
+      fh.puts <<EOF
+#!/bin/sh
+exec su - #{login} -c "exec custodian-dequeue --verbose"
+EOF
+    end
+
+    File.chmod( 0755, "#{sv}/run" )
+  end
+
+
+
+
+  #
+  # Delete an existing worker service.
+  #
+  def CustodianWorker.delete( login )
+
+    #
+    #  Stop the service
+    #
+    sv =  "/etc/service/custodian-#{login}"
+    if ( File.directory?( sv ) )
+      puts "Stopping service: #{sv}"
+      system( "sv down #{sv}" )
+    end
+
+    #
+    #  Delete the user
+    #
+    begin
+      data = Etc.getpwnam( login )
+      if ( data.name )
+        system( "userdel #{login}" )
+        if ( ( File.directory?( data.dir ) ) && ( data.dir == "/home/#{login}" ) )
+          puts "Removing home directory"
+          system( "rm -rf #{data.dir}" )
+        end
+      end
+    rescue => ex
+       puts "WARNING: Login not found #{login}"
+    end
+
+    #
+    #  Remove the service
+    #
+    if ( File.directory?( sv ) )
+        puts "Removing service"
+        system( "rm -rf #{sv}" )
+    end
+  end
+
+
+  #
+  # Return a string containing the given file contents.
+  #
+  def read_file( fname )
+    lines = File.open( fname, 'r') {|file| file.readlines.collect}
+    lines.join( "\n" )
+  end
+
+
+end
+
+
+
+#
+#  Get access to custodian services
+#
+class CustodianServices
+
+  #
+  # The name for this instance.
+  #
+  attr_reader :prefix
+
+  #
+  # Constructor
+  #
+  def initialize( prefix = "/etc/service" )
+    @prefix = prefix
+  end
+
+  #
+  #  Return an array of all services which are custodian-workers
+  #
+  def get
+    a = Array.new()
+
+    Dir.entries( @prefix ).sort_by{|s| s.scan(/\d+/).map{|s| s.to_i}}.each do |name|
+      tmp = CustodianWorker.new( "#{@prefix}/#{name}" )
+      a.push( tmp ) if ( tmp.is_worker? )
+    end
+
+    a
+  end
+
+end
+
+
+
+if __FILE__ == $0 then
+
+
+  arg = ARGV.shift || "list";
+
+  case arg
+  when "list"
+    helper = CustodianServices.new();
+    helper.get().each do |f|
+      puts f.path
+    end
+  when "add"
+    name = ARGV.shift || nil
+    if ( name.nil? )
+      puts "Usage: $0 add NAME"
+      exit 1
+    end
+    f = CustodianWorker.create( name )
+  when "delete"
+    name = ARGV.shift || nil
+    if ( name.nil? )
+      puts "Usage: $0 delete NAME"
+      exit 1
+    end
+    f = CustodianWorker.delete( name )
+  else
+    puts "Unknown argument.  Usage $0 [add|delete|list]"
+  end
+end
+
