@@ -1,4 +1,5 @@
 bytemark/bin/custodian-queue-monitor       usr/bin
+bytemark/bin/custodian-instances           usr/bin
 bytemark/bin/custodian-enqueue-parse-test  usr/bin
 bytemark/cron/custodian-queue-monitor      etc/cron.d
 bytemark/cron/custodian-enqueue-parse-test etc/cron.d
