@@ -68,7 +68,13 @@ class TestCustodianParser < Test::Unit::TestCase
     result = parser.parse_line( "# this is a comment" )
     assert( result.nil? )
 
-    #  1.b.  Adding a test will return an array of test-objects.
+    #  1.b.  Non-strings are an error
+    assert_raise ArgumentError do
+      result = parser.parse_line( nil )
+    end
+
+
+    #  1.c.  Adding a test will return an array of test-objects.
     result = parser.parse_line( "smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'." );
     assert( !result.nil? )
     assert( result.kind_of? Array )
