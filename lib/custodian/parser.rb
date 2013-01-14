@@ -254,12 +254,6 @@ module Custodian
       return nil if ( ( line.nil? ) || ( line =~ /^#/ ) || ( line.length < 1 ) )
 
       #
-      # The specification of mauve-server to which we should raise our alerts to.
-      #
-      return nil if ( line =~ /Mauve\s+server(.*)source/ )
-
-
-      #
       #  Look for macro definitions, inline
       #
       if ( line =~ /^([0-9A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/ )
