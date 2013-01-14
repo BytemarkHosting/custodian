@@ -7,7 +7,7 @@ require 'uri'
 #  This object is instantiated if the parser sees a line such as:
 #
 ###
-### http://foo.vm.bytemark.co.uk/ must run http with content 'foo' otherwise 'ftp fail'.
+### http://foo.vm.bytemark.co.uk/ must run http with content 'page text' otherwise 'http fail'.
 ###
 #
 #
@@ -219,7 +219,7 @@ module Custodian
 
 
       #
-      # If the test fails then report the error../
+      # If the test fails then report the error.
       #
       def error
         @error
