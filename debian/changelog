@@ -1,3 +1,9 @@
+custodian (0.9-4) stable; urgency=low
+
+  * Added duration logging.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 23 Jan 2013 11:59:11 +0000
+
 custodian (0.9-3) stable; urgency=low
 
   * Added redis-protocol tester.
