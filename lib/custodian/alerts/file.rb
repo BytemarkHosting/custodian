@@ -34,7 +34,9 @@ module Custodian
       end
 
 
-
+      def duration( seconds )
+        puts "XXX: #{seconds}"
+      end
       #
       # Record a clear event for the given test.
       #
