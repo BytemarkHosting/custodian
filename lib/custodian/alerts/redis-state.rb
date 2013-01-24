@@ -131,8 +131,8 @@ module Custodian
         # Now store the duration, and trim it to the most recent
         # 1000 entries.
         #
-        @redis.lpush( "#{host}-#{test}", ms )
-        @redis.ltrim( "#{host}-#{test}", "0", "1200" )
+        @redis.lpush( "duration-#{host}-#{test}", ms )
+        @redis.ltrim( "duration-#{host}-#{test}", "0", "1200" )
       end
 
       register_alert_type "redis"
