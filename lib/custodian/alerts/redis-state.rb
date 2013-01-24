@@ -103,6 +103,38 @@ module Custodian
 
 
 
+      #
+      # Store a test-duration in redis
+      #
+      def duration( ms )
+
+        return unless( @redis )
+
+        #
+        # hostname + test-type
+        #
+        host = @test.target
+        test = @test.get_type
+
+        #
+        # Store the host.
+        #
+        # make sure this alert is discoverable
+        @redis.sadd( "duration-hosts", host )
+
+        #
+        # Store the test.
+        #
+        @redis.sadd( "duration-host-#{host}", test )
+
+        #
+        # Now store the duration, and trim it to the most recent
+        # 1000 entries.
+        #
+        @redis.lpush( "#{host}-#{test}", ms )
+        @redis.ltrim( "#{host}-#{test}", "0", "1200" )
+      end
+
       register_alert_type "redis"
 
 
