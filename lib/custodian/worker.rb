@@ -160,7 +160,7 @@ module Custodian
         #
         test = Custodian::TestFactory.create( body )
 
-
+        start_time = Time.now
 
         #
         #  We'll run no more than MAX times.
@@ -184,6 +184,20 @@ module Custodian
           end
           count += 1
         end
+
+        #
+        #  End time
+        #
+        end_time = Time.now
+
+
+        #
+        #  Duration of the test-run, in milliseconds
+        #
+        duration = (( end_time - start_time ) * 1000.0).to_i
+
+        do_duration( test, duration )
+
 
         #
         #  If we didn't succeed on any of the attempts raise the alert.
@@ -254,6 +268,24 @@ module Custodian
       end
     end
 
+    #
+    #  Log a test duration with each registered alerter.
+    #
+    def do_duration( test, duration )
+      @alerter.split( "," ).each do |alerter|
+        log_message( "Creating alerter: #{alerter}" )
+        alert  = Custodian::AlertFactory.create( alerter, test )
+
+        target = @settings.alerter_target( alerter )
+        alert.set_target( target )
+        puts "Target for alert is #{target}"
+
+        # give the alerter a reference to the settings object.
+        alert.set_settings( @settings )
+
+        alert.duration( duration ) if ( alert.respond_to? "duration" )
+      end
+    end
 
 
     #
