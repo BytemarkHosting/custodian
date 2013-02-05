@@ -6,7 +6,7 @@ module Custodian
 
   module ProtocolTest
 
-    class RelayTest < TCPTest
+    class SMTPRelayTest < TCPTest
 
       # save away state from the configuration line.
       def initialize( line )
