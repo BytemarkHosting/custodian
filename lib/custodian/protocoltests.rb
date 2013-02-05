@@ -22,6 +22,7 @@ require 'custodian/protocoltest/redis'
 require 'custodian/protocoltest/rsync'
 require 'custodian/protocoltest/ssh'
 require 'custodian/protocoltest/smtp'
+require 'custodian/protocoltest/smtprelay.rb'
 require 'custodian/protocoltest/telnet'
 
 
