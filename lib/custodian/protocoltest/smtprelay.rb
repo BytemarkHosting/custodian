@@ -2,17 +2,44 @@ require 'net/smtp'
 
 
 
+#
+#  The open SMTP-relay test.
+#
+#  This object is instantiated if the parser sees a line such as:
+#
+###
+### mail.bytemark.co.uk must not run smtprelay otherwise 'smtp fail'.
+###
+#
+#  The specification of the port is optional and defaults to 25
+#
+
 module Custodian
 
   module ProtocolTest
 
-    class SMTPRelayTest < TCPTest
+    class SMTPRelayTest < TestFactory
 
-      # save away state from the configuration line.
+
+      #
+      # Save away state from the configuration line.
+      #
       def initialize( line )
         @line = line
-        @host  = line.split( /\s+/)[0]
+        @host = line.split( /\s+/)[0]
 
+        #
+        # Save the port
+        #
+        if ( line =~ /on\s+([0-9]+)/ )
+          @port = $1.dup
+        else
+          @port = 25
+        end
+
+        #
+        # Is this test inverted?
+        #
         if ( line =~ /must\s+not\s+run\s+/ )
           @inverted = true
         else
@@ -21,40 +48,51 @@ module Custodian
       end
 
 
+
+      #
+      # Allow this test to be serialized.
+      #
+      def to_s
+          @line
+      end
+
+      #
       # run the test for open relays of SMTP protocol - return true on success.
       # false on fail.
-      # this requires love, just trying to get it to run for now..
+      #
       def run_test
-        @error = nil # for if we've run the test before
+        # for if we've run the test before
+        @error  = nil
         message = "Subject: SMTP Relay check\nThis is a test for OPEN SMTP relays."
-        
+
         begin
 
-          Net::SMTP.start(@host,25) do |smtp|
-            sent = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
-
+          Net::SMTP.start(@host,@port) do |smtp|
+            sent    = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
             @status = sent.status.to_s
-            
+
             if @inverted === true
               @success = true
               @failure = false
-            else 
+            else
               @success = false
               @failure = true
             end
-            
+
             if @status === "250" #and @inverted == true
               @error = "NOT OK: message sent on #{@host} with status #{@status}"
               return @success
-            else 
+            else
               @error = "OK: message not sent on #{@host} with status #{@status}"
               return @failure
             end
-            
+
           end # Net SMTP
 
-        rescue Exception => ex # for if we fail to send a message; this is a good thing
-        
+        rescue Exception => ex
+          #
+          # for if we fail to send a message; this is a good thing
+          #
           @error = "OK: Timed out or connection refused on #{@host} with status #{@status}"
           return @failure
         end
@@ -62,13 +100,14 @@ module Custodian
       end
 
 
-      # if the test failed return a suitable error message
+      #
+      # If the test failed here we will return a suitable error message.
+      #
       def error
         @error
       end
 
-      # register ourselves with the factory so we're invoked for lines of the form:
-      #  TARGET must (not) run xxx otherwise ...
+      # register ourselves with the class-factory
       register_test_type "smtprelay"
     end
   end
