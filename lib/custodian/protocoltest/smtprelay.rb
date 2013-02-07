@@ -26,16 +26,37 @@ module Custodian
       # this requires love, just trying to get it to run for now..
       def run_test
         @error = nil # for if we've run the test before
-        message = "This is a test for OPEN SMTP relays."
+        message = "Subject: SMTP Relay check\nThis is a test for OPEN SMTP relays."
         
         begin
+
           Net::SMTP.start(@host,25) do |smtp|
-            smtp.send_message message, "foo@bar.com", "foo@bar.com"
-            @error = "Sent message, that's bad."
+            sent = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
+
+            @status = sent.status.to_s
+            
+            if @inverted === true
+              @success = true
+              @failure = false
+            else 
+              @success = false
+              @failure = true
+            end
+            
+            if @status === "250" #and @inverted == true
+              @error = "NOT OK: message sent on #{@host} with status #{@status}"
+              return @success
+            else 
+              @error = "OK: message not sent on #{@host} with status #{@status}"
+              return @failure
+            end
+            
           end # Net SMTP
 
         rescue Exception => ex # for if we fail to send a message; this is a good thing
-          return false
+        
+          @error = "OK: Timed out or connection refused on #{@host} with status #{@status}"
+          return @failure
         end
 
       end
@@ -43,7 +64,7 @@ module Custodian
 
       # if the test failed return a suitable error message
       def error
-        @error = "Couldn't send message; that's good, really."
+        @error
       end
 
       # register ourselves with the factory so we're invoked for lines of the form:
