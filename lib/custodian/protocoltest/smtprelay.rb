@@ -71,22 +71,22 @@ module Custodian
             sent    = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
             @status = sent.status.to_s
 
-            if @inverted === true
-              @success = true
-              @failure = false
-            else
-              @success = false
-              @failure = true
-            end
-
-            if @status === "250" #and @inverted == true
+            if @status === "250"
               @error = "NOT OK: message sent on #{@host} with status #{@status}"
-              return @success
-            else
+            else 
               @error = "OK: message not sent on #{@host} with status #{@status}"
-              return @failure
             end
-
+            
+            #
+            # give the parser an appropriate response depending on the smtp code
+            # and whether or not we're inverting the test. (eg, 'must not')
+            #
+            
+            return @inverted  if @status == "250" and @inverted
+            return !@inverted if @status == "250" and !@inverted
+            return @inverted  if @status != "250" and !@inverted
+            return !@inverted if @status != "250" and @inverted
+            
           end # Net SMTP
 
         rescue Exception => ex
@@ -94,7 +94,8 @@ module Custodian
           # for if we fail to send a message; this is a good thing
           #
           @error = "OK: Timed out or connection refused on #{@host} with status #{@status}"
-          return @failure
+          return !@inverted if @inverted
+          return @inverted if !@inverted          
         end
 
       end
