@@ -96,23 +96,17 @@ module Custodian
         @error = nil
 
         begin
-          #
           #  Connect.
-          #
           ldap = LDAP::Conn.new( @host, @port )
           ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
 
-          #
           #  Hardwired search is bad..
-          #
           base = 'ou=groups,dc=bytemark,dc=co,dc=uk'
           scope = LDAP::LDAP_SCOPE_SUBTREE
           filter = '(cn=vpn*)'
           attrs = ['sn', 'cn']
 
-          #
           #  Bind.
-          #
           ldap.bind( @ldap_user, @ldap_pass )
           if ( ldap.bound? )
 
@@ -130,28 +124,30 @@ module Custodian
           end
         end
       rescue LDAP::ResultError => ex
-        @error = "LDAP exception: #{ex} when talkign to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+        @error = "LDAP exception: #{ex} when talking to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
         return false
       end
 
+      @error = "LDAP server test failed against '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+      return false
     end
 
 
-      #
-      # If the test fails then report the error.
-      #
-      def error
-        @error
-      end
-
-
-
-
-      register_test_type "ldap"
-
-
-
-
+    #
+    # If the test fails then report the error.
+    #
+    def error
+      @error
     end
+
+
+
+
+    register_test_type "ldap"
+
+
+
+
   end
+end
 end
