@@ -1,4 +1,3 @@
-require 'custodian/protocoltest/tcp'
 
 require 'ldap'
 
