@@ -120,21 +120,21 @@ module Custodian
             # Search
             #
             ldap.search(base,scope,filter,attrs)  { |entry|
-              puts entry.vals('cn')
+              puts "We found an LDAP result #{entry.vals('cn')}"
             }
             ldap.unbind
             return true
           else
-            @error "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+            @error = "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
             return false.
           end
-        rescue LDAP::ResultError => ex
-          @error = "LDAP exception: #{ex} when talkign to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-          return false
         end
+      rescue LDAP::ResultError => ex
+        @error = "LDAP exception: #{ex} when talkign to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+        return false
       end
 
-
+    end
 
 
       #
