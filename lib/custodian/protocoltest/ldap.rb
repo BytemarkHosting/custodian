@@ -7,7 +7,7 @@ require 'custodian/protocoltest/tcp'
 #  This object is instantiated if the parser sees a line such as:
 #
 ###
-### foo.vm.bytemark.co.uk must run ldap otherwise 'auth-server fail'.
+### foo.vm.bytemark.co.uk must run ldap with username 'user' and password 'xx' otherwise 'auth-server fail'.
 ###
 #
 #  The specification of the port is optional and defaults to 389.
@@ -16,7 +16,7 @@ module Custodian
 
   module ProtocolTest
 
-    class LDAPTest < TCPTest
+    class LDAPTest < TestFactory
 
 
       #
@@ -33,6 +33,27 @@ module Custodian
         # Save the host
         #
         @host  = line.split( /\s+/)[0]
+
+        #
+        # The username/password
+        #
+        @ldap_user = nil
+        @ldap_pass = nil
+
+        if ( line =~ /with\s+username\s+'([^']+)'/ )
+          @ldap_user = $1.dup
+        end
+        if ( line =~ /with\s+password\s+'([^']+)'/ )
+          @ldap_pass = $1.dup
+        end
+
+        if ( @ldap_user.nil? )
+          raise ArgumentError, "No username specified: #{@line}"
+        end
+        if ( @ldap_pass.nil? )
+          raise ArgumentError, "No password specified: #{@line}"
+        end
+
 
         #
         # Is this test inverted?
