@@ -45,10 +45,11 @@ class TestLDAPProbe < Test::Unit::TestCase
     #
     # test data
     #
-    data = {
+    data = [
             "foo.example.com must run ldap on 389.",
-            "foo.example.com must run ldap with username 'test'."
-           }
+            "foo.example.com must run ldap with username 'test'.",
+            "foo.example.com must run ldap with uername 'test' with password 'x'."
+    ]
 
     #
     #  For each test

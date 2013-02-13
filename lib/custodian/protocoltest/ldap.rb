@@ -54,7 +54,6 @@ module Custodian
           raise ArgumentError, "No password specified: #{@line}"
         end
 
-
         #
         # Is this test inverted?
         #
