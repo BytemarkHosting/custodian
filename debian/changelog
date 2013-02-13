@@ -1,3 +1,9 @@
+custodian (0.9-5) stable; urgency=low
+
+  * new release, updated LDAP probe to connect/bind/search.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 13 Feb 2013 10:44:01 +0000
+
 custodian (0.9-4) stable; urgency=low
 
   * Added duration logging.
