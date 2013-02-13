@@ -1,5 +1,6 @@
 require 'custodian/protocoltest/tcp'
 
+require 'ldap'
 
 #
 #  The LDAP-protocol test.
@@ -67,7 +68,7 @@ module Custodian
         # Save the port
         #
         if ( line =~ /on\s+([0-9]+)/ )
-          @port = $1.dup
+          @port = $1.dup.to_i
         else
           @port = 389
         end
@@ -94,7 +95,43 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        run_test_internal( @host, @port, nil, false )
+        begin
+          #
+          #  Connect.
+          #
+          ldap = LDAP::Conn.new( @host, @port )
+          ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
+
+          #
+          #  Hardwired search is bad..
+          #
+          base = 'ou=groups,dc=bytemark,dc=co,dc=uk'
+          scope = LDAP::LDAP_SCOPE_SUBTREE
+          filter = '(cn=vpn*)'
+          attrs = ['sn', 'cn']
+
+          #
+          #  Bind.
+          #
+          ldap.bind( @ldap_user, @ldap_pass )
+          if ( ldap.bound? )
+
+            #
+            # Search
+            #
+            ldap.search(base,scope,filter,attrs)  { |entry|
+              puts entry.vals('cn')
+            }
+            ldap.unbind
+            return true
+          else
+            @error "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+            return false.
+          end
+        rescue LDAP::ResultError => ex
+          @error = "LDAP exception: #{ex} when talkign to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+          return false
+        end
       end
 
 
