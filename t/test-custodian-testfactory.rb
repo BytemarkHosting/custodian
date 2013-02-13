@@ -191,7 +191,6 @@ class TestTestFactory < Test::Unit::TestCase
       "foo must run ping otherwise"      => false,
       "foo must not run ping otherwise"  => true,
       "foo must not run ssh otherwise"   => true,
-      "foo must not run ldap otherwise"  => true,
     }
 
     #
@@ -229,9 +228,9 @@ class TestTestFactory < Test::Unit::TestCase
         tst = $1.dup.downcase
 
         #
-        # NOTE: Skip the DNS test - it is more complex.
+        # NOTE: Skip the DNS and LDAP tests - they are more complex.
         #
-        next if ( tst =~ /^(dns)$/ )
+        next if ( tst =~ /^(ldap|dns)$/ )
 
         # normal
         test_one = "http://foo/ must run #{tst} on 1234"
