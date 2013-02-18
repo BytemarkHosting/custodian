@@ -64,6 +64,10 @@ module Custodian
         hostname = "localhost.localdomain"
 
         if ( File.exists?( "/etc/hostname" ) )
+          File.readlines("/etc/hostname" ).each do |line|
+            hostname = line if ( !line.nil? )
+            hostname.chomp!
+          end
         end
 
         hostname
