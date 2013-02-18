@@ -56,6 +56,21 @@ module Custodian
           @line
       end
 
+
+      #
+      # Read the hostname for usage in the SMTP-transaction.
+      #
+      def get_hostname
+        hostname = "localhost.localdomain"
+
+        if ( File.exists?( "/etc/hostname" ) )
+        end
+
+        hostname
+      end
+
+
+
       #
       # run the test for open relays of SMTP protocol - return true on success.
       # false on fail.
@@ -67,26 +82,26 @@ module Custodian
 
         begin
 
-          Net::SMTP.start(@host,@port) do |smtp|
+          Net::SMTP.start(@host,@port, get_hostname() ) do |smtp|
             sent    = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
             @status = sent.status.to_s
 
             if @status === "250"
               @error = "NOT OK: message sent on #{@host} with status #{@status}"
-            else 
+            else
               @error = "OK: message not sent on #{@host} with status #{@status}"
             end
-            
+
             #
             # give the parser an appropriate response depending on the smtp code
             # and whether or not we're inverting the test. (eg, 'must not')
             #
-            
+
             return @inverted  if @status == "250" and @inverted
             return !@inverted if @status == "250" and !@inverted
             return @inverted  if @status != "250" and !@inverted
             return !@inverted if @status != "250" and @inverted
-            
+
           end # Net SMTP
 
         rescue Exception => ex
@@ -95,7 +110,7 @@ module Custodian
           #
           @error = "OK: Timed out or connection refused on #{@host} with status #{@status}"
           return !@inverted if @inverted
-          return @inverted if !@inverted          
+          return @inverted if !@inverted
         end
 
       end
