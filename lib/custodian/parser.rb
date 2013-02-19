@@ -254,6 +254,32 @@ module Custodian
       return nil if ( ( line.nil? ) || ( line =~ /^#/ ) || ( line.length < 1 ) )
 
       #
+      # Look for a time period.
+      #
+      if ( line =~ /between\s+([0-9]+)-([0-9]+)/i )
+        p_start = $1.dup.to_i
+        p_end   = $2.dup.to_i
+
+        #
+        #  Get the current hour.
+        #
+        hour = Time.now.hour
+
+        #
+        #  Should we exclude the test?
+        #
+        if ( line =~ /except\s+between/i )
+          if ( hour > p_start && hour < p_end )
+            return nil
+          end
+        else
+          if ( hour < p_start || hour > p_end )
+            return nil
+          end
+        end
+      end
+
+      #
       #  Look for macro definitions, inline
       #
       if ( line =~ /^([0-9A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/ )

@@ -49,6 +49,13 @@ class TestCustodianParser < Test::Unit::TestCase
   end
 
 
+  def test_period
+    parser = Custodian::Parser.new()
+    result = parser.parse_line( "example.vm.bytemark.co.uk must run ping except between 00-24" )
+    assert( result.nil? )
+  end
+
+
 
   #
   #  Test the different kinds of parsing:
