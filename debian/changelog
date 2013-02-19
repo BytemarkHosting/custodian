@@ -1,3 +1,9 @@
+custodian (0.9-6) stable; urgency=low
+
+  * Initial implementation of time-period exclusions.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 19 Feb 2013 16:44:16 +0000
+
 custodian (0.9-5) stable; urgency=low
 
   * new release, updated LDAP probe to connect/bind/search.
