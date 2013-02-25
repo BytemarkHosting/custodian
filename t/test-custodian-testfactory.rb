@@ -87,6 +87,38 @@ class TestTestFactory < Test::Unit::TestCase
 
 
   #
+  # Test port-guessing.
+  #
+  def test_port_detection
+    data = {
+      "foo must run ftp." => "21",
+      "foo must run ssh." => "22",
+      "foo must run mysql otherwise 'alert'"   => "3306",
+      "foo must run redis otherwise 'alert'"   => "6379",
+      "foo must run mysql on 33 otherwise 'alert'"   => "33",
+    }
+
+    #
+    #  Run each test
+    #
+    data.each do |str,prt|
+      assert_nothing_raised do
+
+        obj = Custodian::TestFactory.create( str )
+
+        #
+        #  Ensure we got the object, and the port was correct.
+        #
+        assert(obj, "created object via TestFactory.create('#{str}')")
+        assert( obj.port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+      end
+    end
+
+  end
+
+
+
+  #
   # Test the rsync-test creation.
   #
   def test_rsync_uri
