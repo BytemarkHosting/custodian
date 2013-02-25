@@ -30,7 +30,34 @@ class TestAlertFactory < Test::Unit::TestCase
     #
     # Ensure we can create each of the two alert types we care about
     #
-    %w( file mauve redis smtp ).each do |name|
+    methods = Array.new()
+    methods.push( "file" )
+    methods.push( "smtp" )
+
+    #
+    # Mauve + Redis are optional
+    #
+    redis = true
+    mauve = true
+
+    begin
+      require 'rubygems'
+      require 'redis'
+    rescue LoadError => ex
+      redis = false
+    end
+
+    begin
+      require 'mauve/sender'
+      require 'mauve/proto'
+    rescue LoadError => ex
+      mauve = false
+    end
+
+    methods.push( "redis" ) if ( redis )
+    methods.push( "mauve" ) if ( mauve )
+
+    methods.each do |name|
 
       #
       #  Use the factory to instantiate the correct object.
