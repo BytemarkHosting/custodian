@@ -1,3 +1,10 @@
+custodian (0.9-7) stable; urgency=low
+
+  * Updated the HTTP-parser to specify whether we follow redirects or not.
+  * Expose the beanstalkd tube name to the various scripts.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 23 Apr 2013 11:33:11 +0000
+
 custodian (0.9-6) stable; urgency=low
 
   * Initial implementation of time-period exclusions.
