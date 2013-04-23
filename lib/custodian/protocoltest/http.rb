@@ -59,6 +59,12 @@ module Custodian
 
 
         #
+        # Will we follow redirects?
+        #
+        @redirect = true
+
+
+        #
         #  Ensure we've got a HTTP/HTTPS url.
         #
         if ( @url !~ /^https?:/ )
@@ -119,12 +125,17 @@ module Custodian
           @expected_content = nil
         end
 
+        #
+        # Do we follow redirects?
+        #
+        if ( line =~ /not following redirects?/i )
+          @redirect = false
+        end
       end
 
 
       #
-      #  Get the right type of this object, based on the
-      # URL
+      #  Get the right type of this object, based on the URL
       #
       def get_type
         if ( @url =~ /^https:/ )
@@ -135,6 +146,15 @@ module Custodian
           raise ArgumentError, "URL isn't http/https: #{@url}"
         end
       end
+
+
+      #
+      #  Do we follow redirects?
+      #
+      def follow_redirects?
+        @redirect
+      end
+
 
       #
       # Allow this test to be serialized.
@@ -167,8 +187,15 @@ module Custodian
           timeout( 20 ) do
             begin
               c = Curl::Easy.new(@url)
-              c.follow_location = true
-              c.max_redirects   = 10
+
+              #
+              # Should we follow redirections?
+              #
+              if ( follow_redirects? )
+                c.follow_location = true
+                c.max_redirects   = 10
+              end
+
               c.ssl_verify_host = false
               c.ssl_verify_peer = false
               c.timeout         = 20

@@ -275,6 +275,43 @@ EOF
   end
 
 
+  #
+  # Test that the parser works for HTTP-redirection
+  #
+  def test_http_redirection
+
+    #
+    # test data
+    #
+    data = {
+      "http://example must run http."                         => true,
+      "http://example must run http with status 200."         => true,
+      "http://example must run http with content 'bar'."      => true,
+      "http://example must run http following redirects."     => true,
+      "http://example must run http not following redirects." => false,
+      "http://example must run http not following redirect."  => false,
+    }
+
+    data.each do |str,follow|
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create( str )
+
+        assert(obj)
+
+        if ( follow )
+          assert( obj.follow_redirects? )
+        else
+          assert( ! obj.follow_redirects? )
+        end
+      end
+    end
+  end
+
+
 
   #
   # Test that the text we're going to use in alerters is present.
