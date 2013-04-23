@@ -101,6 +101,16 @@ module Custodian
     end
 
 
+    #
+    # The name of the beanstalkd tube we'll use
+    #
+    def queue_name
+      _load() unless( _loaded? )
+
+      @settings['queue_name'] || "Custodian"
+    end
+
+
 
 
     #
