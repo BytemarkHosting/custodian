@@ -72,10 +72,10 @@ module Custodian
     #
     # Constructor: Connect to the queue
     #
-    def initialize( server, alerter, logfile, settings )
+    def initialize( server, queue, alerter, logfile, settings )
 
       # Connect to the queue
-      @queue = Beanstalk::Pool.new([server], "Custodian" )
+      @queue = Beanstalk::Pool.new([server], queue )
 
       # Get the alerter-type to instantiate
       @alerter = alerter
