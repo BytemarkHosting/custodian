@@ -71,8 +71,10 @@ if __FILE__ == $0 then
   #
   settings = Custodian::Settings.instance()
   $SERVER  = settings.queue_server
+  $QUEUE   = settings.queue_name
   $ALERTER = settings.alerter
   $LOGFILE = settings.log_file
+
 
   begin
     opts = GetoptLong.new(
@@ -80,6 +82,7 @@ if __FILE__ == $0 then
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--fail",    "-f", GetoptLong::NO_ARGUMENT  ],
                           [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
+                          [ "--queue",   "-q", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--alerter", "-a", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
@@ -93,6 +96,8 @@ if __FILE__ == $0 then
           $LOGFILE = arg
       when "--server" then
           $SERVER = arg
+      when "--queue" then
+          $QUEUE = arg
       when "--alerter" then
           $ALERTER = arg
       when "--single" then
@@ -144,7 +149,7 @@ if __FILE__ == $0 then
   #
   #  Create the object
   #
-  worker = Custodian::Worker.new( $SERVER, $ALERTER, $LOGFILE, settings )
+  worker = Custodian::Worker.new( $SERVER, $QUEUE, $ALERTER, $LOGFILE, settings )
 
 
   #
