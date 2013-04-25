@@ -30,8 +30,8 @@ module Custodian
       # Raise an alert by email.
       #
       def raise
-        subject = "#{test.target} failed #{test.get_type}-test - #{test.error()}"
-        body    = "The alert has cleared\nRegards\n";
+        subject = "#{test.target} alert #{test.get_type}-test - #{test.error()}"
+        body    = "The alert has raised, with the following details:\n#{test.error()}\nRegards\n";
 
         _send_mail( @target, subject, body )
       end
@@ -42,8 +42,8 @@ module Custodian
       # Clear an alert by email.
       #
       def clear
-        subject = "#{test.target} failed #{test.get_type}-test"
-        body    = "The alert has raised, with the following details:\n#{test.error()}\nRegards\n";
+        subject = "#{test.target} cleared #{test.get_type}-test"
+        body    = "The alert has cleared\nRegards\n";
 
         _send_mail( @target, subject, body )
       end
