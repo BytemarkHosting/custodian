@@ -144,9 +144,8 @@ module Custodian
           timeout(30) do
             begin
               socket = TCPSocket.new( host, port )
-              socket.puts( "QUIT")
 
-              # read a banner from the remote server
+              # read a banner from the remote server, if we're supposed to.
               read = nil
               read = socket.gets(nil) if ( do_read )
 
