@@ -1,3 +1,9 @@
+custodian (0.9-8) stable; urgency=low
+
+  * Use .sysread() in the tcp.rb protocol tester.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 13 May 2013 16:44:11 +0000
+
 custodian (0.9-7) stable; urgency=low
 
   * Updated the HTTP-parser to specify whether we follow redirects or not.
