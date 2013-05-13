@@ -147,7 +147,7 @@ module Custodian
 
               # read a banner from the remote server, if we're supposed to.
               read = nil
-              read = socket.gets(1024) if ( do_read )
+              read = socket.sysread(1024) if ( do_read )
 
               # trim to a sane length & strip newlines.
               read = read[0,255] unless ( read.nil? )
