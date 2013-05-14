@@ -97,7 +97,7 @@ module Custodian
     def retries
       _load() unless( _loaded? )
 
-      @settings['retries' ] || 5
+      @settings['retries' ].to_i || 5
     end
 
 
@@ -107,7 +107,7 @@ module Custodian
     def retry_delay
       _load() unless( _loaded? )
 
-      @settings['retry_delay'] || 0
+      @settings['retry_delay'].to_i || 0
     end
 
 
