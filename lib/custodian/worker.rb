@@ -269,7 +269,7 @@ module Custodian
     end
 
     #
-    #  Log a test duration with each registered alerter.
+    #  Log the test duration with each registered alerter.
     #
     def do_duration( test, duration )
       @alerter.split( "," ).each do |alerter|
