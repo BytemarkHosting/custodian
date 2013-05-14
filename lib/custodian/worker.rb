@@ -198,7 +198,7 @@ module Custodian
           #  We delay before re-testing.
           #
           if ( @retry_delay > 0 )
-            puts "Sleeping for #{@retry_delay} seconds to allow cooldown"
+            puts "Sleeping for #{@retry_delay} seconds to allow cool-down"
             sleep( @retry_delay )
           end
         end
