@@ -54,6 +54,11 @@ module Custodian
     #
     attr_reader :retry_count
 
+    #
+    # Should we sleep between repeated tests?
+    #
+    attr_reader :retry_delay
+
 
     #
     # The log-file object
@@ -87,7 +92,10 @@ module Custodian
       @settings = settings
 
       # How many times to repeat a failing test
-      @retry_count=5
+      @retry_count=@settings.retries()
+
+      # Should we sleep between repeated tests?
+      @retry_delay = @settings.retry_delay()
 
     end
 
@@ -183,6 +191,16 @@ module Custodian
             success = true
           end
           count += 1
+
+          #
+          #  Some of our routers don't like being hammered.
+          #
+          #  We delay before re-testing.
+          #
+          if ( @retry_delay > 0 )
+            puts "Sleeping for #{@retry_delay} seconds to allow cooldown"
+            sleep( @retry_delay )
+          end
         end
 
         #
