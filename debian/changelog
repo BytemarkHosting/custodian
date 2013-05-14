@@ -1,3 +1,10 @@
+custodian (0.9-9) stable; urgency=low
+
+  * Allow the number of times to repeat a test to be read from the config file.
+  * Allow a sleep between each test.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 14 May 2013 13:44:31 +0000
+
 custodian (0.9-8) stable; urgency=low
 
   * Use .sysread() in the tcp.rb protocol tester.
