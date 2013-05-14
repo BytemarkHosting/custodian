@@ -90,6 +90,26 @@ module Custodian
 
 
 
+    #
+    # The number of times to re-execute a test before
+    # considering it is failed.
+    #
+    def retries
+      _load() unless( _loaded? )
+
+      @settings['retries' ] || 5
+    end
+
+
+    #
+    #  Should we sleep before repeating tests?
+    #
+    def retry_delay
+      _load() unless( _loaded? )
+
+      @settings['retry_delay'] || 0
+    end
+
 
     #
     # The beanstalkd server address
