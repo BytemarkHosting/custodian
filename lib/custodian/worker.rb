@@ -175,7 +175,7 @@ module Custodian
         #
         #  We stop the execution on a single success.
         #
-        while ( ( count < @retry_count ) && ( result == false ) )
+        while ( ( count < ( @retry_count + 1 ) ) && ( result == false ) )
 
           log_message( "Running test - [#{count}/#{@retry_count}]" )
 
@@ -190,17 +190,25 @@ module Custodian
             do_clear( test )
             success = true
           end
-          count += 1
 
           #
           #  Some of our routers don't like being hammered.
           #
-          #  We delay before re-testing.
+          #  We delay before re-testing, but we only do this if
+          # we're not on the first count.
           #
-          if ( @retry_delay > 0 )
+          #  The intention here is that if the test passes then there will
+          # be no delay.  If the test fails then we'll sleep.
+          #
+          if ( ( @retry_delay > 0 ) && ( count != 1 ) )
             puts "Sleeping for #{@retry_delay} seconds to allow cool-down"
             sleep( @retry_delay )
           end
+
+          #
+          #  Increase count.
+          #
+          count += 1
         end
 
         #
