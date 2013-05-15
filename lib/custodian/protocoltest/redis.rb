@@ -9,7 +9,7 @@ require 'custodian/protocoltest/tcp'
 ### foo.vm.bytemark.co.uk must run redis otherwise 'memory database fail'.
 ###
 #
-#  The specification of the port is optional.
+#  The specification of the port is optional and defaults to 6379
 #
 module Custodian
 

@@ -7,7 +7,7 @@ require 'custodian/protocoltest/tcp'
 #  This object is instantiated if the parser sees a line such as:
 #
 ###
-### foo.vm.bytemark.co.uk must run smtp on 22 otherwise 'SMTP fail'.
+### foo.vm.bytemark.co.uk must run smtp otherwise 'SMTP fail'.
 ###
 #
 #  The specification of the port is optional and defaults to 25.
