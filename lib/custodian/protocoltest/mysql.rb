@@ -9,7 +9,7 @@ require 'custodian/protocoltest/tcp'
 ### foo.vm.bytemark.co.uk must run mysql otherwise 'database fail'.
 ###
 #
-#  The specification of the port is optional.
+#  The specification of the port is optional, and defaults to 3306.
 #
 module Custodian
 

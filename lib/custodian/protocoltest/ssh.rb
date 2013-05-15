@@ -6,10 +6,10 @@ require 'custodian/protocoltest/tcp'
 #  This object is instantiated if the parser sees a line such as:
 #
 ###
-### foo.vm.bytemark.co.uk must run ssh on 22 otherwise 'ssh fail'.
+### foo.vm.bytemark.co.uk must run ssh otherwise 'ssh fail'.
 ###
 #
-#  The specification of the port is optional.
+#  The specification of the port is optional, and defaults to 22.
 #
 module Custodian
 
