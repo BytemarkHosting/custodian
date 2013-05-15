@@ -201,7 +201,7 @@ module Custodian
           # be no delay.  If the test fails then we'll sleep.
           #
           if ( ( @retry_delay > 0 ) && ( count != 1 ) )
-            puts "Sleeping for #{@retry_delay} seconds to allow cool-down"
+            log_message( "Sleeping for #{@retry_delay} seconds to allow cool-down" )
             sleep( @retry_delay )
           end
 
@@ -238,7 +238,7 @@ module Custodian
         end
 
       rescue => ex
-        puts "Exception raised processing job: #{ex}"
+        log_message( "Exception raised processing job: #{ex}" )
 
       ensure
         #
@@ -265,7 +265,7 @@ module Custodian
 
         target = @settings.alerter_target( alerter )
         alert.set_target( target )
-        puts "Target for alert is #{target}"
+        log_message("Target for alert is #{target}")
 
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
@@ -285,7 +285,7 @@ module Custodian
 
         target = @settings.alerter_target( alerter )
         alert.set_target( target )
-        puts "Target for alert is #{target}"
+        log_message( "Target for alert is #{target}" )
 
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
@@ -304,7 +304,7 @@ module Custodian
 
         target = @settings.alerter_target( alerter )
         alert.set_target( target )
-        puts "Target for alert is #{target}"
+        log_message( "Target for alert is #{target}" )
 
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
