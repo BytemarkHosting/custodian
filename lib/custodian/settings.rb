@@ -3,7 +3,8 @@ require 'singleton'
 
 
 #
-# A class which encapsulates some global-settings from the custodian configuration file.
+# A class which encapsulates some global-settings which are read from the
+# global configuration file.
 #
 # The configuration file is optional, and we have defaults for every value.
 #
@@ -34,14 +35,14 @@ module Custodian
     #
     # Load the configuration file; called only once.
     #
-    def _load
+    def _load( file = "/etc/custodian/custodian.cfg" )
+
       @parsed   = true
       @settings = Hash.new()
 
       #
       # The global configuration file.
       #
-      file = "/etc/custodian/custodian.cfg"
       return unless( File.exists?( file ) )
 
       #
@@ -60,6 +61,15 @@ module Custodian
     end
 
 
+    #
+    #  Privately set the value for a named key.
+    #
+    #  Used by the test-suite.
+    #
+    def _store( key, val )
+      @settings[key] = val
+      @parsed = true
+    end
 
 
     #
@@ -80,19 +90,19 @@ module Custodian
 
 
     #
-    # The timeout period for all tests
+    # The timeout period for each individual test.
     #
     def timeout
       _load() unless( _loaded? )
 
-      @settings['timeout'] || 30
+      @settings['timeout'].to_i || 30
     end
 
 
 
     #
-    # The number of times to re-execute a test before
-    # considering it is failed.
+    # The number of times to re-execute a failing test
+    # before raising an alert.
     #
     def retries
       _load() unless( _loaded? )
@@ -102,7 +112,13 @@ module Custodian
 
 
     #
-    #  Should we sleep before repeating tests?
+    # When a test fails we repeat it up to five times.
+    #
+    # (The retries() method will return the number of repeats, but we default to five.)
+    #
+    # Here we configure a delay between those repeats.
+    #
+    # A delay of zero is permissable.
     #
     def retry_delay
       _load() unless( _loaded? )
@@ -129,7 +145,6 @@ module Custodian
 
       @settings['queue_name'] || "Custodian"
     end
-
 
 
 
