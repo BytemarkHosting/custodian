@@ -1,3 +1,5 @@
+
+require 'custodian/settings'
 require 'uri'
 
 
@@ -75,8 +77,14 @@ module Custodian
           return false
         end
 
+        #
+        # Get the timeout period for this test.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
         begin
-          timeout( 20 ) do
+          timeout( period ) do
             begin
               c = Curl::Easy.new()
               c.follow_location = true
@@ -86,7 +94,7 @@ module Custodian
               c.proxy_tunnel    = true
               c.url             = "http://google.com/"
               c.ssl_verify_peer = false
-              c.timeout         = 20
+              c.timeout         = period
               c.perform
               @status = c.response_code
               @content = c.body_str
