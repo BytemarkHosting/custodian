@@ -160,7 +160,7 @@ module Custodian
                 return true
               else
                 # test for banner
-                if ( ( !read.nil? ) && ( read =~ /#{banner}/i ) )
+                if ( ( !read.nil? ) && ( banner.match(read) ) )
                   return true
                 end
 

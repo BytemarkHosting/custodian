@@ -78,7 +78,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        run_test_internal( @host, @port, "@RSYNCD" )
+        run_test_internal( @host, @port, /^@RSYNCD/ )
       end
 
 
