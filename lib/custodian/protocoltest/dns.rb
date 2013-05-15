@@ -1,3 +1,4 @@
+require 'custodian/settings'
 require 'resolv'
 
 #
@@ -94,9 +95,15 @@ module Custodian
         @error = nil
 
         #
+        # Get the timeout period.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
+        #
         # Do the lookup
         #
-        results = resolve_via( @host,  @resolve_type, @resolve_name, 30 )
+        results = resolve_via( @host,  @resolve_type, @resolve_name, period )
         return false if ( results.nil? )
 
         #

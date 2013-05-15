@@ -1,4 +1,5 @@
 
+require 'custodian/settings'
 require 'custodian/testfactory'
 require 'socket'
 require 'timeout'
@@ -140,8 +141,15 @@ module Custodian
       #
       #
       def run_test_internal( host, port, banner = nil, do_read = true )
+
+        #
+        # Get the timeout period for this test.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
         begin
-          timeout(30) do
+          timeout(period) do
             begin
               socket = TCPSocket.new( host, port )
 
