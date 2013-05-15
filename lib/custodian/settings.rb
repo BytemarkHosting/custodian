@@ -95,7 +95,11 @@ module Custodian
     def timeout
       _load() unless( _loaded? )
 
-      @settings['timeout'].to_i || 30
+      if ( @settings['timeout'] )
+        @settings['timeout'].to_i
+      else
+        30
+      end
     end
 
 
@@ -107,7 +111,11 @@ module Custodian
     def retries
       _load() unless( _loaded? )
 
-      @settings['retries' ].to_i || 5
+      if ( @settings['retries'] )
+        @settings['retries'].to_i
+      else
+        5
+      end
     end
 
 
@@ -123,7 +131,11 @@ module Custodian
     def retry_delay
       _load() unless( _loaded? )
 
-      @settings['retry_delay'].to_i || 0
+      if ( @settings['retry_delay'] )
+        @settings['retry_delay'].to_i
+      else
+        0
+      end
     end
 
 
