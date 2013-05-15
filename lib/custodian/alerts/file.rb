@@ -2,7 +2,9 @@
 
 
 #
-#  The SMTP-alerter.
+#  The file-alerter.
+#
+#  This alert just writes events to a flat-file.
 #
 module Custodian
 
@@ -14,7 +16,6 @@ module Custodian
       # The test this alerter cares about
       #
       attr_reader :test
-
 
 
       #
@@ -34,9 +35,14 @@ module Custodian
       end
 
 
+      #
+      # Record the duration of the given test.
+      #
       def duration( seconds )
-        puts "XXX: #{seconds}"
+        write_message( "#{test.get_type}-test against #{test.target} took #{seconds}ms to complete" )
       end
+
+
       #
       # Record a clear event for the given test.
       #
