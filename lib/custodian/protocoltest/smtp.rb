@@ -74,7 +74,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        run_test_internal( @host, @port, /^220/ )
+        run_test_internal( @host, @port, /^220/, true )
       end
 
 
