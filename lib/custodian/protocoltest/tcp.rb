@@ -172,14 +172,14 @@ module Custodian
                 # test for banner
 
                 # regexp.
-                if ( banner.class == "Regexp" )
+                if ( banner.kind_of? Regexp )
                   if ( ( !read.nil? ) && ( banner.match(read) ) )
                     return true
                   end
                 end
 
                 # string.
-                if ( banner.class == "String" )
+                if ( banner.kind_of? String )
                   if ( ( !read.nil? ) && ( read =~ /#{banner}/i ) )
                     return true
                   end
