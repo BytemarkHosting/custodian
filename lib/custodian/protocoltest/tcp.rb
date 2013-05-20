@@ -158,8 +158,10 @@ module Custodian
               read = socket.sysread(1024) if ( do_read )
 
               # trim to a sane length & strip newlines.
-              read = read[0,255] unless ( read.nil? )
-              read.gsub!(/[\n\r]/, "") unless ( read.nil? )
+              if ( ! read.nil? )
+                read = read[0,255]
+                read.gsub!(/[\n\r]/, "")
+              end
 
               socket.close()
 
@@ -168,8 +170,19 @@ module Custodian
                 return true
               else
                 # test for banner
-                if ( ( !read.nil? ) && ( banner.match(read) ) )
-                  return true
+
+                # regexp.
+                if ( banner.class == "Regexp" )
+                  if ( ( !read.nil? ) && ( banner.match(read) ) )
+                    return true
+                  end
+                end
+
+                # string.
+                if ( banner.class == "String" )
+                  if ( ( !read.nil? ) && ( read =~ /#{banner}/i ) )
+                    return true
+                  end
                 end
 
                 @error = "We expected a banner matching '#{banner}' but we got '#{read}'"
