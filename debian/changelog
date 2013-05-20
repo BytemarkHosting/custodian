@@ -1,3 +1,10 @@
+custodian (0.10-1) stable; urgency=low
+
+  * New release; defaulting to not reading from TCP-sockets for the generic
+    test.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 20 May 2013 16:11:16 +0000
+
 custodian (0.9-9) stable; urgency=low
 
   * Allow the number of times to repeat a test to be read from the config file.
