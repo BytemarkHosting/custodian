@@ -140,7 +140,7 @@ module Custodian
       # send the string "quit".
       #
       #
-      def run_test_internal( host, port, banner = nil, do_read = true )
+      def run_test_internal( host, port, banner = nil, do_read = false )
 
         #
         # Get the timeout period for this test.
