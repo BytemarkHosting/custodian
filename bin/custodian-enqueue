@@ -178,7 +178,17 @@ if __FILE__ == $0 then
     elsif ( ENV['DUMP'] )
       puts test
     else
-      queue.put( test.to_s )
+
+      # priority of new job.
+      priority = 1000
+
+      # delay before putting into queue.
+      delay    = 0
+
+      # time-to-remove: how long job.reserve() will live for.
+      ttr      = 300
+
+      queue.put( test.to_s, priority, delay, ttr )
     end
   end
 
