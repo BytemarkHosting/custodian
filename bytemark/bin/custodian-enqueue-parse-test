@@ -1,16 +1,48 @@
 #!/bin/sh
 #
-# Parse the two configuration files we use, and alert if there
-# is a failure.
+# Parse the configuration files we use, and alert if there is a failure.
 #
+# Steve
+# --
 
+
+
+#
+#  Find the hostname of the mauve-server to alert against
+#
+if [ -e /etc/custodian/custodian.cfg ] ; then
+    alert=$(grep ^mauve_target /etc/custodian/custodian.cfg 2>/dev/null | awk -F= '{print $2}' )
+fi
+
+
+#
+#  If we didn't find one then we'll use the default.
+#
+if [ -z "$alert" ]; then
+    alert=alert.bytemark.co.uk
+fi
+
+
+#
+#  For each file.
+#
 for file in bytemark.cfg managed-clients.cfg ; do
 
-   if ( ! custodian-enqueue --test --file /etc/custodian/$file >/dev/null 2>/dev/null );  then
-       mauvesend alert.bytemark.co.uk -i custodian-enqueue-$file -r now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
-   else
-       mauvesend alert.bytemark.co.uk -i custodian-enqueue-$file -c now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
+    #
+    #  If we cannot parse ..
+    #
+    if ( ! custodian-enqueue --test --file /etc/custodian/$file >/dev/null 2>/dev/null );  then
 
-   fi
+        #
+        #  Raise an alert.
+        #
+        mauvesend $alert -i custodian-enqueue-$file -r now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
+    else
+
+        #
+        #  Otherwise clear any prior alert.
+        #
+        mauvesend $alert -i custodian-enqueue-$file -c now -s "Parse failure from custodian-enqueue against $file." --detail="<p>The file was not added to the queue successfully due to syntax error.  Please fix.</p>"
+    fi
 
 done

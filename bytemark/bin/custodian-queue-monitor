@@ -9,13 +9,42 @@
 
 
 #
+#  Find the hostname of the mauve-server to alert against
+#
+if [ -e /etc/custodian/custodian.cfg ] ; then
+    alert=$(grep ^mauve_target /etc/custodian/custodian.cfg 2>/dev/null | awk -F= '{print $2}' )
+fi
+
+
+#
+#  If we didn't find one then we'll use the default.
+#
+if [ -z "$alert" ]; then
+    alert=alert.bytemark.co.uk
+fi
+
+
+#
 # Maximum queue size.
 #
 max=5000
 
 
+
+#
+#  If the queu is too large.
+#
 if ( custodian-queue --monitor=$max ) ; then
-    mauvesend alert.bytemark.co.uk -i custodian -c now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
+
+    #
+    #  Raise an alert
+    #
+    mauvesend $alert -i custodian -c now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
+
 else
-    mauvesend alert.bytemark.co.uk -i custodian -r now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
+
+    #
+    #  Otherwise clear any prior alert.
+    #
+    mauvesend $alert -i custodian -r now -s "Our custodian queue is too full" --detail="<p>The custodian queue doesn't seem to be emptying [alert threshold is $max].</p><p>Is there a bug, or do we need to add more workers? See https://wiki.bytemark.co.uk/Main/CustodianMonitoring</p>"
 fi
