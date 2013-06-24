@@ -24,6 +24,49 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   end
 
   #
+  #  Test the expansion of "obvious" hour-specifiers.
+  #
+  def test_to_hour
+
+    for hour in 0..23
+      assert_equal( hour, Custodian::Util::TimeSpan::to_hour(hour))
+    end
+
+    #
+    #  Invalid hours will throw exceptions
+    #
+    assert_raise ArgumentError do
+      result = Custodian::Util::TimeSpan.to_hour( 0.5 )
+    end
+    assert_raise ArgumentError do
+      result = Custodian::Util::TimeSpan.to_hour( -1 )
+    end
+    assert_raise ArgumentError do
+      result = Custodian::Util::TimeSpan.to_hour( 100 )
+    end
+    assert_raise ArgumentError do
+      result = Custodian::Util::TimeSpan.to_hour( 24 )
+    end
+    assert_raise ArgumentError do
+      result = Custodian::Util::TimeSpan.to_hour( 25 )
+    end
+
+    #
+    #  Ensure AM times work well
+    #
+    for hour in 0..11
+      assert_equal( hour, Custodian::Util::TimeSpan::to_hour( "#{hour}am"))
+    end
+
+    for hour in 0..11
+      assert_equal( 12 +hour, Custodian::Util::TimeSpan::to_hour( "#{hour}pm"))
+    end
+
+  end
+
+
+  #
+  #
   #  Ensure we received errors if the start/end hours are under/over 24
   #
   def test_excessive_hours
@@ -161,6 +204,27 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     for i in 0..23
       assert( Custodian::Util::TimeSpan.inside?( 0, 23, i ) )
     end
+  end
+
+  #
+  #  Test that we don't wrap-around unexpectedly.
+  #
+  #
+  #  i.e. "between 00-00" is one hour, not 24.
+  #
+  def test_wrap_around
+
+    for h in 00..23
+      assert_equal( 1, Custodian::Util::TimeSpan::to_hours( h,h ).size() )
+    end
+
+    #
+    #  But the time-period 00-23 is a full day
+    #
+    assert_equal( 24,
+                  Custodian::Util::TimeSpan::to_hours( 0,23 ).size() )
 
   end
+
+
 end
