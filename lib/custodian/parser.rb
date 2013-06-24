@@ -5,7 +5,7 @@ require 'uri'
 
 
 #
-# This list of all our protocol tests.
+# The list of all our protocol tests.
 #
 require 'custodian/protocoltests'
 
