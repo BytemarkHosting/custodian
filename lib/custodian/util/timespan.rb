@@ -9,67 +9,60 @@ module Custodian
     #
     class TimeSpan
 
+
       #
-      #  Given a starting hour such as 10pm and and ending hour such as 4am
-      # see if the current hour is inside that range.
+      # Convert an hour-string into a sane integer.
       #
-      def TimeSpan.inside?( p_start, p_end, cur_hour = nil)
+      def TimeSpan.to_hour( desc )
 
         #
-        #  If we don't have an hour specified then use the current one.
+        #  Handle PM times.
         #
-        if ( cur_hour.nil? )
-          cur_hour = Time.now.hour
-        end
-
-        #
-        #  Convert "XXPM" to appropriate 24-hour based integers
-        #
-        if ( ( p_start.kind_of? String ) && ( p_start =~ /([0-9]+)pm$/i ) )
-          p_start = $1.dup.to_i + 12;
-        end
-        if ( ( p_end.kind_of? String ) && ( p_end =~ /([0-9]+)pm$/i ) )
-          p_end = $1.dup.to_i + 12;
-        end
-        if ( ( cur_hour.kind_of? String ) && ( cur_hour =~ /([0-9]+)pm$/i ) )
-          cur_hour = $1.dup.to_i + 12;
+        if ( ( desc.kind_of? String ) &&
+             ( desc =~ /([0-9]+)pm$/i ) )
+          desc = $1.dup.to_i + 12;
         end
 
         #
-        #  If we have AM suffixes then strip them
+        #  Handle AM times.
         #
-        if ( p_start.kind_of? String )
-          p_start = p_start.sub( /am$/, '' )
-          p_start = p_start.to_i
+        if ( desc.kind_of? String )
+          desc = desc.sub( /am$/, '' )
+          desc = desc.to_i
         end
-        if ( p_end.kind_of? String )
-          p_end = p_end.sub( /am$/, '' )
-          p_end = p_end.to_i
-        end
-        if ( cur_hour.kind_of? String )
-          cur_hour = cur_hour.sub( /am$/, '' )
-          cur_hour = cur_hour.to_i
-        end
+
+        #
+        #  Ensure within a valid range
+        #
+        raise ArgumentError, "Integer required for time"   unless( desc.kind_of? Integer )
+        raise ArgumentError,  "Invalid time: #{desc}" unless( ( desc >= 0 ) && ( desc <= 23 ) )
 
 
         #
-        #  Ensure we're now left with integer values.
+        # Return the updated string.
         #
-        raise ArgumentError, "Integer required for start time"   unless( p_start.kind_of? Integer )
-        raise ArgumentError,  "Integer required for end time"     unless( p_end.kind_of? Integer )
-        raise ArgumentError,  "Integer required for current hour" unless( cur_hour.kind_of? Integer )
+        desc
+      end
 
-        #
-        #  Ensure the values have appropriate bounds.
-        #
-        raise ArgumentError,  "Invalid start time"   unless( ( p_start >= 0 ) && ( p_start <= 23 ) )
-        raise ArgumentError,  "Invalid end time"     unless( ( p_end >= 0 ) && ( p_end <= 23 ) )
-        raise ArgumentError,  "Invalid current time" unless( ( cur_hour >= 0 ) && ( cur_hour <= 23 ) )
+
+
+
+      #
+      # Given a start/end string convert that
+      # to a hash of hours which are inside the
+      # range - inclusively.
+      #
+      def TimeSpan.to_hours( p_start, p_end )
+
+        p_start = Custodian::Util::TimeSpan::to_hour(p_start)
+        p_end   = Custodian::Util::TimeSpan::to_hour(p_end)
+
 
         #
         #  Valid hours, within the span
         #
         valid = {}
+
 
         #
         #  Iterate over the hours.  Store in a hash.
@@ -82,7 +75,45 @@ module Custodian
         end
         valid[p_end]=1
 
-        # now do the test.
+        #
+        #  Return the hash
+        #
+        valid
+      end
+
+
+
+
+      #
+      # Given a starting hour, such as 10pm, and an ending hour,
+      # such as 4am, test whether a time is within that period.
+      #
+      def TimeSpan.inside?( p_start, p_end, cur_hour = nil)
+
+        #
+        # Default to the current hour, if not specified.
+        #
+        if ( cur_hour.nil? )
+          cur_hour = Time.now.hour
+        end
+
+        #
+        # Ensure all values are sane and reasonable.
+        #
+        p_start  = Custodian::Util::TimeSpan::to_hour(p_start)
+        p_end    = Custodian::Util::TimeSpan::to_hour(p_end)
+        cur_hour = Custodian::Util::TimeSpan::to_hour(cur_hour)
+
+        #
+        #  Get the expanded hours
+        #
+        valid =
+          Custodian::Util::TimeSpan::to_hours( p_start, p_end )
+
+        #
+        # Lookup to see if the specified hour is within the
+        # hours between the range.
+        #
         ( valid[cur_hour] == 1 )
       end
 
