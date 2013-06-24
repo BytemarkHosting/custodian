@@ -1,5 +1,4 @@
 
-require 'ldap'
 
 #
 #  The LDAP-protocol test.
@@ -75,7 +74,6 @@ module Custodian
 
 
 
-
       #
       # Allow this test to be serialized.
       #
@@ -90,6 +88,13 @@ module Custodian
       # Run the test.
       #
       def run_test
+
+        begin
+          require 'ldap'
+        rescue LoadError
+          @error = "LDAP library not available - test disabled"
+          return false
+        end
 
         # reset the error, in case we were previously executed.
         @error = nil
@@ -145,8 +150,6 @@ module Custodian
     register_test_type "ldap"
 
 
-
-
+    end
   end
-end
 end
