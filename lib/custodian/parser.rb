@@ -5,10 +5,10 @@ require 'uri'
 
 
 #
-# The list of all our protocol tests.
+# The modules we've implemented
 #
 require 'custodian/protocoltests'
-
+require 'custodian/util/timespan'
 
 
 
@@ -257,6 +257,10 @@ module Custodian
       # Look for a time period.
       #
       if ( line =~ /between\s+([0-9]+)-([0-9]+)/i )
+
+        #
+        #  The starting/ending hours.
+        #
         p_start = $1.dup.to_i
         p_end   = $2.dup.to_i
 
@@ -266,16 +270,17 @@ module Custodian
         hour = Time.now.hour
 
         #
+        #  Does the hour match the period?
+        #
+        inside = Custodian::Util::TimeSpan.inside?( p_start, p_end, hour )
+
+        #
         #  Should we exclude the test?
         #
         if ( line =~ /except\s+between/i )
-          if ( hour > p_start && hour < p_end )
-            return nil
-          end
+          return nil if ( inside )
         else
-          if ( hour < p_start || hour > p_end )
-            return nil
-          end
+          return nil if ( ! inside )
         end
       end
 
