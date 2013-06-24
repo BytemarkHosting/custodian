@@ -1,5 +1,6 @@
 
 
+require 'custodian/settings'
 require 'ipaddr'
 require 'socket'
 require 'timeout'
@@ -21,8 +22,15 @@ module Custodian
       #
       def DNS.ip_to_hostname( ip )
         resolved = nil
+
+        #
+        # Get the timeout period.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
         begin
-          timeout( 4 ) do
+          timeout( period ) do
             begin
               Socket.getaddrinfo(ip, 'echo').each do |a|
                 resolved = a[2] if ( a )
@@ -45,8 +53,14 @@ module Custodian
 
         resolved = nil
 
+        #
+        # Get the timeout period.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
         begin
-          timeout( 4 ) do
+          timeout( period ) do
             begin
               Socket.getaddrinfo(hostname, 'echo').each do |a|
                 resolved = a[3] if ( a )
