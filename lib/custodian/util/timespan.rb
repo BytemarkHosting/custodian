@@ -78,7 +78,7 @@ module Custodian
         while( hour != p_end )
           valid[hour] = 1
           hour += 1
-          hour  = 0 if ( hour >= 23 )
+          hour  = 0 if ( hour > 23 )
         end
         valid[p_end]=1
 

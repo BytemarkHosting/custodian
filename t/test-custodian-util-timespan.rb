@@ -150,4 +150,17 @@ class TestTimeSpanUtil < Test::Unit::TestCase
 
   end
 
+
+  #
+  #  Since the implementation of our test involves
+  # iterating over the specified period then any 24-hour
+  # period is the worst case.
+  #
+  #
+  def test_worst()
+    for i in 0..23
+      assert( Custodian::Util::TimeSpan.inside?( 0, 23, i ) )
+    end
+
+  end
 end
