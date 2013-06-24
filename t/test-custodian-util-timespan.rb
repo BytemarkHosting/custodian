@@ -39,17 +39,27 @@ class TestTimeSpanUtil < Test::Unit::TestCase
       assert_raise ArgumentError do
         result = Custodian::Util::TimeSpan.inside?( 1, i )
       end
+
+      assert_raise ArgumentError do
+        result = Custodian::Util::TimeSpan.inside?( 1, 2, i )
+      end
     end
 
     #
     #  Now negative values.
     #
     for i in 1..50
+
       assert_raise ArgumentError do
         result = Custodian::Util::TimeSpan.inside?( 1, ( -1 * i ) )
       end
+
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?(  ( -1 * i ), 1 )
+        result = Custodian::Util::TimeSpan.inside?( ( -1 * i ), 1 )
+      end
+
+      assert_raise ArgumentError do
+        result = Custodian::Util::TimeSpan.inside?( 1, 1, ( -1 * i ) )
       end
     end
 
