@@ -181,6 +181,16 @@ module Custodian
 
 
     #
+    # The alert-source we send.  Only used when the notifier is set to mauve.
+    #
+    def alert_source
+      _load() unless( _loaded? )
+
+      @settings['alert_source'] || "Custodian"
+    end
+
+
+    #
     # The target for the alert.
     #
     # When the alerter is "smtp" the target is the mail address.
