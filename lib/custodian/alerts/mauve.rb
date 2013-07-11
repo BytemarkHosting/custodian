@@ -69,7 +69,7 @@ module Custodian
         #
         update         = Mauve::Proto::AlertUpdate.new
         update.alert   = []
-        update.source  = "custodian"
+        update.source  = @settings.alert_source()
         update.replace = false
 
         #
@@ -151,7 +151,7 @@ module Custodian
         #
         update = Mauve::Proto::AlertUpdate.new
         update.alert   = []
-        update.source  = "custodian"
+        update.source  = @settings.alert_source()
         update.replace = false
 
         #
