@@ -195,12 +195,12 @@ module Custodian
           #  Some of our routers don't like being hammered.
           #
           #  We delay before re-testing, but we only do this if
-          # we're not on the first count.
+          # we're not on the last count.
           #
           #  The intention here is that if the test passes then there will
           # be no delay.  If the test fails then we'll sleep.
           #
-          if ( ( @retry_delay > 0 ) && ( count != 1 ) )
+          if ( ( result == false ) && ( @retry_delay > 0 ) && ( count < @retry_count ) )
             log_message( "Sleeping for #{@retry_delay} seconds to allow cool-down" )
             sleep( @retry_delay )
           end
