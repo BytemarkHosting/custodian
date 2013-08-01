@@ -1,3 +1,10 @@
+custodian (0.10-5) stable; urgency=low
+
+  * Updated cool-off period to occur after all but the last test, if the test
+    fails.
+
+ -- Patrick J Cherry <patrick@bytemark.co.uk>  Thu, 01 Aug 2013 14:21:03 +0100
+
 custodian (0.10-4) stable; urgency=low
 
   * Correctly specify the Bytemark IPv6 ranges.
