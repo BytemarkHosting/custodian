@@ -12,6 +12,7 @@
 #
 require 'custodian/protocoltest/tcp'
 require 'custodian/protocoltest/dns'
+require 'custodian/protocoltest/dnsbl'
 require 'custodian/protocoltest/ftp'
 require 'custodian/protocoltest/http'
 require 'custodian/protocoltest/jabber'
