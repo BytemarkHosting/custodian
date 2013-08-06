@@ -34,9 +34,9 @@ module Custodian
         raise ArgumentError, "The target must be an IP address" unless( @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ )
 
         #
-        # Save the host we're testing against
+        # See which blacklist(s) we're testing against.
         #
-        if ( line =~ /via\s+([0-9]+)/ )
+        if ( line =~ /via\s+([^\s]+)\s+/ )
           @zones = $1.dup
         else
           @zones = "zen.spamhaus.org"
@@ -82,6 +82,7 @@ module Custodian
           # 4.3.2.1.$zone
           #
           if ( @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ )
+
             name = "#{$4}.#{$3}.#{$2}.#{$1}.#{zone}"
 
             result = Custodian::Util::DNS.hostname_to_ip( name )
@@ -91,8 +92,10 @@ module Custodian
               return true
             end
 
+          else
+             @error "#{@host} wasn't an IP address"
+             return true
           end
-          #
         end
 
         return false
