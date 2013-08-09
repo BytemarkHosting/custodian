@@ -1,3 +1,9 @@
+custodian (0.10-6) stable; urgency=low
+
+  * New release to include the dnsbl check.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 09 Aug 2013 10:00:01 +0000
+
 custodian (0.10-5) stable; urgency=low
 
   * Updated cool-off period to occur after all but the last test, if the test
