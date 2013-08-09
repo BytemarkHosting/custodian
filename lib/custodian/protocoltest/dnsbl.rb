@@ -93,7 +93,7 @@ module Custodian
             end
 
           else
-             @error "#{@host} wasn't an IP address"
+             @error = "#{@host} wasn't an IP address"
              return true
           end
         end
