@@ -55,7 +55,7 @@ module Custodian
         #
         #  The key we'll send
         #
-        str  = "#{host}-#{test}"
+        str  = "#{test}-#{host}"
         str.gsub!(/\\\./, "-")
         str  = "monitor.#{str}"
 
