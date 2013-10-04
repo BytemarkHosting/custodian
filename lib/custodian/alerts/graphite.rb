@@ -59,7 +59,7 @@ module Custodian
         str.gsub!(/\\\./, "-")
         str  = "monitor.#{str}"
 
-        system( "/bin/echo '#{str} #{ms} #{Time.now.to_i}' | nc localhost 2003" )
+        system( "/bin/echo '#{str} #{ms} #{Time.now.to_i}' | nc localhost 2003 -q1" )
       end
 
       register_alert_type "graphite"
