@@ -56,7 +56,7 @@ module Custodian
         #  The key we'll send
         #
         str  = "#{test}-#{host}"
-        str.gsub!(/\\\./, "-")
+        str.gsub!(/[\/\\.]/, "-")
         str  = "monitor.#{str}"
 
         system( "/bin/echo '#{str} #{ms} #{Time.now.to_i}' | nc localhost 2003 -q1" )
