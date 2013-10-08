@@ -1,8 +1,11 @@
+require 'socket'
+
 #
 #  The graphite-alerter.
 #
-#  This only exists to record timing durations in the local graphite/carbon
-# instance.
+#  This only exists to record timing durations in the local
+# graphite/carbon instance.  Updates are sent via UDP
+# to localhost:2003.
 #
 module Custodian
 
@@ -50,16 +53,22 @@ module Custodian
         # hostname + test-type
         #
         host = @test.target
+        host.gsub!(/[\/\\.]/, "_")
         test = @test.get_type
 
         #
-        #  The key we'll send
+        # The payload
         #
-        str  = "#{test}-#{host}"
-        str.gsub!(/[\/\\.]/, "-")
-        str  = "monitor.#{str}"
+        str  = "#{test}.#{host}"
+        payload = "monitor.#{str} #{ms} #{Time.now.to_i}"
 
-        system( "/bin/echo '#{str} #{ms} #{Time.now.to_i}' | nc localhost 2003 -q1" )
+        #
+        #  Send via UDP.
+        #
+	socket = UDPSocket.new()
+	socket.send( payload, 0, "localhost", 2003 );
+	socket.close()
+
       end
 
       register_alert_type "graphite"
