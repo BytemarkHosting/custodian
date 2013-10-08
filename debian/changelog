@@ -1,3 +1,9 @@
+custodian (0.10-9) stable; urgency=low
+
+  * Add ?ctime=XX to all URL-probes, to break caching.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 08 Oct 2013 14:13:12 +0000
+
 custodian (0.10-8) stable; urgency=low
 
   * Send graphite updates via UDP to localhost:2003.

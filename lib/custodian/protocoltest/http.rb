@@ -191,10 +191,28 @@ module Custodian
         settings = Custodian::Settings.instance()
         period   = settings.timeout()
 
+        #
+        # The URL we'll fetch, which has a cache-busting
+        # query-string
+        #
+        test_url = @url
+
+        #
+        #  Parse and append a query-string if not present.
+        #
+        u = URI.parse( test_url )
+        if ( ! u.query )
+          u.query   = "ctime=#{Time.now.to_i}"
+          test_url  = u.to_s
+        end
+
+
         begin
           timeout( period ) do
             begin
-              c = Curl::Easy.new(@url)
+
+
+              c = Curl::Easy.new(test_url)
 
               #
               # Should we follow redirections?
