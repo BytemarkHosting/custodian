@@ -314,6 +314,43 @@ EOF
 
 
   #
+  # Test that the parser works for cache-busting.
+  #
+  def test_http_cache_busting
+
+    #
+    # test data
+    #
+    data = {
+      "http://example must run http."                         => true,
+      "http://example must run http with status 200."         => true,
+      "http://example must run http with content 'bar'."      => true,
+      "http://example must run http without cache busting."   => false,
+    }
+
+    data.each do |str,cb|
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create( str )
+
+        assert(obj)
+
+        if ( cb )
+          assert( obj.cache_busting? )
+        else
+          assert( ! obj.cache_busting? )
+        end
+      end
+    end
+  end
+
+
+
+
+  #
   # Test that the text we're going to use in alerters is present.
   #
   def test_alert_text
