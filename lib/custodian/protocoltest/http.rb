@@ -133,6 +133,17 @@ module Custodian
         if ( line =~ /not following redirects?/i )
           @redirect = false
         end
+
+        #
+        # Do we use cache-busting?
+        #
+        @cache_busting = true
+        if ( line =~ /with\s+cache\s+busting/ )
+          @cache_busting = true
+        end
+        if ( line =~ /without\s+cache\s+busting/ )
+          @cache_busting = false
+        end
       end
 
 
@@ -157,6 +168,12 @@ module Custodian
         @redirect
       end
 
+      #
+      #  Do we have cache-busting?
+      #
+      def cache_busting?
+        @cache_busting
+      end
 
       #
       # Allow this test to be serialized.
@@ -192,18 +209,20 @@ module Custodian
         period   = settings.timeout()
 
         #
-        # The URL we'll fetch, which has a cache-busting
-        # query-string
+        # The URL we'll fetch/poll.
         #
         test_url = @url
 
         #
-        #  Parse and append a query-string if not present.
+        #  Parse and append a query-string if not present, if we're
+        # running with cache-busting.
         #
-        u = URI.parse( test_url )
-        if ( ! u.query )
-          u.query   = "ctime=#{Time.now.to_i}"
-          test_url  = u.to_s
+        if ( @cache_busting )
+          u = URI.parse( test_url )
+          if ( ! u.query )
+            u.query   = "ctime=#{Time.now.to_i}"
+            test_url  = u.to_s
+          end
         end
 
 
