@@ -34,13 +34,13 @@ class TestDNSUtil < Test::Unit::TestCase
     # IPv6 lookup
     #
     details = Custodian::Util::DNS.hostname_to_ip( "ipv6.steve.org.uk" )
-    assert( details =~ /2001:41c8:51:2aa:feff:ff:fe00:ec3/i )
+    assert( details == "2001:41c8:125:40::80" )
 
     #
     # IPv4 lookup
     #
     details = Custodian::Util::DNS.hostname_to_ip( "ipv4.steve.org.uk" )
-    assert( details =~ /213\.138\.103\.170/i )
+    assert( details == "80.68.85.40" )
 
     #
     # Failure case
