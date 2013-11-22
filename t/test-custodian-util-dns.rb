@@ -33,14 +33,14 @@ class TestDNSUtil < Test::Unit::TestCase
     #
     # IPv6 lookup
     #
-    details = Custodian::Util::DNS.hostname_to_ip( "ipv6.steve.org.uk" )
-    assert( details == "2001:41c8:125:40::80" )
+    details = Custodian::Util::DNS.hostname_to_ip( "bytemark.co.uk" )
+    assert( details == "212.110.161.236" )
 
     #
     # IPv4 lookup
     #
-    details = Custodian::Util::DNS.hostname_to_ip( "ipv4.steve.org.uk" )
-    assert( details == "80.68.85.40" )
+    details = Custodian::Util::DNS.hostname_to_ip( "www.bytemark.co.uk" )
+    assert( details == "212.110.161.236" )
 
     #
     # Failure case
@@ -59,14 +59,14 @@ class TestDNSUtil < Test::Unit::TestCase
     #
     # IPv6 lookup
     #
-    details = Custodian::Util::DNS.ip_to_hostname( "2001:41c8:125:46::22" )
-    assert( details =~ /ssh.steve.org.uk/i )
+    details = Custodian::Util::DNS.ip_to_hostname( "2001:41c8:2::5" )
+    assert( details =~ /bytemark.co.uk/i )
 
     #
     # IPv4 lookup
     #
-    details = Custodian::Util::DNS.ip_to_hostname( "80.68.85.48" )
-    assert( details =~ /ssh.steve.org.uk/i )
+    details = Custodian::Util::DNS.ip_to_hostname( "212.110.161.236" )
+    assert( details =~ /bytemark.co.uk/i )
 
     #
     # Bogus lookup - should return nil.
