@@ -1,7 +1,7 @@
 
 require 'custodian/settings'
+require 'timeout'
 require 'uri'
-
 
 #
 #  The HTTP-protocol test.
@@ -51,6 +51,10 @@ module Custodian
         @url  = line.split( /\s+/)[0]
         @host = @url
 
+       #
+        # Set the resolve modes
+        #
+        @resolve_modes = []
 
         #
         # Will we follow redirects?
@@ -108,6 +112,10 @@ module Custodian
           @expected_status = $1.dup
         else
           @expected_status = "200"
+        end
+
+        if ( line =~ /with (IPv[46])/i )
+          @resolve_modes << $1.downcase.to_sym
         end
 
         #
@@ -216,8 +224,15 @@ module Custodian
         end
 
         errors = []
+        resolution_errors = []
 
-        %(:ipv4 ipv6).each do |resolve_mode|
+        if @resolve_modes.empty?
+          resolve_modes = [:ipv4, :ipv6]
+        else
+          resolve_modes = @resolve_modes
+        end
+                
+        resolve_modes.each do |resolve_mode|
           status   = nil
           content  = nil
 
@@ -240,7 +255,7 @@ module Custodian
           #
           # Set a basic protocol message, for use later.
           #
-          protocol_msg =  (resolve_mode == :ipv4 : "IPv4" ? "IPv6")
+          protocol_msg = (resolve_mode == :ipv4 ? "IPv4" : "IPv6")
 
           begin
             timeout( period ) do
@@ -264,10 +279,15 @@ module Custodian
             errors << "#{protocol_msg}: SSL validation error: #{x.message}."
           rescue Curl::Err::TimeoutError, Timeout::Error
             errors << "#{protocol_msg}: Timed out fetching page."
+          rescue Curl::Err::ConnectionFailedError
+            errors << "#{protocol_msg}: Connection failed."
           rescue Curl::Err::TooManyRedirectsError
             errors << "#{protocol_msg}: More than 10 redirections."
+          rescue Curl::Err::HostResolutionError
+            # Nothing to see here..!
+            resolution_errors << resolve_mode
           rescue => x
-            errors << "#{protocol_msg}: #{x.class.to_s}: #{x.message}."
+            errors << "#{protocol_msg}: #{x.class.to_s}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           end
   
           #
@@ -280,9 +300,14 @@ module Custodian
   
           if ( content.is_a?(String) and 
                expected_content.is_a?(String) and 
-               content =~ /#{expected_content}/i )
+               content !~ /#{expected_content}/i )
             errors << "#{protocol_msg}: The response did not contain our expected text '#{expected_content}'."
           end
+        end
+
+        # uh-oh! Resolution failed on both protocols!
+        if resolution_errors.length > 1
+          errors << "Hostname did not resolve for #{resolution_errors.join(", ")}"
         end
 
         if errors.length > 0
