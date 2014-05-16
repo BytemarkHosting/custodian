@@ -35,14 +35,6 @@ module Custodian
       #
       attr_reader :expected_status, :expected_content
 
-
-      #
-      # The actual status & content received.
-      #
-      attr_reader :status, :content
-
-
-
       #
       # Constructor
       #
@@ -191,8 +183,6 @@ module Custodian
 
         #  Reset state, in case we've previously run.
         @error    = nil
-        @status   = nil
-        @content  = nil
 
         begin
           require 'rubygems'
@@ -225,70 +215,86 @@ module Custodian
           end
         end
 
+        errors = []
 
-        begin
-          timeout( period ) do
-            begin
+        %(:ipv4 ipv6).each do |resolve_mode|
+          status   = nil
+          content  = nil
 
+          c = Curl::Easy.new(test_url)
 
-              c = Curl::Easy.new(test_url)
+          c.resolve_mode = resolve_mode
 
-              #
-              # Should we follow redirections?
-              #
-              if ( follow_redirects? )
-                c.follow_location = true
-                c.max_redirects   = 10
-              end
+          #
+          # Should we follow redirections?
+          #
+          if ( follow_redirects? )
+            c.follow_location = true
+            c.max_redirects   = 10
+          end
 
-              c.ssl_verify_host = false
-              c.ssl_verify_peer = false
-              c.timeout         = period
+          c.ssl_verify_host = false
+          c.ssl_verify_peer = false
+          c.timeout         = period
+
+          #
+          # Set a basic protocol message, for use later.
+          #
+          protocol_msg =  (resolve_mode == :ipv4 : "IPv4" ? "IPv6")
+
+          begin
+            timeout( period ) do
               c.perform
-              @status = c.response_code
-              @content = c.body_str
-            rescue Curl::Err::SSLCACertificateError => x
-              @error = "SSL-Validation error"
-              return false
-            rescue Curl::Err::TimeoutError
-              @error = "Timed out fetching page."
-              return false
-            rescue Curl::Err::TooManyRedirectsError
-              @error = "Too many redirections (more than 10)"
-              return false
-            rescue => x
-               @error = "Exception: #{x}"
-              return false
+              status = c.response_code
+              content = c.body_str
             end
+
+            #
+            # Overwrite protocol_msg with the IP we connect to. 
+            #
+            if c.primary_ip
+              if :ipv4 == resolve_mode
+                protocol_msg = "#{c.primary_ip}" 
+              else
+                protocol_msg = "[#{c.primary_ip}]" 
+              end
+            end
+
+          rescue Curl::Err::SSLCACertificateError => x
+            errors << "#{protocol_msg}: SSL validation error: #{x.message}."
+          rescue Curl::Err::TimeoutError, Timeout::Error
+            errors << "#{protocol_msg}: Timed out fetching page."
+          rescue Curl::Err::TooManyRedirectsError
+            errors << "#{protocol_msg}: More than 10 redirections."
+          rescue => x
+            errors << "#{protocol_msg}: #{x.class.to_s}: #{x.message}."
           end
-        rescue Timeout::Error => e
-          @error = "Timed out during fetch."
+  
+          #
+          # A this point we've either had an exception, or we've
+          # got a result
+          #
+          if ( status and expected_status.to_i != status.to_i )
+            errors << "#{protocol_msg}: Status code was #{status} not the expected #{expected_status}."
+          end
+  
+          if ( content.is_a?(String) and 
+               expected_content.is_a?(String) and 
+               content =~ /#{expected_content}/i )
+            errors << "#{protocol_msg}: The response did not contain our expected text '#{expected_content}'."
+          end
+        end
+
+        if errors.length > 0
+          @error = errors.join("\n")
           return false
         end
-
-        #
-        # A this point we've either had an exception, or we've
-        # got a result
-        #
-        if ( @expected_status.to_i != @status.to_i )
-          @error = "Status code was #{@status} not the expected #{@expected_status}"
-          return false
-        end
-
-        if ( !@expected_content.nil? )
-          if ( @content && (! @content.match(/#{@expected_content}/i) ) )
-            @error = "<p>The response did not contain our expected text '#{@expected_content}'</p>"
-            return false
-          end
-        end
-
+  
         #
         #  All done.
         #
         return true
       end
-
-
 
       #
       # If the test fails then report the error.
@@ -298,13 +304,8 @@ module Custodian
       end
 
 
-
-
       register_test_type "http"
       register_test_type "https"
-
-
-
 
     end
   end
