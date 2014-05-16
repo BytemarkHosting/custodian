@@ -1,3 +1,9 @@
+custodian (0.11-1) stable; urgency=low
+
+  * HTTP test now does both IPv4 and 6.
+
+ -- Patrick J Cherry <patch@bytemark.co.uk>  Fri, 16 May 2014 13:01:27 +0100
+
 custodian (0.10-11) stable; urgency=low
 
   * Added two new protocol primitives:
