@@ -1,3 +1,9 @@
+custodian (0.12-2) stable; urgency=low
+
+  * Strip whitespace-only lines before parsing
+
+ -- James Hannah <james.hannah@bytemark.co.uk>  Mon, 13 Oct 2014 14:45:00 +0100
+
 custodian (0.12-1) stable; urgency=low
 
   * Added support for overriding the HTTP Host header
