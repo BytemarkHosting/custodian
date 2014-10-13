@@ -248,6 +248,8 @@ module Custodian
 
       line.chomp! if ( !line.nil? )
 
+      line.strip! if ( !line.nil? )
+
       #
       # A blank line, or a comment may be skipped.
       #
