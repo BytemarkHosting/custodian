@@ -144,6 +144,12 @@ module Custodian
         if ( line =~ /without\s+cache\s+busting/ )
           @cache_busting = false
         end
+        
+        # Do we need to override the HTTP Host: Header?
+        @host_override = nil
+        if ( line =~ /with host header '([^']+)'/)
+          @host_override = $1.dup
+        end
       end
 
 
@@ -246,6 +252,10 @@ module Custodian
           if ( follow_redirects? )
             c.follow_location = true
             c.max_redirects   = 10
+          end
+          
+          unless @host_override.nil?
+            c.headers["Host"] = @host_override
           end
 
           c.ssl_verify_host = false
