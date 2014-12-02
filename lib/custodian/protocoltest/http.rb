@@ -321,6 +321,9 @@ module Custodian
         end
 
         if errors.length > 0
+          if @host_override
+            errors << "Host header was overridden as Host: #{@host_override}"
+          end
           @error = errors.join("\n")
           return false
         end
