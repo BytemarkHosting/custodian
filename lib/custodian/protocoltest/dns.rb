@@ -143,7 +143,7 @@ module Custodian
                 return nil
               end
 
-              Resolv::DNS.open(:nameserver=>[server_ip]) do |dns|
+              Resolv::DNS.open(:nameserver=>[@server_ip]) do |dns|
                 case ltype
 
                 when /^A$/ then
