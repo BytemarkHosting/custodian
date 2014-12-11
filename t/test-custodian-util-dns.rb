@@ -3,7 +3,7 @@
 
 require 'custodian/util/dns'
 require 'test/unit'
-
+require 'pp'
 
 
 #
@@ -34,13 +34,13 @@ class TestDNSUtil < Test::Unit::TestCase
     # IPv6 lookup
     #
     details = Custodian::Util::DNS.hostname_to_ip( "bytemark.co.uk" )
-    assert( details == "212.110.161.236" )
+    assert( details == "80.68.81.80" )
 
     #
     # IPv4 lookup
     #
     details = Custodian::Util::DNS.hostname_to_ip( "www.bytemark.co.uk" )
-    assert( details == "212.110.161.236" )
+    assert( details == "80.68.81.80" )
 
     #
     # Failure case
@@ -59,14 +59,14 @@ class TestDNSUtil < Test::Unit::TestCase
     #
     # IPv6 lookup
     #
-    details = Custodian::Util::DNS.ip_to_hostname( "2001:41c8:2::5" )
-    assert( details =~ /bytemark.co.uk/i )
+    details = Custodian::Util::DNS.ip_to_hostname( "2001:41c9:0:1019:81::80" )
+    assert( details =~ /bytemark(-?hosting)?\.(com|eu|co\.uk)$/i )
 
     #
     # IPv4 lookup
     #
-    details = Custodian::Util::DNS.ip_to_hostname( "212.110.161.236" )
-    assert( details =~ /bytemark.co.uk/i )
+    details = Custodian::Util::DNS.ip_to_hostname( "80.68.81.80" )
+    assert( details =~ /bytemark(-?hosting)?\.(com|eu|co\.uk)$/i )
 
     #
     # Bogus lookup - should return nil.
