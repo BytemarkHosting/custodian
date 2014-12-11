@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -I../bin/ -I./bin/ -Ilib/ -I../lib/
+#!/usr/bin/ruby
 #
 #  This is a simple wrapper that will run the complete test-suite.
 #
@@ -6,7 +6,13 @@
 # -- 
 #
 
-
+#
+# Set up our include path
+#
+base = File.dirname(__FILE__)
+%w(bin lib .).each do |d|
+  $: << File.expand_path(File.join(base, "../#{d}"))
+end
 
 require 'test/unit'
 require 'fileutils'
