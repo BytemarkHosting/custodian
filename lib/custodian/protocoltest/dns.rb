@@ -1,4 +1,5 @@
 require 'custodian/settings'
+require 'custodian/util/dns'
 require 'resolv'
 
 #
@@ -58,6 +59,8 @@ module Custodian
           @resolve_expected = $3.dup.downcase.split(/[\s,]+/)
         end
 
+        @server_ip = nil
+
         #
         #  Ensure we had all the data.
         #
@@ -112,7 +115,7 @@ module Custodian
         #
 
         if ( !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty? )
-          @error = "DNS server *#{@host}* returned the wrong records for `#{resolve_name} IN #{resolve_type}`.\n\nWe expected:\n * #{resolve_expected.join("\n * ")}\n\nWe got:\n * #{results.join("\n * ")}\n"
+          @error = "DNS server *#{@host}* (#{@server_ip}) returned the wrong records for @#{resolve_name} IN #{resolve_type}@.\n\nWe expected:\n * #{resolve_expected.join("\n * ")}\n\nWe got:\n * #{results.join("\n * ")}\n"
         end
 
         return @error.nil?
@@ -131,20 +134,30 @@ module Custodian
           timeout( period ) do
 
             begin
-              Resolv::DNS.open(:nameserver=>[server]) do |dns|
+              #
+              # Lookup the server IP address first, and record it in an instance variable so we can use it later.
+              #
+              @server_ip = Custodian::Util::DNS.hostname_to_ip(server)
+              if @server_ip.nil?
+                @error = "Could not resolve DNS server #{server}"
+                return nil
+              end
+
+              Resolv::DNS.open(:nameserver=>[server_ip]) do |dns|
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s().downcase ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s() ) }
 
                 when /^AAAA$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s().downcase ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s() ) }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s().downcase ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s() ) ) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s().downcase ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s() ) ) }
+
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"
                   return nil
@@ -152,20 +165,20 @@ module Custodian
               end
 
             rescue StandardError => x
-              @error = "Exception was received when resolving : #{x}"
+              @error = "Exception was received when resolving: #{x}"
               return nil
             end
 
           end
         rescue Timeout::Error => e
-          @error = "Timed-out performing DNS lookups #{e}"
+          @error = "Timed-out performing DNS lookups: #{e}"
           return nil
         end
 
         #
         # Flatten, sort, uniq
         #
-        results.flatten.sort.uniq
+        results.flatten.map{|r| r.to_s.downcase }.sort.uniq
       end
 
 
