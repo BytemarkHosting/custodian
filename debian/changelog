@@ -1,3 +1,9 @@
+custodian (0.13-1) stable; urgency=medium
+
+  * DNS comparisons should be lower case.
+
+ -- Patrick J Cherry <patrick@bytemark.co.uk>  Thu, 11 Dec 2014 11:05:51 +0000
+
 custodian (0.12-2) stable; urgency=low
 
   * Strip whitespace-only lines before parsing
