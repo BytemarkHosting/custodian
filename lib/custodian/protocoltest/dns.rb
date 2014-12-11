@@ -55,7 +55,7 @@ module Custodian
         if ( line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/ )
           @resolve_name     = $1.dup
           @resolve_type     = $2.dup
-          @resolve_expected = $3.dup
+          @resolve_expected = $3.dup.downcase
         end
 
         #
@@ -136,16 +136,16 @@ module Custodian
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push(r.address.to_s()) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s().downcase ) }
 
                 when /^AAAA$/ then
-      dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s())  }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s().downcase ) }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses(r.name.to_s())) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s().downcase ) ) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses(r.exchange.to_s())) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s().downcase ) ) }
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"
                   return nil
