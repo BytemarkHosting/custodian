@@ -1,3 +1,10 @@
+custodian (0.13-2) stable; urgency=medium
+
+  * Further tidying the DNS comparisons.
+  * Tests added.
+
+ -- Patrick J Cherry <patrick@bytemark.co.uk>  Thu, 11 Dec 2014 12:43:59 +0000
+
 custodian (0.13-1) stable; urgency=medium
 
   * DNS comparisons should be lower case.
