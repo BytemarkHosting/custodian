@@ -215,13 +215,13 @@ module Custodian
 
       # otherwise per-test defaults.
       case alert
-        when "smtp":
+        when "smtp"
           "root"
-        when "mauve":
+        when "mauve"
           "alert.bytemark.co.uk"
-        when "file":
+        when "file"
           "alerts.log"
-        when "redis":
+        when "redis"
           "127.0.0.1:6379"
         else
           nil
