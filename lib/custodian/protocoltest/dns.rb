@@ -55,7 +55,7 @@ module Custodian
         if ( line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/ )
           @resolve_name     = $1.dup
           @resolve_type     = $2.dup
-          @resolve_expected = $3.dup.downcase
+          @resolve_expected = $3.dup.downcase.split(/[\s,]+/)
         end
 
         #
@@ -103,20 +103,19 @@ module Custodian
         #
         # Do the lookup
         #
-        results = resolve_via( @host,  @resolve_type, @resolve_name, period )
+        results = resolve_via( @host,  resolve_type, resolve_name, period )
         return false if ( results.nil? )
 
         #
         # OK we have an array of results.  If every one of the expected
         # results is contained in those results returned then we're good.
         #
-        expected = 0
-        if ( results != @resolve_expected )
-          @error = "When resolving the name #{@resolve_name} [#{resolve_type}-record lookup] against DNS-server #{@host} we received an error.  The expected result '#{@resolve_expected}' didn't match the returned results '#{results}'"
-          return false
+
+        if ( !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty? )
+          @error = "DNS server *#{@host}* returned the wrong records for `#{resolve_name} IN #{resolve_type}`.\n\nWe expected:\n * #{resolve_expected.join("\n * ")}\n\nWe got:\n * #{results.join("\n * ")}\n"
         end
 
-        true
+        return @error.nil?
       end
 
 
@@ -151,10 +150,12 @@ module Custodian
                   return nil
                 end
               end
-            rescue Exception => x
+
+            rescue StandardError => x
               @error = "Exception was received when resolving : #{x}"
               return nil
             end
+
           end
         rescue Timeout::Error => e
           @error = "Timed-out performing DNS lookups #{e}"
@@ -162,19 +163,9 @@ module Custodian
         end
 
         #
-        #  Flatten via a hash.
+        # Flatten, sort, uniq
         #
-        h = Hash.new()
-        results.sort.each do |key|
-          if ( key.kind_of? Array )
-            key.each do |n|
-              h[n]=1
-            end
-          else
-            h[key]=1
-          end
-        end
-        h.keys.sort!.join( "," )
+        results.flatten.sort.uniq
       end
 
 
@@ -190,7 +181,6 @@ module Custodian
 
 
       register_test_type "dns"
-
 
 
 
