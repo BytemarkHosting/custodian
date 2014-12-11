@@ -32,9 +32,7 @@ module Custodian
         begin
           timeout( period ) do
             begin
-              Socket.getaddrinfo(ip, 'echo').each do |a|
-                resolved = a[2] if ( a )
-              end
+              resolved = Socket.getnameinfo(Socket.sockaddr_in(80, ip) ).first
             rescue SocketError
               resolved = nil
             end
