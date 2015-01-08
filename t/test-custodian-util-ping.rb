@@ -68,10 +68,6 @@ class TestPingUtil < Test::Unit::TestCase
     assert( helper.is_ipv4? )
     assert( ! helper.is_ipv6? )
 
-    helper = Custodian::Util::Ping.new( "www.google.com" );
-    assert( helper.is_ipv4? )
-    assert( ! helper.is_ipv6? )
-
   end
 
 
@@ -80,7 +76,7 @@ class TestPingUtil < Test::Unit::TestCase
   #
   def test_lookup_ipv6
 
-    helper = Custodian::Util::Ping.new( "ipv6.google.com" );
+    helper = Custodian::Util::Ping.new( "ipv6.steve.org.uk" );
     assert( helper.is_ipv6? )
     assert( ! helper.is_ipv4? )
   end
