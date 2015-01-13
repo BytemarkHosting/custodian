@@ -299,8 +299,8 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-
-        assert(obj)
+        assert(obj, "Instantiating a test works")
+        assert( str == obj.to_s, "Getting back the test works" )
 
         if ( follow )
           assert( obj.follow_redirects? )
@@ -335,8 +335,8 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-
-        assert(obj)
+        assert(obj, "Instantiating a test works")
+        assert( str == obj.to_s, "Getting back the test works" )
 
         if ( cb )
           assert( obj.cache_busting? )
@@ -378,8 +378,8 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-
-        assert(obj)
+        assert(obj, "Instantiating a test works")
+        assert( str == obj.to_s, "Getting back the test works" )
 
         if ( fail.nil? )
           assert( obj.get_notification_text().nil? )
