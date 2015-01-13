@@ -88,10 +88,57 @@ module Custodian
           return false
         end
 
-        mx.each do |bob|
-          puts "XXXX #{bob}"
+
+        #
+        #  For each host we must make a connection.
+        #
+        #  We'll keep count of failures.
+        #
+        failed = 0
+        passed = 0
+        error  = ""
+
+        mx.each do |backend|
+
+          begin
+            timeout(period) do
+              begin
+                socket = TCPSocket.new( backend, 25 )
+                read = socket.sysread(1024)
+
+                # trim to a sane length & strip newlines.
+                if ( ! read.nil? )
+                  read = read[0,255]
+                  read.gsub!(/[\n\r]/, "")
+                end
+
+                if ( read =~ /^220/ )
+                  passed += 1
+                else
+                  failed += 1
+                end
+              rescue
+                # Failure to connect.
+                failed +=1
+                error += "Error connecting to #{backend}:25. "
+              end
+            end
+          rescue Timeout::Error => ex
+            # Timeout
+            failed +=1
+            error += "Timeout connecting to #{backend}:25. "
+          end
         end
-        return true;
+
+        #
+        #  At this point we should have tested the things
+        #
+        if ( failed > 0 )
+          @error = "There are #{mx.size} hosts running as MX-servers for domain #{@host} - #{passed}:OK #{failed}:FAILED - #{error}"
+          return false
+        else
+          return true;
+        end
       end
 
 
