@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8 -I./lib/ -I../lib/
+#!/usr/bin/ruby -I./lib/ -I../lib/
 
 
 require 'custodian/util/dns'
