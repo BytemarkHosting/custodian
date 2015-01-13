@@ -3,7 +3,8 @@
 
 require 'test/unit'
 require 'rubygems'
-require 'mocha/setup'
+#require 'mocha/setup'
+require 'mocha'
 require 'custodian/protocoltests'
 
 
