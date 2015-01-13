@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8 -Ilib/ -I../lib/ -rubygems
+#!/usr/bin/ruby -Ilib/ -I../lib/ -rubygems
 #
 # NAME
 #  custodian-dequeue - Pull network tests from a queue and execute them in series.

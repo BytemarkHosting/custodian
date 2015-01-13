@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8
+#!/usr/bin/ruby
 #
 # NAME
 #  custodian-enqueue - Parse tests from a file and enqueue to beanstalkd.
