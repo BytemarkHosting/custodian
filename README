@@ -7,7 +7,7 @@ Github Mirror:
 
 
 Copyright:
-    Copyright (c) 2012-2013 Bytemark Computer Consulting Ltd
+    Copyright (c) 2012-2015 Bytemark Computer Consulting Ltd
 
 Bug Tracker:
     https://projects.bytemark.co.uk/projects/custodian/issues/new
@@ -49,7 +49,7 @@ may be extended or adapted more easily to your environment.
 Configuration
 -------------
 
-The software is configured by a the main configuration file located at:
+The software is configured by the main configuration file located at:
 
    /etc/custodian/custodian.cfg
 
@@ -72,8 +72,3 @@ The software is documented online at the project home-page:
 Beyond that each script has a manpage which is installed when the
 package is installed - or which may be examined by invoking the
 script with the "--manual" flag.
-
-
-
-
-
