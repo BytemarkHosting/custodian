@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -Ilib/
 #
 # NAME
 #  custodian-enqueue - Parse tests from a file and enqueue to beanstalkd.
@@ -193,5 +193,3 @@ if __FILE__ == $0 then
   end
 
 end
-
-
