@@ -2,7 +2,8 @@
 
 
 require 'test/unit'
-require 'mocha/test_unit'
+require 'rubygems'
+require 'mocha/setup'
 require 'custodian/protocoltests'
 
 
@@ -62,7 +63,7 @@ class TestDNSTypes < Test::Unit::TestCase
   def test_dns_protocol_test
      test = Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving A as '1.2.3.4,2001:lower::case,2001:UPPER::CASE'." )
      test.stubs(:resolve_via).returns(%w(2001:lower::case 2001:upper::case 1.2.3.4))
-     assert test.run_test, test.error
+     assert test.run_test, "The error was #{test.error}"
     
      # Re-stub to return just one record 
      test.stubs(:resolve_via).returns(%w(1.2.3.4))
