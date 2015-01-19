@@ -3,7 +3,6 @@
 #
 # Standard modules
 #
-require 'beanstalk-client'
 require 'logger'
 
 
@@ -13,7 +12,7 @@ require 'logger'
 #
 require 'custodian/alerts'
 require 'custodian/settings'
-
+require 'custodian/queue'
 
 
 #
@@ -29,7 +28,7 @@ require 'custodian/protocoltests'
 
 
 #
-# This class contains the code for connecting to a Beanstalk queue,
+# This class contains the code for connecting to the queue,
 # fetching tests from it, and executing them
 #
 module Custodian
@@ -38,7 +37,7 @@ module Custodian
 
 
     #
-    # The beanstalk queue.
+    # The queue we're using for retrieving tests.
     #
     attr_reader :queue
 
@@ -77,10 +76,10 @@ module Custodian
     #
     # Constructor: Connect to the queue
     #
-    def initialize( server, queue, alerter, logfile, settings )
+    def initialize( server, alerter, logfile, settings )
 
       # Connect to the queue
-      @queue = Beanstalk::Pool.new([server], queue )
+      @queue = QueueType.create( "redis" )
 
       # Get the alerter-type to instantiate
       @alerter = alerter
@@ -141,20 +140,14 @@ module Custodian
         #
         #  Acquire a job.
         #
-        job = @queue.reserve()
-        log_message( "Job aquired - Job ID : #{job.id}" )
+        job = @queue.fetch(1)
+        log_message( "Job aquired: #{job}" )
 
         #
         #  Get the job body
         #
-        body = job.body
-        raise ArgumentError, "Job was empty" if (body.nil?)
-        raise ArgumentError, "Job was not a string" unless body.kind_of?(String)
-
-        #
-        #  Output the job.
-        #
-        log_message( "Job: #{body}" )
+        raise ArgumentError, "Job was empty" if (job.nil?)
+        raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
 
 
         #
@@ -166,7 +159,7 @@ module Custodian
         #
         # Create the test-object.
         #
-        test = Custodian::TestFactory.create( body )
+        test = Custodian::TestFactory.create( job )
 
         start_time = Time.now
 
@@ -240,14 +233,6 @@ module Custodian
       rescue => ex
         log_message( "Exception raised processing job: #{ex}" )
 
-      ensure
-        #
-        #  Delete the job - either we received an error, in which case
-        # we should remove it to avoid picking it up again, or we handled
-        # it successfully so it should be removed.
-        #
-        log_message( "Job ID : #{job.id} - Removed" )
-        job.delete if ( job )
       end
 
       return result

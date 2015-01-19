@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -Ilib/
 #
 # NAME
 #  custodian-queue - Work with the queue.
@@ -42,7 +42,6 @@
 #
 # Standard modules
 #
-require 'beanstalk-client'
 require 'getoptlong'
 
 
@@ -50,7 +49,7 @@ require 'getoptlong'
 # Our code
 #
 require 'custodian/settings'
-
+require 'custodian/queue'
 
 
 #
@@ -69,7 +68,6 @@ if __FILE__ == $0 then
   #
   settings = Custodian::Settings.instance()
   $SERVER  = settings.queue_server
-  $QUEUE   = settings.queue_name
 
   begin
     opts = GetoptLong.new(
@@ -78,7 +76,6 @@ if __FILE__ == $0 then
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--monitor", "-M", GetoptLong::OPTIONAL_ARGUMENT ],
                           [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
-                          [ "--queue",   "-q", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--stats",   "-s", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
@@ -95,8 +92,6 @@ if __FILE__ == $0 then
           $FLUSH = true
       when "--server" then
           $SERVER = arg
-      when "--queue" then
-          $QUEUE = arg
       when "--help" then
           $help = true
       when "--manual" then
@@ -140,7 +135,7 @@ if __FILE__ == $0 then
   #
   #  Create the queue object.
   #
-  queue = Beanstalk::Pool.new([$SERVER], $QUEUE )
+  queue = Custodian::QueueType.create( "redis" )
 
   #
   # Alerting on a queue that is too-full?
@@ -150,8 +145,7 @@ if __FILE__ == $0 then
     #
     # Find the number of jobs
     #
-    stats = queue.stats()
-    jobs  = stats['current-jobs-ready'] || 0
+    jobs = queue.size?
 
     if ( jobs > $MONITOR )
         exit 1
@@ -165,8 +159,8 @@ if __FILE__ == $0 then
   # Showing stats?
   #
   if ( $STATS )
-     stats = queue.stats()
-     puts "There are #{stats['current-jobs-ready'] || 0} jobs pending."
+     jobs = queue.size?()
+     puts "There are #{jobs || 0} jobs pending."
      exit( 0 )
   end
 
@@ -176,10 +170,11 @@ if __FILE__ == $0 then
   #
   if ( $FLUSH )
     count = 0
-    while( true )
+    run = true
+    while( run )
       begin
-        job = queue.reserve(1)
-        job.delete
+        job = queue.fetch(1)
+        exit(0) if ( job.nil? )
         count += 1
       rescue Beanstalk::TimedOut => ex
         puts "Flushed #{count} pending jobs."

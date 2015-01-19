@@ -140,22 +140,12 @@ module Custodian
 
 
     #
-    # The beanstalkd server address
+    # The address of the queue.
     #
     def queue_server
       _load() unless( _loaded? )
 
       @settings['queue_server'] || "127.0.0.1:11300"
-    end
-
-
-    #
-    # The name of the beanstalkd tube we'll use
-    #
-    def queue_name
-      _load() unless( _loaded? )
-
-      @settings['queue_name'] || "Custodian"
     end
 
 
