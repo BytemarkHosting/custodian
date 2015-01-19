@@ -82,7 +82,11 @@ module Custodian
     #  Fetch a job from the queue - the timeout parameter is ignored.
     #
     def fetch(timeout)
-      @redis.lpop( "queue" )
+      job = false
+      while( ! job )
+        job = @redis.lpop( "queue" )
+      end
+      return( job )
     end
 
     #

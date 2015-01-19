@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -Ilib/
 #
 # NAME
-#  custodian-enqueue - Parse tests from a file and enqueue to beanstalkd.
+#  custodian-enqueue - Parse tests from a file and enqueue them.
 #
 # SYNOPSIS
 #  custodian-enqueue  [ -h | --help ]
@@ -19,8 +19,6 @@
 #
 #  -d, --dump          Dump the parsed tests to the console; don't insert in the queue.
 #
-#  -q, --queue         Use the named beanstalkd tube.
-#
 #  --test              Test the parsing of the given file, alert on errors.
 #
 #  -f, --file FILE     Parse the given configuration file.
@@ -29,17 +27,15 @@
 #
 # ABOUT
 #
-#  This tool reads a single configuration file and parses it into a
+# This tool reads a single configuration file and parses it into a
 # series of network & protocol tests.   These tests are then stored in
-# a beanstalkd queue.
+# a queue from which workers can retrieve and execute them.
 #
-#  The intention is that the tests will be pulled from the queue and
-# executed by the companion program custodian-dequeue.  The dequeing
-# process may occur up numerous other hosts
+# The dequeing process may occur up numerous other hosts
 #
 # CONFIGURATION FILE
 #
-#  The configuration file is 99% compatible with that used in the tool
+# The configuration file is 99% compatible with that used in the tool
 # custodian replaces.
 #
 #
@@ -53,13 +49,13 @@
 #
 # Standard modules
 #
-require 'beanstalk-client'
 require 'getoptlong'
 
 #
 # Our code.
 #
 require 'custodian/parser'
+require 'custodian/queue'
 require 'custodian/settings'
 
 
@@ -77,7 +73,6 @@ if __FILE__ == $0 then
   #
   settings = Custodian::Settings.instance()
   $SERVER  = settings.queue_server
-  $QUEUE   = settings.queue_name
 
   begin
     opts = GetoptLong.new(
@@ -86,7 +81,6 @@ if __FILE__ == $0 then
                           [ "--server",   GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--file",  "-f", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--help",  "-h", GetoptLong::NO_ARGUMENT ],
-                          [ "--queue",  "-q", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--manual","-m", GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
@@ -97,8 +91,6 @@ if __FILE__ == $0 then
           ENV["TEST"] = "1"
       when "--server" then
           $SERVER = arg
-      when "--queue" then
-          $QUEUE= arg
        when "--file" then
           ENV["FILE"] = arg
       when "--help" then
@@ -146,7 +138,7 @@ if __FILE__ == $0 then
   #
   # Connected to the server
   #
-  queue = Beanstalk::Pool.new([$SERVER], $QUEUE )
+  queue = Custodian::QueueType.create( "redis" )
   if ( ! queue )
     puts "Failed to connect to beanstalk server: #{$SERVER}"
     exit 1
@@ -178,17 +170,7 @@ if __FILE__ == $0 then
     elsif ( ENV['DUMP'] )
       puts test
     else
-
-      # priority of new job.
-      priority = 1000
-
-      # delay before putting into queue.
-      delay    = 0
-
-      # time-to-remove: how long job.reserve() will live for.
-      ttr      = 300
-
-      queue.put( test.to_s, priority, delay, ttr )
+      queue.add( test.to_s )
     end
   end
 
