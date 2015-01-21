@@ -79,7 +79,7 @@ module Custodian
     def initialize( server, alerter, logfile, settings )
 
       # Connect to the queue
-      @queue = QueueType.create( "redis" )
+      @queue = QueueType.create( settings.queue_type )
 
       # Get the alerter-type to instantiate
       @alerter = alerter
