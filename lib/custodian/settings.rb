@@ -149,6 +149,16 @@ module Custodian
     end
 
 
+    #
+    #  The type of queue to use.
+    #
+    def queue_type
+      _load() unless( _loaded? )
+
+      @settings['queue_type'] || "redis"
+    end
+
+
 
     #
     # The filename for the logfile.
