@@ -27,6 +27,13 @@ module Custodian
 
         # The main domain we're querying
         @host = line.split(/\s+/)[0]
+
+        if ( line =~ /must\s+not\s+run\s+/ )
+          @inverted = true
+        else
+          @inverted = false
+        end
+
       end
 
 
