@@ -1,4 +1,3 @@
-#!/usr/bin/ruby1.8
 
 module Custodian
 
@@ -120,5 +119,3 @@ module Custodian
     end
   end
 end
-
-
