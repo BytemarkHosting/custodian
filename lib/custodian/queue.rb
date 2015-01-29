@@ -6,7 +6,7 @@
   begin
     require library
   rescue LoadError
-    puts "Failed to load the library: #{library}"
+    ENV["DEBUG"] && puts( "Failed to load the library: #{library}" )
   end
 end
 
