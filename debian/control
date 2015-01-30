@@ -2,16 +2,16 @@ Source: custodian
 Section: net
 Priority: extra
 Maintainer: Steve Kemp <steve@bytemark.co.uk>
-Build-Depends: debhelper (>= 7.0.0), cdbs, txt2man, ruby1.8
-Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 7.0.0), cdbs, txt2man, ruby
+Standards-Version: 3.9.6
 Homepage: https://projects.bytemark.co.uk/projects/custodian/
 
 
 Package: custodian
 Architecture: all
-Depends: ruby1.8, rubygems, ${misc:Depends}, libldap-ruby1.8
+Depends: ruby, rubygems, ${misc:Depends}, libldap-ruby
 Suggests: beanstalkd, mauvealert-client (>= 3.13.1)
-Description: This package provides remote monitoring
+Description: remote monitoring via distributed agents
  This package allows you to setup a semi-distributed monitoring
  solution, using the Bytemark MauveAlert server for notification.
  .
@@ -21,7 +21,7 @@ Description: This package provides remote monitoring
 
 Package: custodian-bytemark
 Architecture: all
-Depends: custodian, ruby1.8, ${misc:Depends}
+Depends: custodian, ruby, ${misc:Depends}
 Description: Bytemark-specific add-ons for Custodian.
  This package contains some monitoring for the monitor,
  to ensure that custodian isn't failing to parse configuration
