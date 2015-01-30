@@ -1,0 +1,2 @@
+custodian-bytemark: binary-without-manpage usr/bin/custodian-enqueue-parse-test
+custodian-bytemark: binary-without-manpage usr/bin/custodian-queue-monitor
