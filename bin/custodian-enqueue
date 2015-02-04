@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -Ilib/
+#!/usr/bin/ruby -Ilib/ -I../lib/ -rubygems
 #
 # NAME
 #  custodian-enqueue - Parse tests from a file and enqueue them.
