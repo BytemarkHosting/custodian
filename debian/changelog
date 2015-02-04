@@ -1,3 +1,9 @@
+custodian (0.16) stable; urgency=medium
+
+  * Updated dependencies for Squeeze and LDAP.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Feb 2014 10:44:01 +0000
+
 custodian (0.15) stable; urgency=medium
 
   * Updated the package to add lintian warnings for the missing man-pages.
