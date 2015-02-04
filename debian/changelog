@@ -1,3 +1,10 @@
+custodian (0.17) stable; urgency=medium
+
+  * Updated the shebang line of all our ruby scripts to allow rubygems
+    to be loaded.  Without this connecting to the Redis queue failed.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Feb 2014 11:22:11 +0000
+
 custodian (0.16) stable; urgency=medium
 
   * Updated dependencies for Squeeze and LDAP.
