@@ -7,7 +7,6 @@
 #  custodian-dequeue  [ -h | --help ]
 #                     [ -m | --manual]
 #                     [ -f | --fail ]
-#                     [ -l | --logfile FILE]
 #                     [ -s | --single ]
 #                     [ -v | --verbose ]
 #
@@ -17,11 +16,9 @@
 #
 #  -m, --manual        Show this manual, and exit.
 #
-#  -l, --logfile       Specify the path to the logfile to run.
+#  -s, --single        Run a single test and exit.
 #
-#  -s, --single        Run a single test and exit.  Don't poll the queue for more.
-#
-#  -f, --fail          Run tests but stop the first time we see a fail.
+#  -f, --fail          Stop running once a single test fails.
 #
 #  -v, --verbose       Be noisy.
 #
