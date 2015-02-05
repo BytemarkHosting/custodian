@@ -76,10 +76,10 @@ end
 
 
     #
-    #  Connect to the server on localhost
+    # Connect to the server on localhost, unless QUEUE_ADDRESS is set.
     #
     def initialize
-      host = ENV["REDIS"] || "127.0.0.1"
+      host = ENV["QUEUE_ADDRESS"] || "127.0.0.1"
       @redis = Redis.new( :host => host )
     end
 
@@ -124,11 +124,11 @@ end
   class BeanstalkQueueType < QueueType
 
     #
-    #  Connect to the server on localhost
+    # Connect to the server on localhost, unless QUEUE_ADDRESS is set.
     #
     def initialize
-      host = ENV["QUEUE"] || "127.0.0.1:11300"
-      @queue = Beanstalk::Pool.new([host] )
+      host  = ENV["QUEUE_ADDRESS"] || "127.0.0.1"
+      @queue = Beanstalk::Pool.new( ["#{host}:11300" ] )
     end
 
     #
@@ -168,8 +168,10 @@ end
       ( stats['current-jobs-ready'] || 0 )
     end
 
+    #
+    # Flush the queue.
+    #
     def flush!
-
       while( fetch(1) )
         # nop
       end
