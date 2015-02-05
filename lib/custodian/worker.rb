@@ -74,17 +74,18 @@ module Custodian
 
 
     #
-    # Constructor: Connect to the queue
+    # Constructor: Connect to the queue, and setup our settings.
     #
-    def initialize( server, alerter, logfile, settings )
+    def initialize( settings )
 
       # Connect to the queue
-      @queue = QueueType.create( settings.queue_type )
+      @queue = QueueType.create( settings.queue_type() )
 
       # Get the alerter-type to instantiate
-      @alerter = alerter
+      @alerter = settings.alerter
 
       # Instantiate the logger.
+      logfile = settings.log_file
       @logger = Logger.new( logfile, "daily" )
 
       # Save the settings
