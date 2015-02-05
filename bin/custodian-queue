@@ -159,18 +159,7 @@ if __FILE__ == $0 then
   #  Are we flushing the queue?
   #
   if ( $FLUSH )
-    count = 0
-    run = true
-    while( run )
-      begin
-        job = queue.fetch(1)
-        exit(0) if ( job.nil? )
-        count += 1
-      rescue Beanstalk::TimedOut => ex
-        puts "Flushed #{count} pending jobs."
-        exit( 0 )
-      end
-    end
+    queue.flush!
   end
 
 
