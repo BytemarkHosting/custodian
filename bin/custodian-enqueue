@@ -31,7 +31,7 @@
 # series of network & protocol tests.   These tests are then stored in
 # a queue from which workers can retrieve and execute them.
 #
-# The dequeing process may occur up numerous other hosts
+# The dequeing process may occur up numerous other hosts.
 #
 # CONFIGURATION FILE
 #
