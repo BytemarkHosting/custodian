@@ -55,10 +55,11 @@ class TestCustodianQueue < Test::Unit::TestCase
 
     #
     # here we're testing we've got a derived class that has
-    # implemented "def size?"
+    # implemented the methods "size?" & "flush!"
     #
     assert_nothing_raised do
       q.size?
+      q.flush!
     end
 
   end
@@ -72,10 +73,11 @@ class TestCustodianQueue < Test::Unit::TestCase
 
     #
     # here we're testing we've got a derived class that has
-    # implemented "def size?"
+    # implemented the methods "size?" & "flush!"
     #
     assert_nothing_raised do
       q.size?
+      q.flush!
     end
 
 
