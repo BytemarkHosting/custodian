@@ -1,3 +1,9 @@
+custodian (0.20) stable; urgency=medium
+
+  * Don't trash the subject of alerts.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 05 Feb 2015 14:33:41 +0000
+
 custodian (0.19) stable; urgency=medium
 
   * Updated the way that the queue-flushing is achieved.  This avoids
