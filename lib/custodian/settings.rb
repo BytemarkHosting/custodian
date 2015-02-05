@@ -140,17 +140,10 @@ module Custodian
 
 
     #
-    # The address of the queue.
-    #
-    def queue_server
-      _load() unless( _loaded? )
-
-      @settings['queue_server'] || "127.0.0.1:11300"
-    end
-
-
-    #
     #  The type of queue to use.
+    #
+    #  The hostname/IP address of the queue should be set in the
+    # environmental variable 'QUEUE_ADDRESS'.
     #
     def queue_type
       _load() unless( _loaded? )
