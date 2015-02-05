@@ -58,7 +58,13 @@ module Custodian
       raise "Subclasses must implement this method!"
     end
 
-  end
+    #
+    # Empty the queue
+    #
+    def flush!()
+      raise "Subclasses must implement this method!"
+    end
+end
 
 
 
@@ -103,6 +109,11 @@ module Custodian
     def size?
       @redis.llen( "queue" )
     end
+
+    def flush!
+      @redis.del( "queue" )
+    end
+
   end
 
 
@@ -157,6 +168,12 @@ module Custodian
       ( stats['current-jobs-ready'] || 0 )
     end
 
+    def flush!
+
+      while( fetch(1) )
+        # nop
+      end
+    end
   end
 
 end
