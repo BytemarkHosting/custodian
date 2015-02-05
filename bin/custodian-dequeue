@@ -8,7 +8,6 @@
 #                     [ -m | --manual]
 #                     [ -f | --fail ]
 #                     [ -l | --logfile FILE]
-#                     [ -S | --server 1.2.3.4:123 ]
 #                     [ -s | --single ]
 #                     [ -v | --verbose ]
 #
@@ -20,8 +19,6 @@
 #
 #  -l, --logfile       Specify the path to the logfile to run.
 #
-#  -S, --server        Specify the host:port for the beanstalkd queue.
-#
 #  -s, --single        Run a single test and exit.  Don't poll the queue for more.
 #
 #  -f, --fail          Run tests but stop the first time we see a fail.
@@ -31,10 +28,11 @@
 #
 # ABOUT
 #
-#  This tool is designed to pull network/protocol-tests from a beanstalkd server and execute
-# them one by one.
+# This tool is designed to pull network/protocol-tests from the central queue
+# and execute them one by one.
 #
-#  The results of the testing will be sent to a notifier, where they can later be acted upon.
+# The results of the testing will be sent to a notifier, where they can later
+# be acted upon.
 #
 #
 # AUTHOR
@@ -68,22 +66,15 @@ if __FILE__ == $0 then
   $manual  = false
 
   #
-  #  The beanstalkd server address, alerting method, and logfile.
+  #  The settings object contains a lot of configuration-data.
   #
   settings = Custodian::Settings.instance()
-  $SERVER  = settings.queue_server
-  $ALERTER = settings.alerter
-  $LOGFILE = settings.log_file
-
 
   begin
     opts = GetoptLong.new(
                           [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
                           [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
                           [ "--fail",    "-f", GetoptLong::NO_ARGUMENT  ],
-                          [ "--logfile", "-l", GetoptLong::REQUIRED_ARGUMENT ],
-                          [ "--server",  "-S", GetoptLong::REQUIRED_ARGUMENT ],
-                          [ "--alerter", "-a", GetoptLong::REQUIRED_ARGUMENT ],
                           [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
                           [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
                           )
@@ -91,12 +82,6 @@ if __FILE__ == $0 then
       case opt
       when "--verbose" then
           ENV["VERBOSE"] = "1"
-      when "--logfile" then
-          $LOGFILE = arg
-      when "--server" then
-          $SERVER = arg
-      when "--alerter" then
-          $ALERTER = arg
       when "--single" then
           ENV["SINGLE"] = "1"
       when "--fail" then
@@ -143,10 +128,12 @@ if __FILE__ == $0 then
     exit 0
   end
 
+
   #
-  #  Create the object
+  #  Create the worker, passing it the settings object so it can
+  # sort out its own logfile, etc.
   #
-  worker = Custodian::Worker.new( $SERVER, $ALERTER, $LOGFILE, settings )
+  worker = Custodian::Worker.new( settings )
 
 
   #
