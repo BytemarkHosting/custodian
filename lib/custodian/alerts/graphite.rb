@@ -52,8 +52,7 @@ module Custodian
         #
         # hostname + test-type
         #
-        host = @test.target
-        host.gsub!(/[\/\\.]/, "_")
+        host = @test.target.gsub(/[\/\\.]/, "_")
         test = @test.get_type
 
         #
@@ -66,7 +65,7 @@ module Custodian
         #  Send via UDP.
         #
 	socket = UDPSocket.new()
-	socket.send( payload, 0, "localhost", 2003 );
+	socket.send( payload, 0, @target, 2003 );
 	socket.close()
 
       end
