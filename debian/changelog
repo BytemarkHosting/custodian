@@ -1,3 +1,9 @@
+custodian (0.21) stable; urgency=medium
+
+  * Reordered the keys we send to graphite.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 06 Feb 2015 11:00:11 +0000
+
 custodian (0.20) stable; urgency=medium
 
   * Don't trash the subject of alerts.
