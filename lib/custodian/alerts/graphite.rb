@@ -58,7 +58,7 @@ module Custodian
         #
         # The payload
         #
-        payload = "custodian.#{test}.#{host}.test_duration #{ms} #{Time.now.to_i}"
+        payload = "custodian.#{test}.#{host}.test_duration_ms #{ms} #{Time.now.to_i}"
 
         #
         #  Send via UDP.
