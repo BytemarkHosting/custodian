@@ -1,3 +1,10 @@
+custodian (0.22) stable; urgency=medium
+
+  * Updated the way we save state in Redis, in the redis-alerter.
+    This makes it more useful and simpler to dashboard.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 12 Feb 2015 09:11:09 +0000
+
 custodian (0.21) stable; urgency=medium
 
   * Reordered the keys we send to graphite.
