@@ -1,3 +1,9 @@
+custodian (0.23) stable; urgency=medium
+
+  * Updated the redis-alerter to make the test-definition available.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 12 Feb 2015 10:33:01 +0000
+
 custodian (0.22) stable; urgency=medium
 
   * Updated the way we save state in Redis, in the redis-alerter.
