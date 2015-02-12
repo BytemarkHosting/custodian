@@ -34,6 +34,7 @@ module Custodian
         begin
           require 'rubygems'
           require 'redis'
+          require 'json'
 
           @redis = Redis.new(:host => @target )
 
