@@ -1,19 +1,15 @@
 #
 #  The redis-alerter.
 #
-#  This doesn't raise/clear alerts in the traditional sense, instead it just
-# stores results in a redis database where you can poll them from a status-panel,
-# or similar.
+#  This doesn't raise/clear alerts in the traditional sense, instead
+# it just saves the results in a "recent tests" set inside Redis.
 #
-#  There is a global set called "hosts" which has the hostname-test-type lists
-# and the individual results can be pulled by simple key-fetches on those.
 #
 module Custodian
 
   module Alerter
 
     class RedisAlert < AlertFactory
-
 
       #
       # The test this alerter cares about
@@ -57,21 +53,16 @@ module Custodian
 
         return unless( @redis )
 
+        tmp = {}
+        tmp["time"] = Time.now.to_i
+        tmp["type"] = @test.get_type
+        tmp["target"] = @test.target
+        tmp["result"] = "RAISE"
+        tmp["reason"] =  @test.error()
 
-        # hostname + test-type
-        host = @test.target
-        test = @test.get_type
+        @redis.lpush( "recent-tests", tmp.to_json)
+        @redis.ltrim( "recent-tests", 0, 100 )
 
-        # store the error - set an expiry time of 5 minutes
-        @redis.set( "#{host}-#{test}", "ERR")
-        @redis.expireat( "#{host}-#{test}", Time.now.to_i + 5 * 60 )
-
-        # Set the reason
-        @redis.set( "#{host}-#{test}-reason", @test.error() )
-        @redis.expireat( "#{host}-#{test}-reason", Time.now.to_i + 5 * 60 )
-
-        # make sure this alert is discoverable
-        @redis.sadd( "hosts", "#{host}-#{test}" )
       end
 
 
@@ -84,21 +75,15 @@ module Custodian
         return unless( @redis )
 
 
-        # hostname + test-type
-        host = @test.target
-        test = @test.get_type
+        tmp = {}
+        tmp["time"]   = Time.now.to_i
+        tmp["type"]   = @test.get_type
+        tmp["target"] = @test.target
+        tmp["result"] = "OK"
+        tmp["reason"] = ""
 
-        # store the OK - set the expiry time of five minutes
-        @redis.set( "#{host}-#{test}", "OK")
-        @redis.expireat( "#{host}-#{test}", Time.now.to_i + 5 * 60 )
-
-        # clear the reason
-        @redis.set( "#{host}-#{test}-reason", "")
-        @redis.expireat( "#{host}-#{test}-reason", Time.now.to_i + 5 * 60 )
-
-
-        # make sure this alert is discoverable
-        @redis.sadd( "hosts", "#{host}-#{test}" )
+        @redis.lpush( "recent-tests", tmp.to_json)
+        @redis.ltrim( "recent-tests", 0, 100 )
       end
 
 
@@ -110,35 +95,11 @@ module Custodian
 
         return unless( @redis )
 
-        #
-        # hostname + test-type
-        #
-        host = @test.target
-        test = @test.get_type
-
-        #
-        # Store the host.
-        #
-        # make sure this alert is discoverable
-        @redis.sadd( "duration-hosts", host )
-
-        #
-        # Store the test.
-        #
-        @redis.sadd( "duration-host-#{host}", test )
-
-        #
-        # Now store the duration, and trim it to the most recent
-        # 1000 entries.
-        #
-        @redis.lpush( "duration-#{host}-#{test}", ms )
-        @redis.ltrim( "duration-#{host}-#{test}", "0", "1200" )
+        # NOP
       end
 
+
       register_alert_type "redis"
-
-
-
 
     end
   end
