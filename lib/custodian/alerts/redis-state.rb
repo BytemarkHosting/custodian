@@ -55,11 +55,12 @@ module Custodian
         return unless( @redis )
 
         tmp = {}
-        tmp["time"] = Time.now.to_i
-        tmp["type"] = @test.get_type
+        tmp["time"]   = Time.now.to_i
+        tmp["type"]   = @test.get_type
         tmp["target"] = @test.target
         tmp["result"] = "RAISE"
         tmp["reason"] =  @test.error()
+        tmp["test"  ] = @test.to_s
 
         @redis.lpush( "recent-tests", tmp.to_json)
         @redis.ltrim( "recent-tests", 0, 100 )
@@ -82,6 +83,7 @@ module Custodian
         tmp["target"] = @test.target
         tmp["result"] = "OK"
         tmp["reason"] = ""
+        tmp["test"  ] = @test.to_s
 
         @redis.lpush( "recent-tests", tmp.to_json)
         @redis.ltrim( "recent-tests", 0, 100 )
