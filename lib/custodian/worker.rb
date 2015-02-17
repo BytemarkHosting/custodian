@@ -149,18 +149,10 @@ module Custodian
       #
       # Create the test-object from our class-factory
       #
-      #      TODO: Here is where we'd handle multiple test-implementations
-      #            instead of .create returning a single Test-object it would
-      #            return an array of same.
-      #
-      test = Custodian::TestFactory.create( job )
-
-      #
-      #
-      #
-      #  Now process it.
-      #
-      process_single_test( test )
+      Custodian::TestFactory.create( job ).each do |test|
+        puts "CREATED FROM JOB: #{test.class}"
+        process_single_test( test )
+      end
     end
 
 
