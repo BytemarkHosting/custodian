@@ -128,46 +128,62 @@ module Custodian
 
 
 
+    #
+    # Fetch a single job from the queue, and dispatch it for
+    # processing.
+    #
+    def process_single_job
+
+      #
+      #  Acquire a job from our queue.
+      #
+      job = @queue.fetch(1)
+
+      #
+      #  Ensure that the job is sane.
+      #
+      raise ArgumentError, "Job was empty" if (job.nil?)
+      raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
+
+
+      #
+      # Create the test-object from our class-factory
+      #
+      #      TODO: Here is where we'd handle multiple test-implementations
+      #            instead of .create returning a single Test-object it would
+      #            return an array of same.
+      #
+      test = Custodian::TestFactory.create( job )
+
+      #
+      #
+      #
+      #  Now process it.
+      #
+      process_single_test( test )
+    end
+
 
     #
     # Fetch a single job from the queue, and process it.
     #
-    def process_single_job
-
-      result = false
+    def process_single_test( test )
 
       begin
 
-        #
-        #  Acquire a job.
-        #
-        job = @queue.fetch(1)
-        log_message( "Job aquired: #{job}" )
+        log_message( "Received job: #{test.to_s}" )
 
         #
-        #  Get the job body
+        # The count of times this test has run, the result, and the start-time
         #
-        raise ArgumentError, "Job was empty" if (job.nil?)
-        raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
-
-
-        #
-        # The count of times this test has run.
-        #
-        count = 1
-
-
-        #
-        # Create the test-object.
-        #
-        test = Custodian::TestFactory.create( job )
-
+        count      = 1
+        result     = false
         start_time = Time.now
 
         #
-        #  We'll run no more than MAX times.
+        #  If a job fails we'll repeat it, but no more than MAX times.
         #
-        #  We stop the execution on a single success.
+        #  We exit here if we receive a single success.
         #
         while ( ( count < ( @retry_count + 1 ) ) && ( result == false ) )
 
@@ -182,11 +198,10 @@ module Custodian
           if ( result )
             log_message( "Test succeeed - clearing alert" )
             do_clear( test )
-            success = true
           end
 
           #
-          #  Some of our routers don't like being hammered.
+          #  Some of our routers/hosts don't like being hammered.
           #
           #  We delay before re-testing, but we only do this if
           # we're not on the last count.
@@ -200,7 +215,7 @@ module Custodian
           end
 
           #
-          #  Increase count.
+          #  Increase the log of times we've repeated the test.
           #
           count += 1
         end
@@ -210,12 +225,16 @@ module Custodian
         #
         end_time = Time.now
 
-
         #
         #  Duration of the test-run, in milliseconds
         #
         duration = (( end_time - start_time ) * 1000.0).to_i
 
+
+        #
+        #  Record that, if we have any alerters that are interested
+        # in run-times.
+        #
         do_duration( test, duration )
 
 
