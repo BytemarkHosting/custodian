@@ -36,29 +36,45 @@ module Custodian
       raise ArgumentError, "The type of test to create must be a string" unless ( line.kind_of? String )
 
       #
+      #  The array we return.
+      #
+      result = Array.new()
+
+
+      #
       # If this is an obvious protocol test.
       #
       if ( line =~ /must\s+(not\s+)?run\s+(\S+)(\s+|\.|$)/ )
+
         test_type = $2.dup
         test_type.chomp!( "." )
-        c = @@subclasses[test_type]
-        if c
 
-          obj = c.new( line )
+        #
+        #  For each of the test-classes that implement the type
+        #
+        @@subclasses[test_type].each do |impl|
 
-          #
-          # Get the notification text, which is not specific to the test-type
-          #
-          # We do this only after we've instantiated the test.
-          #
-          if ( line =~ /\s+otherwise\s+'([^']+)'/ )
-            obj.set_notification_text( $1.dup )
+          if impl
+            obj = impl.new( line )
+
+            #
+            # Get the notification text, which is not specific to the test-type
+            #
+            # We do this only after we've instantiated the test.
+            #
+            if ( line =~ /\s+otherwise\s+'([^']+)'/ )
+              obj.set_notification_text( $1.dup )
+            end
+
+            result.push(obj)
+          else
+            raise ArgumentError, "Bad test type: '#{test_type}'"
           end
-
-          return obj
-        else
-          raise ArgumentError, "Bad test type: '#{test_type}'"
         end
+
+        # return the test-types.
+        return( result )
+
       else
         raise "Unknown line given - Failed to instantiate a suitable protocol-test: '#{line}'"
       end
@@ -69,7 +85,8 @@ module Custodian
     # Register a new test type - this must be called by our derived classes
     #
     def self.register_test_type name
-      @@subclasses[name] = self
+      @@subclasses[name] ||=  Array.new()
+      @@subclasses[name].push(self)
     end
 
 
@@ -88,9 +105,14 @@ module Custodian
     # Get the friendly-type of this class
     #
     def get_type
-      @@subclasses.each do |name,value|
-        if ( value == self.class  )
-          return name
+      # get each registed type
+      @@subclasses.keys.each do |name|
+
+        # for each handler ..
+        @@subclasses[name].each do |impl|
+          if ( impl == self.class )
+            return name
+          end
         end
       end
       nil
