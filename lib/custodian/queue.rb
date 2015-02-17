@@ -85,13 +85,28 @@ end
 
 
     #
-    #  Fetch a job from the queue - the timeout parameter is ignored.
+    #  Fetch a job from the queue.
+    #
+    #  The timeout is used to specify the period we wait for a new job.
     #
     def fetch(timeout)
-      job = false
-      while( ! job )
+      job = nil
+      timeout ||= 0
+
+      # 
+      # Don't melt the CPU.
+      #
+      sleep_interval = 0.5
+
+      loop do
         job = @redis.lpop( "queue" )
+        break if job or timeout < 0
+
+        sleep( sleep_interval )
+
+        timeout -= sleep_interval
       end
+
       return( job )
     end
 
