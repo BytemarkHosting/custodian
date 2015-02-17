@@ -213,14 +213,20 @@ module Custodian
         test_host = test.target
         test_type = test.get_type
 
-
         alert         = Mauve::Proto::Alert.new
 
         #
         # Mauve only lets us use IDs which are <= 255 characters in length
         # hash the line from the parser to ensure it is short enough.
         # (IDs must be unique, per-source)
-        alert.id      = Digest::SHA1.hexdigest(test.to_s)
+        #
+        # Because there might be N-classes which implemented the test
+        # we need to make sure these are distinct too.
+        #
+        id_key  = test.to_s
+        id_key += test.class
+
+        alert.id = Digest::SHA1.hexdigest(id_key)
 
         alert.subject = subject
         alert.summary = "The #{test_type} test failed against #{test_host}"
