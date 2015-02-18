@@ -59,8 +59,9 @@ module Custodian
         tmp["type"]   = @test.get_type
         tmp["target"] = @test.target
         tmp["result"] = "RAISE"
-        tmp["reason"] =  @test.error()
+        tmp["reason"] = @test.error()
         tmp["test"  ] = @test.to_s
+        tmp["class" ] = @test.class
 
         @redis.lpush( "recent-tests", tmp.to_json)
         @redis.ltrim( "recent-tests", 0, 100 )
@@ -84,6 +85,7 @@ module Custodian
         tmp["result"] = "OK"
         tmp["reason"] = ""
         tmp["test"  ] = @test.to_s
+        tmp["class" ] = @test.class
 
         @redis.lpush( "recent-tests", tmp.to_json)
         @redis.ltrim( "recent-tests", 0, 100 )
