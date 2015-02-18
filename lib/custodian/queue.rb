@@ -58,6 +58,7 @@ module Custodian
       raise "Subclasses must implement this method!"
     end
 
+
     #
     # Empty the queue
     #
@@ -102,6 +103,7 @@ end
       end
     end
 
+
     #
     #  Add a new job to the queue.
     #
@@ -117,6 +119,10 @@ end
       @redis.llen( "queue" )
     end
 
+
+    #
+    #  Empty the queue, discarding all pending jobs.
+    #
     def flush!
       @redis.del( "queue" )
     end
@@ -137,6 +143,7 @@ end
       host  = ENV["QUEUE_ADDRESS"] || "127.0.0.1"
       @queue = Beanstalk::Pool.new( ["#{host}:11300" ] )
     end
+
 
     #
     #  Here we fetch a value from the queue, and delete it at the same time.
@@ -175,8 +182,9 @@ end
       ( stats['current-jobs-ready'] || 0 )
     end
 
+
     #
-    # Flush the queue.
+    # Flush the queue, discarding all pending jobs.
     #
     def flush!
       while( fetch(1) )
