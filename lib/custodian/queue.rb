@@ -94,12 +94,16 @@ end
     def fetch(timeout = 1)
       job = nil
 
-      while( 1 )
+      while( true )
 
         foo, job = @redis.blpop( "queue", :timeout => timeout )
-        return job if ( job )
 
-        sleep( timeout )
+        if ( job )
+          return job
+        else
+          sleep( timeout )
+        end
+
       end
     end
 
