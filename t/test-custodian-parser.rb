@@ -299,13 +299,16 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-        assert(obj, "Instantiating a test works")
-        assert( str == obj.to_s, "Getting back the test works" )
+
+        assert( !obj.nil? )
+        assert( obj.kind_of? Array )
+        assert( obj.size == 1 )
+        assert_equal( obj[0].to_s, str )
 
         if ( follow )
-          assert( obj.follow_redirects? )
+          assert( obj[0].follow_redirects? )
         else
-          assert( ! obj.follow_redirects? )
+          assert( ! obj[0].follow_redirects? )
         end
       end
     end
@@ -335,13 +338,16 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-        assert(obj, "Instantiating a test works")
-        assert( str == obj.to_s, "Getting back the test works" )
+
+        assert( !obj.nil? )
+        assert( obj.kind_of? Array )
+        assert( obj.size == 1 )
+        assert_equal( obj[0].to_s, str )
 
         if ( cb )
-          assert( obj.cache_busting? )
+          assert( obj[0].cache_busting? )
         else
-          assert( ! obj.cache_busting? )
+          assert( ! obj[0].cache_busting? )
         end
       end
     end
@@ -378,13 +384,16 @@ EOF
         # Create the new parser
         #
         obj = Custodian::TestFactory.create( str )
-        assert(obj, "Instantiating a test works")
-        assert( str == obj.to_s, "Getting back the test works" )
+
+        assert( !obj.nil? )
+        assert( obj.kind_of? Array )
+        assert( obj.size == 1 )
+        assert_equal( obj[0].to_s, str )
 
         if ( fail.nil? )
-          assert( obj.get_notification_text().nil? )
+          assert( obj[0].get_notification_text().nil? )
         else
-          assert_equal( obj.get_notification_text(), fail )
+          assert_equal( obj[0].get_notification_text(), fail )
         end
 
       end
