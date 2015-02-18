@@ -249,35 +249,35 @@ class TestTestFactory < Test::Unit::TestCase
   def test_types
     registered = Custodian::TestFactory.known_tests()
 
-    registered.each do |obj|
+    # for each test-type
+    registered.keys.each do |type|
 
+      # for each handler ..
+      registered[type].each do |name|
 
-      #
-      #  Try to get the name
-      #
-      name=obj.to_s
-      if ( name =~ /protocoltest::(.*)Test$/i )
-        tst = $1.dup.downcase
+        if ( name.to_s =~ /protocoltest::(.*)Test$/i )
+          tst = $1.dup.downcase
 
-        #
-        # NOTE: Skip the DNS and LDAP tests - they are more complex.
-        #
-        next if ( tst =~ /^(ldap|dns|dnsbl)$/ )
+          #
+          # NOTE: Skip the DNS and LDAP tests - they are more complex.
+          #
+          next if ( tst =~ /^(ldap|dns|dnsbl|sslcertificate)$/ )
 
-        # normal
-        test_one = "http://foo/ must run #{tst} on 1234"
-        test_two = "http://foo/ must not run #{tst} on 12345"
+          # normal
+          test_one = "http://foo.com/.com must run #{tst} on 1234"
+          test_two = "http://foo.com/ must not run #{tst} on 12345"
 
-        assert_nothing_raised do
+          assert_nothing_raised do
 
-          test_one_obj = Custodian::TestFactory.create( test_one )
-          assert( !test_one_obj.inverted() )
+            test_one_obj = Custodian::TestFactory.create( test_one )
+            assert( !test_one_obj[0].inverted() )
 
-          test_two_obj = Custodian::TestFactory.create( test_two )
-          assert( test_two_obj.inverted(), "Found inverted test for #{tst}" )
+            test_two_obj = Custodian::TestFactory.create( test_two )
+            assert( test_two_obj[0].inverted(), "Found inverted test for #{tst}" )
 
-          assert_equal( tst, test_one_obj.get_type )
-          assert_equal( tst, test_two_obj.get_type )
+            assert_equal( tst, test_one_obj[0].get_type )
+            assert_equal( tst, test_two_obj[0].get_type )
+          end
         end
       end
     end
@@ -312,4 +312,3 @@ class TestTestFactory < Test::Unit::TestCase
   end
 
 end
-
