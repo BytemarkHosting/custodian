@@ -87,27 +87,19 @@ end
     #
     #  Fetch a job from the queue.
     #
-    #  The timeout is used to specify the period we wait for a new job.
+    #  The timeout is used to specify the period we wait for a new job, and
+    # we pause that same period between fetches.
     #
-    def fetch(timeout)
+    def fetch(timeout = 1)
       job = nil
-      timeout ||= 0
 
-      # 
-      # Don't melt the CPU.
-      #
-      sleep_interval = 0.5
+      while( 1 )
 
-      loop do
-        job = @redis.lpop( "queue" )
-        break if job or timeout < 0
+        foo, job = @redis.blpop( "queue", :timeout => timeout )
+        return job if ( job )
 
-        sleep( sleep_interval )
-
-        timeout -= sleep_interval
+        sleep( timeout )
       end
-
-      return( job )
     end
 
     #
