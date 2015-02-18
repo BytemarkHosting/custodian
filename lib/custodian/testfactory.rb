@@ -28,7 +28,6 @@ module Custodian
     #
     # The line will be like "target must run tcp|ssh|ftp|smtp .."
     #
-    #
     def self.create( line )
 
 
@@ -76,7 +75,7 @@ module Custodian
         return( result )
 
       else
-        raise "Unknown line given - Failed to instantiate a suitable protocol-test: '#{line}'"
+        raise "Failed to instantiate a suitable protocol-test for '#{line}'"
       end
     end
 
@@ -91,10 +90,9 @@ module Custodian
 
 
     #
-    # Return an array of test-types we know about
+    # Return the test-types we know about.
     #
     # i.e. Derived classes that have registered themselves.
-    #
     #
     def self.known_tests
       @@subclasses
@@ -102,7 +100,7 @@ module Custodian
 
 
     #
-    # Get the friendly-type of this class
+    # Get the friendly-type of derived-classes
     #
     def get_type
       # get each registed type
