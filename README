@@ -61,6 +61,22 @@ is documented in that same file.
 
 
 
+Dependencies
+------------
+
+The software is written in Ruby and will work under either Ruby 1.8,
+or Ruby 1.9.1.  The software has not yet been tested upon Ruby 2.x, JRuby,
+or similar.
+
+Dependencies, beyond ruby, are limited to the following gems:
+
+* For HTTP/HTTPS testing: curb
+* For communication with the queue: redis / beanstalkd-client
+
+You may install either redis or beanstalkd as your queue, and install
+the corresponding gem.  There is no need to install both.
+
+
 
 Documentation
 -------------
