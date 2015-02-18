@@ -150,7 +150,6 @@ module Custodian
       # Create the test-object from our class-factory
       #
       Custodian::TestFactory.create( job ).each do |test|
-        puts "CREATED FROM JOB: #{test.class}"
         process_single_test( test )
       end
     end
