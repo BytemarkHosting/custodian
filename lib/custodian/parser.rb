@@ -337,8 +337,23 @@ module Custodian
           job = nil
 
           begin
+
+            #
+            #  We need to parse the job with the class-factory
+            #
+            #  BUT the key thing here is that the line is parseable,
+            # not that we care about the result of that parsing.
+            #
+            # The result of the parsing will be an array and if so
+            # we just need to store the first job.  Since it is duplicated
+            # if there are multiple handlers and we should always have one -
+            # or an unknown job-type of course!
+            #
             job = Custodian::TestFactory.create( macro_expanded )
-            ret.push( job )
+
+            if ( job && ( job.kind_of? Array ) )
+              ret.push( job[0].to_s )
+            end
           rescue => ex
             raise ArgumentError, "Parsing a line to a protocol test gave the error: #{ex}"
             return nil
