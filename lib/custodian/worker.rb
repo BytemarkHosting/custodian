@@ -53,6 +53,7 @@ module Custodian
     #
     attr_reader :retry_count
 
+
     #
     # Should we sleep between repeated tests?
     #
@@ -74,14 +75,16 @@ module Custodian
 
 
     #
-    # Constructor: Connect to the queue, and setup our settings.
+    # Constructor.
+    #
+    # Connect to the queue, and record interesting settings away.
     #
     def initialize( settings )
 
       # Connect to the queue
       @queue = QueueType.create( settings.queue_type() )
 
-      # Get the alerter-type to instantiate
+      # Get the alerter-type(s) to instantiate
       @alerter = settings.alerter
 
       # Instantiate the logger.
@@ -103,8 +106,7 @@ module Custodian
 
 
     #
-    # Write the given message to our logfile - and show it to the console
-    # if we're running with '--verbose' in play
+    # Write the given message to our logfile - and show it to the console too.
     #
     def log_message( msg )
       @logger.info( msg )
@@ -145,9 +147,8 @@ module Custodian
       raise ArgumentError, "Job was empty" if (job.nil?)
       raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
 
-
       #
-      # Create the test-object from our class-factory
+      # Create test-objects from our class-factory, and process them.
       #
       Custodian::TestFactory.create( job ).each do |test|
         process_single_test( test )
@@ -156,7 +157,11 @@ module Custodian
 
 
     #
-    # Fetch a single job from the queue, and process it.
+    # Process a single test.
+    #
+    # A test which succeeds will clear any outstanding alert.
+    #
+    # Any test which fails for N-times in a row will raise an alert.
     #
     def process_single_test( test )
 
