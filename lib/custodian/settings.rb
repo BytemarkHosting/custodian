@@ -8,8 +8,8 @@ require 'singleton'
 #
 # The configuration file is optional, and we have defaults for every value.
 #
-# This class is a singleton to avoid having to re-parse the configuration file more than
-# once per program-launch.
+# This class is a singleton to avoid having to re-parse the configuration
+# file more than once per program-launch.
 #
 module Custodian
 
@@ -48,7 +48,7 @@ module Custodian
       #
       # Load and "parse" the key=value content.
       #
-      File.open( file, "r").each_line do |line|
+      File.open( file, "r" ).each_line do |line|
         next if ( line.nil? || line =~ /^#/ )
         if ( line =~ /^(.*)=(.*)$/ )
           key = $1.dup

@@ -67,10 +67,9 @@ module Custodian
 
 
     #
-    # Return an array of the notifiers we know about.
+    # Return the notifiers we know about.
     #
     # i.e. Derived classes that have registered themselves.
-    #
     #
     def self.known_alerters
       @@subclasses
@@ -78,7 +77,7 @@ module Custodian
 
 
     #
-    # Get the friendly-type of this class
+    # Get the friendly-type of derived-classes.
     #
     def get_type
       @@subclasses.each do |name,value|
@@ -108,12 +107,14 @@ module Custodian
     end
 
 
+
     #
     # Raise an alert.
     #
     def raise
       puts "NOP"
     end
+
 
 
     #
