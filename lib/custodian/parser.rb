@@ -43,11 +43,6 @@ module Custodian
     attr_reader :filename
 
     #
-    # Timeout period, in seconds, that we encode into test objects.
-    #
-    attr_reader :timeout
-
-    #
     # An array of test-objects, which are subclasses of our test-factory.
     #
     attr_reader :jobs
@@ -58,27 +53,25 @@ module Custodian
     # Constructor
     #
     def initialize( )
-
-
       @MACROS  = Hash.new()
       @jobs    = Array.new()
-      @timeout = 60
-
     end
 
 
 
 
     #
-    # Retrieve a HTTP/HTTPS page from the web, which is used for macro-expansion.
+    # Retrieve a HTTP/HTTPS page from the web, for macro-expansion.
     #
     def getURL (uri_str)
       begin
         uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
         url = URI.parse(uri_str)
         http = Net::HTTP.new(url.host, url.port)
-        http.open_timeout = @timeout
-        http.read_timeout = @timeout
+
+        # timeout for the HTTP-fetch, in seconds.
+        http.open_timeout = 60
+        http.read_timeout = 60
 
         if (url.scheme == "https")
           http.use_ssl = true
