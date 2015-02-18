@@ -52,8 +52,8 @@ class TestTestFactory < Test::Unit::TestCase
     end
 
 
-    assert( Custodian::TestFactory.create( "ftp.example.com        must run ftp." ).target() == "ftp.example.com"  )
-    assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." ).target() == "ftp.example.com"  )
+    assert( Custodian::TestFactory.create( "ftp.example.com        must run ftp." )[0].target() == "ftp.example.com"  )
+    assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." )[0].target() == "ftp.example.com"  )
 
 
     #
@@ -74,11 +74,11 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create( str )
 
-        #
-        #  Ensure we got the object, and the port was correct.
-        #
-        assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj.port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert( obj.kind_of? Array )
+        assert( ! obj.empty? )
+        assert_equal( obj[0].get_type, "ftp" )
+        assert_equal( obj[0].port().to_s(), prt )
+
       end
     end
 
@@ -106,11 +106,10 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create( str )
 
-        #
-        #  Ensure we got the object, and the port was correct.
-        #
-        assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj.port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert(obj)
+        assert( obj.kind_of? Array )
+        assert( ! obj.empty? )
+        assert( obj[0].port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
 
@@ -131,9 +130,9 @@ class TestTestFactory < Test::Unit::TestCase
       assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync on 3311 otherwise 'xxx'." ) )
     end
 
-    assert( Custodian::TestFactory.create( "rsync.example.com  must run rsync." ).target() ==
+    assert( Custodian::TestFactory.create( "rsync.example.com  must run rsync." )[0].target() ==
             "rsync.example.com"  )
-    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." ).target() ==
+    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." )[0].target() ==
             "rsync.example.com"  )
 
 
@@ -155,11 +154,9 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create( str )
 
-        #
-        #  Ensure we got the object, and the port was correct.
-        #
-        assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj.port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert( obj.kind_of? Array )
+        assert( ! obj.empty? )
+        assert( obj[0].port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
   end
@@ -233,11 +230,14 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create( str )
 
+        assert( obj.kind_of? Array )
+        assert( ! obj.empty? )
+
         #
         #  Ensure we got the object, and the port was correct.
         #
         assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj.inverted() == inv, "#{str} -> #{inv}" )
+        assert( obj[0].inverted() == inv, "#{str} -> #{inv}" )
       end
     end
 
@@ -304,7 +304,9 @@ class TestTestFactory < Test::Unit::TestCase
       assert_nothing_raised do
         obj = Custodian::TestFactory.create( entry )
         assert(obj)
-        assert_equal( "test.host.example.com", obj.target() )
+        assert( obj.kind_of? Array )
+        assert( ! obj.empty? )
+        assert_equal( "test.host.example.com", obj[0].target() )
       end
     end
   end
