@@ -48,6 +48,11 @@ module Custodian
         test_type = $2.dup
         test_type.chomp!( "." )
 
+        if ( @@subclasses[test_type].nil? )
+            raise ArgumentError, "There is no handler registered for the '#{test_type}' test-type"
+        end
+
+
         #
         #  For each of the test-classes that implement the type
         #
