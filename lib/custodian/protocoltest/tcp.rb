@@ -132,6 +132,105 @@ module Custodian
 
 
 
+      #
+      # Run the connection test - optionally matching against the banner.
+      #
+      # If the banner is nil then we're merely testing we can connect and
+      # send the string "quit".
+      #
+      # There are two ways this method will be invoked, via the configuration file:
+      #
+      #         foo.vm.bytemark.co.uk must run tcp on 24 with banner 'smtp'
+      # or
+      #         1.2.3.44 must run tcp on 53 otherwise 'named failed'.
+      #
+      # Here we're going to try to resolve the hostname in the first version
+      # into both IPv6 and IPv4 addresses and test them both.
+      #
+      # A failure in either version will result in a failure.
+      #
+      def run_test_internal( host, port, banner = nil, do_read = false )
+
+        #
+        # Get the timeout period.
+        #
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
+        #
+        # Perform the DNS lookups of the specified name.
+        #
+        ips = Array.new()
+
+        #
+        #  Does the name look like an IP?
+        #
+        begin
+          x = IPAddr.new( host )
+          if ( x.ipv4? or x.ipv6? )
+            ips.push( host )
+          end
+        rescue ArgumentError
+          #
+          # NOP - Just means the host wasn't an IP
+          #
+        end
+
+
+
+        #
+        # OK if it didn't look like an IP address then attempt to
+        # look it up, as both IPv4 and IPv6.
+        #
+        begin
+          timeout( period ) do
+
+            Resolv::DNS.open do |dns|
+              ress = dns.getresources(host, Resolv::DNS::Resource::IN::A)
+              ress.map { |r| ips.push( r.address.to_s ) }
+              ress = dns.getresources(host, Resolv::DNS::Resource::IN::AAAA)
+              ress.map { |r| ips.push( r.address.to_s ) }
+            end
+          end
+        rescue Timeout::Error => e
+          @error = "Timed-out performing DNS lookups: #{e}"
+          return nil
+        end
+
+
+        #
+        #  Did we fail to perform a DNS lookup?
+        #
+        if ( ips.empty? )
+          @error = "#{@host} failed to resolve to either IPv4 or IPv6"
+          return false
+        end
+
+
+        #
+        # Run the test, avoiding the use of the shell, for each of the
+        # IPv4 and IPv6 addresses we discovered, or the host that we
+        # were given.
+        #
+        ips.each do |ip|
+          if ( ! run_test_internal_real( ip, port, banner, do_read ) )
+
+            return false
+            #
+            # @error will be already set.
+            #
+          end
+        end
+
+
+        #
+        #  All was OK
+        #
+        @error = nil
+        return true
+      end
+
+
 
       #
       # Run the connection test - optionally matching against the banner.
@@ -139,8 +238,10 @@ module Custodian
       # If the banner is nil then we're merely testing we can connect and
       # send the string "quit".
       #
+      # This method will ONLY ever be invoked with an IP-address for a
+      # destination.
       #
-      def run_test_internal( host, port, banner = nil, do_read = false )
+      def run_test_internal_real( host, port, banner = nil, do_read = false )
 
         #
         # Get the timeout period for this test.
