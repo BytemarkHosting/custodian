@@ -10,6 +10,11 @@ require 'custodian/testfactory'
 ### DNSHOSTS must run ping otherwise ..
 ###
 #
+# We take care to resolve any value we test, so that we can test explicitly
+# for the family involved.  (i.e. If we're ping-testing example.com then
+# we will explicitly look for an IPv4 and IPv6 address to test, rather than
+# just using 'example.com'.)
+#
 #
 module Custodian
 
@@ -65,6 +70,7 @@ module Custodian
         # Find the binary we're going to invoke.
         #
         binary = nil
+        binary = "./bin/multi-ping"
         binary = "/usr/bin/multi-ping"  if ( File.exists?( "/usr/bin/multi-ping" ) )
 
         if ( binary.nil? )
@@ -86,15 +92,79 @@ module Custodian
 
 
         #
-        # Run the test: Avoiding the use of the shell.
+        # Get the timeout period.
         #
-        if ( system( binary, @host ) == true )
-          return true
-        else
-          @error = "Ping failed."
+        settings = Custodian::Settings.instance()
+        period   = settings.timeout()
+
+
+
+        #
+        # Perform the DNS lookups of the specified name.
+        #
+        ips = Array.new()
+
+        #
+        #  Does the name look like an IP?
+        #
+        begin
+          x = IPAddr.new( @host )
+          if ( x.ipv4? or x.ipv6? )
+            ips.push( @host )
+          end
+        rescue ArgumentError
+        end
+
+
+        #
+        # OK if it didn't look like an IP address then attempt to
+        # look it up, as both IPv4 and IPv6.
+        # 
+        begin
+          timeout( period ) do
+
+            Resolv::DNS.open do |dns|
+              ress = dns.getresources(@host, Resolv::DNS::Resource::IN::A)
+              ress.map { |r| ips.push( r.address.to_s ) }
+              ress = dns.getresources(@host, Resolv::DNS::Resource::IN::AAAA)
+              ress.map { |r| ips.push( r.address.to_s ) }
+            end
+          end
+        rescue Timeout::Error => e
+          @error = "Timed-out performing DNS lookups: #{e}"
+          return nil
+        end
+
+
+        #
+        #  Did we fail to perform a DNS lookup?
+        #
+        if ( ips.empty? )
+          @error = "#{@host} failed to resolve to either IPv4 or IPv6"
           return false
         end
 
+
+        #
+        # Run the test, avoiding the use of the shell, for each of the
+        # IPv4 and IPv6 addresses we discovered, or the host that we
+        # were given.
+        #
+        ips.each do |ip|
+          if ( system( binary, ip ) != true )
+            @error = "Ping failed for #{ip} - from #{@host} "
+            return false
+          end
+        end
+
+        #
+        # If there was a failure then the previous loop would have
+        # set the @error value and returned false.
+        #
+        # So by the time we reach here we know that all the addresses
+        # were pingable.
+        #
+        return true
       end
 
 
