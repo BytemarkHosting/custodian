@@ -1,3 +1,13 @@
+custodian (0.24) stable; urgency=medium
+
+  * Added SSL-validation for the HTTPS tests.
+    This only works in office-hours.
+  * Updated the TCP-based and ping-based test to explicitly perform DNS
+    lookups.  This allows IPv4 and IPv6-tests to be made from a single
+    hostname.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 03 Mar 2015 09:05:01 +0000
+
 custodian (0.23) stable; urgency=medium
 
   * Updated the redis-alerter to make the test-definition available.
