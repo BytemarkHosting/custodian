@@ -1,3 +1,9 @@
+custodian (0.24.2) stable; urgency=medium
+
+  * Allow "ipv6_only" and "ipv4_only" to be added to tests.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Mar 2015 10:00:01 +0000
+
 custodian (0.24.1) stable; urgency=medium
 
   * Updated to work with Ruby 1.8, and explictly convert the class
