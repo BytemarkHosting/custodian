@@ -158,7 +158,14 @@ class SSLCheck
         s = TCPSocket.open(uri.host, uri.port)
         s = OpenSSL::SSL::SSLSocket.new(s, ctx)
         s.sync_close = true
-        s.hostname = uri.host # SNI
+
+        # Setup a hostname for SNI-purposes.
+        begin
+          s.hostname = uri.host
+        rescue NoMethodError => err
+          # SNI isn't possible, as the SSL library is too old.
+        end
+
         s.connect
         @certificate = s.peer_cert
         self.bundle = s.peer_cert_chain
