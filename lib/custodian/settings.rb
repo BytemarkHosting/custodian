@@ -169,7 +169,7 @@ module Custodian
     def alerter
       _load() unless( _loaded? )
 
-      @settings['alerter'] || "redis"
+      @settings['alerter'] || "file"
     end
 
 
