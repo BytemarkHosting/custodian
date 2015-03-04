@@ -1,3 +1,9 @@
+custodian (0.24.4) stable; urgency=low
+
+  * Check SSL certificates correctly if our SSL library is too old for SNI.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Mar 2015 13:33:31 +0000
+
 custodian (0.24.3) stable; urgency=low
 
   * Remove the logfile - default to logging to stdout and allowing
