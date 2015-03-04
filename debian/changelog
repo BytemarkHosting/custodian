@@ -1,3 +1,10 @@
+custodian (0.24.3) stable; urgency=low
+
+  * Remove the logfile - default to logging to stdout and allowing
+    deployment to use syslog via "logger -t custodian".
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Mar 2015 12:44:21 +0000
+
 custodian (0.24.2) stable; urgency=medium
 
   * Allow "ipv6_only" and "ipv4_only" to be added to tests.
