@@ -1,3 +1,9 @@
+custodian (0.24.6) stable; urgency=low
+
+  * Allow SSL-certificate checking to be disabled via "no_ssl_check".
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 04 Mar 2015 15:00:51 +0000
+
 custodian (0.24.5) stable; urgency=low
 
   * Correctly report the reason for SSL failures.
