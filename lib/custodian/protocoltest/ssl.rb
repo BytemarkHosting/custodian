@@ -387,10 +387,21 @@ module Custodian
       #
       def run_test
 
+        #
+        #  If the line disables us then return early
+        #
+        if ( @line =~ /no_ssl_check/ )
+          return true
+        end
+
+
+        #
+        #  Get the current hour.
+        #
         hour = Time.now.hour
 
         #
-        #  If outside 10AM-5PM we don't alert.
+        #  If outside 10AM-5PM we don't run the test.
         #
         if ( hour < 10 || hour > 17 )
           puts( "Outside office hours - Not running SSL-Verification of #{@host}" )
