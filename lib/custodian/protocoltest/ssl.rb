@@ -19,7 +19,7 @@ class SSLCheck
 
   # This is a helper for console-debugging.
   def verbose( msg )
-    # nop
+    return(msg)
   end
 
   #
@@ -415,8 +415,8 @@ module Custodian
           puts( "SSL Verification returned no result (timeout?) #{@host}" )
           return true
         else
-          puts( "SSL certificate check for #{@host} has failed." )
-          @error  = "SSL certificate check for #{@host} failed: ";
+          puts( "SSL Verification for #{@host} has failed." )
+          @error  = "SSL Verification for #{@host} failed: ";
           @error +=  s.errors.join("\n")
           return false
         end
