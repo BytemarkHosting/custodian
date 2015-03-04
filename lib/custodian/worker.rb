@@ -35,7 +35,9 @@ module Custodian
 
 
     #
-    # The name of the alerter to use.
+    # The alerter which is being used.
+    #
+    # NOTE: There might be more than one, comma-separated.
     #
     attr_reader :alerter
 
@@ -67,14 +69,14 @@ module Custodian
     #
     def initialize( settings )
 
-      # Connect to the queue
-      @queue = QueueType.create( settings.queue_type() )
-
-      # Get the alerter-type(s) to instantiate
-      @alerter = settings.alerter
-
       # Save the settings
       @settings = settings
+
+      # Connect to the queue
+      @queue = QueueType.create( @settings.queue_type() )
+
+      # Get the alerter-type(s) to instantiate
+      @alerter = @settings.alerter
 
       # How many times to repeat a failing test
       @retry_count=@settings.retries()
@@ -88,7 +90,7 @@ module Custodian
 
 
     #
-    # Show to the console if "--verbose" was specified.
+    # Show a message on STDOUT if "--verbose" was specified.
     #
     def log_message( msg )
       puts msg if ( ENV["VERBOSE" ] )
@@ -146,7 +148,7 @@ module Custodian
 
       begin
 
-        log_message( "Received job: #{test.to_s}" )
+        log_message( "Acquired job: #{test.to_s}" )
 
         #
         # The count of times this test has run, the result, and the start-time
