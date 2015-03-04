@@ -1,12 +1,4 @@
 
-
-#
-# Standard modules
-#
-require 'logger'
-
-
-
 #
 # Our modules.
 #
@@ -61,12 +53,6 @@ module Custodian
 
 
     #
-    # The log-file object
-    #
-    attr_reader :logger
-
-
-    #
     # The settings from the global configuration file
     #
     attr_reader :settings
@@ -87,10 +73,6 @@ module Custodian
       # Get the alerter-type(s) to instantiate
       @alerter = settings.alerter
 
-      # Instantiate the logger.
-      logfile = settings.log_file
-      @logger = Logger.new( logfile, "daily" )
-
       # Save the settings
       @settings = settings
 
@@ -106,11 +88,10 @@ module Custodian
 
 
     #
-    # Write the given message to our logfile - and show it to the console too.
+    # Show to the console if "--verbose" was specified.
     #
     def log_message( msg )
-      @logger.info( msg )
-      puts msg
+      puts msg if ( ENV["VERBOSE" ] )
     end
 
 
@@ -121,8 +102,6 @@ module Custodian
     #
     def run!
       while( true )
-        log_message( "\n" )
-        log_message( "\n" )
         log_message( "Waiting for job.." )
         process_single_job()
       end
