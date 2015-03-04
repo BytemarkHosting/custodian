@@ -224,7 +224,7 @@ module Custodian
         # we need to make sure these are distinct too.
         #
         id_key  = test.to_s
-        id_key += test.class
+        id_key += test.class.to_s
 
         alert.id = Digest::SHA1.hexdigest(id_key)
 
