@@ -317,7 +317,7 @@ module Custodian
 
         # uh-oh! Resolution failed on both protocols!
         if resolution_errors.length > 1
-          errors << "Hostname did not resolve for #{resolution_errors.join(", ")}"
+          errors << "Hostname did not resolve for #{resolution_errors.join(', ')}"
         end
 
         if errors.length > 0
