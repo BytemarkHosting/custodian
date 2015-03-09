@@ -413,7 +413,7 @@ module Custodian
     def parse_file( filename )
 
       raise ArgumentError, "Missing configuration file!" if ( filename.nil? )
-      raise ArgumentError, "File not found: #{@file}" unless ( File.exists?( filename) )
+      raise ArgumentError, "File not found: #{@file}" unless ( File.exist?( filename) )
 
       #
       #  Read the configuration file.

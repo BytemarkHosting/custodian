@@ -63,7 +63,7 @@ module Custodian
       def get_hostname
         hostname = "localhost.localdomain"
 
-        if ( File.exists?( "/etc/hostname" ) )
+        if ( File.exist?( "/etc/hostname" ) )
           File.readlines("/etc/hostname" ).each do |line|
             hostname = line if ( !line.nil? )
             hostname.chomp!

@@ -43,7 +43,7 @@ module Custodian
       #
       # The global configuration file.
       #
-      return unless( File.exists?( file ) )
+      return unless( File.exist?( file ) )
 
       #
       # Load and "parse" the key=value content.
