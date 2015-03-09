@@ -75,7 +75,7 @@ class TestTestFactory < Test::Unit::TestCase
         obj = Custodian::TestFactory.create(str)
 
         assert(obj.kind_of? Array)
-        assert(! obj.empty?)
+        assert(!obj.empty?)
         assert_equal(obj[0].get_type, 'ftp')
         assert_equal(obj[0].port.to_s, prt)
 
@@ -108,7 +108,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         assert(obj)
         assert(obj.kind_of? Array)
-        assert(! obj.empty?)
+        assert(!obj.empty?)
         assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
@@ -155,7 +155,7 @@ class TestTestFactory < Test::Unit::TestCase
         obj = Custodian::TestFactory.create(str)
 
         assert(obj.kind_of? Array)
-        assert(! obj.empty?)
+        assert(!obj.empty?)
         assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
@@ -231,7 +231,7 @@ class TestTestFactory < Test::Unit::TestCase
         obj = Custodian::TestFactory.create(str)
 
         assert(obj.kind_of? Array)
-        assert(! obj.empty?)
+        assert(!obj.empty?)
 
         #
         #  Ensure we got the object, and the port was correct.
@@ -305,7 +305,7 @@ class TestTestFactory < Test::Unit::TestCase
         obj = Custodian::TestFactory.create(entry)
         assert(obj)
         assert(obj.kind_of? Array)
-        assert(! obj.empty?)
+        assert(!obj.empty?)
         assert_equal('test.host.example.com', obj[0].target)
       end
     end

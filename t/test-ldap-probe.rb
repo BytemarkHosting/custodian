@@ -33,7 +33,7 @@ class TestLDAPProbe < Test::Unit::TestCase
     end
 
     assert(test.kind_of? Array)
-    assert(! test.empty?)
+    assert(!test.empty?)
     assert_equal(test[0].get_type, 'ldap')
   end
 
@@ -60,7 +60,7 @@ class TestLDAPProbe < Test::Unit::TestCase
         test = Custodian::TestFactory.create(str)
 
         assert(test.kind_of? Array)
-        assert(! test.empty?)
+        assert(!test.empty?)
 
       end
     end

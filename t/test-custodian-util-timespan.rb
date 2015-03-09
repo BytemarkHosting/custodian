@@ -59,7 +59,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     end
 
     for hour in 0..11
-      assert_equal(12 +hour, Custodian::Util::TimeSpan.to_hour("#{hour}pm"))
+      assert_equal(12 + hour, Custodian::Util::TimeSpan.to_hour("#{hour}pm"))
     end
 
   end
@@ -171,25 +171,25 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     #
     # The preceeding + successive hours shouldn't be.
     #
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, 15))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, 19))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, 15))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, 19))
 
     #
     # That is true for the string-versions too
     #
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, '3pm'))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, '7pm'))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, '3pm'))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, '7pm'))
 
 
     #
     # Random hours should be outside too.
     #
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, 3))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, '3am'))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, 7))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, '7am'))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, 9))
-    assert(! Custodian::Util::TimeSpan.inside?(open, close, '9am'))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, 3))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, '3am'))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, 7))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, '7am'))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, 9))
+    assert(!Custodian::Util::TimeSpan.inside?(open, close, '9am'))
 
   end
 

@@ -94,7 +94,7 @@ end
     def fetch(timeout = 1)
       job = nil
 
-      while(true)
+      loop do
 
         foo, job = @redis.blpop('queue', :timeout => timeout)
 
@@ -191,7 +191,7 @@ end
     # Flush the queue, discarding all pending jobs.
     #
     def flush!
-      while(fetch(1))
+      while fetch(1)
         # nop
       end
     end

@@ -61,7 +61,7 @@ class SSLCheck
   #
   def domain=(d)
     raise ArgumentError, 'domain must be a String' unless d.is_a?(String)
-    @domain=d
+    @domain = d
   end
 
   #
@@ -277,7 +277,7 @@ class SSLCheck
       return true
     end
 
-    days_until_expiry = (self.certificate.not_after.to_i - Time.now.to_i)/(24.0*3600).floor.to_i
+    days_until_expiry = (self.certificate.not_after.to_i - Time.now.to_i) / (24.0 * 3600).floor.to_i
 
     if days_until_expiry > 14
       verbose  "The certificate for #{self.domain} is valid until #{self.certificate.not_after}."

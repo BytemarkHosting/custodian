@@ -33,8 +33,8 @@ module Custodian
         #
         #  Ensure within a valid range
         #
-        raise ArgumentError, 'Integer required for time'   unless(desc.kind_of? Integer)
-        raise ArgumentError,  "Invalid time: #{desc}" unless((desc >= 0) && (desc <= 23))
+        raise ArgumentError, 'Integer required for time'   unless desc.kind_of? Integer
+        raise ArgumentError,  "Invalid time: #{desc}" unless (desc >= 0) && (desc <= 23)
 
 
         #
@@ -67,12 +67,12 @@ module Custodian
         #  Iterate over the hours.  Store in a hash.
         #
         hour = p_start
-        while(hour != p_end)
+        while (hour != p_end)
           valid[hour] = 1
           hour += 1
           hour  = 0 if  hour > 23 
         end
-        valid[p_end]=1
+        valid[p_end] = 1
 
         #
         #  Return the hash

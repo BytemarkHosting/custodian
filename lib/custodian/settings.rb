@@ -43,7 +43,7 @@ module Custodian
       #
       # The global configuration file.
       #
-      return unless(File.exist?(file))
+      return unless File.exist?(file)
 
       #
       # Load and "parse" the key=value content.
@@ -84,7 +84,7 @@ module Custodian
     # Retrieve an arbitrary key
     #
     def key(name)
-      _load unless(_loaded?)
+      _load unless _loaded?
       @settings[name]
     end
 
@@ -93,7 +93,7 @@ module Custodian
     # The timeout period for each individual test.
     #
     def timeout
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       if  @settings['timeout'] 
         @settings['timeout'].to_i
@@ -109,7 +109,7 @@ module Custodian
     # before raising an alert.
     #
     def retries
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       if  @settings['retries'] 
         @settings['retries'].to_i
@@ -129,7 +129,7 @@ module Custodian
     # A delay of zero is permissable.
     #
     def retry_delay
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       if  @settings['retry_delay'] 
         @settings['retry_delay'].to_i
@@ -146,7 +146,7 @@ module Custodian
     # environmental variable 'QUEUE_ADDRESS'.
     #
     def queue_type
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       @settings['queue_type'] || 'redis'
     end
@@ -157,7 +157,7 @@ module Custodian
     # The filename for the logfile.
     #
     def log_file
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       @settings['log_file'] || 'custodian-dequeue.log'
     end
@@ -167,7 +167,7 @@ module Custodian
     # The alerter to use
     #
     def alerter
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       @settings['alerter'] || 'file'
     end
@@ -177,7 +177,7 @@ module Custodian
     # The alert-source we send.  Only used when the notifier is set to mauve.
     #
     def alert_source
-      _load unless(_loaded?)
+      _load unless _loaded?
 
       @settings['alert_source'] || 'Custodian'
     end
@@ -195,7 +195,7 @@ module Custodian
     # When the alerter is "redis" the target is the redis-server address.
     #
     def alerter_target(alert)
-      _load unless(_loaded?)
+      _load unless _loaded?
 
 
       #

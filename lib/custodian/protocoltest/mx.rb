@@ -114,7 +114,7 @@ module Custodian
                 read = socket.sysread(1024)
 
                 # trim to a sane length & strip newlines.
-                if  ! read.nil? 
+                if  !read.nil? 
                   read = read[0,255]
                   read.gsub!(/[\n\r]/, '')
                 end
@@ -126,13 +126,13 @@ module Custodian
                 end
               rescue
                 # Failure to connect.
-                failed +=1
+                failed += 1
                 error += "Error connecting to #{backend}:25. "
               end
             end
           rescue Timeout::Error => ex
             # Timeout
-            failed +=1
+            failed += 1
             error += "Timeout connecting to #{backend}:25. "
           end
         end

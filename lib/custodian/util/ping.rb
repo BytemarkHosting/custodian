@@ -78,7 +78,7 @@ module Custodian
           if (system("ping6 -c 1 #{@resolved} 2>/dev/null >/dev/null") == true)
             return true
           end
-        elsif(is_ipv4?)
+        elsif is_ipv4?
           if (system("ping -c 1 #{@resolved} 2>/dev/null >/dev/null") == true)
             return true
           end
