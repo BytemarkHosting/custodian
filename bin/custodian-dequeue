@@ -65,7 +65,7 @@ if __FILE__ == $PROGRAM_NAME then
   #
   #  The settings object contains a lot of configuration-data.
   #
-  settings = Custodian::Settings.instance()
+  settings = Custodian::Settings.instance
 
   begin
     opts = GetoptLong.new(
@@ -137,7 +137,7 @@ if __FILE__ == $PROGRAM_NAME then
   #  Single step?
   #
   if ( ENV['SINGLE'] )
-    worker.process_single_job()
+    worker.process_single_job
     exit(0)
   end
 
@@ -145,7 +145,7 @@ if __FILE__ == $PROGRAM_NAME then
   #  Run until we see a failure?
   #
   if ( ENV['FAIL'] )
-    worker.process_until_fail()
+    worker.process_until_fail
     exit(0)
   end
 

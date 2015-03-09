@@ -209,8 +209,8 @@ module Custodian
         #
         # Get the timeout period for this test.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         #
         # The URL we'll fetch/poll.

@@ -73,16 +73,16 @@ module Custodian
       @settings = settings
 
       # Connect to the queue
-      @queue = QueueType.create( @settings.queue_type() )
+      @queue = QueueType.create( @settings.queue_type )
 
       # Get the alerter-type(s) to instantiate
       @alerter = @settings.alerter
 
       # How many times to repeat a failing test
-      @retry_count=@settings.retries()
+      @retry_count=@settings.retries
 
       # Should we sleep between repeated tests?
-      @retry_delay = @settings.retry_delay()
+      @retry_delay = @settings.retry_delay
 
     end
 
@@ -105,7 +105,7 @@ module Custodian
     def run!
       while( true )
         log_message( "Waiting for job.." )
-        process_single_job()
+        process_single_job
       end
     end
 
@@ -170,7 +170,7 @@ module Custodian
           # Run the test - inverting the result if we should
           #
           result = test.run_test
-          result = ! result if ( test.inverted() )
+          result = ! result if ( test.inverted )
 
           if ( result )
             log_message( "Test succeeed - clearing alert" )
@@ -223,7 +223,7 @@ module Custodian
           #
           # Raise the alert, passing the error message.
           #
-          log_message( "Test failed - alerting with #{test.error()}" )
+          log_message( "Test failed - alerting with #{test.error}" )
           do_raise( test )
         end
 
@@ -252,7 +252,7 @@ module Custodian
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
 
-        alert.raise()
+        alert.raise
       end
     end
 
@@ -272,7 +272,7 @@ module Custodian
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
 
-        alert.clear()
+        alert.clear
       end
     end
 
@@ -300,7 +300,7 @@ module Custodian
     #  Process jobs until we see a failure, then stop.
     #
     def process_until_fail
-      while( process_single_job() )
+      while( process_single_job )
         # nop
       end
     end

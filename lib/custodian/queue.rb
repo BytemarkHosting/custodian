@@ -182,7 +182,7 @@ end
     #  Get the size of the queue
     #
     def size?
-      stats = @queue.stats()
+      stats = @queue.stats
       ( stats['current-jobs-ready'] || 0 )
     end
 

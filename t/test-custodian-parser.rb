@@ -44,13 +44,13 @@ class TestCustodianParser < Test::Unit::TestCase
     #  Constructor
     #
     assert_nothing_raised do
-      Custodian::Parser.new()
+      Custodian::Parser.new
     end
   end
 
 
   def test_period
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
     result = parser.parse_line( "example.vm.bytemark.co.uk must run ping except between 00-23" )
     assert( result.nil? )
   end
@@ -69,7 +69,7 @@ class TestCustodianParser < Test::Unit::TestCase
     #
     #  1.  By string.
     #
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
 
     #  1.a.  Comment lines return nil.
     result = parser.parse_line( "# this is a comment" )
@@ -91,7 +91,7 @@ class TestCustodianParser < Test::Unit::TestCase
     #
     # 2.  By array.
     #
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
     #  2.a.  Comment lines return nil.
     tmp    = []
     tmp.push( "# This is a comment.." )
@@ -107,7 +107,7 @@ class TestCustodianParser < Test::Unit::TestCase
     #
     # 3.  By lines
     #
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
     #  3.a.  Comment lines return nil.
     str =<<EOF
 # This is a comment
@@ -134,7 +134,7 @@ EOF
   #
   def test_macros_lines
 
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
 
     #
     #  Input text
@@ -155,7 +155,7 @@ EOF
     #
     macros = parser.macros
     assert( ! macros.empty? )
-    assert( macros.size() == 2 )
+    assert( macros.size == 2 )
   end
 
 
@@ -166,7 +166,7 @@ EOF
   #
   def test_macros_array
 
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
 
     #
     #  Input text
@@ -186,7 +186,7 @@ EOF
     #
     macros = parser.macros
     assert( ! macros.empty? )
-    assert( macros.size() == 2 )
+    assert( macros.size == 2 )
   end
 
 
@@ -197,7 +197,7 @@ EOF
   #
   def test_duplicate_macros
 
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
 
     #
     #  Input text to parse.
@@ -219,7 +219,7 @@ EOF
     #
     macros = parser.macros
     assert( ! macros.empty? )
-    assert( macros.size() == 1 )
+    assert( macros.size == 1 )
   end
 
 
@@ -233,7 +233,7 @@ EOF
     #
     #  Create a parser - validate it is free of macros.
     #
-    parser = Custodian::Parser.new()
+    parser = Custodian::Parser.new
     macros = parser.macros
     assert( macros.empty? )
 
@@ -248,7 +248,7 @@ EOF
     #  The difference is the return value will be an array
     #
     assert( out_txt.kind_of? Array )
-    assert( out_txt.size() == 1 )
+    assert( out_txt.size == 1 )
     assert( out_txt[0] == in_txt )
 
 
@@ -268,7 +268,7 @@ EOF
     # The result should be an array
     #
     assert( ret.kind_of? Array )
-    assert_equal( ret.size(), 2 )
+    assert_equal( ret.size, 2 )
     assert( ret[0] =~ /example1/)
     assert( ret[1] =~ /example2/)
 
@@ -391,9 +391,9 @@ EOF
         assert_equal( obj[0].to_s, str )
 
         if ( fail.nil? )
-          assert( obj[0].get_notification_text().nil? )
+          assert( obj[0].get_notification_text.nil? )
         else
-          assert_equal( obj[0].get_notification_text(), fail )
+          assert_equal( obj[0].get_notification_text, fail )
         end
 
       end

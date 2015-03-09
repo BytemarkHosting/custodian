@@ -153,8 +153,8 @@ module Custodian
         #
         # Get the timeout period.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         #
         # Perform the DNS lookups of the specified name.
@@ -265,8 +265,8 @@ module Custodian
         #
         # Get the timeout period for this test.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         begin
           timeout(period) do
@@ -283,7 +283,7 @@ module Custodian
                 read.gsub!(/[\n\r]/, "")
               end
 
-              socket.close()
+              socket.close
 
               if ( banner.nil? )
                 @error = nil

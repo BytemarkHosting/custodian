@@ -69,7 +69,7 @@ module Custodian
         #
         update         = Mauve::Proto::AlertUpdate.new
         update.alert   = []
-        update.source  = @settings.alert_source()
+        update.source  = @settings.alert_source
         update.replace = false
 
         #
@@ -151,7 +151,7 @@ module Custodian
         #
         update = Mauve::Proto::AlertUpdate.new
         update.alert   = []
-        update.source  = @settings.alert_source()
+        update.source  = @settings.alert_source
         update.replace = false
 
         #
@@ -241,7 +241,7 @@ module Custodian
           #
           #  The text from the job-defition
           #
-          user_text = test.get_notification_text()
+          user_text = test.get_notification_text
 
           #
           # Add the user-detail if present
@@ -251,7 +251,7 @@ module Custodian
           #
           # Add the test-failure message
           #
-          alert.detail = "#{alert.detail}<p>#{test.error()}</p>"
+          alert.detail = "#{alert.detail}<p>#{test.error}</p>"
 
           #
           #  Determine if this is inside/outside the bytemark network

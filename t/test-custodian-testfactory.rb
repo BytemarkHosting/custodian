@@ -52,8 +52,8 @@ class TestTestFactory < Test::Unit::TestCase
     end
 
 
-    assert( Custodian::TestFactory.create( "ftp.example.com        must run ftp." )[0].target() == "ftp.example.com"  )
-    assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." )[0].target() == "ftp.example.com"  )
+    assert( Custodian::TestFactory.create( "ftp.example.com        must run ftp." )[0].target == "ftp.example.com"  )
+    assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." )[0].target == "ftp.example.com"  )
 
 
     #
@@ -77,7 +77,7 @@ class TestTestFactory < Test::Unit::TestCase
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
         assert_equal( obj[0].get_type, "ftp" )
-        assert_equal( obj[0].port().to_s(), prt )
+        assert_equal( obj[0].port.to_s, prt )
 
       end
     end
@@ -109,7 +109,7 @@ class TestTestFactory < Test::Unit::TestCase
         assert(obj)
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
-        assert( obj[0].port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert( obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
 
@@ -130,9 +130,9 @@ class TestTestFactory < Test::Unit::TestCase
       assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync on 3311 otherwise 'xxx'." ) )
     end
 
-    assert( Custodian::TestFactory.create( "rsync.example.com  must run rsync." )[0].target() ==
+    assert( Custodian::TestFactory.create( "rsync.example.com  must run rsync." )[0].target ==
             "rsync.example.com"  )
-    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." )[0].target() ==
+    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." )[0].target ==
             "rsync.example.com"  )
 
 
@@ -156,7 +156,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
-        assert( obj[0].port().to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert( obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
   end
@@ -237,7 +237,7 @@ class TestTestFactory < Test::Unit::TestCase
         #  Ensure we got the object, and the port was correct.
         #
         assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj[0].inverted() == inv, "#{str} -> #{inv}" )
+        assert( obj[0].inverted == inv, "#{str} -> #{inv}" )
       end
     end
 
@@ -247,7 +247,7 @@ class TestTestFactory < Test::Unit::TestCase
   # Get all the types we know about.
   #
   def test_types
-    registered = Custodian::TestFactory.known_tests()
+    registered = Custodian::TestFactory.known_tests
 
     # for each test-type
     registered.keys.each do |type|
@@ -270,10 +270,10 @@ class TestTestFactory < Test::Unit::TestCase
           assert_nothing_raised do
 
             test_one_obj = Custodian::TestFactory.create( test_one )
-            assert( !test_one_obj[0].inverted() )
+            assert( !test_one_obj[0].inverted )
 
             test_two_obj = Custodian::TestFactory.create( test_two )
-            assert( test_two_obj[0].inverted(), "Found inverted test for #{tst}" )
+            assert( test_two_obj[0].inverted, "Found inverted test for #{tst}" )
 
             assert_equal( tst, test_one_obj[0].get_type )
             assert_equal( tst, test_two_obj[0].get_type )
@@ -306,7 +306,7 @@ class TestTestFactory < Test::Unit::TestCase
         assert(obj)
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
-        assert_equal( "test.host.example.com", obj[0].target() )
+        assert_equal( "test.host.example.com", obj[0].target )
       end
     end
   end

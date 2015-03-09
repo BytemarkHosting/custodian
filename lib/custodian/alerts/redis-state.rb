@@ -59,7 +59,7 @@ module Custodian
         tmp["type"]   = @test.get_type
         tmp["target"] = @test.target
         tmp["result"] = "RAISE"
-        tmp["reason"] = @test.error()
+        tmp["reason"] = @test.error
         tmp["test"  ] = @test.to_s
         tmp["class" ] = @test.class
 

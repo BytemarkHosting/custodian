@@ -80,13 +80,13 @@ module Custodian
         #
         # Get the timeout period for this test.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         begin
           timeout( period ) do
             begin
-              c = Curl::Easy.new()
+              c = Curl::Easy.new
               c.follow_location = true
               c.max_redirects   = 10
               c.ssl_verify_host = false
