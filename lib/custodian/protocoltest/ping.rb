@@ -70,8 +70,8 @@ module Custodian
         # Find the binary we're going to invoke.
         #
         binary = nil
-        binary = "./bin/multi-ping"
-        binary = "/usr/bin/multi-ping"  if  File.exist?( "/usr/bin/multi-ping" ) 
+        binary = './bin/multi-ping'
+        binary = '/usr/bin/multi-ping'  if  File.exist?( '/usr/bin/multi-ping' ) 
 
         if  binary.nil? 
           @error = "Failed to find '/usr/bin/multi-ping'"
@@ -200,7 +200,7 @@ module Custodian
 
 
 
-      register_test_type "ping"
+      register_test_type 'ping'
 
 
 

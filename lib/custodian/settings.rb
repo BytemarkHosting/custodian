@@ -35,7 +35,7 @@ module Custodian
     #
     # Load the configuration file; called only once.
     #
-    def _load( file = "/etc/custodian/custodian.cfg" )
+    def _load( file = '/etc/custodian/custodian.cfg' )
 
       @parsed   = true
       @settings = {}
@@ -48,7 +48,7 @@ module Custodian
       #
       # Load and "parse" the key=value content.
       #
-      File.open( file, "r" ).each_line do |line|
+      File.open( file, 'r' ).each_line do |line|
         next if  line.nil? || line =~ /^#/ 
         if  line =~ /^(.*)=(.*)$/ 
           key = $1.dup
@@ -148,7 +148,7 @@ module Custodian
     def queue_type
       _load unless( _loaded? )
 
-      @settings['queue_type'] || "redis"
+      @settings['queue_type'] || 'redis'
     end
 
 
@@ -159,7 +159,7 @@ module Custodian
     def log_file
       _load unless( _loaded? )
 
-      @settings['log_file'] || "custodian-dequeue.log"
+      @settings['log_file'] || 'custodian-dequeue.log'
     end
 
 
@@ -169,7 +169,7 @@ module Custodian
     def alerter
       _load unless( _loaded? )
 
-      @settings['alerter'] || "file"
+      @settings['alerter'] || 'file'
     end
 
 
@@ -179,7 +179,7 @@ module Custodian
     def alert_source
       _load unless( _loaded? )
 
-      @settings['alert_source'] || "Custodian"
+      @settings['alert_source'] || 'Custodian'
     end
 
 
@@ -208,14 +208,14 @@ module Custodian
 
       # otherwise per-test defaults.
       case alert
-        when "smtp"
-          "root"
-        when "mauve"
-          "alert.bytemark.co.uk"
-        when "file"
-          "alerts.log"
-        when "redis"
-          "127.0.0.1:6379"
+        when 'smtp'
+          'root'
+        when 'mauve'
+          'alert.bytemark.co.uk'
+        when 'file'
+          'alerts.log'
+        when 'redis'
+          '127.0.0.1:6379'
         else
           nil
       end

@@ -63,27 +63,27 @@ if __FILE__ == $PROGRAM_NAME then
 
   begin
     opts = GetoptLong.new(
-                          [ "--flush",   "-f", GetoptLong::NO_ARGUMENT ],
-                          [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
-                          [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
-                          [ "--monitor", "-M", GetoptLong::OPTIONAL_ARGUMENT ],
-                          [ "--stats",   "-s", GetoptLong::NO_ARGUMENT ]
+                          [ '--flush',   '-f', GetoptLong::NO_ARGUMENT ],
+                          [ '--help',    '-h', GetoptLong::NO_ARGUMENT ],
+                          [ '--manual',  '-m', GetoptLong::NO_ARGUMENT ],
+                          [ '--monitor', '-M', GetoptLong::OPTIONAL_ARGUMENT ],
+                          [ '--stats',   '-s', GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
-      when "--monitor" then
+      when '--monitor' then
           if  arg 
               $MONITOR = arg.to_i
           else
               $MONITOR = 5000
           end
-      when "--stats" then
+      when '--stats' then
           $STATS = true
-      when "--flush" then
+      when '--flush' then
           $FLUSH = true
-      when "--help" then
+      when '--help' then
           $help = true
-      when "--manual" then
+      when '--manual' then
           $manual = true
       end
     end

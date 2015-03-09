@@ -103,7 +103,7 @@ module Custodian
         #
         failed = 0
         passed = 0
-        error  = ""
+        error  = ''
 
         mx.each do |backend|
 
@@ -116,7 +116,7 @@ module Custodian
                 # trim to a sane length & strip newlines.
                 if  ! read.nil? 
                   read = read[0,255]
-                  read.gsub!(/[\n\r]/, "")
+                  read.gsub!(/[\n\r]/, '')
                 end
 
                 if  read =~ /^220/ 
@@ -161,7 +161,7 @@ module Custodian
 
 
 
-      register_test_type "mx"
+      register_test_type 'mx'
 
 
 

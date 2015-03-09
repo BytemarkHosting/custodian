@@ -6,7 +6,7 @@
   begin
     require library
   rescue LoadError
-    ENV["DEBUG"] && puts( "Failed to load the library: #{library}" )
+    ENV['DEBUG'] && puts( "Failed to load the library: #{library}" )
   end
 end
 
@@ -25,9 +25,9 @@ module Custodian
     #
     def self.create type
       case type
-      when "redis"
+      when 'redis'
         RedisQueueType.new
-      when "beanstalk"
+      when 'beanstalk'
         BeanstalkQueueType.new
       else
         raise "Bad queue-type: #{type}"
@@ -39,7 +39,7 @@ module Custodian
     # Retrieve a job from the queue.
     #
     def fetch(_timeout)
-      raise "Subclasses must implement this method!"
+      raise 'Subclasses must implement this method!'
     end
 
 
@@ -47,7 +47,7 @@ module Custodian
     # Add a new job to the queue.
     #
     def add(_job_string)
-      raise "Subclasses must implement this method!"
+      raise 'Subclasses must implement this method!'
     end
 
 
@@ -55,7 +55,7 @@ module Custodian
     # Get the size of the queue
     #
     def size?
-      raise "Subclasses must implement this method!"
+      raise 'Subclasses must implement this method!'
     end
 
 
@@ -63,7 +63,7 @@ module Custodian
     # Empty the queue
     #
     def flush!
-      raise "Subclasses must implement this method!"
+      raise 'Subclasses must implement this method!'
     end
 end
 
@@ -80,7 +80,7 @@ end
     # Connect to the server on localhost, unless QUEUE_ADDRESS is set.
     #
     def initialize
-      host = ENV["QUEUE_ADDRESS"] || "127.0.0.1"
+      host = ENV['QUEUE_ADDRESS'] || '127.0.0.1'
       @redis = Redis.new( :host => host )
     end
 
@@ -96,7 +96,7 @@ end
 
       while( true )
 
-        foo, job = @redis.blpop( "queue", :timeout => timeout )
+        foo, job = @redis.blpop( 'queue', :timeout => timeout )
 
         if  job 
           return job
@@ -112,7 +112,7 @@ end
     #  Add a new job to the queue.
     #
     def add(job_string)
-      @redis.rpush( "queue", job_string )
+      @redis.rpush( 'queue', job_string )
     end
 
 
@@ -120,7 +120,7 @@ end
     #  How many jobs in the queue?
     #
     def size?
-      @redis.llen( "queue" )
+      @redis.llen( 'queue' )
     end
 
 
@@ -128,7 +128,7 @@ end
     #  Empty the queue, discarding all pending jobs.
     #
     def flush!
-      @redis.del( "queue" )
+      @redis.del( 'queue' )
     end
 
   end
@@ -144,7 +144,7 @@ end
     # Connect to the server on localhost, unless QUEUE_ADDRESS is set.
     #
     def initialize
-      host  = ENV["QUEUE_ADDRESS"] || "127.0.0.1"
+      host  = ENV['QUEUE_ADDRESS'] || '127.0.0.1'
       @queue = Beanstalk::Pool.new( ["#{host}:11300" ] )
     end
 
@@ -162,7 +162,7 @@ end
           j.delete
           return b
         else
-          raise "ERRROR"
+          raise 'ERRROR'
         end
       rescue Beanstalk::TimedOut => ex
         return nil

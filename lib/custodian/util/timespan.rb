@@ -33,7 +33,7 @@ module Custodian
         #
         #  Ensure within a valid range
         #
-        raise ArgumentError, "Integer required for time"   unless( desc.kind_of? Integer )
+        raise ArgumentError, 'Integer required for time'   unless( desc.kind_of? Integer )
         raise ArgumentError,  "Invalid time: #{desc}" unless( ( desc >= 0 ) && ( desc <= 23 ) )
 
 

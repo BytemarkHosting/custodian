@@ -92,7 +92,7 @@ module Custodian
 
 
 
-      register_test_type "imap"
+      register_test_type 'imap'
 
 
 

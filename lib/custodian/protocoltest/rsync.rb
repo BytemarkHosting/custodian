@@ -94,7 +94,7 @@ module Custodian
 
 
 
-      register_test_type "rsync"
+      register_test_type 'rsync'
 
 
 

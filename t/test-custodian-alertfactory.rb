@@ -31,8 +31,8 @@ class TestAlertFactory < Test::Unit::TestCase
     # Ensure we can create each of the two alert types we care about
     #
     methods = []
-    methods.push( "file" )
-    methods.push( "smtp" )
+    methods.push( 'file' )
+    methods.push( 'smtp' )
 
     #
     # Mauve + Redis are optional
@@ -54,8 +54,8 @@ class TestAlertFactory < Test::Unit::TestCase
       mauve = false
     end
 
-    methods.push( "redis" ) if  redis 
-    methods.push( "mauve" ) if  mauve 
+    methods.push( 'redis' ) if  redis 
+    methods.push( 'mauve' ) if  mauve 
 
     methods.each do |name|
 
@@ -75,8 +75,8 @@ class TestAlertFactory < Test::Unit::TestCase
       # Ensure that the object implements the raise() + clear()
       # methods we mandate.
       #
-      assert( obj.respond_to? "raise" )
-      assert( obj.respond_to? "clear" )
+      assert( obj.respond_to? 'raise' )
+      assert( obj.respond_to? 'clear' )
     end
 
 
@@ -84,7 +84,7 @@ class TestAlertFactory < Test::Unit::TestCase
     # Creating an alert we don't know about is an error
     #
     assert_raise ArgumentError do
-      obj = Custodian::AlertFactory.create( "not found", nil )
+      obj = Custodian::AlertFactory.create( 'not found', nil )
     end
 
     #

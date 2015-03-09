@@ -73,7 +73,7 @@ module Custodian
         http.open_timeout = 60
         http.read_timeout = 60
 
-        if (url.scheme == "https")
+        if (url.scheme == 'https')
           http.use_ssl = true
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
@@ -89,7 +89,7 @@ module Custodian
 
         if ( response.code.to_i != 200 )
           puts "Status code of #{uri_str} was #{response.code}"
-          puts "ABORTING"
+          puts 'ABORTING'
           exit( 0 )
         end
 
@@ -104,11 +104,11 @@ module Custodian
         end
 
       rescue Errno::EHOSTUNREACH => ex
-        raise ex, "no route to host"
+        raise ex, 'no route to host'
       rescue Timeout::Error => ex
-        raise ex, "timeout"
+        raise ex, 'timeout'
       rescue Errno::ECONNREFUSED => ex
-        raise ex, "connection refused"
+        raise ex, 'connection refused'
       end
     end
 
@@ -135,7 +135,7 @@ module Custodian
         #
         #  HTTP-fetch
         #
-        uri = $1.dup.chomp(".")
+        uri = $1.dup.chomp('.')
 
         text = get_url_contents(uri)
         text.split( /[\r\n]/ ).each do |line|
@@ -411,7 +411,7 @@ module Custodian
     #
     def parse_file( filename )
 
-      raise ArgumentError, "Missing configuration file!" if  filename.nil?
+      raise ArgumentError, 'Missing configuration file!' if  filename.nil?
       raise ArgumentError, "File not found: #{@file}" unless  File.exist?( filename)
 
       #

@@ -79,10 +79,10 @@ module Custodian
         case line
         when /\s+must\s(not\s+)?run\s+http(\s+|\.|$)/i
         then
-          test_type = "http"
+          test_type = 'http'
         when /\s+must\s+(not\s+)?run\s+https(\s+|\.|$)/i
         then
-          test_type = "https"
+          test_type = 'https'
         else
           raise ArgumentError, "URL has invalid scheme: #{@line}"
         end
@@ -111,7 +111,7 @@ module Custodian
         if  line =~ /with status ([0-9]+)/ 
           @expected_status = $1.dup
         else
-          @expected_status = "200"
+          @expected_status = '200'
         end
 
         if  line =~ /with (IPv[46])/i 
@@ -158,9 +158,9 @@ module Custodian
       #
       def get_type
         if  @url =~ /^https:/ 
-          "https"
+          'https'
         elsif  @url =~ /^http:/ 
-          "http"
+          'http'
         else
           raise ArgumentError, "URL isn't http/https: #{@url}"
         end
@@ -255,7 +255,7 @@ module Custodian
           end
           
           unless @host_override.nil?
-            c.headers["Host"] = @host_override
+            c.headers['Host'] = @host_override
           end
 
           c.ssl_verify_host = false
@@ -265,7 +265,7 @@ module Custodian
           #
           # Set a basic protocol message, for use later.
           #
-          protocol_msg = (resolve_mode == :ipv4 ? "IPv4" : "IPv6")
+          protocol_msg = (resolve_mode == :ipv4 ? 'IPv4' : 'IPv6')
 
           begin
             timeout( period ) do
@@ -342,8 +342,8 @@ module Custodian
       end
 
 
-      register_test_type "http"
-      register_test_type "https"
+      register_test_type 'http'
+      register_test_type 'https'
 
     end
   end

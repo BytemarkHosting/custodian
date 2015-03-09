@@ -61,10 +61,10 @@ module Custodian
       # Read the hostname for usage in the SMTP-transaction.
       #
       def get_hostname
-        hostname = "localhost.localdomain"
+        hostname = 'localhost.localdomain'
 
-        if  File.exist?( "/etc/hostname" ) 
-          File.readlines("/etc/hostname" ).each do |line|
+        if  File.exist?( '/etc/hostname' ) 
+          File.readlines('/etc/hostname' ).each do |line|
             hostname = line if  !line.nil? 
             hostname.chomp!
           end
@@ -87,10 +87,10 @@ module Custodian
         begin
 
           Net::SMTP.start(@host,@port, get_hostname ) do |smtp|
-            sent    = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
+            sent    = smtp.send_message message, 'noreply@bytemark.co.uk', 'noreply@bytemark.co.uk'
             @status = sent.status.to_s
 
-            if @status === "250"
+            if @status === '250'
               @error = "NOT OK: message sent on #{@host} with status #{@status}"
             else
               @error = "OK: message not sent on #{@host} with status #{@status}"
@@ -101,10 +101,10 @@ module Custodian
             # and whether or not we're inverting the test. (eg, 'must not')
             #
 
-            return @inverted  if @status == "250" and @inverted
-            return !@inverted if @status == "250" and !@inverted
-            return @inverted  if @status != "250" and !@inverted
-            return !@inverted if @status != "250" and @inverted
+            return @inverted  if @status == '250' and @inverted
+            return !@inverted if @status == '250' and !@inverted
+            return @inverted  if @status != '250' and !@inverted
+            return !@inverted if @status != '250' and @inverted
 
           end # Net SMTP
 
@@ -128,7 +128,7 @@ module Custodian
       end
 
       # register ourselves with the class-factory
-      register_test_type "smtprelay"
+      register_test_type 'smtprelay'
     end
   end
 end

@@ -102,7 +102,7 @@ module Custodian
         @error = nil
 
         if  @port.nil? 
-          raise ArgumentError, "Missing port to test against"
+          raise ArgumentError, 'Missing port to test against'
         end
       end
 
@@ -280,7 +280,7 @@ module Custodian
               # trim to a sane length & strip newlines.
               if  ! read.nil? 
                 read = read[0,255]
-                read.gsub!(/[\n\r]/, "")
+                read.gsub!(/[\n\r]/, '')
               end
 
               socket.close
@@ -317,7 +317,7 @@ module Custodian
           @error = "TIMEOUT: #{e}"
           return false
         end
-        @error = "Misc failure"
+        @error = 'Misc failure'
         false
       end
 
@@ -334,7 +334,7 @@ module Custodian
 
 
 
-      register_test_type "tcp"
+      register_test_type 'tcp'
 
 
 

@@ -114,7 +114,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   #
   def test_simple_cases
     # 8am-5pm
-    assert(Custodian::Util::TimeSpan.inside?( "8am", "5am", 12 ))
+    assert(Custodian::Util::TimeSpan.inside?( '8am', '5am', 12 ))
     assert(Custodian::Util::TimeSpan.inside?( 8, 17, 12 ))
 
   end
@@ -125,25 +125,25 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_midnight_cases
 
     # 9pm-2am
-    assert(Custodian::Util::TimeSpan.inside?( "9pm", "2am", 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( "9pm", "2am", "10pm" ))
+    assert(Custodian::Util::TimeSpan.inside?( '9pm', '2am', 22 ))
+    assert(Custodian::Util::TimeSpan.inside?( '9pm', '2am', '10pm' ))
     assert(Custodian::Util::TimeSpan.inside?( 21, 2, 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 21, 2, "10pm" ))
+    assert(Custodian::Util::TimeSpan.inside?( 21, 2, '10pm' ))
 
     # 10pm-3am
-    assert(Custodian::Util::TimeSpan.inside?( "10pm", "3am", 22 ))
+    assert(Custodian::Util::TimeSpan.inside?( '10pm', '3am', 22 ))
     assert(Custodian::Util::TimeSpan.inside?( 22, 3, 22 ))
     assert(Custodian::Util::TimeSpan.inside?( 22, 3, 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 22, 3, "10pm" ))
+    assert(Custodian::Util::TimeSpan.inside?( 22, 3, '10pm' ))
 
     # 11pm-5am
-    assert(Custodian::Util::TimeSpan.inside?( "11pm", "5am", 23 ))
+    assert(Custodian::Util::TimeSpan.inside?( '11pm', '5am', 23 ))
     assert(Custodian::Util::TimeSpan.inside?( 23, 5, 23 ))
-    assert(Custodian::Util::TimeSpan.inside?( "11pm", "5am", "11pm" ))
+    assert(Custodian::Util::TimeSpan.inside?( '11pm', '5am', '11pm' ))
 
     # midnight-3am
-    assert( Custodian::Util::TimeSpan.inside?( "0", "3am", 1 ))
-    assert( Custodian::Util::TimeSpan.inside?( "0", "3am", "1am" ))
+    assert( Custodian::Util::TimeSpan.inside?( '0', '3am', 1 ))
+    assert( Custodian::Util::TimeSpan.inside?( '0', '3am', '1am' ))
   end
 
 
@@ -154,18 +154,18 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   #
   def test_inclusive
 
-    open = "4pm"
-    close = "6pm"
+    open = '4pm'
+    close = '6pm'
 
     # The hours + the middle should be inside
     assert( Custodian::Util::TimeSpan.inside?( open, close, 16 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, "4pm" ) )
+    assert( Custodian::Util::TimeSpan.inside?( open, close, '4pm' ) )
 
     assert( Custodian::Util::TimeSpan.inside?( open, close, 17 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, "5pm" ) )
+    assert( Custodian::Util::TimeSpan.inside?( open, close, '5pm' ) )
 
     assert( Custodian::Util::TimeSpan.inside?( open, close, 18 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, "6pm" ) )
+    assert( Custodian::Util::TimeSpan.inside?( open, close, '6pm' ) )
 
 
     #
@@ -177,19 +177,19 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     #
     # That is true for the string-versions too
     #
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, "3pm" ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, "7pm" ) )
+    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '3pm' ) )
+    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '7pm' ) )
 
 
     #
     # Random hours should be outside too.
     #
     assert( ! Custodian::Util::TimeSpan.inside?( open, close, 3 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, "3am" ) )
+    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '3am' ) )
     assert( ! Custodian::Util::TimeSpan.inside?( open, close, 7 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, "7am" ) )
+    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '7am' ) )
     assert( ! Custodian::Util::TimeSpan.inside?( open, close, 9 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, "9am" ) )
+    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '9am' ) )
 
   end
 

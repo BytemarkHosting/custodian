@@ -62,14 +62,14 @@ Subject: #{subject}
 #{body}
 END_OF_MESSAGE
 
-        Net::SMTP.start("127.0.0.1") do |smtp|
+        Net::SMTP.start('127.0.0.1') do |smtp|
           smtp.send_message( msg, to, to)
         end
 
       end
 
 
-      register_alert_type "smtp"
+      register_alert_type 'smtp'
 
 
 
