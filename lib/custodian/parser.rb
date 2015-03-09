@@ -52,7 +52,7 @@ module Custodian
     #
     # Constructor
     #
-    def initialize( )
+    def initialize 
       @MACROS  = Hash.new()
       @jobs    = Array.new()
     end

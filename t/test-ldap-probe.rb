@@ -42,7 +42,7 @@ class TestLDAPProbe < Test::Unit::TestCase
   #
   #  Ensure missing a test raises an error.
   #
-  def test_missing_ldap()
+  def test_missing_ldap
     #
     # test data
     #
