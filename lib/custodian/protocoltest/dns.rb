@@ -115,7 +115,7 @@ module Custodian
         #
 
         if  !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty? 
-          @error = "DNS server *#{@host}* (#{@server_ip}) returned the wrong records for @#{resolve_name} IN #{resolve_type}@.\n\nWe expected '#{resolve_expected.join(",")}', but we received '#{results.join(",")}'\n"
+          @error = "DNS server *#{@host}* (#{@server_ip}) returned the wrong records for @#{resolve_name} IN #{resolve_type}@.\n\nWe expected '#{resolve_expected.join(',')}', but we received '#{results.join(',')}'\n"
         end
 
         @error.nil?
