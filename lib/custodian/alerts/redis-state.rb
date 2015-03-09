@@ -91,19 +91,6 @@ module Custodian
         @redis.ltrim( "recent-tests", 0, 100 )
       end
 
-
-
-      #
-      # Store a test-duration in redis
-      #
-      def duration( ms )
-
-        return unless( @redis )
-
-        # NOP
-      end
-
-
       register_alert_type "redis"
 
     end

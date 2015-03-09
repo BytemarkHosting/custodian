@@ -38,7 +38,7 @@ module Custodian
     #
     # Retrieve a job from the queue.
     #
-    def fetch(timeout)
+    def fetch(_timeout)
       raise "Subclasses must implement this method!"
     end
 
@@ -46,7 +46,7 @@ module Custodian
     #
     # Add a new job to the queue.
     #
-    def add(job_string)
+    def add(_job_string)
       raise "Subclasses must implement this method!"
     end
 
