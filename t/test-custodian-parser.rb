@@ -292,7 +292,7 @@ EOF
       'http://example must run http not following redirect.'  => false,
     }
 
-    data.each do |str,follow|
+    data.each do |str, follow|
       assert_nothing_raised do
 
         #
@@ -331,7 +331,7 @@ EOF
       'http://example must run http without cache busting.'   => false,
     }
 
-    data.each do |str,cb|
+    data.each do |str, cb|
       assert_nothing_raised do
 
         #
@@ -377,7 +377,7 @@ EOF
     #
     #  For each test
     #
-    data.each do |str,fail|
+    data.each do |str, fail|
       assert_nothing_raised do
 
         #

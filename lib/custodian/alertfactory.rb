@@ -80,7 +80,7 @@ module Custodian
     # Get the friendly-type of derived-classes.
     #
     def get_type
-      @@subclasses.each do |name,value|
+      @@subclasses.each do |name, value|
         if (value == self.class)
           return name
         end

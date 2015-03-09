@@ -263,7 +263,7 @@ class SSLCheck
     # Check that the certificate is current
     #
     if self.certificate.not_before < Time.now
-      verbose  "The certificate for #{self.domain} is valid from #{self.certificate.not_before}."
+      verbose "The certificate for #{self.domain} is valid from #{self.certificate.not_before}."
       return true
     else
       self.errors << verbose("The certificate for #{self.domain} *is not valid yet*.")
@@ -280,7 +280,7 @@ class SSLCheck
     days_until_expiry = (self.certificate.not_after.to_i - Time.now.to_i) / (24.0 * 3600).floor.to_i
 
     if days_until_expiry > 14
-      verbose  "The certificate for #{self.domain} is valid until #{self.certificate.not_after}."
+      verbose "The certificate for #{self.domain} is valid until #{self.certificate.not_after}."
       return true
     else
       if days_until_expiry > 0
@@ -305,7 +305,7 @@ class SSLCheck
     # certificate is self-signed.
     #
     if self.key.is_a?(OpenSSL::PKey) and self.certificate.verify(self.key)
-      verbose  "Using a self-signed certificate for #{self.domain}."
+      verbose "Using a self-signed certificate for #{self.domain}."
       return true
 
     #
@@ -313,7 +313,7 @@ class SSLCheck
     # including any bundle that has been uploaded.
     #
     elsif self.certificate_store.is_a?(OpenSSL::X509::Store) and self.certificate_store.verify(self.certificate)
-      verbose  "Certificate signed by #{self.certificate.issuer}"
+      verbose "Certificate signed by #{self.certificate.issuer}"
       return true
 
     #

@@ -50,7 +50,7 @@ class TestBytemarkUtil < Test::Unit::TestCase
     }
 
 
-    to_test.each do |name,inside|
+    to_test.each do |name, inside|
 
       if  inside 
         assert(Custodian::Util::Bytemark.inside?(name) == true)
