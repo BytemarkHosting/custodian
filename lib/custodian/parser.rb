@@ -52,7 +52,7 @@ module Custodian
     #
     # Constructor
     #
-    def initialize 
+    def initialize
       @MACROS  = {}
       @jobs    = []
     end
@@ -63,7 +63,7 @@ module Custodian
     #
     # Retrieve a HTTP/HTTPS page from the web, for macro-expansion.
     #
-    def getURL (uri_str)
+    def get_url_contents (uri_str)
       begin
         uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
         url = URI.parse(uri_str)
@@ -98,7 +98,7 @@ module Custodian
         then
           newURL = response['location'].match(/^http/)?
           response['Location']:uri_str+response['Location']
-          return( getURL(newURL) )
+          return( get_url_contents(newURL) )
         else
           return response.body
         end
@@ -124,25 +124,25 @@ module Custodian
       #
       #  Get the name of the macro.
       #
-      name = $1.dup if  line =~ /^([0-9A-Z_]+)\s+/ 
+      name = $1.dup if  line =~ /^([0-9A-Z_]+)\s+/
 
 
       #
       #  Get the value
       #
-      if  line =~ /fetched\s+from\s+(.*)[\r\n\.]*$/ 
+      if  line =~ /fetched\s+from\s+(.*)[\r\n\.]*$/
 
         #
         #  HTTP-fetch
         #
         uri = $1.dup.chomp(".")
 
-        text = getURL(uri)
+        text = get_url_contents(uri)
         text.split( /[\r\n]/ ).each do |line|
           val.push( line ) if  line.length > 0
         end
 
-      elsif  line =~ /\s(is|are)\s+(.*)\.+$/ 
+      elsif  line =~ /\s(is|are)\s+(.*)\.+$/
 
         #
         #  Literal list of hosts
@@ -152,7 +152,7 @@ module Custodian
         #
         #  If there is " and " then tokenize
         #
-        if  hosts =~ /\s+and\s+/ 
+        if  hosts =~ /\s+and\s+/
           tmp = hosts.split( /\s+and\s+/ )
           tmp.each do |entry|
             val.push( entry )
@@ -165,7 +165,7 @@ module Custodian
         end
       end
 
-      if  is_macro?( name ) 
+      if  is_macro?( name )
         raise ArgumentError, "The macro #{name} is already defined"
       end
 
@@ -214,13 +214,13 @@ module Custodian
 
       r = []
 
-      if  input =~ /^(\S+)\s+(.*)$/ 
+      if  input =~ /^(\S+)\s+(.*)$/
         macro=$1.dup
         rest=$2.dup
       end
 
 
-      if  is_macro?( macro ) 
+      if  is_macro?( macro )
         get_macro_targets(macro).each do |host|
           r.push( "#{host} #{rest}" )
         end
@@ -239,19 +239,19 @@ module Custodian
 
       raise ArgumentError, "Line is not a string: #{line}" unless( line.kind_of? String )
 
-      line.chomp! if  !line.nil? 
+      line.chomp! if  !line.nil?
 
-      line.strip! if  !line.nil? 
+      line.strip! if  !line.nil?
 
       #
       # A blank line, or a comment may be skipped.
       #
-      return nil if  ( line.nil? ) || ( line =~ /^#/ ) || ( line.length < 1 ) 
+      return nil if  ( line.nil? ) || ( line =~ /^#/ ) || ( line.length < 1 )
 
       #
       # Look for a time period.
       #
-      if  line =~ /between\s+([0-9]+)-([0-9]+)/i 
+      if  line =~ /between\s+([0-9]+)-([0-9]+)/i
 
         #
         #  The starting/ending hours.
@@ -272,23 +272,23 @@ module Custodian
         #
         #  Should we exclude the test?
         #
-        if  line =~ /except\s+between/i 
-          return nil if  inside 
+        if  line =~ /except\s+between/i
+          return nil if  inside
         else
-          return nil if  ! inside 
+          return nil if  ! inside
         end
       end
 
       #
       #  Look for macro definitions, inline
       #
-      if  line =~ /^([0-9A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/ 
+      if  line =~ /^([0-9A-Z]_+)\s+are\s+fetched\s+from\s+([^\s]+)\.?/
         define_macro( line )
 
-      elsif  line =~ /^([0-9A-Z_]+)\s+(is|are)\s+/ 
+      elsif  line =~ /^([0-9A-Z_]+)\s+(is|are)\s+/
         define_macro( line )
 
-      elsif  line =~ /^(\S+)\s+must\s+ping(.*)/ 
+      elsif  line =~ /^(\S+)\s+must\s+ping(.*)/
         #
         #  Ping is a special case because the configuration file entry
         # would read:
@@ -310,7 +310,7 @@ module Custodian
         new_line = "#{pre} must run ping #{post}"
         return( parse_line( new_line ) )
 
-      elsif  line =~ /^\S+\s+must(\s+not)?\s+run\s+([^\s]+)(\s+|\.|$)/i 
+      elsif  line =~ /^\S+\s+must(\s+not)?\s+run\s+([^\s]+)(\s+|\.|$)/i
 
         #
         # Expand the macro if we should
@@ -344,7 +344,7 @@ module Custodian
             #
             job = Custodian::TestFactory.create( macro_expanded )
 
-            if  job && ( job.kind_of? Array ) 
+            if  job && ( job.kind_of? Array )
               ret.push( job[0].to_s )
             end
           rescue => ex
@@ -368,7 +368,7 @@ module Custodian
       #
       # If we're given a string then split it on newline
       #
-      if  text.kind_of?( String )  
+      if  text.kind_of?( String )
         a    = text.split( /[\r\n]/ )
         text = a
       end
@@ -392,7 +392,7 @@ module Custodian
         #           The line was a comment.
         #
         #
-        if  ret.kind_of?( Array ) 
+        if  ret.kind_of?( Array )
           ret.each do |probe|
             @jobs.push( probe )
           end
@@ -411,8 +411,8 @@ module Custodian
     #
     def parse_file( filename )
 
-      raise ArgumentError, "Missing configuration file!" if  filename.nil? 
-      raise ArgumentError, "File not found: #{@file}" unless  File.exist?( filename) 
+      raise ArgumentError, "Missing configuration file!" if  filename.nil?
+      raise ArgumentError, "File not found: #{@file}" unless  File.exist?( filename)
 
       #
       #  Read the configuration file.
