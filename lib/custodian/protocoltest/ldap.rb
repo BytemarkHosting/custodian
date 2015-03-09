@@ -133,7 +133,7 @@ module Custodian
       end
 
       @error = "LDAP server test failed against '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-      return false
+      false
     end
 
 

@@ -232,7 +232,7 @@ module Custodian
 
       end
 
-      return result
+      result
     end
 
 

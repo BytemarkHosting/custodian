@@ -85,7 +85,7 @@ module Custodian
         else
           puts "ERROR: Resolved to neither an IPv6 or IPv4 address."
         end
-        return false
+        false
       end
 
     end
