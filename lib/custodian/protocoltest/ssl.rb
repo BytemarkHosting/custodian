@@ -154,7 +154,7 @@ class SSLCheck
     ctx = OpenSSL::SSL::SSLContext.new(:TLSv1_client)
     retried = false
     begin
-      Timeout::timeout(10) do
+      Timeout.timeout(10) do
         s = TCPSocket.open(uri.host, uri.port)
         s = OpenSSL::SSL::SSLSocket.new(s, ctx)
         s.sync_close = true
@@ -212,7 +212,7 @@ class SSLCheck
 
     s = nil
     begin
-      Timeout::timeout(10) do
+      Timeout.timeout(10) do
         s = TCPSocket.open(uri.host, uri.port)
         s = OpenSSL::SSL::SSLSocket.new(s, OpenSSL::SSL::SSLContext.new(:SSLv3_client))
         s.sync_close = true
