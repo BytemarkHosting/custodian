@@ -93,7 +93,7 @@ module Custodian
     # Show a message on STDOUT if "--verbose" was specified.
     #
     def log_message(msg)
-      puts msg if  ENV['VERBOSE' ] 
+      puts msg if  ENV['VERBOSE'] 
     end
 
 
