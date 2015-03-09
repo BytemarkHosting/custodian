@@ -82,7 +82,7 @@ class TestCustodianParser < Test::Unit::TestCase
 
 
     #  1.c.  Adding a test will return an array of test-objects.
-    result = parser.parse_line( "smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'." );
+    result = parser.parse_line( "smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'." )
     assert( !result.nil? )
     assert( result.kind_of? Array )
     assert( result.size == 1 )
@@ -99,9 +99,9 @@ class TestCustodianParser < Test::Unit::TestCase
 
     #  2.b.  Adding a test will return an array of test-objects.
     tmp = []
-    tmp.push( "smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'." );
+    tmp.push( "smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'." )
     ret = parser.parse_lines( tmp )
-    assert( ret.kind_of? Array );
+    assert( ret.kind_of? Array )
     assert( ret.size == 1 )
 
     #
@@ -121,7 +121,7 @@ smtp.bytemark.co.uk must run smtp on 25.
 google.com must run ping otherwise 'internet broken?'.
 EOF
     ret = parser.parse_lines( str )
-    assert( ret.kind_of? Array );
+    assert( ret.kind_of? Array )
     assert( ret.size == 1 )
 
   end
@@ -172,8 +172,8 @@ EOF
     #  Input text
     #
     text = []
-    text.push( "FOO  is  kvm1.vm.bytemark.co.uk." );
-    text.push( "FOO2 is  kvm2.vm.bytemark.co.uk." );
+    text.push( "FOO  is  kvm1.vm.bytemark.co.uk." )
+    text.push( "FOO2 is  kvm2.vm.bytemark.co.uk." )
 
     #
     # Test the parser with this text
@@ -203,8 +203,8 @@ EOF
     #  Input text to parse.
     #
     text = []
-    text.push( "FOO is kvm1.vm.bytemark.co.uk." );
-    text.push( "FOO is kvm2.vm.bytemark.co.uk." );
+    text.push( "FOO is kvm1.vm.bytemark.co.uk." )
+    text.push( "FOO is kvm2.vm.bytemark.co.uk." )
 
     #
     # Test the parser with this text

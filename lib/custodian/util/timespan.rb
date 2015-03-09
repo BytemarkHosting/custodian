@@ -19,7 +19,7 @@ module Custodian
         #
         if  ( desc.kind_of? String ) &&
              ( desc =~ /([0-9]+)pm$/i ) 
-          desc = $1.dup.to_i + 12;
+          desc = $1.dup.to_i + 12
         end
 
         #

@@ -31,7 +31,7 @@ module Custodian
       #
       def raise
         subject = "#{test.target} alert #{test.get_type}-test - #{test.error}"
-        body    = "The alert has raised, with the following details:\n#{test.error}\nRegards\n";
+        body    = "The alert has raised, with the following details:\n#{test.error}\nRegards\n"
 
         _send_mail( @target, subject, body )
       end
@@ -43,7 +43,7 @@ module Custodian
       #
       def clear
         subject = "#{test.target} cleared #{test.get_type}-test"
-        body    = "The alert has cleared\nRegards\n";
+        body    = "The alert has cleared\nRegards\n"
 
         _send_mail( @target, subject, body )
       end
