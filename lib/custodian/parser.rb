@@ -416,7 +416,7 @@ module Custodian
       #
       #  Read the configuration file.
       #
-      out = File.open(filename, 'r') {|file| file.readlines.collect}
+      out = File.open(filename, 'r') { |file| file.readlines.collect }
 
       #
       #  Parse it
