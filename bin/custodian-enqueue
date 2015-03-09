@@ -63,7 +63,7 @@ require 'custodian/settings'
 #
 #  Entry-point to our code.
 #
-if __FILE__ == $0 then
+if __FILE__ == $PROGRAM_NAME then
 
   $help   = false
   $manual = false

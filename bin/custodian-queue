@@ -52,7 +52,7 @@ require 'custodian/queue'
 #
 #  Entry-point to our code.
 #
-if __FILE__ == $0 then
+if __FILE__ == $PROGRAM_NAME then
 
   $FLUSH   = false
   $STATS   = false
