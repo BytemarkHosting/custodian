@@ -32,7 +32,7 @@ class TestTestFactory < Test::Unit::TestCase
     end
 
     assert_raise ArgumentError do
-      obj = Custodian::TestFactory.create( Array.new, nil )
+      obj = Custodian::TestFactory.create( [], nil )
     end
 
 
@@ -290,7 +290,7 @@ class TestTestFactory < Test::Unit::TestCase
   def test_target_detection
 
 
-    a = Array.new()
+    a = []
 
     a.push( "test.host.example.com must run ftp.")
     a.push( "ftp://test.host.example.com/ must run ftp.")

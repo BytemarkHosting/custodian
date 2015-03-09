@@ -128,7 +128,7 @@ module Custodian
       #
       def resolve_via( server, ltype, name, period )
 
-        results = Array.new()
+        results = []
 
         begin
           timeout( period ) do

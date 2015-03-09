@@ -63,7 +63,7 @@ module Custodian
         #
         #  The MX-hosts
         #
-        mx = Array.new()
+        mx = []
 
         #
         #  Lookup the MX record
