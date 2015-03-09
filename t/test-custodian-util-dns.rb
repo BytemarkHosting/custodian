@@ -30,17 +30,21 @@ class TestDNSUtil < Test::Unit::TestCase
   #
   def test_lookup
 
-    #
-    # IPv6 lookup
-    #
     details = Custodian::Util::DNS.hostname_to_ip( "bytemark.co.uk" )
-    assert( details == "80.68.81.80" )
+    assert( ( details == "2001:41c9:0:1019:81::80" ) ||
+            ( details == "80.68.81.80" ) )
 
-    #
-    # IPv4 lookup
-    #
     details = Custodian::Util::DNS.hostname_to_ip( "www.bytemark.co.uk" )
-    assert( details == "80.68.81.80" )
+    assert( ( details == "2001:41c9:0:1019:81::80" ) ||
+            ( details == "80.68.81.80" ) )
+
+
+    details = Custodian::Util::DNS.hostname_to_ip( "ipv4.steve.org.uk" )
+    assert( details == "80.68.84.103" )
+
+    details = Custodian::Util::DNS.hostname_to_ip( "ipv6.steve.org.uk" )
+    assert( details == "2001:41c8:10b:103::10" )
+
 
     #
     # Failure case
