@@ -109,7 +109,7 @@ class TestTestFactory < Test::Unit::TestCase
         assert(obj)
         assert(obj.kind_of? Array)
         assert(!obj.empty?)
-        assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert(obj[0].port.to_s == prt, "'#{str}' gave expected port '#{prt}'.")
       end
     end
 
@@ -156,7 +156,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         assert(obj.kind_of? Array)
         assert(!obj.empty?)
-        assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert(obj[0].port.to_s == prt, "'#{str}' gave expected port '#{prt}'.")
       end
     end
   end
