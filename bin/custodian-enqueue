@@ -131,7 +131,7 @@ if __FILE__ == $PROGRAM_NAME then
   #
   settings = Custodian::Settings.instance
   queue = Custodian::QueueType.create(settings.queue_type)
-  if  ! queue 
+  if  !queue 
     puts "Failed to connect to the #{settings.queue_type} queue"
     exit 1
   end

@@ -109,7 +109,7 @@ class TestCustodianParser < Test::Unit::TestCase
     #
     parser = Custodian::Parser.new
     #  3.a.  Comment lines return nil.
-    str =<<EOF
+    str = <<EOF
 # This is a comment
 # This is also a fine comment
 EOF
@@ -139,7 +139,7 @@ EOF
     #
     #  Input text
     #
-    text =<<EOF
+    text = <<EOF
 FOO is  kvm1.vm.bytemark.co.uk.
 TEST is kvm2.vm.bytemark.co.uk.
 EOF
@@ -154,7 +154,7 @@ EOF
     #  We should now have two macros.
     #
     macros = parser.macros
-    assert(! macros.empty?)
+    assert(!macros.empty?)
     assert(macros.size == 2)
   end
 
@@ -185,7 +185,7 @@ EOF
     #  We should now have two macros.
     #
     macros = parser.macros
-    assert(! macros.empty?)
+    assert(!macros.empty?)
     assert(macros.size == 2)
   end
 
@@ -218,7 +218,7 @@ EOF
     #  We should now have one macro.
     #
     macros = parser.macros
-    assert(! macros.empty?)
+    assert(!macros.empty?)
     assert(macros.size == 1)
   end
 
@@ -308,7 +308,7 @@ EOF
         if  follow 
           assert(obj[0].follow_redirects?)
         else
-          assert(! obj[0].follow_redirects?)
+          assert(!obj[0].follow_redirects?)
         end
       end
     end
@@ -347,7 +347,7 @@ EOF
         if  cb 
           assert(obj[0].cache_busting?)
         else
-          assert(! obj[0].cache_busting?)
+          assert(!obj[0].cache_busting?)
         end
       end
     end

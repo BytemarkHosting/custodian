@@ -232,7 +232,7 @@ module Custodian
         # were given.
         #
         ips.each do |ip|
-          if  ! run_test_internal_real(ip, port, banner, do_read) 
+          if  !run_test_internal_real(ip, port, banner, do_read) 
 
             return false
             #
@@ -278,7 +278,7 @@ module Custodian
               read = socket.sysread(1024) if  do_read 
 
               # trim to a sane length & strip newlines.
-              if  ! read.nil? 
+              if  !read.nil? 
                 read = read[0,255]
                 read.gsub!(/[\n\r]/, '')
               end

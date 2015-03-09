@@ -223,7 +223,7 @@ module Custodian
         #
         if  @cache_busting 
           u = URI.parse(test_url)
-          if  ! u.query 
+          if  !u.query 
             u.query   = "ctime=#{Time.now.to_i}"
             test_url  = u.to_s
           end

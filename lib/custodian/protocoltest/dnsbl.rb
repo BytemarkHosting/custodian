@@ -31,7 +31,7 @@ module Custodian
         #
         # Ensure the host is an IP address.
         #
-        raise ArgumentError, 'The target must be an IP address' unless(@host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/)
+        raise ArgumentError, 'The target must be an IP address' unless @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/
 
         #
         # See which blacklist(s) we're testing against.

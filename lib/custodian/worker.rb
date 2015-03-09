@@ -79,7 +79,7 @@ module Custodian
       @alerter = @settings.alerter
 
       # How many times to repeat a failing test
-      @retry_count=@settings.retries
+      @retry_count = @settings.retries
 
       # Should we sleep between repeated tests?
       @retry_delay = @settings.retry_delay
@@ -103,7 +103,7 @@ module Custodian
     # Process jobs from the queue - never return.
     #
     def run!
-      while(true)
+      loop do
         log_message('Waiting for job..')
         process_single_job
       end
@@ -170,7 +170,7 @@ module Custodian
           # Run the test - inverting the result if we should
           #
           result = test.run_test
-          result = ! result if  test.inverted 
+          result = !result if  test.inverted 
 
           if  result 
             log_message('Test succeeed - clearing alert')
@@ -218,7 +218,7 @@ module Custodian
         #
         #  If we didn't succeed on any of the attempts raise the alert.
         #
-        if  ! result 
+        if  !result 
 
           #
           # Raise the alert, passing the error message.
@@ -300,7 +300,7 @@ module Custodian
     #  Process jobs until we see a failure, then stop.
     #
     def process_until_fail
-      while(process_single_job)
+      while process_single_job
         # nop
       end
     end

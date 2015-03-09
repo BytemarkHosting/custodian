@@ -52,7 +52,7 @@ module Custodian
       #
       def raise
 
-        return unless(@redis)
+        return unless @redis
 
         tmp = {}
         tmp['time']   = Time.now.to_i
@@ -75,7 +75,7 @@ module Custodian
       #
       def clear
 
-        return unless(@redis)
+        return unless @redis
 
 
         tmp = {}

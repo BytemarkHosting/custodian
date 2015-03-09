@@ -64,10 +64,10 @@ module Custodian
         #
         #  Ensure we had all the data.
         #
-        raise ArgumentError, 'Missing host to resolve' unless(@resolve_name)
-        raise ArgumentError, 'Missing type of record to lookup' unless(@resolve_type)
-        raise ArgumentError, 'Missing expected results' unless(@resolve_expected)
-        raise ArgumentError, "Uknown record type: #{@resolve_type}" unless(@resolve_type =~ /^(A|NS|MX|AAAA)$/)
+        raise ArgumentError, 'Missing host to resolve' unless @resolve_name
+        raise ArgumentError, 'Missing type of record to lookup' unless @resolve_type
+        raise ArgumentError, 'Missing expected results' unless @resolve_expected
+        raise ArgumentError, "Uknown record type: #{@resolve_type}" unless @resolve_type =~ /^(A|NS|MX|AAAA)$/
 
         #
         #  The host to query against
@@ -143,7 +143,7 @@ module Custodian
                 return nil
               end
 
-              Resolv::DNS.open(:nameserver=>[@server_ip]) do |dns|
+              Resolv::DNS.open(:nameserver => [@server_ip]) do |dns|
                 case ltype
 
                 when /^A$/ then

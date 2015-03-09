@@ -62,7 +62,7 @@ module Custodian
       #
       def raise
 
-        return unless(@loaded)
+        return unless @loaded
 
         #
         # Get ready to send to mauve.
@@ -144,7 +144,7 @@ module Custodian
       #
       def clear
 
-        return unless(@loaded)
+        return unless @loaded
 
         #
         # Get ready to send to mauve.

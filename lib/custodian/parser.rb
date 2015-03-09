@@ -63,7 +63,7 @@ module Custodian
     #
     # Retrieve a HTTP/HTTPS page from the web, for macro-expansion.
     #
-    def get_url_contents (uri_str)
+    def get_url_contents(uri_str)
       begin
         uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
         url = URI.parse(uri_str)
@@ -96,8 +96,7 @@ module Custodian
         case response
         when Net::HTTPRedirection
         then
-          newURL = response['location'].match(/^http/)?
-          response['Location']:uri_str+response['Location']
+          newURL = response['location'].match(/^http/) ?           response['Location'] : uri_str + response['Location']
           return(get_url_contents(newURL))
         else
           return response.body
@@ -215,8 +214,8 @@ module Custodian
       r = []
 
       if  input =~ /^(\S+)\s+(.*)$/
-        macro=$1.dup
-        rest=$2.dup
+        macro = $1.dup
+        rest = $2.dup
       end
 
 
@@ -237,7 +236,7 @@ module Custodian
     #
     def parse_line(line)
 
-      raise ArgumentError, "Line is not a string: #{line}" unless(line.kind_of? String)
+      raise ArgumentError, "Line is not a string: #{line}" unless line.kind_of? String
 
       line.chomp! if  !line.nil?
 
@@ -275,7 +274,7 @@ module Custodian
         if  line =~ /except\s+between/i
           return nil if  inside
         else
-          return nil if  ! inside
+          return nil if  !inside
         end
       end
 

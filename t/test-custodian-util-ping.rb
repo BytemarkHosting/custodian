@@ -66,7 +66,7 @@ class TestPingUtil < Test::Unit::TestCase
 
     helper = Custodian::Util::Ping.new('ipv4.steve.org.uk')
     assert(helper.is_ipv4?)
-    assert(! helper.is_ipv6?)
+    assert(!helper.is_ipv6?)
 
   end
 
@@ -78,7 +78,7 @@ class TestPingUtil < Test::Unit::TestCase
 
     helper = Custodian::Util::Ping.new('ipv6.steve.org.uk')
     assert(helper.is_ipv6?)
-    assert(! helper.is_ipv4?)
+    assert(!helper.is_ipv4?)
   end
 
 
@@ -90,8 +90,8 @@ class TestPingUtil < Test::Unit::TestCase
       assert_nothing_raised do
         helper = Custodian::Util::Ping.new(name)
 
-        assert(! helper.is_ipv4?)
-        assert(! helper.is_ipv6?)
+        assert(!helper.is_ipv4?)
+        assert(!helper.is_ipv6?)
       end
     end
 
