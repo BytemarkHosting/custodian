@@ -31,7 +31,7 @@ module Custodian
       # Record a raise event for the given test.
       #
       def raise
-        write_message( "RAISE: #{test.target} failed #{test.get_type}-test - #{test.error()}" )
+        write_message( "RAISE: #{test.target} failed #{test.get_type}-test - #{test.error}" )
       end
 
 

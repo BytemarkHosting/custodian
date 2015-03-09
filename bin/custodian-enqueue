@@ -129,10 +129,10 @@ if __FILE__ == $PROGRAM_NAME then
   #
   # Connected to the queue - be it redis or beanstalkd
   #
-  settings = Custodian::Settings.instance()
-  queue = Custodian::QueueType.create( settings.queue_type() )
+  settings = Custodian::Settings.instance
+  queue = Custodian::QueueType.create( settings.queue_type )
   if ( ! queue )
-    puts "Failed to connect to the #{settings.queue_type()} queue"
+    puts "Failed to connect to the #{settings.queue_type} queue"
     exit 1
   end
 
@@ -140,7 +140,7 @@ if __FILE__ == $PROGRAM_NAME then
   #
   # Create the parser object.
   #
-  mon = Custodian::Parser.new()
+  mon = Custodian::Parser.new
 
 
   #

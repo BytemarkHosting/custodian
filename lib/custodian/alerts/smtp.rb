@@ -30,8 +30,8 @@ module Custodian
       # Raise an alert by email.
       #
       def raise
-        subject = "#{test.target} alert #{test.get_type}-test - #{test.error()}"
-        body    = "The alert has raised, with the following details:\n#{test.error()}\nRegards\n";
+        subject = "#{test.target} alert #{test.get_type}-test - #{test.error}"
+        body    = "The alert has raised, with the following details:\n#{test.error}\nRegards\n";
 
         _send_mail( @target, subject, body )
       end

@@ -57,8 +57,8 @@ module Custodian
         #
         # Get the timeout period.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         #
         #  The MX-hosts

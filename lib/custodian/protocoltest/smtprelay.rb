@@ -86,7 +86,7 @@ module Custodian
 
         begin
 
-          Net::SMTP.start(@host,@port, get_hostname() ) do |smtp|
+          Net::SMTP.start(@host,@port, get_hostname ) do |smtp|
             sent    = smtp.send_message message, "noreply@bytemark.co.uk", "noreply@bytemark.co.uk"
             @status = sent.status.to_s
 

@@ -29,8 +29,8 @@ class TestConfigurationSingleton < Test::Unit::TestCase
   # Test that we're genuinely a singleton
   #
   def test_singleton
-    a = Custodian::Settings.instance()
-    b = Custodian::Settings.instance()
+    a = Custodian::Settings.instance
+    b = Custodian::Settings.instance
 
     assert( a )
     assert( b )
@@ -42,7 +42,7 @@ class TestConfigurationSingleton < Test::Unit::TestCase
   #  Test that our settings are suitable types
   #
   def test_types
-    settings = Custodian::Settings.instance()
+    settings = Custodian::Settings.instance
 
 
     # retry delay - probably unset.
@@ -64,18 +64,18 @@ class TestConfigurationSingleton < Test::Unit::TestCase
 
 
     # timeout - probably unset.
-    a = settings.timeout()
+    a = settings.timeout
     assert( a.class == Fixnum )
 
     # store a number
     settings._store( "timeout", 5 )
-    a = settings.timeout()
+    a = settings.timeout
     assert( a.class == Fixnum )
     assert( a == 5 )
 
     # store a string
     settings._store( "timeout", "35" )
-    a = settings.timeout()
+    a = settings.timeout
     assert( a.class == Fixnum )
     assert( a == 35 )
 

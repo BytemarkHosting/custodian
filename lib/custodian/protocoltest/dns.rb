@@ -100,8 +100,8 @@ module Custodian
         #
         # Get the timeout period.
         #
-        settings = Custodian::Settings.instance()
-        period   = settings.timeout()
+        settings = Custodian::Settings.instance
+        period   = settings.timeout
 
         #
         # Do the lookup
@@ -147,16 +147,16 @@ module Custodian
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s() ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s ) }
 
                 when /^AAAA$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s() ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s ) }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s() ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s ) ) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s() ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s ) ) }
 
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"

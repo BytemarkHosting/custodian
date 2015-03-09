@@ -139,7 +139,7 @@ module Custodian
 
         text = getURL(uri)
         text.split( /[\r\n]/ ).each do |line|
-          val.push( line ) if ( line.length() > 0)
+          val.push( line ) if ( line.length > 0)
         end
 
       elsif ( line =~ /\s(is|are)\s+(.*)\.+$/ )
