@@ -37,7 +37,7 @@ module Custodian
       #
       #  The array we return.
       #
-      result = Array.new()
+      result = []
 
 
       #
@@ -89,7 +89,7 @@ module Custodian
     # Register a new test type - this must be called by our derived classes
     #
     def self.register_test_type name
-      @@subclasses[name] ||=  Array.new()
+      @@subclasses[name] ||=  []
       @@subclasses[name].push(self)
     end
 

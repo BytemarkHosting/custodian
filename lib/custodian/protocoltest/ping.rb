@@ -102,7 +102,7 @@ module Custodian
         #
         # Perform the DNS lookups of the specified name.
         #
-        ips = Array.new()
+        ips = []
 
         #
         #  Does the name look like an IP?

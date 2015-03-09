@@ -30,7 +30,7 @@ class TestAlertFactory < Test::Unit::TestCase
     #
     # Ensure we can create each of the two alert types we care about
     #
-    methods = Array.new()
+    methods = []
     methods.push( "file" )
     methods.push( "smtp" )
 
@@ -94,7 +94,7 @@ class TestAlertFactory < Test::Unit::TestCase
       obj = Custodian::AlertFactory.create( nil, nil )
     end
     assert_raise ArgumentError do
-      obj = Custodian::AlertFactory.create( Array.new, nil )
+      obj = Custodian::AlertFactory.create( [], nil )
     end
 
   end

@@ -125,7 +125,7 @@ module Custodian
           else
             @error = "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
             return false
-          end
+          .end
         end
       rescue LDAP::ResultError => ex
         @error = "LDAP exception: #{ex} when talking to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"

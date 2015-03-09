@@ -53,8 +53,8 @@ module Custodian
     # Constructor
     #
     def initialize 
-      @MACROS  = Hash.new()
-      @jobs    = Array.new()
+      @MACROS  = {}
+      @jobs    = []
     end
 
 
@@ -119,7 +119,7 @@ module Custodian
     #
     def define_macro( line )
       name = nil
-      val  = Array.new
+      val  = []
 
       #
       #  Get the name of the macro.
@@ -212,7 +212,7 @@ module Custodian
     #
     def expand_macro( input )
 
-      r = Array.new()
+      r = []
 
       if ( input =~ /^(\S+)\s+(.*)$/ )
         macro=$1.dup
@@ -320,7 +320,7 @@ module Custodian
         #
         # The array of objects we will return to the caller.
         #
-        ret = Array.new()
+        ret = []
 
         #
         # For each host in our possibly-macro-expanded list:

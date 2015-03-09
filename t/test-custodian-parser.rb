@@ -93,12 +93,12 @@ class TestCustodianParser < Test::Unit::TestCase
     #
     parser = Custodian::Parser.new()
     #  2.a.  Comment lines return nil.
-    tmp    = Array.new()
+    tmp    = []
     tmp.push( "# This is a comment.." )
     assert( parser.parse_lines( tmp ).nil? )
 
     #  2.b.  Adding a test will return an array of test-objects.
-    tmp = Array.new()
+    tmp = []
     tmp.push( "smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'." );
     ret = parser.parse_lines( tmp )
     assert( ret.kind_of? Array );
@@ -171,7 +171,7 @@ EOF
     #
     #  Input text
     #
-    text = Array.new()
+    text = []
     text.push( "FOO  is  kvm1.vm.bytemark.co.uk." );
     text.push( "FOO2 is  kvm2.vm.bytemark.co.uk." );
 
@@ -202,7 +202,7 @@ EOF
     #
     #  Input text to parse.
     #
-    text = Array.new()
+    text = []
     text.push( "FOO is kvm1.vm.bytemark.co.uk." );
     text.push( "FOO is kvm2.vm.bytemark.co.uk." );
 

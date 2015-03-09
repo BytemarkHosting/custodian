@@ -38,7 +38,7 @@ module Custodian
     def _load( file = "/etc/custodian/custodian.cfg" )
 
       @parsed   = true
-      @settings = Hash.new()
+      @settings = {}
 
       #
       # The global configuration file.

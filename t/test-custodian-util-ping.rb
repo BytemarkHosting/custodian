@@ -49,10 +49,10 @@ class TestPingUtil < Test::Unit::TestCase
     # A hostname is a string, not an array, hash, or similar.
     #
     assert_raise ArgumentError do
-      Custodian::Util::Ping.new( Hash.new)
+      Custodian::Util::Ping.new( {})
     end
     assert_raise ArgumentError do
-      Custodian::Util::Ping.new( Array.new)
+      Custodian::Util::Ping.new( [])
     end
 
 
