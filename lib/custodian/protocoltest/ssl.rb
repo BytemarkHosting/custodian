@@ -77,7 +77,7 @@ class SSLCheck
   #
   def tests=(ts)
     raise ArgumentError, 'tests must be an Array' unless ts.is_a?(Array)
-    @tests = ts.collect{|t| t.to_sym}.select{|t| ALL_TESTS.include?(t)}
+    @tests = ts.collect { |t| t.to_sym }.select { |t| ALL_TESTS.include?(t) }
 
     @tests
   end
@@ -200,7 +200,7 @@ class SSLCheck
       self.errors << verbose("Failed to fetch certificate for #{self.domain}")
       return nil
     else
-      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any?{|r| false == r}
+      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any? { |r| false == r }
     end
   end
 

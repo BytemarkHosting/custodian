@@ -147,16 +147,16 @@ module Custodian
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push(r.address.to_s) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map { |r| results.push(r.address.to_s) }
 
                 when /^AAAA$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push(r.address.to_s) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map { |r| results.push(r.address.to_s) }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push(Resolv.getaddresses(r.name.to_s)) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map { |r| results.push(Resolv.getaddresses(r.name.to_s)) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push(Resolv.getaddresses(r.exchange.to_s)) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map { |r| results.push(Resolv.getaddresses(r.exchange.to_s)) }
 
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"
@@ -178,7 +178,7 @@ module Custodian
         #
         # Flatten, sort, uniq
         #
-        results.flatten.map{|r| r.to_s.downcase }.sort.uniq
+        results.flatten.map { |r| r.to_s.downcase }.sort.uniq
       end
 
 
