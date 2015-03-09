@@ -73,7 +73,7 @@ module Custodian
 
             Resolv::DNS.open do |dns|
               ress = dns.getresources(@host, Resolv::DNS::Resource::IN::MX)
-              ress.map { |r| mx.push( IPSocket::getaddress(r.exchange.to_s) ) }
+              ress.map { |r| mx.push( IPSocket.getaddress(r.exchange.to_s) ) }
             end
           end
         rescue Timeout::Error => e

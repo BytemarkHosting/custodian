@@ -29,7 +29,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_to_hour
 
     for hour in 0..23
-      assert_equal( hour, Custodian::Util::TimeSpan::to_hour(hour))
+      assert_equal( hour, Custodian::Util::TimeSpan.to_hour(hour))
     end
 
     #
@@ -55,11 +55,11 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     #  Ensure AM times work well
     #
     for hour in 0..11
-      assert_equal( hour, Custodian::Util::TimeSpan::to_hour( "#{hour}am"))
+      assert_equal( hour, Custodian::Util::TimeSpan.to_hour( "#{hour}am"))
     end
 
     for hour in 0..11
-      assert_equal( 12 +hour, Custodian::Util::TimeSpan::to_hour( "#{hour}pm"))
+      assert_equal( 12 +hour, Custodian::Util::TimeSpan.to_hour( "#{hour}pm"))
     end
 
   end
@@ -215,14 +215,14 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_wrap_around
 
     for h in 00..23
-      assert_equal( 1, Custodian::Util::TimeSpan::to_hours( h,h ).size() )
+      assert_equal( 1, Custodian::Util::TimeSpan.to_hours( h,h ).size() )
     end
 
     #
     #  But the time-period 00-23 is a full day
     #
     assert_equal( 24,
-                  Custodian::Util::TimeSpan::to_hours( 0,23 ).size() )
+                  Custodian::Util::TimeSpan.to_hours( 0,23 ).size() )
 
   end
 

@@ -26,7 +26,7 @@ module Custodian
       #
       # Is the named target inside the Bytemark IP-range?
       #
-      def Bytemark.inside?( target )
+      def self.inside?( target )
         inside = false
 
         if ( BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(target))} )

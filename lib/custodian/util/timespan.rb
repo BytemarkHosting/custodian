@@ -53,8 +53,8 @@ module Custodian
       #
       def TimeSpan.to_hours( p_start, p_end )
 
-        p_start = Custodian::Util::TimeSpan::to_hour(p_start)
-        p_end   = Custodian::Util::TimeSpan::to_hour(p_end)
+        p_start = Custodian::Util::TimeSpan.to_hour(p_start)
+        p_end   = Custodian::Util::TimeSpan.to_hour(p_end)
 
 
         #
@@ -99,15 +99,15 @@ module Custodian
         #
         # Ensure all values are sane and reasonable.
         #
-        p_start  = Custodian::Util::TimeSpan::to_hour(p_start)
-        p_end    = Custodian::Util::TimeSpan::to_hour(p_end)
-        cur_hour = Custodian::Util::TimeSpan::to_hour(cur_hour)
+        p_start  = Custodian::Util::TimeSpan.to_hour(p_start)
+        p_end    = Custodian::Util::TimeSpan.to_hour(p_end)
+        cur_hour = Custodian::Util::TimeSpan.to_hour(cur_hour)
 
         #
         #  Get the expanded hours
         #
         valid =
-          Custodian::Util::TimeSpan::to_hours( p_start, p_end )
+          Custodian::Util::TimeSpan.to_hours( p_start, p_end )
 
         #
         # Lookup to see if the specified hour is within the
