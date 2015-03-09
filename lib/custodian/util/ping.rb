@@ -26,7 +26,7 @@ module Custodian
       #
       def initialize(hostname)
 
-        raise ArgumentError, 'Hostname must not be nil' if  hostname.nil? 
+        raise ArgumentError, 'Hostname must not be nil' if  hostname.nil?
         raise ArgumentError, 'Hostname must be a String' unless  hostname.kind_of?(String)
 
         @hostname = hostname
@@ -47,7 +47,7 @@ module Custodian
       # Does the hostname resolve to an IPv4 address?
       #
       def is_ipv4?
-        if  (! @resolved.nil?) && (@resolved =~  /^([0-9]+).([0-9]+).([0-9]+).([0-9]+)$/) 
+        if  (! @resolved.nil?) && (@resolved =~  /^([0-9]+).([0-9]+).([0-9]+).([0-9]+)$/)
           true
         else
           false
@@ -59,7 +59,7 @@ module Custodian
       # Does the hostname resolve to an IPv6 address?
       #
       def is_ipv6?
-        if  (! @resolved.nil?) && (@resolved =~  /^([a-f0-9:]+)$/i) 
+        if  (! @resolved.nil?) && (@resolved =~  /^([a-f0-9:]+)$/i)
           true
         else
           false
@@ -74,7 +74,7 @@ module Custodian
       # Return false on error.
       #
       def run_ping
-        if  is_ipv6? 
+        if  is_ipv6?
           if (system("ping6 -c 1 #{@resolved} 2>/dev/null >/dev/null") == true)
             return true
           end

@@ -49,8 +49,8 @@ module Custodian
       # Load and "parse" the key=value content.
       #
       File.open(file, 'r').each_line do |line|
-        next if  line.nil? || line =~ /^#/ 
-        if  line =~ /^(.*)=(.*)$/ 
+        next if  line.nil? || line =~ /^#/
+        if  line =~ /^(.*)=(.*)$/
           key = $1.dup
           val = $2.dup
           key.strip!
@@ -95,7 +95,7 @@ module Custodian
     def timeout
       _load unless _loaded?
 
-      if  @settings['timeout'] 
+      if  @settings['timeout']
         @settings['timeout'].to_i
       else
         30
@@ -111,7 +111,7 @@ module Custodian
     def retries
       _load unless _loaded?
 
-      if  @settings['retries'] 
+      if  @settings['retries']
         @settings['retries'].to_i
       else
         5
@@ -131,7 +131,7 @@ module Custodian
     def retry_delay
       _load unless _loaded?
 
-      if  @settings['retry_delay'] 
+      if  @settings['retry_delay']
         @settings['retry_delay'].to_i
       else
         0
@@ -202,7 +202,7 @@ module Custodian
       # Find the alerting method.
       #
       # if we have something setup then use it.
-      if  @settings["#{alert}_target"] 
+      if  @settings["#{alert}_target"]
         return(@settings["#{alert}_target"])
       end
 

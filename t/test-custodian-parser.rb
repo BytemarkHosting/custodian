@@ -305,7 +305,7 @@ EOF
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  follow 
+        if  follow
           assert(obj[0].follow_redirects?)
         else
           assert(!obj[0].follow_redirects?)
@@ -344,7 +344,7 @@ EOF
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  cb 
+        if  cb
           assert(obj[0].cache_busting?)
         else
           assert(!obj[0].cache_busting?)
@@ -390,7 +390,7 @@ EOF
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  fail.nil? 
+        if  fail.nil?
           assert(obj[0].get_notification_text.nil?)
         else
           assert_equal(obj[0].get_notification_text, fail)

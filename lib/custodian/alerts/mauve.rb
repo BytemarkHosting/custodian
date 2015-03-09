@@ -110,7 +110,7 @@ module Custodian
         # we're in the working day.
         #
         if  ((wday != 0) && (wday != 6)) &&
-             (hour >= day_start && hour < day_end) 
+             (hour >= day_start && hour < day_end)
           working = true
         end
 
@@ -199,9 +199,9 @@ module Custodian
         subject = @test.target
 
         if  (subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
-             (subject =~ /^([0-9a-f:]+)$/) 
+             (subject =~ /^([0-9a-f:]+)$/)
           res = Custodian::Util::DNS.ip_to_hostname(subject)
-          if  res 
+          if  res
             subject = res
           end
         end
@@ -234,7 +234,7 @@ module Custodian
         #
         #  If we're raising then add the error
         #
-        if  failure 
+        if  failure
 
           alert.detail  = "<p>The #{test_type} test failed against #{test_host}.</p>"
 
@@ -246,7 +246,7 @@ module Custodian
           #
           # Add the user-detail if present
           #
-          alert.detail = "#{alert.detail}<p>#{user_text}</p>" if  !user_text.nil? 
+          alert.detail = "#{alert.detail}<p>#{user_text}</p>" if  !user_text.nil?
 
           #
           # Add the test-failure message
@@ -257,7 +257,7 @@ module Custodian
           #  Determine if this is inside/outside the bytemark network
           #
           location = expand_inside_bytemark(test_host)
-          if  !location.nil? && location.length 
+          if  !location.nil? && location.length
             alert.detail = "#{alert.detail}\n#{location}"
           end
         end
@@ -282,7 +282,7 @@ module Custodian
         #  We'll also make the host a link that can be clicked in the alert we raise.
         #
         target = host
-        if  target =~ /^([a-z]+):\/\/([^\/]+)/ 
+        if  target =~ /^([a-z]+):\/\/([^\/]+)/
           target = $2.dup
           host   = "<a href=\"#{host}\">#{host}</a>"
         end
@@ -297,7 +297,7 @@ module Custodian
         #  Resolve the target to an IP, unless it is already an address.
         #
         if  (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
-             (target =~ /^([0-9a-f:]+)$/) 
+             (target =~ /^([0-9a-f:]+)$/)
           resolved = target
         else
           resolved = Custodian::Util::DNS.hostname_to_ip(target)
@@ -307,13 +307,13 @@ module Custodian
         #
         # Did we get an error?
         #
-        return '' unless  !resolved.nil? 
+        return '' unless  !resolved.nil?
 
 
         #
         #  Return the formatted message
         #
-        if  Custodian::Util::Bytemark.inside?(resolved.to_s) 
+        if  Custodian::Util::Bytemark.inside?(resolved.to_s)
           if (resolved == target)
             return "<p>#{host} is inside the Bytemark network.</p>"
           else

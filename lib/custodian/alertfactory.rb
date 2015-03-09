@@ -46,8 +46,8 @@ module Custodian
     #
     def self.create(alert_type, obj)
 
-      raise ArgumentError, 'The type of notifier to create cannot be nil' if  alert_type.nil? 
-      raise ArgumentError, 'The type of notifier to create must be a string' unless  alert_type.kind_of? String 
+      raise ArgumentError, 'The type of notifier to create cannot be nil' if  alert_type.nil?
+      raise ArgumentError, 'The type of notifier to create must be a string' unless  alert_type.kind_of? String
 
       c = @@subclasses[alert_type]
       if c

@@ -75,7 +75,7 @@ module Custodian
         #
         # Is this test inverted?
         #
-        if  line =~ /must\s+not\s+run\s+/ 
+        if  line =~ /must\s+not\s+run\s+/
           @inverted = true
         else
           @inverted = false
@@ -84,7 +84,7 @@ module Custodian
         #
         # Save the port
         #
-        if  line =~ /on\s+([0-9]+)/ 
+        if  line =~ /on\s+([0-9]+)/
           @port = $1.dup
         else
           @port = nil
@@ -93,7 +93,7 @@ module Custodian
         #
         # Save the optional banner.
         #
-        if  line =~ /with\s+banner\s+'([^']+)'/ 
+        if  line =~ /with\s+banner\s+'([^']+)'/
           @banner = $1.dup
         else
           @banner = nil
@@ -101,7 +101,7 @@ module Custodian
 
         @error = nil
 
-        if  @port.nil? 
+        if  @port.nil?
           raise ArgumentError, 'Missing port to test against'
         end
       end
@@ -166,7 +166,7 @@ module Custodian
         #
         begin
           x = IPAddr.new(host)
-          if  x.ipv4? or x.ipv6? 
+          if  x.ipv4? or x.ipv6?
             ips.push(host)
           end
         rescue ArgumentError
@@ -184,10 +184,10 @@ module Custodian
         #
         # Allow the test to disable one/both
         #
-        if  @line =~ /ipv4_only/ 
+        if  @line =~ /ipv4_only/
           do_ipv6 = false
         end
-        if  @line =~ /ipv6_only/ 
+        if  @line =~ /ipv6_only/
           do_ipv4 = false
         end
 
@@ -201,11 +201,11 @@ module Custodian
 
             Resolv::DNS.open do |dns|
 
-              if  do_ipv4 
+              if  do_ipv4
                 ress = dns.getresources(host, Resolv::DNS::Resource::IN::A)
                 ress.map { |r| ips.push(r.address.to_s) }
               end
-              if  do_ipv6 
+              if  do_ipv6
                 ress = dns.getresources(host, Resolv::DNS::Resource::IN::AAAA)
                 ress.map { |r| ips.push(r.address.to_s) }
               end
@@ -220,7 +220,7 @@ module Custodian
         #
         #  Did we fail to perform a DNS lookup?
         #
-        if  ips.empty? 
+        if  ips.empty?
           @error = "#{@host} failed to resolve to either IPv4 or IPv6"
           return false
         end
@@ -232,7 +232,7 @@ module Custodian
         # were given.
         #
         ips.each do |ip|
-          if  !run_test_internal_real(ip, port, banner, do_read) 
+          if  !run_test_internal_real(ip, port, banner, do_read)
 
             return false
             #
@@ -275,32 +275,32 @@ module Custodian
 
               # read a banner from the remote server, if we're supposed to.
               read = nil
-              read = socket.sysread(1024) if  do_read 
+              read = socket.sysread(1024) if  do_read
 
               # trim to a sane length & strip newlines.
-              if  !read.nil? 
+              if  !read.nil?
                 read = read[0, 255]
                 read.gsub!(/[\n\r]/, '')
               end
 
               socket.close
 
-              if  banner.nil? 
+              if  banner.nil?
                 @error = nil
                 return true
               else
                 # test for banner
 
                 # regexp.
-                if  banner.kind_of? Regexp 
-                  if  (!read.nil?) && (banner.match(read)) 
+                if  banner.kind_of? Regexp
+                  if  (!read.nil?) && (banner.match(read))
                     return true
                   end
                 end
 
                 # string.
-                if  banner.kind_of? String 
-                  if  (!read.nil?) && (read =~ /#{banner}/i) 
+                if  banner.kind_of? String
+                  if  (!read.nil?) && (read =~ /#{banner}/i)
                     return true
                   end
                 end

@@ -29,7 +29,7 @@ module Custodian
       def self.inside?(target)
         inside = false
 
-        if  BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(target))} 
+        if  BYTEMARK_RANGES.any?{|range| range.include?(IPAddr.new(target))}
           inside = true
         end
 
