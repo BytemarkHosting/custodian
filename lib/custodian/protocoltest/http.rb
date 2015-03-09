@@ -65,7 +65,7 @@ module Custodian
         #
         #  Ensure we've got a HTTP/HTTPS url.
         #
-        if ( @url !~ /^https?:/ )
+        if  @url !~ /^https?:/ 
           raise ArgumentError, "The target wasn't a HTTP/HTTPS URL: #{line}"
         end
 
@@ -99,7 +99,7 @@ module Custodian
         #
         # Is this test inverted?
         #
-        if ( line =~ /must\s+not\s+run\s+/ )
+        if  line =~ /must\s+not\s+run\s+/ 
           @inverted = true
         else
           @inverted = false
@@ -108,20 +108,20 @@ module Custodian
         #
         # Expected status
         #
-        if ( line =~ /with status ([0-9]+)/ )
+        if  line =~ /with status ([0-9]+)/ 
           @expected_status = $1.dup
         else
           @expected_status = "200"
         end
 
-        if ( line =~ /with (IPv[46])/i )
+        if  line =~ /with (IPv[46])/i 
           @resolve_modes << $1.downcase.to_sym
         end
 
         #
         # The content we expect to find
         #
-        if ( line =~ /with content '([^']+)'/ )
+        if  line =~ /with content '([^']+)'/ 
           @expected_content = $1.dup
         else
           @expected_content = nil
@@ -130,7 +130,7 @@ module Custodian
         #
         # Do we follow redirects?
         #
-        if ( line =~ /not following redirects?/i )
+        if  line =~ /not following redirects?/i 
           @redirect = false
         end
 
@@ -138,16 +138,16 @@ module Custodian
         # Do we use cache-busting?
         #
         @cache_busting = true
-        if ( line =~ /with\s+cache\s+busting/ )
+        if  line =~ /with\s+cache\s+busting/ 
           @cache_busting = true
         end
-        if ( line =~ /without\s+cache\s+busting/ )
+        if  line =~ /without\s+cache\s+busting/ 
           @cache_busting = false
         end
         
         # Do we need to override the HTTP Host: Header?
         @host_override = nil
-        if ( line =~ /with host header '([^']+)'/)
+        if  line =~ /with host header '([^']+)'/
           @host_override = $1.dup
         end
       end
@@ -157,9 +157,9 @@ module Custodian
       #  Get the right type of this object, based on the URL
       #
       def get_type
-        if ( @url =~ /^https:/ )
+        if  @url =~ /^https:/ 
           "https"
-        elsif ( @url =~ /^http:/ )
+        elsif  @url =~ /^http:/ 
           "http"
         else
           raise ArgumentError, "URL isn't http/https: #{@url}"
@@ -221,9 +221,9 @@ module Custodian
         #  Parse and append a query-string if not present, if we're
         # running with cache-busting.
         #
-        if ( @cache_busting )
+        if  @cache_busting 
           u = URI.parse( test_url )
-          if ( ! u.query )
+          if  ! u.query 
             u.query   = "ctime=#{Time.now.to_i}"
             test_url  = u.to_s
           end
@@ -249,7 +249,7 @@ module Custodian
           #
           # Should we follow redirections?
           #
-          if ( follow_redirects? )
+          if  follow_redirects? 
             c.follow_location = true
             c.max_redirects   = 10
           end
@@ -304,13 +304,13 @@ module Custodian
           # A this point we've either had an exception, or we've
           # got a result
           #
-          if ( status and expected_status.to_i != status.to_i )
+          if  status and expected_status.to_i != status.to_i 
             errors << "#{protocol_msg}: Status code was #{status} not the expected #{expected_status}."
           end
   
-          if ( content.is_a?(String) and 
+          if  content.is_a?(String) and 
                expected_content.is_a?(String) and 
-               content !~ /#{expected_content}/i )
+               content !~ /#{expected_content}/i 
             errors << "#{protocol_msg}: The response did not contain our expected text '#{expected_content}'."
           end
         end

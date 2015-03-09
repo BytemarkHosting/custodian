@@ -136,7 +136,7 @@ if __FILE__ == $PROGRAM_NAME then
   #
   #  Single step?
   #
-  if ( ENV['SINGLE'] )
+  if  ENV['SINGLE'] 
     worker.process_single_job
     exit(0)
   end
@@ -144,7 +144,7 @@ if __FILE__ == $PROGRAM_NAME then
   #
   #  Run until we see a failure?
   #
-  if ( ENV['FAIL'] )
+  if  ENV['FAIL'] 
     worker.process_until_fail
     exit(0)
   end

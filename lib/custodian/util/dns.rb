@@ -61,7 +61,7 @@ module Custodian
           timeout( period ) do
             begin
               Socket.getaddrinfo(hostname, 'echo').each do |a|
-                resolved = a[3] if ( a )
+                resolved = a[3] if  a 
               end
             rescue SocketError
               resolved = nil

@@ -33,14 +33,14 @@ module Custodian
         # If the target is an URL then strip to the hostname.
         #
         @host  = line.split( /\s+/)[0]
-        if ( @host =~ /^rsync:\/\/([^\/]+)\/?/ )
+        if  @host =~ /^rsync:\/\/([^\/]+)\/?/ 
           @host = $1.dup
         end
 
         #
         # Is this test inverted?
         #
-        if ( line =~ /must\s+not\s+run\s+/ )
+        if  line =~ /must\s+not\s+run\s+/ 
           @inverted = true
         else
           @inverted = false
@@ -50,7 +50,7 @@ module Custodian
         #
         # Save the port
         #
-        if ( line =~ /on\s+([0-9]+)/ )
+        if  line =~ /on\s+([0-9]+)/ 
           @port = $1.dup
         else
           @port = 873

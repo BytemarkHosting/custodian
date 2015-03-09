@@ -54,8 +54,8 @@ class TestAlertFactory < Test::Unit::TestCase
       mauve = false
     end
 
-    methods.push( "redis" ) if ( redis )
-    methods.push( "mauve" ) if ( mauve )
+    methods.push( "redis" ) if  redis 
+    methods.push( "mauve" ) if  mauve 
 
     methods.each do |name|
 
