@@ -34,7 +34,7 @@ module Custodian
     #
     # The subclasses we have.
     #
-    @@subclasses = { }
+    @@subclasses = {}
 
 
 
