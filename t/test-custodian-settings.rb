@@ -32,9 +32,9 @@ class TestConfigurationSingleton < Test::Unit::TestCase
     a = Custodian::Settings.instance
     b = Custodian::Settings.instance
 
-    assert( a )
-    assert( b )
-    assert_equal( a.object_id, b.object_id )
+    assert(a)
+    assert(b)
+    assert_equal(a.object_id, b.object_id)
   end
 
 
@@ -47,37 +47,37 @@ class TestConfigurationSingleton < Test::Unit::TestCase
 
     # retry delay - probably unset.
     a = settings.retry_delay
-    assert( a.class == Fixnum )
+    assert(a.class == Fixnum)
 
     # store a number
-    settings._store( 'retry_delay', 5 )
+    settings._store('retry_delay', 5)
     a = settings.retry_delay
-    assert( a.class == Fixnum )
-    assert( a == 5 )
+    assert(a.class == Fixnum)
+    assert(a == 5)
 
     # store a string
-    settings._store( 'retry_delay', '35' )
+    settings._store('retry_delay', '35')
     a = settings.retry_delay
-    assert( a.class == Fixnum )
-    assert( a == 35 )
+    assert(a.class == Fixnum)
+    assert(a == 35)
 
 
 
     # timeout - probably unset.
     a = settings.timeout
-    assert( a.class == Fixnum )
+    assert(a.class == Fixnum)
 
     # store a number
-    settings._store( 'timeout', 5 )
+    settings._store('timeout', 5)
     a = settings.timeout
-    assert( a.class == Fixnum )
-    assert( a == 5 )
+    assert(a.class == Fixnum)
+    assert(a == 5)
 
     # store a string
-    settings._store( 'timeout', '35' )
+    settings._store('timeout', '35')
     a = settings.timeout
-    assert( a.class == Fixnum )
-    assert( a == 35 )
+    assert(a.class == Fixnum)
+    assert(a == 35)
 
 
   end

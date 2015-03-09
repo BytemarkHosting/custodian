@@ -29,12 +29,12 @@ class TestLDAPProbe < Test::Unit::TestCase
     test = nil
 
     assert_nothing_raised do
-     test = Custodian::TestFactory.create( "auth.bytemark.co.uk must run ldap on 389 with username 'testing' with password 'bob' otherwise 'LDAP dead?'." )
+     test = Custodian::TestFactory.create("auth.bytemark.co.uk must run ldap on 389 with username 'testing' with password 'bob' otherwise 'LDAP dead?'.")
     end
 
-    assert( test.kind_of? Array )
-    assert( ! test.empty? )
-    assert_equal( test[0].get_type, 'ldap' )
+    assert(test.kind_of? Array)
+    assert(! test.empty?)
+    assert_equal(test[0].get_type, 'ldap')
   end
 
 
@@ -57,10 +57,10 @@ class TestLDAPProbe < Test::Unit::TestCase
     #
     data.each do |str|
       assert_raise ArgumentError do
-        test = Custodian::TestFactory.create( str )
+        test = Custodian::TestFactory.create(str)
 
-        assert( test.kind_of? Array )
-        assert( ! test.empty? )
+        assert(test.kind_of? Array)
+        assert(! test.empty?)
 
       end
     end

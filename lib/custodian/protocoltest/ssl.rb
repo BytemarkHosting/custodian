@@ -18,7 +18,7 @@ class SSLCheck
   attr_reader :errors
 
   # This is a helper for console-debugging.
-  def verbose( msg )
+  def verbose(msg)
     (msg)
   end
 
@@ -350,7 +350,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         #  Save the line
@@ -360,7 +360,7 @@ module Custodian
         #
         # Save the host
         #
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
       end
 
@@ -404,7 +404,7 @@ module Custodian
         #  If outside 10AM-5PM we don't run the test.
         #
         if  hour < 10 || hour > 17 
-          puts( "Outside office hours - Not running SSL-Verification of #{@host}" )
+          puts("Outside office hours - Not running SSL-Verification of #{@host}")
           return true
         end
 
@@ -412,7 +412,7 @@ module Custodian
         #  Double-check we've got an SSL host
         #
         if  ! @host =~ /^https:\/\// 
-          puts( 'Not an SSL URL' )
+          puts('Not an SSL URL')
           return true
         end
 
@@ -420,13 +420,13 @@ module Custodian
         result = s.verify
 
         if true == result
-          puts( "SSL Verification succeeded for #{@host}" )
+          puts("SSL Verification succeeded for #{@host}")
           return true
         elsif result.nil?
-          puts( "SSL Verification returned no result (timeout?) #{@host}" )
+          puts("SSL Verification returned no result (timeout?) #{@host}")
           return true
         else
-          puts( "SSL Verification for #{@host} has failed." )
+          puts("SSL Verification for #{@host} has failed.")
           @error  = "SSL Verification for #{@host} failed: "
           @error +=  s.errors.join("\n")
           return false

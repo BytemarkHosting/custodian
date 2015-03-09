@@ -44,14 +44,14 @@ module Custodian
     # The "obj" here is the test-case that will be generating the
     # raise/clear event.
     #
-    def self.create( alert_type, obj )
+    def self.create(alert_type, obj)
 
       raise ArgumentError, 'The type of notifier to create cannot be nil' if  alert_type.nil? 
       raise ArgumentError, 'The type of notifier to create must be a string' unless  alert_type.kind_of? String 
 
       c = @@subclasses[alert_type]
       if c
-        c.new( obj )
+        c.new(obj)
       else
         raise ArgumentError, "Bad alert type: '#{alert_type}'"
       end
@@ -81,7 +81,7 @@ module Custodian
     #
     def get_type
       @@subclasses.each do |name,value|
-        if ( value == self.class  )
+        if (value == self.class)
           return name
         end
       end
@@ -93,7 +93,7 @@ module Custodian
     #
     # Set the target for this alert.
     #
-    def set_target( target )
+    def set_target(target)
       @target = target
     end
 
@@ -102,7 +102,7 @@ module Custodian
     #
     # Store a reference to the settings
     #
-    def set_settings( obj )
+    def set_settings(obj)
       @settings = obj
     end
 

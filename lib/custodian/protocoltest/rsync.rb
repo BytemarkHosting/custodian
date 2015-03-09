@@ -22,7 +22,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         # Save the line.
@@ -32,7 +32,7 @@ module Custodian
         #
         # If the target is an URL then strip to the hostname.
         #
-        @host  = line.split( /\s+/)[0]
+        @host  = line.split(/\s+/)[0]
         if  @host =~ /^rsync:\/\/([^\/]+)\/?/ 
           @host = $1.dup
         end
@@ -78,7 +78,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        run_test_internal( @host, @port, /^@RSYNCD/, true )
+        run_test_internal(@host, @port, /^@RSYNCD/, true)
       end
 
 

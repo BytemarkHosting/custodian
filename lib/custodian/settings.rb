@@ -35,7 +35,7 @@ module Custodian
     #
     # Load the configuration file; called only once.
     #
-    def _load( file = '/etc/custodian/custodian.cfg' )
+    def _load(file = '/etc/custodian/custodian.cfg')
 
       @parsed   = true
       @settings = {}
@@ -43,12 +43,12 @@ module Custodian
       #
       # The global configuration file.
       #
-      return unless( File.exist?( file ) )
+      return unless(File.exist?(file))
 
       #
       # Load and "parse" the key=value content.
       #
-      File.open( file, 'r' ).each_line do |line|
+      File.open(file, 'r').each_line do |line|
         next if  line.nil? || line =~ /^#/ 
         if  line =~ /^(.*)=(.*)$/ 
           key = $1.dup
@@ -66,7 +66,7 @@ module Custodian
     #
     #  Used by the test-suite.
     #
-    def _store( key, val )
+    def _store(key, val)
       @settings[key] = val
       @parsed = true
     end
@@ -83,8 +83,8 @@ module Custodian
     #
     # Retrieve an arbitrary key
     #
-    def key( name )
-      _load unless( _loaded? )
+    def key(name)
+      _load unless(_loaded?)
       @settings[name]
     end
 
@@ -93,7 +93,7 @@ module Custodian
     # The timeout period for each individual test.
     #
     def timeout
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       if  @settings['timeout'] 
         @settings['timeout'].to_i
@@ -109,7 +109,7 @@ module Custodian
     # before raising an alert.
     #
     def retries
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       if  @settings['retries'] 
         @settings['retries'].to_i
@@ -129,7 +129,7 @@ module Custodian
     # A delay of zero is permissable.
     #
     def retry_delay
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       if  @settings['retry_delay'] 
         @settings['retry_delay'].to_i
@@ -146,7 +146,7 @@ module Custodian
     # environmental variable 'QUEUE_ADDRESS'.
     #
     def queue_type
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       @settings['queue_type'] || 'redis'
     end
@@ -157,7 +157,7 @@ module Custodian
     # The filename for the logfile.
     #
     def log_file
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       @settings['log_file'] || 'custodian-dequeue.log'
     end
@@ -167,7 +167,7 @@ module Custodian
     # The alerter to use
     #
     def alerter
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       @settings['alerter'] || 'file'
     end
@@ -177,7 +177,7 @@ module Custodian
     # The alert-source we send.  Only used when the notifier is set to mauve.
     #
     def alert_source
-      _load unless( _loaded? )
+      _load unless(_loaded?)
 
       @settings['alert_source'] || 'Custodian'
     end
@@ -194,8 +194,8 @@ module Custodian
     #
     # When the alerter is "redis" the target is the redis-server address.
     #
-    def alerter_target( alert )
-      _load unless( _loaded? )
+    def alerter_target(alert)
+      _load unless(_loaded?)
 
 
       #
@@ -203,7 +203,7 @@ module Custodian
       #
       # if we have something setup then use it.
       if  @settings["#{alert}_target"] 
-        return( @settings["#{alert}_target"] )
+        return(@settings["#{alert}_target"])
       end
 
       # otherwise per-test defaults.

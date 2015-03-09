@@ -21,7 +21,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         # Save the line.
@@ -31,7 +31,7 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split( /\s+/)[0]
+        @host  = line.split(/\s+/)[0]
 
         #
         # The username/password
@@ -101,7 +101,7 @@ module Custodian
 
         begin
           #  Connect.
-          ldap = LDAP::Conn.new( @host, @port )
+          ldap = LDAP::Conn.new(@host, @port)
           ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
 
           #  Hardwired search is bad..
@@ -111,7 +111,7 @@ module Custodian
           attrs = ['sn', 'cn']
 
           #  Bind.
-          ldap.bind( @ldap_user, @ldap_pass )
+          ldap.bind(@ldap_user, @ldap_pass)
           if  ldap.bound? 
 
             #

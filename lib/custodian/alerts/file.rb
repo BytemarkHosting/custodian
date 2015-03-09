@@ -21,7 +21,7 @@ module Custodian
       #
       # Constructor - save the test-object away.
       #
-      def initialize( obj )
+      def initialize(obj)
         @test = obj
       end
 
@@ -31,15 +31,15 @@ module Custodian
       # Record a raise event for the given test.
       #
       def raise
-        write_message( "RAISE: #{test.target} failed #{test.get_type}-test - #{test.error}" )
+        write_message("RAISE: #{test.target} failed #{test.get_type}-test - #{test.error}")
       end
 
 
       #
       # Record the duration of the given test.
       #
-      def duration( seconds )
-        write_message( "#{test.get_type}-test against #{test.target} took #{seconds}ms to complete" )
+      def duration(seconds)
+        write_message("#{test.get_type}-test against #{test.target} took #{seconds}ms to complete")
       end
 
 
@@ -47,16 +47,16 @@ module Custodian
       # Record a clear event for the given test.
       #
       def clear
-        write_message( "CLEAR: #{test.target} failed #{test.get_type}-test" )
+        write_message("CLEAR: #{test.target} failed #{test.get_type}-test")
       end
 
 
       #
       # Write the actual message to our target.
       #
-      def write_message( msg )
+      def write_message(msg)
         file = File.open(@target, 'a')
-        file.puts( "#{Time.now} #{msg}" )
+        file.puts("#{Time.now} #{msg}")
         file.close
 
       end

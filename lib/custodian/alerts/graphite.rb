@@ -22,7 +22,7 @@ module Custodian
       #
       # Constructor - save the test-object away.
       #
-      def initialize( obj )
+      def initialize(obj)
         @test  = obj
       end
 
@@ -47,7 +47,7 @@ module Custodian
       #
       # Send the test test-duration to graphite/carbon
       #
-      def duration( ms )
+      def duration(ms)
 
         #
         # hostname + test-type
@@ -64,7 +64,7 @@ module Custodian
         #  Send via UDP.
         #
         socket = UDPSocket.new
-        socket.send( payload, 0, @target, 2003 )
+        socket.send(payload, 0, @target, 2003)
         socket.close
 
       end

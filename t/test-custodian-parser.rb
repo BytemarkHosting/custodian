@@ -51,8 +51,8 @@ class TestCustodianParser < Test::Unit::TestCase
 
   def test_period
     parser = Custodian::Parser.new
-    result = parser.parse_line( 'example.vm.bytemark.co.uk must run ping except between 00-23' )
-    assert( result.nil? )
+    result = parser.parse_line('example.vm.bytemark.co.uk must run ping except between 00-23')
+    assert(result.nil?)
   end
 
 
@@ -72,20 +72,20 @@ class TestCustodianParser < Test::Unit::TestCase
     parser = Custodian::Parser.new
 
     #  1.a.  Comment lines return nil.
-    result = parser.parse_line( '# this is a comment' )
-    assert( result.nil? )
+    result = parser.parse_line('# this is a comment')
+    assert(result.nil?)
 
     #  1.b.  Non-strings are an error
     assert_raise ArgumentError do
-      result = parser.parse_line( nil )
+      result = parser.parse_line(nil)
     end
 
 
     #  1.c.  Adding a test will return an array of test-objects.
-    result = parser.parse_line( "smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'." )
-    assert( !result.nil? )
-    assert( result.kind_of? Array )
-    assert( result.size == 1 )
+    result = parser.parse_line("smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'.")
+    assert(!result.nil?)
+    assert(result.kind_of? Array)
+    assert(result.size == 1)
 
 
     #
@@ -94,15 +94,15 @@ class TestCustodianParser < Test::Unit::TestCase
     parser = Custodian::Parser.new
     #  2.a.  Comment lines return nil.
     tmp    = []
-    tmp.push( '# This is a comment..' )
-    assert( parser.parse_lines( tmp ).nil? )
+    tmp.push('# This is a comment..')
+    assert(parser.parse_lines(tmp).nil?)
 
     #  2.b.  Adding a test will return an array of test-objects.
     tmp = []
-    tmp.push( "smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'." )
-    ret = parser.parse_lines( tmp )
-    assert( ret.kind_of? Array )
-    assert( ret.size == 1 )
+    tmp.push("smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'.")
+    ret = parser.parse_lines(tmp)
+    assert(ret.kind_of? Array)
+    assert(ret.size == 1)
 
     #
     # 3.  By lines
@@ -113,16 +113,16 @@ class TestCustodianParser < Test::Unit::TestCase
 # This is a comment
 # This is also a fine comment
 EOF
-    assert( parser.parse_lines( str ).nil? )
+    assert(parser.parse_lines(str).nil?)
 
     #  3.b.  Adding a test will return an array of test-objects.
     str = <<EOF
 smtp.bytemark.co.uk must run smtp on 25.
 google.com must run ping otherwise 'internet broken?'.
 EOF
-    ret = parser.parse_lines( str )
-    assert( ret.kind_of? Array )
-    assert( ret.size == 1 )
+    ret = parser.parse_lines(str)
+    assert(ret.kind_of? Array)
+    assert(ret.size == 1)
 
   end
 
@@ -147,15 +147,15 @@ EOF
     #
     # Test the parser with this text
     #
-    parser.parse_lines( text )
+    parser.parse_lines(text)
 
 
     #
     #  We should now have two macros.
     #
     macros = parser.macros
-    assert( ! macros.empty? )
-    assert( macros.size == 2 )
+    assert(! macros.empty?)
+    assert(macros.size == 2)
   end
 
 
@@ -172,21 +172,21 @@ EOF
     #  Input text
     #
     text = []
-    text.push( 'FOO  is  kvm1.vm.bytemark.co.uk.' )
-    text.push( 'FOO2 is  kvm2.vm.bytemark.co.uk.' )
+    text.push('FOO  is  kvm1.vm.bytemark.co.uk.')
+    text.push('FOO2 is  kvm2.vm.bytemark.co.uk.')
 
     #
     # Test the parser with this text
     #
-    parser.parse_lines( text )
+    parser.parse_lines(text)
 
 
     #
     #  We should now have two macros.
     #
     macros = parser.macros
-    assert( ! macros.empty? )
-    assert( macros.size == 2 )
+    assert(! macros.empty?)
+    assert(macros.size == 2)
   end
 
 
@@ -203,14 +203,14 @@ EOF
     #  Input text to parse.
     #
     text = []
-    text.push( 'FOO is kvm1.vm.bytemark.co.uk.' )
-    text.push( 'FOO is kvm2.vm.bytemark.co.uk.' )
+    text.push('FOO is kvm1.vm.bytemark.co.uk.')
+    text.push('FOO is kvm2.vm.bytemark.co.uk.')
 
     #
     # Test the parser with this text
     #
     assert_raise ArgumentError do
-      parser.parse_lines( text )
+      parser.parse_lines(text)
     end
 
 
@@ -218,8 +218,8 @@ EOF
     #  We should now have one macro.
     #
     macros = parser.macros
-    assert( ! macros.empty? )
-    assert( macros.size == 1 )
+    assert(! macros.empty?)
+    assert(macros.size == 1)
   end
 
 
@@ -235,42 +235,42 @@ EOF
     #
     parser = Custodian::Parser.new
     macros = parser.macros
-    assert( macros.empty? )
+    assert(macros.empty?)
 
     #
     #  Expand a line - which should result in no change
     # as the line does not involve a known-macro
     #
     in_txt  = 'example.bytemark.co.uk must run smtp.'
-    out_txt = parser.expand_macro( in_txt )
+    out_txt = parser.expand_macro(in_txt)
 
     #
     #  The difference is the return value will be an array
     #
-    assert( out_txt.kind_of? Array )
-    assert( out_txt.size == 1 )
-    assert( out_txt[0] == in_txt )
+    assert(out_txt.kind_of? Array)
+    assert(out_txt.size == 1)
+    assert(out_txt[0] == in_txt)
 
 
     #
     #  Now define a macro
     #
-    parser.parse_line( 'TARGET is example1.bytemark.co.uk and example2.bytemark.co.uk.' )
+    parser.parse_line('TARGET is example1.bytemark.co.uk and example2.bytemark.co.uk.')
     macros = parser.macros
-    assert( !macros.empty? )
+    assert(!macros.empty?)
 
     #
     # Now we have a two-host macro, repeat the expansion
     #
-    ret = parser.expand_macro( 'TARGET must run smtp on 25.' )
+    ret = parser.expand_macro('TARGET must run smtp on 25.')
 
     #
     # The result should be an array
     #
-    assert( ret.kind_of? Array )
-    assert_equal( ret.size, 2 )
-    assert( ret[0] =~ /example1/)
-    assert( ret[1] =~ /example2/)
+    assert(ret.kind_of? Array)
+    assert_equal(ret.size, 2)
+    assert(ret[0] =~ /example1/)
+    assert(ret[1] =~ /example2/)
 
   end
 
@@ -298,17 +298,17 @@ EOF
         #
         # Create the new parser
         #
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( !obj.nil? )
-        assert( obj.kind_of? Array )
-        assert( obj.size == 1 )
-        assert_equal( obj[0].to_s, str )
+        assert(!obj.nil?)
+        assert(obj.kind_of? Array)
+        assert(obj.size == 1)
+        assert_equal(obj[0].to_s, str)
 
         if  follow 
-          assert( obj[0].follow_redirects? )
+          assert(obj[0].follow_redirects?)
         else
-          assert( ! obj[0].follow_redirects? )
+          assert(! obj[0].follow_redirects?)
         end
       end
     end
@@ -337,17 +337,17 @@ EOF
         #
         # Create the new parser
         #
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( !obj.nil? )
-        assert( obj.kind_of? Array )
-        assert( obj.size == 1 )
-        assert_equal( obj[0].to_s, str )
+        assert(!obj.nil?)
+        assert(obj.kind_of? Array)
+        assert(obj.size == 1)
+        assert_equal(obj[0].to_s, str)
 
         if  cb 
-          assert( obj[0].cache_busting? )
+          assert(obj[0].cache_busting?)
         else
-          assert( ! obj[0].cache_busting? )
+          assert(! obj[0].cache_busting?)
         end
       end
     end
@@ -383,17 +383,17 @@ EOF
         #
         # Create the new parser
         #
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( !obj.nil? )
-        assert( obj.kind_of? Array )
-        assert( obj.size == 1 )
-        assert_equal( obj[0].to_s, str )
+        assert(!obj.nil?)
+        assert(obj.kind_of? Array)
+        assert(obj.size == 1)
+        assert_equal(obj[0].to_s, str)
 
         if  fail.nil? 
-          assert( obj[0].get_notification_text.nil? )
+          assert(obj[0].get_notification_text.nil?)
         else
-          assert_equal( obj[0].get_notification_text, fail )
+          assert_equal(obj[0].get_notification_text, fail)
         end
 
       end

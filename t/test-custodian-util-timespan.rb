@@ -29,37 +29,37 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_to_hour
 
     for hour in 0..23
-      assert_equal( hour, Custodian::Util::TimeSpan.to_hour(hour))
+      assert_equal(hour, Custodian::Util::TimeSpan.to_hour(hour))
     end
 
     #
     #  Invalid hours will throw exceptions
     #
     assert_raise ArgumentError do
-      result = Custodian::Util::TimeSpan.to_hour( 0.5 )
+      result = Custodian::Util::TimeSpan.to_hour(0.5)
     end
     assert_raise ArgumentError do
-      result = Custodian::Util::TimeSpan.to_hour( -1 )
+      result = Custodian::Util::TimeSpan.to_hour(-1)
     end
     assert_raise ArgumentError do
-      result = Custodian::Util::TimeSpan.to_hour( 100 )
+      result = Custodian::Util::TimeSpan.to_hour(100)
     end
     assert_raise ArgumentError do
-      result = Custodian::Util::TimeSpan.to_hour( 24 )
+      result = Custodian::Util::TimeSpan.to_hour(24)
     end
     assert_raise ArgumentError do
-      result = Custodian::Util::TimeSpan.to_hour( 25 )
+      result = Custodian::Util::TimeSpan.to_hour(25)
     end
 
     #
     #  Ensure AM times work well
     #
     for hour in 0..11
-      assert_equal( hour, Custodian::Util::TimeSpan.to_hour( "#{hour}am"))
+      assert_equal(hour, Custodian::Util::TimeSpan.to_hour("#{hour}am"))
     end
 
     for hour in 0..11
-      assert_equal( 12 +hour, Custodian::Util::TimeSpan.to_hour( "#{hour}pm"))
+      assert_equal(12 +hour, Custodian::Util::TimeSpan.to_hour("#{hour}pm"))
     end
 
   end
@@ -76,15 +76,15 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     #
     for i in  24..100
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( i, 2 )
+        result = Custodian::Util::TimeSpan.inside?(i, 2)
       end
 
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( 1, i )
+        result = Custodian::Util::TimeSpan.inside?(1, i)
       end
 
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( 1, 2, i )
+        result = Custodian::Util::TimeSpan.inside?(1, 2, i)
       end
     end
 
@@ -94,15 +94,15 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     for i in 1..50
 
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( 1, ( -1 * i ) )
+        result = Custodian::Util::TimeSpan.inside?(1, (-1 * i))
       end
 
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( ( -1 * i ), 1 )
+        result = Custodian::Util::TimeSpan.inside?((-1 * i), 1)
       end
 
       assert_raise ArgumentError do
-        result = Custodian::Util::TimeSpan.inside?( 1, 1, ( -1 * i ) )
+        result = Custodian::Util::TimeSpan.inside?(1, 1, (-1 * i))
       end
     end
 
@@ -114,8 +114,8 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   #
   def test_simple_cases
     # 8am-5pm
-    assert(Custodian::Util::TimeSpan.inside?( '8am', '5am', 12 ))
-    assert(Custodian::Util::TimeSpan.inside?( 8, 17, 12 ))
+    assert(Custodian::Util::TimeSpan.inside?('8am', '5am', 12))
+    assert(Custodian::Util::TimeSpan.inside?(8, 17, 12))
 
   end
 
@@ -125,25 +125,25 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_midnight_cases
 
     # 9pm-2am
-    assert(Custodian::Util::TimeSpan.inside?( '9pm', '2am', 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( '9pm', '2am', '10pm' ))
-    assert(Custodian::Util::TimeSpan.inside?( 21, 2, 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 21, 2, '10pm' ))
+    assert(Custodian::Util::TimeSpan.inside?('9pm', '2am', 22))
+    assert(Custodian::Util::TimeSpan.inside?('9pm', '2am', '10pm'))
+    assert(Custodian::Util::TimeSpan.inside?(21, 2, 22))
+    assert(Custodian::Util::TimeSpan.inside?(21, 2, '10pm'))
 
     # 10pm-3am
-    assert(Custodian::Util::TimeSpan.inside?( '10pm', '3am', 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 22, 3, 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 22, 3, 22 ))
-    assert(Custodian::Util::TimeSpan.inside?( 22, 3, '10pm' ))
+    assert(Custodian::Util::TimeSpan.inside?('10pm', '3am', 22))
+    assert(Custodian::Util::TimeSpan.inside?(22, 3, 22))
+    assert(Custodian::Util::TimeSpan.inside?(22, 3, 22))
+    assert(Custodian::Util::TimeSpan.inside?(22, 3, '10pm'))
 
     # 11pm-5am
-    assert(Custodian::Util::TimeSpan.inside?( '11pm', '5am', 23 ))
-    assert(Custodian::Util::TimeSpan.inside?( 23, 5, 23 ))
-    assert(Custodian::Util::TimeSpan.inside?( '11pm', '5am', '11pm' ))
+    assert(Custodian::Util::TimeSpan.inside?('11pm', '5am', 23))
+    assert(Custodian::Util::TimeSpan.inside?(23, 5, 23))
+    assert(Custodian::Util::TimeSpan.inside?('11pm', '5am', '11pm'))
 
     # midnight-3am
-    assert( Custodian::Util::TimeSpan.inside?( '0', '3am', 1 ))
-    assert( Custodian::Util::TimeSpan.inside?( '0', '3am', '1am' ))
+    assert(Custodian::Util::TimeSpan.inside?('0', '3am', 1))
+    assert(Custodian::Util::TimeSpan.inside?('0', '3am', '1am'))
   end
 
 
@@ -158,38 +158,38 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     close = '6pm'
 
     # The hours + the middle should be inside
-    assert( Custodian::Util::TimeSpan.inside?( open, close, 16 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, '4pm' ) )
+    assert(Custodian::Util::TimeSpan.inside?(open, close, 16))
+    assert(Custodian::Util::TimeSpan.inside?(open, close, '4pm'))
 
-    assert( Custodian::Util::TimeSpan.inside?( open, close, 17 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, '5pm' ) )
+    assert(Custodian::Util::TimeSpan.inside?(open, close, 17))
+    assert(Custodian::Util::TimeSpan.inside?(open, close, '5pm'))
 
-    assert( Custodian::Util::TimeSpan.inside?( open, close, 18 ) )
-    assert( Custodian::Util::TimeSpan.inside?( open, close, '6pm' ) )
+    assert(Custodian::Util::TimeSpan.inside?(open, close, 18))
+    assert(Custodian::Util::TimeSpan.inside?(open, close, '6pm'))
 
 
     #
     # The preceeding + successive hours shouldn't be.
     #
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, 15 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, 19 ) )
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, 15))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, 19))
 
     #
     # That is true for the string-versions too
     #
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '3pm' ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '7pm' ) )
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, '3pm'))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, '7pm'))
 
 
     #
     # Random hours should be outside too.
     #
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, 3 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '3am' ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, 7 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '7am' ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, 9 ) )
-    assert( ! Custodian::Util::TimeSpan.inside?( open, close, '9am' ) )
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, 3))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, '3am'))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, 7))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, '7am'))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, 9))
+    assert(! Custodian::Util::TimeSpan.inside?(open, close, '9am'))
 
   end
 
@@ -202,7 +202,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   #
   def test_worst
     for i in 0..23
-      assert( Custodian::Util::TimeSpan.inside?( 0, 23, i ) )
+      assert(Custodian::Util::TimeSpan.inside?(0, 23, i))
     end
   end
 
@@ -215,14 +215,14 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_wrap_around
 
     for h in 00..23
-      assert_equal( 1, Custodian::Util::TimeSpan.to_hours( h,h ).size )
+      assert_equal(1, Custodian::Util::TimeSpan.to_hours(h,h).size)
     end
 
     #
     #  But the time-period 00-23 is a full day
     #
-    assert_equal( 24,
-                  Custodian::Util::TimeSpan.to_hours( 0,23 ).size )
+    assert_equal(24,
+                 Custodian::Util::TimeSpan.to_hours(0,23).size)
 
   end
 

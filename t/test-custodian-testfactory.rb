@@ -28,11 +28,11 @@ class TestTestFactory < Test::Unit::TestCase
   def test_init
 
     assert_raise ArgumentError do
-      obj = Custodian::TestFactory.create( nil, nil )
+      obj = Custodian::TestFactory.create(nil, nil)
     end
 
     assert_raise ArgumentError do
-      obj = Custodian::TestFactory.create( [], nil )
+      obj = Custodian::TestFactory.create([], nil)
     end
 
 
@@ -45,15 +45,15 @@ class TestTestFactory < Test::Unit::TestCase
   def test_ftp_uri
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( 'ftp.example.com must  run ftp.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp on 21.' ) )
-      assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp on 21 otherwise 'xxx'." ) )
+      assert(Custodian::TestFactory.create('ftp.example.com must  run ftp.'))
+      assert(Custodian::TestFactory.create('ftp://ftp.example.com/ must run ftp.'))
+      assert(Custodian::TestFactory.create('ftp://ftp.example.com/ must run ftp on 21.'))
+      assert(Custodian::TestFactory.create("ftp://ftp.example.com/ must run ftp on 21 otherwise 'xxx'."))
     end
 
 
-    assert( Custodian::TestFactory.create( 'ftp.example.com        must run ftp.' )[0].target == 'ftp.example.com'  )
-    assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp.' )[0].target == 'ftp.example.com'  )
+    assert(Custodian::TestFactory.create('ftp.example.com        must run ftp.')[0].target == 'ftp.example.com')
+    assert(Custodian::TestFactory.create('ftp://ftp.example.com/ must run ftp.')[0].target == 'ftp.example.com')
 
 
     #
@@ -72,12 +72,12 @@ class TestTestFactory < Test::Unit::TestCase
     data.each do |str,prt|
       assert_nothing_raised do
 
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( obj.kind_of? Array )
-        assert( ! obj.empty? )
-        assert_equal( obj[0].get_type, 'ftp' )
-        assert_equal( obj[0].port.to_s, prt )
+        assert(obj.kind_of? Array)
+        assert(! obj.empty?)
+        assert_equal(obj[0].get_type, 'ftp')
+        assert_equal(obj[0].port.to_s, prt)
 
       end
     end
@@ -104,12 +104,12 @@ class TestTestFactory < Test::Unit::TestCase
     data.each do |str,prt|
       assert_nothing_raised do
 
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
         assert(obj)
-        assert( obj.kind_of? Array )
-        assert( ! obj.empty? )
-        assert( obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert(obj.kind_of? Array)
+        assert(! obj.empty?)
+        assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
 
@@ -124,16 +124,16 @@ class TestTestFactory < Test::Unit::TestCase
 
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( 'example.com must  run rsync.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://example.com/ must run rsync.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://example.com/ must run rsync on 333.' ) )
-      assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync on 3311 otherwise 'xxx'." ) )
+      assert(Custodian::TestFactory.create('example.com must  run rsync.'))
+      assert(Custodian::TestFactory.create('ftp://example.com/ must run rsync.'))
+      assert(Custodian::TestFactory.create('ftp://example.com/ must run rsync on 333.'))
+      assert(Custodian::TestFactory.create("ftp://example.com/ must run rsync on 3311 otherwise 'xxx'."))
     end
 
-    assert( Custodian::TestFactory.create( 'rsync.example.com  must run rsync.' )[0].target ==
-            'rsync.example.com'  )
-    assert( Custodian::TestFactory.create( 'rsync://rsync.example.com/ must run rsync.' )[0].target ==
-            'rsync.example.com'  )
+    assert(Custodian::TestFactory.create('rsync.example.com  must run rsync.')[0].target ==
+            'rsync.example.com')
+    assert(Custodian::TestFactory.create('rsync://rsync.example.com/ must run rsync.')[0].target ==
+            'rsync.example.com')
 
 
     #
@@ -152,11 +152,11 @@ class TestTestFactory < Test::Unit::TestCase
     data.each do |str,prt|
       assert_nothing_raised do
 
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( obj.kind_of? Array )
-        assert( ! obj.empty? )
-        assert( obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
+        assert(obj.kind_of? Array)
+        assert(! obj.empty?)
+        assert(obj[0].port.to_s == prt , "'#{str}' gave expected port '#{prt}'.")
       end
     end
   end
@@ -170,28 +170,28 @@ class TestTestFactory < Test::Unit::TestCase
   def test_dns_handler
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'." ) )
+      assert(Custodian::TestFactory.create("a.ns.bytemark.co.uk must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'."))
     end
 
     #
     #  Missing record-type
     #
     assert_raise ArgumentError do
-      Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for bytemark.co.uk as '80.68.80.26;85.17.170.78;80.68.80.27'." )
+      Custodian::TestFactory.create("a.ns.bytemark.co.uk must run dns for bytemark.co.uk as '80.68.80.26;85.17.170.78;80.68.80.27'.")
     end
 
     #
     #  Missing target
     #
     assert_raise ArgumentError do
-      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'." ) )
+      assert(Custodian::TestFactory.create("a.ns.bytemark.co.uk must run dns resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'."))
     end
 
     #
     #  Missing expected results
     #
     assert_raise ArgumentError do
-      assert( Custodian::TestFactory.create( 'a.ns.bytemark.co.uk must run dns for www.bytemark.co.uk resolving NS ' ) )
+      assert(Custodian::TestFactory.create('a.ns.bytemark.co.uk must run dns for www.bytemark.co.uk resolving NS '))
     end
   end
 
@@ -205,9 +205,9 @@ class TestTestFactory < Test::Unit::TestCase
 
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( 'example.com must not run rsync.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://example.com/ must not run rsync.' ) )
-      assert( Custodian::TestFactory.create( 'ftp://example.com/ must not run rsync on 333.' ) )
+      assert(Custodian::TestFactory.create('example.com must not run rsync.'))
+      assert(Custodian::TestFactory.create('ftp://example.com/ must not run rsync.'))
+      assert(Custodian::TestFactory.create('ftp://example.com/ must not run rsync on 333.'))
     end
 
 
@@ -228,16 +228,16 @@ class TestTestFactory < Test::Unit::TestCase
     data.each do |str,inv|
       assert_nothing_raised do
 
-        obj = Custodian::TestFactory.create( str )
+        obj = Custodian::TestFactory.create(str)
 
-        assert( obj.kind_of? Array )
-        assert( ! obj.empty? )
+        assert(obj.kind_of? Array)
+        assert(! obj.empty?)
 
         #
         #  Ensure we got the object, and the port was correct.
         #
         assert(obj, "created object via TestFactory.create('#{str}')")
-        assert( obj[0].inverted == inv, "#{str} -> #{inv}" )
+        assert(obj[0].inverted == inv, "#{str} -> #{inv}")
       end
     end
 
@@ -269,14 +269,14 @@ class TestTestFactory < Test::Unit::TestCase
 
           assert_nothing_raised do
 
-            test_one_obj = Custodian::TestFactory.create( test_one )
-            assert( !test_one_obj[0].inverted )
+            test_one_obj = Custodian::TestFactory.create(test_one)
+            assert(!test_one_obj[0].inverted)
 
-            test_two_obj = Custodian::TestFactory.create( test_two )
-            assert( test_two_obj[0].inverted, "Found inverted test for #{tst}" )
+            test_two_obj = Custodian::TestFactory.create(test_two)
+            assert(test_two_obj[0].inverted, "Found inverted test for #{tst}")
 
-            assert_equal( tst, test_one_obj[0].get_type )
-            assert_equal( tst, test_two_obj[0].get_type )
+            assert_equal(tst, test_one_obj[0].get_type)
+            assert_equal(tst, test_two_obj[0].get_type)
           end
         end
       end
@@ -292,21 +292,21 @@ class TestTestFactory < Test::Unit::TestCase
 
     a = []
 
-    a.push( 'test.host.example.com must run ftp.')
-    a.push( 'ftp://test.host.example.com/ must run ftp.')
-    a.push( 'ftp://test.host.example.com/foo must run ftp.')
-    a.push( 'test.host.example.com must run ping.')
-    a.push( "test.host.example.com  must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'.")
-    a.push( 'rsync://test.host.example.com must run rsync.')
-    a.push( 'rsync://test.host.example.com must run rsync.')
+    a.push('test.host.example.com must run ftp.')
+    a.push('ftp://test.host.example.com/ must run ftp.')
+    a.push('ftp://test.host.example.com/foo must run ftp.')
+    a.push('test.host.example.com must run ping.')
+    a.push("test.host.example.com  must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'.")
+    a.push('rsync://test.host.example.com must run rsync.')
+    a.push('rsync://test.host.example.com must run rsync.')
 
     a.each do |entry|
       assert_nothing_raised do
-        obj = Custodian::TestFactory.create( entry )
+        obj = Custodian::TestFactory.create(entry)
         assert(obj)
-        assert( obj.kind_of? Array )
-        assert( ! obj.empty? )
-        assert_equal( 'test.host.example.com', obj[0].target )
+        assert(obj.kind_of? Array)
+        assert(! obj.empty?)
+        assert_equal('test.host.example.com', obj[0].target)
       end
     end
   end

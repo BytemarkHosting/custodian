@@ -60,7 +60,7 @@ module Custodian
       #
       # Ensure we received a port to run the TCP-test against.
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         # Save the line
@@ -70,7 +70,7 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split( /\s+/)[0]
+        @host  = line.split(/\s+/)[0]
 
         #
         # Is this test inverted?
@@ -126,7 +126,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        ( run_test_internal( @host, @port, @banner, ( ! @banner.nil? ) ) )
+        (run_test_internal(@host, @port, @banner, (! @banner.nil?)))
       end
 
 
@@ -148,7 +148,7 @@ module Custodian
       #
       # A failure in either version will result in a failure.
       #
-      def run_test_internal( host, port, banner = nil, do_read = false )
+      def run_test_internal(host, port, banner = nil, do_read = false)
 
         #
         # Get the timeout period.
@@ -165,9 +165,9 @@ module Custodian
         #  Does the name look like an IP?
         #
         begin
-          x = IPAddr.new( host )
+          x = IPAddr.new(host)
           if  x.ipv4? or x.ipv6? 
-            ips.push( host )
+            ips.push(host)
           end
         rescue ArgumentError
           #
@@ -197,17 +197,17 @@ module Custodian
         # look it up, as both IPv4 and IPv6.
         #
         begin
-          timeout( period ) do
+          timeout(period) do
 
             Resolv::DNS.open do |dns|
 
               if  do_ipv4 
                 ress = dns.getresources(host, Resolv::DNS::Resource::IN::A)
-                ress.map { |r| ips.push( r.address.to_s ) }
+                ress.map { |r| ips.push(r.address.to_s) }
               end
               if  do_ipv6 
                 ress = dns.getresources(host, Resolv::DNS::Resource::IN::AAAA)
-                ress.map { |r| ips.push( r.address.to_s ) }
+                ress.map { |r| ips.push(r.address.to_s) }
               end
             end
           end
@@ -232,7 +232,7 @@ module Custodian
         # were given.
         #
         ips.each do |ip|
-          if  ! run_test_internal_real( ip, port, banner, do_read ) 
+          if  ! run_test_internal_real(ip, port, banner, do_read) 
 
             return false
             #
@@ -260,7 +260,7 @@ module Custodian
       # This method will ONLY ever be invoked with an IP-address for a
       # destination.
       #
-      def run_test_internal_real( host, port, banner = nil, do_read = false )
+      def run_test_internal_real(host, port, banner = nil, do_read = false)
 
         #
         # Get the timeout period for this test.
@@ -271,7 +271,7 @@ module Custodian
         begin
           timeout(period) do
             begin
-              socket = TCPSocket.new( host, port )
+              socket = TCPSocket.new(host, port)
 
               # read a banner from the remote server, if we're supposed to.
               read = nil
@@ -293,14 +293,14 @@ module Custodian
 
                 # regexp.
                 if  banner.kind_of? Regexp 
-                  if  ( !read.nil? ) && ( banner.match(read) ) 
+                  if  (!read.nil?) && (banner.match(read)) 
                     return true
                   end
                 end
 
                 # string.
                 if  banner.kind_of? String 
-                  if  ( !read.nil? ) && ( read =~ /#{banner}/i ) 
+                  if  (!read.nil?) && (read =~ /#{banner}/i) 
                     return true
                   end
                 end

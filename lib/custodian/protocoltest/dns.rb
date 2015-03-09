@@ -37,7 +37,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         #  Save the line
@@ -64,15 +64,15 @@ module Custodian
         #
         #  Ensure we had all the data.
         #
-        raise ArgumentError, 'Missing host to resolve' unless( @resolve_name )
-        raise ArgumentError, 'Missing type of record to lookup' unless( @resolve_type )
-        raise ArgumentError, 'Missing expected results' unless( @resolve_expected )
-        raise ArgumentError, "Uknown record type: #{@resolve_type}" unless( @resolve_type =~ /^(A|NS|MX|AAAA)$/ )
+        raise ArgumentError, 'Missing host to resolve' unless(@resolve_name)
+        raise ArgumentError, 'Missing type of record to lookup' unless(@resolve_type)
+        raise ArgumentError, 'Missing expected results' unless(@resolve_expected)
+        raise ArgumentError, "Uknown record type: #{@resolve_type}" unless(@resolve_type =~ /^(A|NS|MX|AAAA)$/)
 
         #
         #  The host to query against
         #
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
       end
 
@@ -106,7 +106,7 @@ module Custodian
         #
         # Do the lookup
         #
-        results = resolve_via( @host,  resolve_type, resolve_name, period )
+        results = resolve_via(@host,  resolve_type, resolve_name, period)
         return false if  results.nil? 
 
         #
@@ -126,12 +126,12 @@ module Custodian
       #
       # Resolve an IP
       #
-      def resolve_via( server, ltype, name, period )
+      def resolve_via(server, ltype, name, period)
 
         results = []
 
         begin
-          timeout( period ) do
+          timeout(period) do
 
             begin
               #
@@ -147,16 +147,16 @@ module Custodian
                 case ltype
 
                 when /^A$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push( r.address.to_s ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::A).map{ |r| results.push(r.address.to_s) }
 
                 when /^AAAA$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push( r.address.to_s ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::AAAA).map{ |r| results.push(r.address.to_s) }
 
                 when /^NS$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push( Resolv.getaddresses( r.name.to_s ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::NS).map{ |r| results.push(Resolv.getaddresses(r.name.to_s)) }
 
                 when /^MX$/ then
-                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push( Resolv.getaddresses( r.exchange.to_s ) ) }
+                  dns.getresources(name, Resolv::DNS::Resource::IN::MX).map{ |r| results.push(Resolv.getaddresses(r.exchange.to_s)) }
 
                 else
                   @error = "Unknown record type to resolve: '#{ltype}'"

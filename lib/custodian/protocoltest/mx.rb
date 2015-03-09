@@ -20,7 +20,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         # Save the line away
         @line = line
@@ -69,11 +69,11 @@ module Custodian
         #  Lookup the MX record
         #
         begin
-          timeout( period ) do
+          timeout(period) do
 
             Resolv::DNS.open do |dns|
               ress = dns.getresources(@host, Resolv::DNS::Resource::IN::MX)
-              ress.map { |r| mx.push( IPSocket.getaddress(r.exchange.to_s) ) }
+              ress.map { |r| mx.push(IPSocket.getaddress(r.exchange.to_s)) }
             end
           end
         rescue Timeout::Error => e
@@ -110,7 +110,7 @@ module Custodian
           begin
             timeout(period) do
               begin
-                socket = TCPSocket.new( backend, 25 )
+                socket = TCPSocket.new(backend, 25)
                 read = socket.sysread(1024)
 
                 # trim to a sane length & strip newlines.

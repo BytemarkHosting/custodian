@@ -130,7 +130,7 @@ if __FILE__ == $PROGRAM_NAME then
   #  Create the worker, passing it the settings object so it can
   # sort out its own logfile, etc.
   #
-  worker = Custodian::Worker.new( settings )
+  worker = Custodian::Worker.new(settings)
 
 
   #

@@ -41,7 +41,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( obj )
+      def initialize(obj)
         @test = obj
 
         begin
@@ -62,7 +62,7 @@ module Custodian
       #
       def raise
 
-        return unless( @loaded )
+        return unless(@loaded)
 
         #
         # Get ready to send to mauve.
@@ -75,7 +75,7 @@ module Custodian
         #
         # Construct a new alert structure.
         #
-        alert = _get_alert( true )
+        alert = _get_alert(true)
 
         #
         #  We're raising this alert.
@@ -96,21 +96,21 @@ module Custodian
         #
         # Lookup the start of the day.
         #
-        day_start = @settings.key( 'day_start' ).to_i || 10
-        day_end   = @settings.key( 'day_end' ).to_i   || 18
+        day_start = @settings.key('day_start').to_i || 10
+        day_end   = @settings.key('day_end').to_i   || 18
 
         #
         #  In hour suppress
         #
-        working_suppress = @settings.key( 'working_suppress' ).to_i || 4
-        oncall_suppress  = @settings.key( 'oncall_suppress' ).to_i  || 10
+        working_suppress = @settings.key('working_suppress').to_i || 4
+        oncall_suppress  = @settings.key('oncall_suppress').to_i  || 10
 
         #
         # If we're Monday-Friday, between the start & end time, then
         # we're in the working day.
         #
-        if  ( ( wday != 0 ) && ( wday != 6 ) ) &&
-             ( hour >= day_start && hour < day_end ) 
+        if  ((wday != 0) && (wday != 6)) &&
+             (hour >= day_start && hour < day_end) 
           working = true
         end
 
@@ -127,13 +127,13 @@ module Custodian
         #
         # We're going to suppress this alert now
         #
-        alert.suppress_until = Time.now.to_i + ( period * 60 )
+        alert.suppress_until = Time.now.to_i + (period * 60)
 
         #
         #  Update it and send it
         #
         update.alert << alert
-        Mauve::Sender.new( @target ).send(update)
+        Mauve::Sender.new(@target).send(update)
 
       end
 
@@ -144,7 +144,7 @@ module Custodian
       #
       def clear
 
-        return unless( @loaded )
+        return unless(@loaded)
 
         #
         # Get ready to send to mauve.
@@ -157,7 +157,7 @@ module Custodian
         #
         # Construct a new alert structure.
         #
-        alert = _get_alert( false )
+        alert = _get_alert(false)
 
         #
         #  We're clearing this alert.
@@ -168,7 +168,7 @@ module Custodian
         #  Update it and send it
         #
         update.alert << alert
-        Mauve::Sender.new( @target ).send(update)
+        Mauve::Sender.new(@target).send(update)
 
       end
 
@@ -184,7 +184,7 @@ module Custodian
       # Most of the mess of this method is ensuring there is some
       # "helpful" data in the detail-field of the alert.
       #
-      def _get_alert( failure )
+      def _get_alert(failure)
 
         #
         # The subject of an alert MUST be one of:
@@ -198,9 +198,9 @@ module Custodian
         #
         subject = @test.target
 
-        if  ( subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
-             ( subject =~ /^([0-9a-f:]+)$/ ) 
-          res = Custodian::Util::DNS.ip_to_hostname( subject )
+        if  (subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
+             (subject =~ /^([0-9a-f:]+)$/) 
+          res = Custodian::Util::DNS.ip_to_hostname(subject)
           if  res 
             subject = res
           end
@@ -256,7 +256,7 @@ module Custodian
           #
           #  Determine if this is inside/outside the bytemark network
           #
-          location = expand_inside_bytemark( test_host )
+          location = expand_inside_bytemark(test_host)
           if  !location.nil? && location.length 
             alert.detail = "#{alert.detail}\n#{location}"
           end
@@ -274,7 +274,7 @@ module Custodian
       # or not.
       #
       #
-      def expand_inside_bytemark( host )
+      def expand_inside_bytemark(host)
 
         #
         #  If the host is a URL then we need to work with the hostname component alone.
@@ -296,11 +296,11 @@ module Custodian
         #
         #  Resolve the target to an IP, unless it is already an address.
         #
-        if  ( target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ ) ||
-             ( target =~ /^([0-9a-f:]+)$/ ) 
+        if  (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
+             (target =~ /^([0-9a-f:]+)$/) 
           resolved = target
         else
-          resolved = Custodian::Util::DNS.hostname_to_ip( target )
+          resolved = Custodian::Util::DNS.hostname_to_ip(target)
         end
 
 
@@ -313,14 +313,14 @@ module Custodian
         #
         #  Return the formatted message
         #
-        if  Custodian::Util::Bytemark.inside?( resolved.to_s ) 
-          if ( resolved == target )
+        if  Custodian::Util::Bytemark.inside?(resolved.to_s) 
+          if (resolved == target)
             return "<p>#{host} is inside the Bytemark network.</p>"
           else
             return "<p>#{host} resolves to #{resolved} which is inside the Bytemark network.</p>"
           end
         else
-          if ( resolved == target )
+          if (resolved == target)
             return "<p>#{host} is OUTSIDE the Bytemark network.</p>"
           else
             return "<p>#{host} resolves to #{resolved} which is OUTSIDE the Bytemark network.</p>"

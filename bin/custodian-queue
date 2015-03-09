@@ -125,7 +125,7 @@ if __FILE__ == $PROGRAM_NAME then
   #  Create the queue object.
   #
   settings = Custodian::Settings.instance
-  queue = Custodian::QueueType.create( settings.queue_type )
+  queue = Custodian::QueueType.create(settings.queue_type)
 
   #
   # Alerting on a queue that is too-full?
@@ -151,7 +151,7 @@ if __FILE__ == $PROGRAM_NAME then
   if  $STATS 
      jobs = queue.size?
      puts "There are #{jobs || 0} jobs pending."
-     exit( 0 )
+     exit(0)
   end
 
 

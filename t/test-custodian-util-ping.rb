@@ -41,7 +41,7 @@ class TestPingUtil < Test::Unit::TestCase
     # A hostname must be supplied
     #
     assert_raise ArgumentError do
-        Custodian::Util::Ping.new( nil )
+        Custodian::Util::Ping.new(nil)
     end
 
 
@@ -49,10 +49,10 @@ class TestPingUtil < Test::Unit::TestCase
     # A hostname is a string, not an array, hash, or similar.
     #
     assert_raise ArgumentError do
-      Custodian::Util::Ping.new( {})
+      Custodian::Util::Ping.new({})
     end
     assert_raise ArgumentError do
-      Custodian::Util::Ping.new( [])
+      Custodian::Util::Ping.new([])
     end
 
 
@@ -64,9 +64,9 @@ class TestPingUtil < Test::Unit::TestCase
   #
   def test_lookup_ipv4
 
-    helper = Custodian::Util::Ping.new( 'ipv4.steve.org.uk' )
-    assert( helper.is_ipv4? )
-    assert( ! helper.is_ipv6? )
+    helper = Custodian::Util::Ping.new('ipv4.steve.org.uk')
+    assert(helper.is_ipv4?)
+    assert(! helper.is_ipv6?)
 
   end
 
@@ -76,9 +76,9 @@ class TestPingUtil < Test::Unit::TestCase
   #
   def test_lookup_ipv6
 
-    helper = Custodian::Util::Ping.new( 'ipv6.steve.org.uk' )
-    assert( helper.is_ipv6? )
-    assert( ! helper.is_ipv4? )
+    helper = Custodian::Util::Ping.new('ipv6.steve.org.uk')
+    assert(helper.is_ipv6?)
+    assert(! helper.is_ipv4?)
   end
 
 
@@ -88,10 +88,10 @@ class TestPingUtil < Test::Unit::TestCase
   def test_lookup_fail
     %w( tessf.dfsdf.sdf.sdfsdf fdsfkljflj3.fdsfds.f3.dfs ).each do |name|
       assert_nothing_raised do
-        helper = Custodian::Util::Ping.new( name )
+        helper = Custodian::Util::Ping.new(name)
 
-        assert( ! helper.is_ipv4? )
-        assert( ! helper.is_ipv6? )
+        assert(! helper.is_ipv4?)
+        assert(! helper.is_ipv6?)
       end
     end
 
