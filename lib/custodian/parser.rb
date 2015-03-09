@@ -349,7 +349,6 @@ module Custodian
             end
           rescue => ex
             raise ArgumentError, "Parsing a line to a protocol test gave the error: #{ex}"
-            return nil
           end
         end
 
