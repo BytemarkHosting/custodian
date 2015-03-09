@@ -145,7 +145,7 @@ end
     #
     def initialize
       host  = ENV['QUEUE_ADDRESS'] || '127.0.0.1'
-      @queue = Beanstalk::Pool.new(["#{host}:11300" ])
+      @queue = Beanstalk::Pool.new(["#{host}:11300"])
     end
 
 

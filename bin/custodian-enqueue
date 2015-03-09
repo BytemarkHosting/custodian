@@ -70,11 +70,11 @@ if __FILE__ == $PROGRAM_NAME then
 
   begin
     opts = GetoptLong.new(
-                          [ '--dump',  '-d', GetoptLong::NO_ARGUMENT ],
-                          [ '--test',   GetoptLong::NO_ARGUMENT ],
-                          [ '--file',  '-f', GetoptLong::REQUIRED_ARGUMENT ],
-                          [ '--help',  '-h', GetoptLong::NO_ARGUMENT ],
-                          [ '--manual', '-m', GetoptLong::NO_ARGUMENT ]
+                          ['--dump',  '-d', GetoptLong::NO_ARGUMENT],
+                          ['--test',   GetoptLong::NO_ARGUMENT],
+                          ['--file',  '-f', GetoptLong::REQUIRED_ARGUMENT],
+                          ['--help',  '-h', GetoptLong::NO_ARGUMENT],
+                          ['--manual', '-m', GetoptLong::NO_ARGUMENT]
                           )
     opts.each do |opt, arg|
       case opt
