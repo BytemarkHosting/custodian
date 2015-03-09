@@ -62,7 +62,7 @@ module Custodian
     #
     # Empty the queue
     #
-    def flush!()
+    def flush!
       raise "Subclasses must implement this method!"
     end
 end

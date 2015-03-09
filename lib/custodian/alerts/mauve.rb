@@ -60,7 +60,7 @@ module Custodian
       #
       # Generate an alert-message which will be raised via mauve.
       #
-      def raise()
+      def raise
 
         return unless( @loaded )
 

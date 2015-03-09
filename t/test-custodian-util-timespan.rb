@@ -200,7 +200,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   # period is the worst case.
   #
   #
-  def test_worst()
+  def test_worst
     for i in 0..23
       assert( Custodian::Util::TimeSpan.inside?( 0, 23, i ) )
     end
