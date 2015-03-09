@@ -64,7 +64,7 @@ module Custodian
         #  Send via UDP.
         #
         socket = UDPSocket.new
-        socket.send( payload, 0, @target, 2003 );
+        socket.send( payload, 0, @target, 2003 )
         socket.close
 
       end

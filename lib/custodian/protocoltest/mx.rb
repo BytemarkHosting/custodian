@@ -144,7 +144,7 @@ module Custodian
           @error = "There are #{mx.size} hosts running as MX-servers for domain #{@host} - #{passed}:OK #{failed}:FAILED - #{error}"
           return false
         else
-          return true;
+          return true
         end
       end
 

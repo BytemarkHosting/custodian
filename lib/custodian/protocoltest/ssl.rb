@@ -427,7 +427,7 @@ module Custodian
           return true
         else
           puts( "SSL Verification for #{@host} has failed." )
-          @error  = "SSL Verification for #{@host} failed: ";
+          @error  = "SSL Verification for #{@host} failed: "
           @error +=  s.errors.join("\n")
           return false
         end
