@@ -71,7 +71,7 @@ module Custodian
         #
         binary = nil
         binary = "./bin/multi-ping"
-        binary = "/usr/bin/multi-ping"  if ( File.exists?( "/usr/bin/multi-ping" ) )
+        binary = "/usr/bin/multi-ping"  if ( File.exist?( "/usr/bin/multi-ping" ) )
 
         if ( binary.nil? )
           @error = "Failed to find '/usr/bin/multi-ping'"
