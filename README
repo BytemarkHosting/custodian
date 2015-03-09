@@ -78,6 +78,16 @@ the corresponding gem.  There is no need to install both.
 
 
 
+Formatting
+----------
+
+Our code is formatted and tested with [rubodoc](https://github.com/bbatsov/rubocop).
+
+Code should not be committed to the repository which results in warnings
+or errors from the current `.rubodoc` configuration file.
+
+
+
 Documentation
 -------------
 
