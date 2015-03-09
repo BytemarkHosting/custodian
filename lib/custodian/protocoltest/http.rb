@@ -51,7 +51,7 @@ module Custodian
         @url  = line.split( /\s+/)[0]
         @host = @url
 
-       #
+        #
         # Set the resolve modes
         #
         @resolve_modes = []
