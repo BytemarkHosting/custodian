@@ -117,7 +117,7 @@ module Custodian
             #
             # Search
             #
-            ldap.search(base,scope,filter,attrs)  { |entry|
+            ldap.search(base, scope, filter, attrs)  { |entry|
               puts "We found an LDAP result #{entry.vals('cn')}"
             }
             ldap.unbind

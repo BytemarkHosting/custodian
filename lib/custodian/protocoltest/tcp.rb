@@ -279,7 +279,7 @@ module Custodian
 
               # trim to a sane length & strip newlines.
               if  !read.nil? 
-                read = read[0,255]
+                read = read[0, 255]
                 read.gsub!(/[\n\r]/, '')
               end
 

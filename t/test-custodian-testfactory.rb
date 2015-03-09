@@ -69,7 +69,7 @@ class TestTestFactory < Test::Unit::TestCase
     #
     #  Run each test
     #
-    data.each do |str,prt|
+    data.each do |str, prt|
       assert_nothing_raised do
 
         obj = Custodian::TestFactory.create(str)
@@ -101,7 +101,7 @@ class TestTestFactory < Test::Unit::TestCase
     #
     #  Run each test
     #
-    data.each do |str,prt|
+    data.each do |str, prt|
       assert_nothing_raised do
 
         obj = Custodian::TestFactory.create(str)
@@ -149,7 +149,7 @@ class TestTestFactory < Test::Unit::TestCase
     #
     #  Run each test
     #
-    data.each do |str,prt|
+    data.each do |str, prt|
       assert_nothing_raised do
 
         obj = Custodian::TestFactory.create(str)
@@ -225,7 +225,7 @@ class TestTestFactory < Test::Unit::TestCase
     #
     #  Run each test
     #
-    data.each do |str,inv|
+    data.each do |str, inv|
       assert_nothing_raised do
 
         obj = Custodian::TestFactory.create(str)

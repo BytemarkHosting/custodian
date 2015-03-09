@@ -215,14 +215,14 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   def test_wrap_around
 
     for h in 00..23
-      assert_equal(1, Custodian::Util::TimeSpan.to_hours(h,h).size)
+      assert_equal(1, Custodian::Util::TimeSpan.to_hours(h, h).size)
     end
 
     #
     #  But the time-period 00-23 is a full day
     #
     assert_equal(24,
-                 Custodian::Util::TimeSpan.to_hours(0,23).size)
+                 Custodian::Util::TimeSpan.to_hours(0, 23).size)
 
   end
 
