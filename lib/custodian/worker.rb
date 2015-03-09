@@ -148,7 +148,7 @@ module Custodian
 
       begin
 
-        log_message( "Acquired job: #{test.to_s}" )
+        log_message( "Acquired job: #{test}" )
 
         #
         # The count of times this test has run, the result, and the start-time
