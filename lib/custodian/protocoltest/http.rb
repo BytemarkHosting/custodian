@@ -331,7 +331,7 @@ module Custodian
         #
         #  All done.
         #
-        return true
+        true
       end
 
       #

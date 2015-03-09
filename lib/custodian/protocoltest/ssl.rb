@@ -19,7 +19,7 @@ class SSLCheck
 
   # This is a helper for console-debugging.
   def verbose( msg )
-    return(msg)
+    (msg)
   end
 
   #
@@ -186,7 +186,7 @@ class SSLCheck
       s.close if s.respond_to?(:close) and !s.closed?
     end
 
-    return @certificate
+    @certificate
   end
 
   #
@@ -232,7 +232,7 @@ class SSLCheck
       s.close if s.respond_to?(:close) and !s.closed?
     end
 
-    return false
+    false
   end
 
   def verify_subject

@@ -98,7 +98,7 @@ module Custodian
           end
         end
 
-        return false
+        false
       end
 
 

@@ -126,7 +126,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        return( run_test_internal( @host, @port, @banner, ( ! @banner.nil? ) ) )
+        ( run_test_internal( @host, @port, @banner, ( ! @banner.nil? ) ) )
       end
 
 
@@ -246,7 +246,7 @@ module Custodian
         #  All was OK
         #
         @error = nil
-        return true
+        true
       end
 
 
@@ -318,7 +318,7 @@ module Custodian
           return false
         end
         @error = "Misc failure"
-        return false
+        false
       end
 
 

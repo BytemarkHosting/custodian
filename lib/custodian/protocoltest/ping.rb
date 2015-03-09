@@ -184,7 +184,7 @@ module Custodian
         # So by the time we reach here we know that all the addresses
         # were pingable.
         #
-        return true
+        true
       end
 
 
