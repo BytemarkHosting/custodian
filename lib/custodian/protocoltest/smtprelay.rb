@@ -108,7 +108,7 @@ module Custodian
 
           end # Net SMTP
 
-        rescue Exception => ex
+        rescue StandardError => ex
           #
           # for if we fail to send a message; this is a good thing
           #
