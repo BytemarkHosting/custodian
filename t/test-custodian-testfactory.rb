@@ -255,13 +255,13 @@ class TestTestFactory < Test::Unit::TestCase
       # for each handler ..
       registered[type].each do |name|
 
-        if ( name.to_s =~ /protocoltest::(.*)Test$/i )
+        if  name.to_s =~ /protocoltest::(.*)Test$/i 
           tst = $1.dup.downcase
 
           #
           # NOTE: Skip the DNS and LDAP tests - they are more complex.
           #
-          next if ( tst =~ /^(ldap|dns|dnsbl|sslcertificate)$/ )
+          next if  tst =~ /^(ldap|dns|dnsbl|sslcertificate)$/ 
 
           # normal
           test_one = "http://foo.com/.com must run #{tst} on 1234"

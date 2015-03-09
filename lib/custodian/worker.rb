@@ -93,7 +93,7 @@ module Custodian
     # Show a message on STDOUT if "--verbose" was specified.
     #
     def log_message( msg )
-      puts msg if ( ENV["VERBOSE" ] )
+      puts msg if  ENV["VERBOSE" ] 
     end
 
 
@@ -125,7 +125,7 @@ module Custodian
       #
       #  Ensure that the job is sane.
       #
-      raise ArgumentError, "Job was empty" if (job.nil?)
+      raise ArgumentError, "Job was empty" if job.nil?
       raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
 
       #
@@ -162,7 +162,7 @@ module Custodian
         #
         #  We exit here if we receive a single success.
         #
-        while ( ( count < ( @retry_count + 1 ) ) && ( result == false ) )
+        while  ( count < ( @retry_count + 1 ) ) && ( result == false ) 
 
           log_message( "Running test - [#{count}/#{@retry_count}]" )
 
@@ -170,9 +170,9 @@ module Custodian
           # Run the test - inverting the result if we should
           #
           result = test.run_test
-          result = ! result if ( test.inverted )
+          result = ! result if  test.inverted 
 
-          if ( result )
+          if  result 
             log_message( "Test succeeed - clearing alert" )
             do_clear( test )
           end
@@ -186,7 +186,7 @@ module Custodian
           #  The intention here is that if the test passes then there will
           # be no delay.  If the test fails then we'll sleep.
           #
-          if ( ( result == false ) && ( @retry_delay > 0 ) && ( count < @retry_count ) )
+          if  ( result == false ) && ( @retry_delay > 0 ) && ( count < @retry_count ) 
             log_message( "Sleeping for #{@retry_delay} seconds to allow cool-down" )
             sleep( @retry_delay )
           end
@@ -218,7 +218,7 @@ module Custodian
         #
         #  If we didn't succeed on any of the attempts raise the alert.
         #
-        if ( ! result )
+        if  ! result 
 
           #
           # Raise the alert, passing the error message.
@@ -291,7 +291,7 @@ module Custodian
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
 
-        alert.duration( duration ) if ( alert.respond_to? "duration" )
+        alert.duration( duration ) if  alert.respond_to? "duration" 
       end
     end
 

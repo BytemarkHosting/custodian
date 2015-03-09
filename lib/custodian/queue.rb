@@ -98,7 +98,7 @@ end
 
         foo, job = @redis.blpop( "queue", :timeout => timeout )
 
-        if ( job )
+        if  job 
           return job
         else
           sleep( timeout )
@@ -157,7 +157,7 @@ end
     def fetch(timeout)
       begin
         j = @queue.reserve(timeout)
-        if ( j ) then
+        if  j  then
           b = j.body
           j.delete
           return b

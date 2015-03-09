@@ -31,7 +31,7 @@ module Custodian
         #
         # Save the port
         #
-        if ( line =~ /on\s+([0-9]+)/ )
+        if  line =~ /on\s+([0-9]+)/ 
           @port = $1.dup
         else
           @port = 25
@@ -40,7 +40,7 @@ module Custodian
         #
         # Is this test inverted?
         #
-        if ( line =~ /must\s+not\s+run\s+/ )
+        if  line =~ /must\s+not\s+run\s+/ 
           @inverted = true
         else
           @inverted = false
@@ -63,9 +63,9 @@ module Custodian
       def get_hostname
         hostname = "localhost.localdomain"
 
-        if ( File.exist?( "/etc/hostname" ) )
+        if  File.exist?( "/etc/hostname" ) 
           File.readlines("/etc/hostname" ).each do |line|
-            hostname = line if ( !line.nil? )
+            hostname = line if  !line.nil? 
             hostname.chomp!
           end
         end

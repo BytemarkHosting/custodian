@@ -44,7 +44,7 @@ module Custodian
         #
         # Is this test inverted?
         #
-        if ( line =~ /must\s+not\s+run\s+/ )
+        if  line =~ /must\s+not\s+run\s+/ 
           @inverted = true
         else
           @inverted = false
