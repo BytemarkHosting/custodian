@@ -1,4 +1,76 @@
-#!/usr/bin/ruby -Ilib/ -I../lib/
+#!/usr/bin/ruby -Ilib/
+#
+# Usage information at the end of the script.
+#
+
+require 'getoptlong'
+require 'custodian/util/ping'
+
+#
+#  Options set by the command-line.
+#
+help   = false
+manual = false
+
+opts = GetoptLong.new(
+  ['--help',   '-h', GetoptLong::NO_ARGUMENT],
+  ['--manual', '-m', GetoptLong::NO_ARGUMENT])
+
+begin
+  opts.each do |opt, _arg|
+    case opt
+    when '--help' then
+      help = true
+    when '--manual' then
+      manual = true
+    end
+  end
+rescue => err
+  # any errors, show the help
+  warn err.to_s
+  help = true
+end
+
+#
+# Show the help information.
+#
+if manual || help
+  DATA.read.split("\n").each do |line|
+    puts Regexp.last_match(1).dup if line =~ /^# ?(.*)/
+  end
+  exit 0
+end
+
+#
+#  Get the address to ping.
+#
+hostname = ARGV.shift
+
+#
+#  Abort if we don't have a hostname
+#
+if  hostname.nil?
+  puts "Usage: #{$PROGRAM_NAME} hostname"
+  exit 1
+end
+
+#
+#  Create the object
+#
+helper = Custodian::Util::Ping.new(hostname)
+
+#
+#  Ping the host, via the helper
+#
+if  helper.run_ping
+  puts "#{hostname} - #{helper.address} - is alive."
+  exit 0
+else
+  exit 1
+end
+
+
+__END__
 #
 # NAME
 #   multi-ping - IPv4 and IPv6 ping tool
@@ -30,100 +102,3 @@
 #
 #  Steve Kemp  <steve@bytemark.co.uk>
 #
-
-
-require 'getoptlong'
-require 'custodian/util/ping'
-
-
-
-#
-#  Options set by the command-line.  These are all global.
-#
-$help   = false
-$manual = false
-
-opts = GetoptLong.new(
-                      ['--help',   '-h', GetoptLong::NO_ARGUMENT],
-                      ['--manual', '-m', GetoptLong::NO_ARGUMENT])
-
-begin
-  opts.each do |opt, arg|
-    case opt
-    when '--help' then
-      $help = true
-    when '--manual' then
-      $manual = true
-    end
-  end
-rescue => err
-  # any errors, show the help
-  warn err.to_s
-  $help = true
-end
-
-
-#
-# CAUTION! Here be quality kode.
-#
-if $manual or $help
-
-  # Open the file, stripping the shebang line
-  lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
-
-  found_synopsis = false
-
-  lines.each do |line|
-
-    line.chomp!
-    break if line.empty?
-
-    if $help and !found_synopsis
-      found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
-      next
-    end
-
-    puts line[2..-1].to_s
-
-    break if $help and found_synopsis and line =~ /^#\s*$/
-
-  end
-
-  exit 0
-end
-
-
-
-
-
-#
-#  Get the address to ping.
-#
-hostname = ARGV.shift
-
-
-#
-#  Abort if we don't have a hostname
-#
-if  hostname.nil? 
-  puts "Usage: #{$PROGRAM_NAME} hostname"
-  exit 1
-end
-
-
-
-#
-#  Create the object
-#
-helper = Custodian::Util::Ping.new(hostname)
-
-
-#
-#  Ping the host, via the helper
-#
-if  helper.run_ping 
-  puts "#{hostname} - #{helper.address} - is alive."
-  exit 0
-else
-  exit 1
-end
