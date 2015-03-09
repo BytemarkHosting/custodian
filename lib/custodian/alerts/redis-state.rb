@@ -29,14 +29,14 @@ module Custodian
       # Constructor - save the test-object away & instantiate
       # the redis connection.
       #
-      def initialize( obj )
+      def initialize(obj)
 
         begin
           require 'rubygems'
           require 'redis'
           require 'json'
 
-          @redis = Redis.new(:host => @target )
+          @redis = Redis.new(:host => @target)
 
         rescue
           puts 'ERROR Loading redis rubygem!'
@@ -52,7 +52,7 @@ module Custodian
       #
       def raise
 
-        return unless( @redis )
+        return unless(@redis)
 
         tmp = {}
         tmp['time']   = Time.now.to_i
@@ -63,8 +63,8 @@ module Custodian
         tmp['test'  ] = @test.to_s
         tmp['class' ] = @test.class
 
-        @redis.lpush( 'recent-tests', tmp.to_json)
-        @redis.ltrim( 'recent-tests', 0, 100 )
+        @redis.lpush('recent-tests', tmp.to_json)
+        @redis.ltrim('recent-tests', 0, 100)
 
       end
 
@@ -75,7 +75,7 @@ module Custodian
       #
       def clear
 
-        return unless( @redis )
+        return unless(@redis)
 
 
         tmp = {}
@@ -87,8 +87,8 @@ module Custodian
         tmp['test'  ] = @test.to_s
         tmp['class' ] = @test.class
 
-        @redis.lpush( 'recent-tests', tmp.to_json)
-        @redis.ltrim( 'recent-tests', 0, 100 )
+        @redis.lpush('recent-tests', tmp.to_json)
+        @redis.ltrim('recent-tests', 0, 100)
       end
 
       register_alert_type 'redis'

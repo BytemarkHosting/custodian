@@ -45,7 +45,7 @@ $manual = false
 
 opts = GetoptLong.new(
                       [ '--help',   '-h', GetoptLong::NO_ARGUMENT ],
-                      [ '--manual', '-m', GetoptLong::NO_ARGUMENT ] )
+                      [ '--manual', '-m', GetoptLong::NO_ARGUMENT ])
 
 begin
   opts.each do |opt,arg|
@@ -115,7 +115,7 @@ end
 #
 #  Create the object
 #
-helper = Custodian::Util::Ping.new( hostname )
+helper = Custodian::Util::Ping.new(hostname)
 
 
 #

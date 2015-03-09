@@ -29,7 +29,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         #  Save the line
@@ -39,7 +39,7 @@ module Custodian
         #
         #  Save the target
         #
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # Is this test inverted?
@@ -84,7 +84,7 @@ module Custodian
         period   = settings.timeout
 
         begin
-          timeout( period ) do
+          timeout(period) do
             begin
               c = Curl::Easy.new
               c.follow_location = true
@@ -121,7 +121,7 @@ module Custodian
         # A this point we've either had an exception, or we've
         # got a result.
         #
-        if ( @status.to_i == 200 )
+        if (@status.to_i == 200)
             return true
         else
             @error = "Proxy fetch of http://google.com/ via #{@host} failed"

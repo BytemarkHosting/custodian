@@ -6,7 +6,7 @@
   begin
     require library
   rescue LoadError
-    ENV['DEBUG'] && puts( "Failed to load the library: #{library}" )
+    ENV['DEBUG'] && puts("Failed to load the library: #{library}")
   end
 end
 
@@ -81,7 +81,7 @@ end
     #
     def initialize
       host = ENV['QUEUE_ADDRESS'] || '127.0.0.1'
-      @redis = Redis.new( :host => host )
+      @redis = Redis.new(:host => host)
     end
 
 
@@ -94,14 +94,14 @@ end
     def fetch(timeout = 1)
       job = nil
 
-      while( true )
+      while(true)
 
-        foo, job = @redis.blpop( 'queue', :timeout => timeout )
+        foo, job = @redis.blpop('queue', :timeout => timeout)
 
         if  job 
           return job
         else
-          sleep( timeout )
+          sleep(timeout)
         end
 
       end
@@ -112,7 +112,7 @@ end
     #  Add a new job to the queue.
     #
     def add(job_string)
-      @redis.rpush( 'queue', job_string )
+      @redis.rpush('queue', job_string)
     end
 
 
@@ -120,7 +120,7 @@ end
     #  How many jobs in the queue?
     #
     def size?
-      @redis.llen( 'queue' )
+      @redis.llen('queue')
     end
 
 
@@ -128,7 +128,7 @@ end
     #  Empty the queue, discarding all pending jobs.
     #
     def flush!
-      @redis.del( 'queue' )
+      @redis.del('queue')
     end
 
   end
@@ -145,7 +145,7 @@ end
     #
     def initialize
       host  = ENV['QUEUE_ADDRESS'] || '127.0.0.1'
-      @queue = Beanstalk::Pool.new( ["#{host}:11300" ] )
+      @queue = Beanstalk::Pool.new(["#{host}:11300" ])
     end
 
 
@@ -183,7 +183,7 @@ end
     #
     def size?
       stats = @queue.stats
-      ( stats['current-jobs-ready'] || 0 )
+      (stats['current-jobs-ready'] || 0)
     end
 
 
@@ -191,7 +191,7 @@ end
     # Flush the queue, discarding all pending jobs.
     #
     def flush!
-      while( fetch(1) )
+      while(fetch(1))
         # nop
       end
     end

@@ -26,7 +26,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         #  Save the line
@@ -36,7 +36,7 @@ module Custodian
         #
         # Save the host
         #
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # Is this test inverted?
@@ -71,7 +71,7 @@ module Custodian
         #
         binary = nil
         binary = './bin/multi-ping'
-        binary = '/usr/bin/multi-ping'  if  File.exist?( '/usr/bin/multi-ping' ) 
+        binary = '/usr/bin/multi-ping'  if  File.exist?('/usr/bin/multi-ping') 
 
         if  binary.nil? 
           @error = "Failed to find '/usr/bin/multi-ping'"
@@ -108,9 +108,9 @@ module Custodian
         #  Does the name look like an IP?
         #
         begin
-          x = IPAddr.new( @host )
+          x = IPAddr.new(@host)
           if  x.ipv4? or x.ipv6? 
-            ips.push( @host )
+            ips.push(@host)
           end
         rescue ArgumentError
         end
@@ -137,16 +137,16 @@ module Custodian
         # look it up, as both IPv4 and IPv6.
         #
         begin
-          timeout( period ) do
+          timeout(period) do
 
             Resolv::DNS.open do |dns|
               if  do_ipv4 
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::A)
-                ress.map { |r| ips.push( r.address.to_s ) }
+                ress.map { |r| ips.push(r.address.to_s) }
               end
               if  do_ipv6 
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::AAAA)
-                ress.map { |r| ips.push( r.address.to_s ) }
+                ress.map { |r| ips.push(r.address.to_s) }
               end
             end
           end
@@ -171,7 +171,7 @@ module Custodian
         # were given.
         #
         ips.each do |ip|
-          if ( system( binary, ip ) != true )
+          if (system(binary, ip) != true)
             @error = "Ping failed for #{ip} - from #{@host} "
             return false
           end

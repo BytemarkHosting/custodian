@@ -24,9 +24,9 @@ module Custodian
       #
       # Save away state from the configuration line.
       #
-      def initialize( line )
+      def initialize(line)
         @line = line
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # Save the port
@@ -63,8 +63,8 @@ module Custodian
       def get_hostname
         hostname = 'localhost.localdomain'
 
-        if  File.exist?( '/etc/hostname' ) 
-          File.readlines('/etc/hostname' ).each do |line|
+        if  File.exist?('/etc/hostname') 
+          File.readlines('/etc/hostname').each do |line|
             hostname = line if  !line.nil? 
             hostname.chomp!
           end
@@ -86,7 +86,7 @@ module Custodian
 
         begin
 
-          Net::SMTP.start(@host,@port, get_hostname ) do |smtp|
+          Net::SMTP.start(@host,@port, get_hostname) do |smtp|
             sent    = smtp.send_message message, 'noreply@bytemark.co.uk', 'noreply@bytemark.co.uk'
             @status = sent.status.to_s
 

@@ -42,13 +42,13 @@ class TestTestName < Test::Unit::TestCase
     test = nil
 
     assert_nothing_raised do
-     test = Custodian::TestFactory.create( 'http://example.com/ must run http.' )
+     test = Custodian::TestFactory.create('http://example.com/ must run http.')
     end
 
-    assert( test )
-    assert( test.kind_of? Array )
-    assert( ! test.empty? )
-    assert_equal( test[0].get_type, 'http' )
+    assert(test)
+    assert(test.kind_of? Array)
+    assert(! test.empty?)
+    assert_equal(test[0].get_type, 'http')
   end
 
 
@@ -59,13 +59,13 @@ class TestTestName < Test::Unit::TestCase
     test = nil
 
     assert_nothing_raised do
-     test = Custodian::TestFactory.create( 'https://example.com/ must run https.' )
+     test = Custodian::TestFactory.create('https://example.com/ must run https.')
     end
 
-    assert( test )
-    assert( test.kind_of? Array )
-    assert( ! test.empty? )
-    assert_equal( test[0].get_type, 'https' )
+    assert(test)
+    assert(test.kind_of? Array)
+    assert(! test.empty?)
+    assert_equal(test[0].get_type, 'https')
   end
 
 
@@ -76,19 +76,19 @@ class TestTestName < Test::Unit::TestCase
 
 
     assert_raise ArgumentError do
-      Custodian::TestFactory.create( 'https://example.com/ must run http.' )
+      Custodian::TestFactory.create('https://example.com/ must run http.')
     end
 
     assert_raise ArgumentError do
-      Custodian::TestFactory.create( 'http://example.com/ must run https.' )
+      Custodian::TestFactory.create('http://example.com/ must run https.')
     end
 
 
     assert_nothing_raised do
-      Custodian::TestFactory.create( 'http://example.com/ must run http.' )
+      Custodian::TestFactory.create('http://example.com/ must run http.')
     end
     assert_nothing_raised do
-      Custodian::TestFactory.create( 'https://example.com/ must run https.' )
+      Custodian::TestFactory.create('https://example.com/ must run https.')
     end
 
   end

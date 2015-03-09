@@ -28,7 +28,7 @@ module Custodian
     #
     # The line will be like "target must run tcp|ssh|ftp|smtp .."
     #
-    def self.create( line )
+    def self.create(line)
 
 
       raise ArgumentError, 'The type of test to create cannot be nil' if  line.nil? 
@@ -46,7 +46,7 @@ module Custodian
       if  line =~ /must\s+(not\s+)?run\s+(\S+)(\s+|\.|$)/ 
 
         test_type = $2.dup
-        test_type.chomp!( '.' )
+        test_type.chomp!('.')
 
         if  @@subclasses[test_type].nil? 
             raise ArgumentError, "There is no handler registered for the '#{test_type}' test-type"
@@ -59,7 +59,7 @@ module Custodian
         @@subclasses[test_type].each do |impl|
 
           if impl
-            obj = impl.new( line )
+            obj = impl.new(line)
 
             #
             # Get the notification text, which is not specific to the test-type
@@ -67,7 +67,7 @@ module Custodian
             # We do this only after we've instantiated the test.
             #
             if  line =~ /\s+otherwise\s+'([^']+)'/ 
-              obj.set_notification_text( $1.dup )
+              obj.set_notification_text($1.dup)
             end
 
             result.push(obj)
@@ -77,7 +77,7 @@ module Custodian
         end
 
         # return the test-types.
-        return( result )
+        return(result)
 
       else
         raise "Failed to instantiate a suitable protocol-test for '#{line}'"
@@ -113,7 +113,7 @@ module Custodian
 
         # for each handler ..
         @@subclasses[name].each do |impl|
-          if ( impl == self.class )
+          if (impl == self.class)
             return name
           end
         end
@@ -145,7 +145,7 @@ module Custodian
     #
     # Set the user-text which is returned on error.
     #
-    def set_notification_text( str )
+    def set_notification_text(str)
       @notification_text = str
     end
 

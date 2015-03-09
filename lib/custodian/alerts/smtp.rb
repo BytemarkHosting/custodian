@@ -20,7 +20,7 @@ module Custodian
       #
       # Constructor - save the test-object away.
       #
-      def initialize( obj )
+      def initialize(obj)
         @test = obj
       end
 
@@ -33,7 +33,7 @@ module Custodian
         subject = "#{test.target} alert #{test.get_type}-test - #{test.error}"
         body    = "The alert has raised, with the following details:\n#{test.error}\nRegards\n"
 
-        _send_mail( @target, subject, body )
+        _send_mail(@target, subject, body)
       end
 
 
@@ -45,7 +45,7 @@ module Custodian
         subject = "#{test.target} cleared #{test.get_type}-test"
         body    = "The alert has cleared\nRegards\n"
 
-        _send_mail( @target, subject, body )
+        _send_mail(@target, subject, body)
       end
 
 
@@ -53,7 +53,7 @@ module Custodian
       #
       # Send an email
       #
-      def _send_mail( to, subject, body )
+      def _send_mail(to, subject, body)
         msg = <<END_OF_MESSAGE
 From: #{to}
 To: #{to}
@@ -63,7 +63,7 @@ Subject: #{subject}
 END_OF_MESSAGE
 
         Net::SMTP.start('127.0.0.1') do |smtp|
-          smtp.send_message( msg, to, to)
+          smtp.send_message(msg, to, to)
         end
 
       end

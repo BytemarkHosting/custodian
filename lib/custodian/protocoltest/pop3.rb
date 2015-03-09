@@ -22,7 +22,7 @@ module Custodian
       #
       # Ensure we received a port to run the test against.
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         # Save the line
@@ -32,7 +32,7 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split( /\s+/)[0]
+        @host  = line.split(/\s+/)[0]
 
 
         #
@@ -76,7 +76,7 @@ module Custodian
         # reset the error, in case we were previously executed.
         @error = nil
 
-        run_test_internal( @host, @port, /\+OK/i, true )
+        run_test_internal(@host, @port, /\+OK/i, true)
       end
 
 

@@ -38,7 +38,7 @@ module Custodian
       #
       # Constructor
       #
-      def initialize( line )
+      def initialize(line)
 
         #
         #  Save the line
@@ -48,7 +48,7 @@ module Custodian
         #
         #  Save the URL
         #
-        @url  = line.split( /\s+/)[0]
+        @url  = line.split(/\s+/)[0]
         @host = @url
 
         #
@@ -90,8 +90,8 @@ module Custodian
         #
         #  Get the schema of the URL
         #
-        u = URI.parse( @url )
-        if ( u.scheme != test_type )
+        u = URI.parse(@url)
+        if (u.scheme != test_type)
           raise ArgumentError, "The test case has a different protocol in the URI than that which we're testing: #{@line} - \"#{test_type} != #{u.scheme}\""
         end
 
@@ -222,7 +222,7 @@ module Custodian
         # running with cache-busting.
         #
         if  @cache_busting 
-          u = URI.parse( test_url )
+          u = URI.parse(test_url)
           if  ! u.query 
             u.query   = "ctime=#{Time.now.to_i}"
             test_url  = u.to_s
@@ -268,7 +268,7 @@ module Custodian
           protocol_msg = (resolve_mode == :ipv4 ? 'IPv4' : 'IPv6')
 
           begin
-            timeout( period ) do
+            timeout(period) do
               c.perform
               status = c.response_code
               content = c.body_str

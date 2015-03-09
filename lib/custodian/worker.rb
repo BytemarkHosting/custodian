@@ -67,13 +67,13 @@ module Custodian
     #
     # Connect to the queue, and record interesting settings away.
     #
-    def initialize( settings )
+    def initialize(settings)
 
       # Save the settings
       @settings = settings
 
       # Connect to the queue
-      @queue = QueueType.create( @settings.queue_type )
+      @queue = QueueType.create(@settings.queue_type)
 
       # Get the alerter-type(s) to instantiate
       @alerter = @settings.alerter
@@ -92,7 +92,7 @@ module Custodian
     #
     # Show a message on STDOUT if "--verbose" was specified.
     #
-    def log_message( msg )
+    def log_message(msg)
       puts msg if  ENV['VERBOSE' ] 
     end
 
@@ -103,8 +103,8 @@ module Custodian
     # Process jobs from the queue - never return.
     #
     def run!
-      while( true )
-        log_message( 'Waiting for job..' )
+      while(true)
+        log_message('Waiting for job..')
         process_single_job
       end
     end
@@ -131,8 +131,8 @@ module Custodian
       #
       # Create test-objects from our class-factory, and process them.
       #
-      Custodian::TestFactory.create( job ).each do |test|
-        process_single_test( test )
+      Custodian::TestFactory.create(job).each do |test|
+        process_single_test(test)
       end
     end
 
@@ -144,11 +144,11 @@ module Custodian
     #
     # Any test which fails for N-times in a row will raise an alert.
     #
-    def process_single_test( test )
+    def process_single_test(test)
 
       begin
 
-        log_message( "Acquired job: #{test}" )
+        log_message("Acquired job: #{test}")
 
         #
         # The count of times this test has run, the result, and the start-time
@@ -162,9 +162,9 @@ module Custodian
         #
         #  We exit here if we receive a single success.
         #
-        while  ( count < ( @retry_count + 1 ) ) && ( result == false ) 
+        while  (count < (@retry_count + 1)) && (result == false) 
 
-          log_message( "Running test - [#{count}/#{@retry_count}]" )
+          log_message("Running test - [#{count}/#{@retry_count}]")
 
           #
           # Run the test - inverting the result if we should
@@ -173,8 +173,8 @@ module Custodian
           result = ! result if  test.inverted 
 
           if  result 
-            log_message( 'Test succeeed - clearing alert' )
-            do_clear( test )
+            log_message('Test succeeed - clearing alert')
+            do_clear(test)
           end
 
           #
@@ -186,9 +186,9 @@ module Custodian
           #  The intention here is that if the test passes then there will
           # be no delay.  If the test fails then we'll sleep.
           #
-          if  ( result == false ) && ( @retry_delay > 0 ) && ( count < @retry_count ) 
-            log_message( "Sleeping for #{@retry_delay} seconds to allow cool-down" )
-            sleep( @retry_delay )
+          if  (result == false) && (@retry_delay > 0) && (count < @retry_count) 
+            log_message("Sleeping for #{@retry_delay} seconds to allow cool-down")
+            sleep(@retry_delay)
           end
 
           #
@@ -205,14 +205,14 @@ module Custodian
         #
         #  Duration of the test-run, in milliseconds
         #
-        duration = (( end_time - start_time ) * 1000.0).to_i
+        duration = ((end_time - start_time) * 1000.0).to_i
 
 
         #
         #  Record that, if we have any alerters that are interested
         # in run-times.
         #
-        do_duration( test, duration )
+        do_duration(test, duration)
 
 
         #
@@ -223,12 +223,12 @@ module Custodian
           #
           # Raise the alert, passing the error message.
           #
-          log_message( "Test failed - alerting with #{test.error}" )
-          do_raise( test )
+          log_message("Test failed - alerting with #{test.error}")
+          do_raise(test)
         end
 
       rescue => ex
-        log_message( "Exception raised processing job: #{ex}" )
+        log_message("Exception raised processing job: #{ex}")
 
       end
 
@@ -239,18 +239,18 @@ module Custodian
     #
     # Raise an alert, with each registered alerter.
     #
-    def do_raise( test )
-      @alerter.split( ',' ).each do |alerter|
+    def do_raise(test)
+      @alerter.split(',').each do |alerter|
 
-        log_message( "Creating alerter: #{alerter}" )
-        alert = Custodian::AlertFactory.create( alerter, test )
+        log_message("Creating alerter: #{alerter}")
+        alert = Custodian::AlertFactory.create(alerter, test)
 
-        target = @settings.alerter_target( alerter )
-        alert.set_target( target )
+        target = @settings.alerter_target(alerter)
+        alert.set_target(target)
         log_message("Target for alert is #{target}")
 
         # give the alerter a reference to the settings object.
-        alert.set_settings( @settings )
+        alert.set_settings(@settings)
 
         alert.raise
       end
@@ -260,17 +260,17 @@ module Custodian
     #
     # Clear an alert, with each registered alerter.
     #
-    def do_clear( test )
-      @alerter.split( ',' ).each do |alerter|
-        log_message( "Creating alerter: #{alerter}" )
-        alert  = Custodian::AlertFactory.create( alerter, test )
+    def do_clear(test)
+      @alerter.split(',').each do |alerter|
+        log_message("Creating alerter: #{alerter}")
+        alert  = Custodian::AlertFactory.create(alerter, test)
 
-        target = @settings.alerter_target( alerter )
-        alert.set_target( target )
-        log_message( "Target for alert is #{target}" )
+        target = @settings.alerter_target(alerter)
+        alert.set_target(target)
+        log_message("Target for alert is #{target}")
 
         # give the alerter a reference to the settings object.
-        alert.set_settings( @settings )
+        alert.set_settings(@settings)
 
         alert.clear
       end
@@ -279,19 +279,19 @@ module Custodian
     #
     #  Log the test duration with each registered alerter.
     #
-    def do_duration( test, duration )
-      @alerter.split( ',' ).each do |alerter|
-        log_message( "Creating alerter: #{alerter}" )
-        alert  = Custodian::AlertFactory.create( alerter, test )
+    def do_duration(test, duration)
+      @alerter.split(',').each do |alerter|
+        log_message("Creating alerter: #{alerter}")
+        alert  = Custodian::AlertFactory.create(alerter, test)
 
-        target = @settings.alerter_target( alerter )
-        alert.set_target( target )
-        log_message( "Target for alert is #{target}" )
+        target = @settings.alerter_target(alerter)
+        alert.set_target(target)
+        log_message("Target for alert is #{target}")
 
         # give the alerter a reference to the settings object.
-        alert.set_settings( @settings )
+        alert.set_settings(@settings)
 
-        alert.duration( duration ) if  alert.respond_to? 'duration' 
+        alert.duration(duration) if  alert.respond_to? 'duration' 
       end
     end
 
@@ -300,7 +300,7 @@ module Custodian
     #  Process jobs until we see a failure, then stop.
     #
     def process_until_fail
-      while( process_single_job )
+      while(process_single_job)
         # nop
       end
     end

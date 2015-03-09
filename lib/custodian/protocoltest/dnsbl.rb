@@ -24,14 +24,14 @@ module Custodian
       #
       # Save away state from the configuration line.
       #
-      def initialize( line )
+      def initialize(line)
         @line = line
-        @host = line.split( /\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # Ensure the host is an IP address.
         #
-        raise ArgumentError, 'The target must be an IP address' unless( @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ )
+        raise ArgumentError, 'The target must be an IP address' unless(@host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/)
 
         #
         # See which blacklist(s) we're testing against.
@@ -73,7 +73,7 @@ module Custodian
         # The error is empty.
         @error  = nil
 
-        @zones.split( ',' ).each do |zone|
+        @zones.split(',').each do |zone|
 
           #
           #  Convert the IP to be looked up.
@@ -85,9 +85,9 @@ module Custodian
 
             name = "#{$4}.#{$3}.#{$2}.#{$1}.#{zone}"
 
-            result = Custodian::Util::DNS.hostname_to_ip( name )
+            result = Custodian::Util::DNS.hostname_to_ip(name)
 
-            if  ( !result.nil? ) && ( result.length > 0 ) 
+            if  (!result.nil?) && (result.length > 0) 
               @error = "IP #{@host} listed in blacklist #{zone}.  Lookup of #{name} lead to result: #{result}"
               return true
             end

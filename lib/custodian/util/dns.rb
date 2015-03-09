@@ -20,7 +20,7 @@ module Custodian
       #
       # Return the reverse DNS for the specified IP address, nil on failure.
       #
-      def DNS.ip_to_hostname( ip )
+      def DNS.ip_to_hostname(ip)
         resolved = nil
 
         #
@@ -30,9 +30,9 @@ module Custodian
         period   = settings.timeout
 
         begin
-          timeout( period ) do
+          timeout(period) do
             begin
-              resolved = Socket.getnameinfo(Socket.sockaddr_in(80, ip) ).first
+              resolved = Socket.getnameinfo(Socket.sockaddr_in(80, ip)).first
             rescue SocketError
               resolved = nil
             end
@@ -47,7 +47,7 @@ module Custodian
       #
       # Convert a hostname to an IP address, return nil on failure.
       #
-      def DNS.hostname_to_ip( hostname )
+      def DNS.hostname_to_ip(hostname)
 
         resolved = nil
 
@@ -58,7 +58,7 @@ module Custodian
         period   = settings.timeout
 
         begin
-          timeout( period ) do
+          timeout(period) do
             begin
               Socket.getaddrinfo(hostname, 'echo').each do |a|
                 resolved = a[3] if  a 
