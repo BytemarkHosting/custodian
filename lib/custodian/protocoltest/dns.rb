@@ -47,13 +47,13 @@ module Custodian
         #
         # Is this test inverted?
         #
-        if  line =~ /must\s+not\s+run\s+/ 
+        if  line =~ /must\s+not\s+run\s+/
           @inverted = true
         else
           @inverted = false
         end
 
-        if  line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/ 
+        if  line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/
           @resolve_name     = $1.dup
           @resolve_type     = $2.dup
           @resolve_expected = $3.dup.downcase.split(/[\s,]+/)
@@ -107,14 +107,14 @@ module Custodian
         # Do the lookup
         #
         results = resolve_via(@host,  resolve_type, resolve_name, period)
-        return false if  results.nil? 
+        return false if  results.nil?
 
         #
         # OK we have an array of results.  If every one of the expected
         # results is contained in those results returned then we're good.
         #
 
-        if  !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty? 
+        if  !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty?
           @error = "DNS server *#{@host}* (#{@server_ip}) returned the wrong records for @#{resolve_name} IN #{resolve_type}@.\n\nWe expected '#{resolve_expected.join(',')}', but we received '#{results.join(',')}'\n"
         end
 

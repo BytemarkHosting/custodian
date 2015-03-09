@@ -28,7 +28,7 @@ module Custodian
         # The main domain we're querying
         @host = line.split(/\s+/)[0]
 
-        if  line =~ /must\s+not\s+run\s+/ 
+        if  line =~ /must\s+not\s+run\s+/
           @inverted = true
         else
           @inverted = false
@@ -114,12 +114,12 @@ module Custodian
                 read = socket.sysread(1024)
 
                 # trim to a sane length & strip newlines.
-                if  !read.nil? 
+                if  !read.nil?
                   read = read[0, 255]
                   read.gsub!(/[\n\r]/, '')
                 end
 
-                if  read =~ /^220/ 
+                if  read =~ /^220/
                   passed += 1
                 else
                   failed += 1
@@ -140,7 +140,7 @@ module Custodian
         #
         #  At this point we should have tested the things
         #
-        if  failed > 0 
+        if  failed > 0
           @error = "There are #{mx.size} hosts running as MX-servers for domain #{@host} - #{passed}:OK #{failed}:FAILED - #{error}"
           return false
         else

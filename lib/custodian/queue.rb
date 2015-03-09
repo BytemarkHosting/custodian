@@ -98,7 +98,7 @@ end
 
         foo, job = @redis.blpop('queue', :timeout => timeout)
 
-        if  job 
+        if  job
           return job
         else
           sleep(timeout)
