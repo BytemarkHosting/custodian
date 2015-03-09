@@ -61,7 +61,7 @@ module Custodian
     #
     # Register a new type of notifier - this must be called by our derived classes
     #
-    def self.register_alert_type name
+    def self.register_alert_type(name)
       @@subclasses[name] = self
     end
 

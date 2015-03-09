@@ -23,7 +23,7 @@ module Custodian
     #
     # Class-Factory
     #
-    def self.create type
+    def self.create(type)
       case type
       when 'redis'
         RedisQueueType.new
