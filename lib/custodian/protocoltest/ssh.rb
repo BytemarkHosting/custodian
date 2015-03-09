@@ -63,7 +63,7 @@ module Custodian
       # Allow this test to be serialized.
       #
       def to_s
-        return( @line )
+        @line
       end
 
 
