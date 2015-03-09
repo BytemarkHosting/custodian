@@ -1,7 +1,97 @@
-#!/usr/bin/ruby -Ilib/ -I../lib/ -rubygems
+#!/usr/bin/ruby -rubygems
+#
+# Usage information at the end of the script.
+#
+
+require 'getoptlong'
+require 'custodian/settings'
+require 'custodian/queue'
+require 'custodian/worker'
+
+#
+#  Entry-point to our code.
+#
+if __FILE__ == $PROGRAM_NAME
+
+  help    = false
+  manual  = false
+
+  #
+  #  The settings object contains a lot of configuration-data.
+  #
+  settings = Custodian::Settings.instance
+
+  begin
+    opts = GetoptLong.new(
+      ['--help',    '-h', GetoptLong::NO_ARGUMENT],
+      ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
+      ['--fail',    '-f', GetoptLong::NO_ARGUMENT],
+      ['--single',  '-s', GetoptLong::NO_ARGUMENT],
+      ['--verbose', '-v', GetoptLong::NO_ARGUMENT]
+                          )
+    opts.each do |opt, _arg|
+      case opt
+      when '--verbose' then
+        ENV['VERBOSE'] = '1'
+      when '--single' then
+        ENV['SINGLE'] = '1'
+      when '--fail' then
+        ENV['FAIL'] = '1'
+      when '--help' then
+        help = true
+      when '--manual' then
+        manual = true
+      end
+    end
+  rescue StandardError => ex
+    puts "Option parsing failed: #{ex}"
+    exit
+  end
+
+  #
+  # Show the help information.
+  #
+  if manual || help
+    DATA.read.split("\n").each do |line|
+      puts Regexp.last_match(1).dup if line =~ /^# ?(.*)/
+    end
+    exit 0
+  end
+
+  #
+  #  Create the worker, passing it the settings object so it can
+  # sort out its own logfile, etc.
+  #
+  worker = Custodian::Worker.new(settings)
+
+  #
+  #  Single step?
+  #
+  if  ENV['SINGLE']
+    worker.process_single_job
+    exit(0)
+  end
+
+  #
+  #  Run until we see a failure?
+  #
+  if  ENV['FAIL']
+    worker.process_until_fail
+    exit(0)
+  end
+
+  #
+  #  Otherwise loop indefinitely
+  #
+  worker.run!
+
+end
+
+
+__END__
 #
 # NAME
-#  custodian-dequeue - Pull network tests from a queue and execute them in series.
+#  custodian-dequeue - Execute network tests from the central queue.
 #
 # SYNOPSIS
 #  custodian-dequeue  [ -h | --help ]
@@ -36,122 +126,3 @@
 #
 #  Steve Kemp  <steve@bytemark.co.uk>
 #
-
-
-#
-# Standard modules
-#
-require 'getoptlong'
-
-
-#
-# Our code.
-#
-require 'custodian/settings'
-require 'custodian/queue'
-require 'custodian/worker'
-
-
-
-
-#
-#  Entry-point to our code.
-#
-if __FILE__ == $PROGRAM_NAME then
-
-  $help    = false
-  $manual  = false
-
-  #
-  #  The settings object contains a lot of configuration-data.
-  #
-  settings = Custodian::Settings.instance
-
-  begin
-    opts = GetoptLong.new(
-                          ['--help',    '-h', GetoptLong::NO_ARGUMENT],
-                          ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
-                          ['--fail',    '-f', GetoptLong::NO_ARGUMENT],
-                          ['--single',  '-s', GetoptLong::NO_ARGUMENT],
-                          ['--verbose', '-v', GetoptLong::NO_ARGUMENT]
-                          )
-    opts.each do |opt, arg|
-      case opt
-      when '--verbose' then
-          ENV['VERBOSE'] = '1'
-      when '--single' then
-          ENV['SINGLE'] = '1'
-      when '--fail' then
-          ENV['FAIL'] = '1'
-      when '--help' then
-          $help = true
-      when '--manual' then
-          $manual = true
-      end
-    end
-  rescue StandardError => ex
-    puts "Option parsing failed: #{ex}"
-    exit
-  end
-
-
-
-  #
-  # CAUTION! Here be quality kode.
-  #
-  if $manual or $help
-
-    # Open the file, stripping the shebang line
-    lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
-
-    found_synopsis = false
-
-    lines.each do |line|
-
-      line.chomp!
-      break if line.empty?
-
-      if $help and !found_synopsis
-        found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
-        next
-      end
-
-      puts line[2..-1].to_s
-
-      break if $help and found_synopsis and line =~ /^#\s*$/
-
-    end
-
-    exit 0
-  end
-
-
-  #
-  #  Create the worker, passing it the settings object so it can
-  # sort out its own logfile, etc.
-  #
-  worker = Custodian::Worker.new(settings)
-
-
-  #
-  #  Single step?
-  #
-  if  ENV['SINGLE'] 
-    worker.process_single_job
-    exit(0)
-  end
-
-  #
-  #  Run until we see a failure?
-  #
-  if  ENV['FAIL'] 
-    worker.process_until_fail
-    exit(0)
-  end
-
-  #
-  #  Otherwise loop indefinitely
-  #
-  worker.run!
-
-end

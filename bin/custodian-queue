@@ -1,5 +1,105 @@
-#!/usr/bin/ruby -Ilib/ -I../lib/ -rubygems
+#!/usr/bin/ruby -rubygems
 #
+# Usage information at the end of the script.
+#
+
+require 'getoptlong'
+require 'custodian/settings'
+require 'custodian/queue'
+
+#
+#  Entry-point to our code.
+#
+if __FILE__ == $PROGRAM_NAME
+
+  flush   = false
+  stats   = false
+  help    = false
+  manual  = false
+  monitor = nil
+
+  begin
+    opts = GetoptLong.new(
+      ['--flush',   '-f', GetoptLong::NO_ARGUMENT],
+      ['--help',    '-h', GetoptLong::NO_ARGUMENT],
+      ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
+      ['--monitor', '-M', GetoptLong::OPTIONAL_ARGUMENT],
+      ['--stats',   '-s', GetoptLong::NO_ARGUMENT]
+                          )
+    opts.each do |opt, arg|
+      case opt
+      when '--monitor' then
+        if  arg
+          monitor = arg.to_i
+        else
+          monitor = 5000
+        end
+      when '--stats' then
+        stats = true
+      when '--flush' then
+        flush = true
+      when '--help' then
+        help = true
+      when '--manual' then
+        manual = true
+      end
+    end
+  rescue StandardError => ex
+    puts "Option parsing failed: #{ex}"
+    exit
+  end
+
+  #
+  # Show the help information.
+  #
+  if manual || help
+    DATA.read.split("\n").each do |line|
+      puts Regexp.last_match(1).dup if line =~ /^# ?(.*)/
+    end
+    exit 0
+  end
+
+  #
+  #  Create the queue object.
+  #
+  settings = Custodian::Settings.instance
+  queue = Custodian::QueueType.create(settings.queue_type)
+
+  #
+  # Alerting on a queue that is too-full?
+  #
+  unless monitor.nil?
+
+    #
+    # Find the number of jobs
+    #
+    jobs = queue.size?
+
+    if jobs > monitor
+      exit 1
+    else
+      exit 0
+    end
+  end
+
+  #
+  # Showing stats?
+  #
+  if stats
+    jobs = queue.size?
+    puts "There are #{jobs || 0} jobs pending."
+    exit(0)
+  end
+
+  #
+  #  Are we flushing the queue?
+  #
+  queue.flush! if flush
+
+end
+
+
+__END__
 # NAME
 #  custodian-queue - Work with the queue.
 #
@@ -16,7 +116,8 @@
 #
 #  -m, --manual        Show this manual, and exit.
 #
-#  -M, --monitor       If the queue size exceeds the threshold report that via an exit code.
+#  -M, --monitor       If the queue size exceeds the given threshold
+#                      then report that via an exit code.
 #
 #  -f, --flush         Flush the queue, removing all jobs.
 #
@@ -25,142 +126,13 @@
 #
 # ABOUT
 #
-#  This tool is designed to inspect the beanstalkd queue, or flush the pending
-# jobs from it.
+# This tool is designed to inspect the global queue, and also allows that
+# queue to be flushed of all pending-jobs.
 #
+# The queue may be redis-based, or beanstalkd-based, as defined by the
+# global configuration-file.
 #
 # AUTHOR
 #
 #  Steve Kemp  <steve@bytemark.co.uk>
 #
-
-
-
-#
-# Standard modules
-#
-require 'getoptlong'
-
-
-#
-# Our code
-#
-require 'custodian/settings'
-require 'custodian/queue'
-
-
-#
-#  Entry-point to our code.
-#
-if __FILE__ == $PROGRAM_NAME then
-
-  $FLUSH   = false
-  $STATS   = false
-  $help    = false
-  $manual  = false
-  $MONITOR = nil
-
-
-  begin
-    opts = GetoptLong.new(
-                          ['--flush',   '-f', GetoptLong::NO_ARGUMENT],
-                          ['--help',    '-h', GetoptLong::NO_ARGUMENT],
-                          ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
-                          ['--monitor', '-M', GetoptLong::OPTIONAL_ARGUMENT],
-                          ['--stats',   '-s', GetoptLong::NO_ARGUMENT]
-                          )
-    opts.each do |opt, arg|
-      case opt
-      when '--monitor' then
-          if  arg 
-              $MONITOR = arg.to_i
-          else
-              $MONITOR = 5000
-          end
-      when '--stats' then
-          $STATS = true
-      when '--flush' then
-          $FLUSH = true
-      when '--help' then
-          $help = true
-      when '--manual' then
-          $manual = true
-      end
-    end
-  rescue StandardError => ex
-    puts "Option parsing failed: #{ex}"
-    exit
-  end
-
-  #
-  # CAUTION! Here be quality kode.
-  #
-  if $manual or $help
-
-    # Open the file, stripping the shebang line
-    lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
-
-    found_synopsis = false
-
-    lines.each do |line|
-
-      line.chomp!
-      break if line.empty?
-
-      if $help and !found_synopsis
-        found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
-        next
-      end
-
-      puts line[2..-1].to_s
-
-      break if $help and found_synopsis and line =~ /^#\s*$/
-
-    end
-
-    exit 0
-  end
-
-  #
-  #  Create the queue object.
-  #
-  settings = Custodian::Settings.instance
-  queue = Custodian::QueueType.create(settings.queue_type)
-
-  #
-  # Alerting on a queue that is too-full?
-  #
-  if  !$MONITOR.nil? 
-
-    #
-    # Find the number of jobs
-    #
-    jobs = queue.size?
-
-    if  jobs > $MONITOR 
-        exit 1
-    else
-        exit 0
-    end
-  end
-
-
-  #
-  # Showing stats?
-  #
-  if  $STATS 
-     jobs = queue.size?
-     puts "There are #{jobs || 0} jobs pending."
-     exit(0)
-  end
-
-
-  #
-  #  Are we flushing the queue?
-  #
-  if  $FLUSH 
-    queue.flush!
-  end
-
-
-end

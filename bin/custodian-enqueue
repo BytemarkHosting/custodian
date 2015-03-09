@@ -1,4 +1,99 @@
-#!/usr/bin/ruby -Ilib/ -I../lib/ -rubygems
+#!/usr/bin/ruby -rubygems
+#
+# Usage information at the end of the script.
+#
+
+require 'getoptlong'
+require 'custodian/parser'
+require 'custodian/queue'
+require 'custodian/settings'
+
+#
+#  Entry-point to our code.
+#
+if __FILE__ == $PROGRAM_NAME
+
+  help   = false
+  manual = false
+
+  begin
+    opts = GetoptLong.new(
+      ['--dump',  '-d', GetoptLong::NO_ARGUMENT],
+      ['--test',   GetoptLong::NO_ARGUMENT],
+      ['--file',  '-f', GetoptLong::REQUIRED_ARGUMENT],
+      ['--help',  '-h', GetoptLong::NO_ARGUMENT],
+      ['--manual', '-m', GetoptLong::NO_ARGUMENT]
+                          )
+    opts.each do |opt, arg|
+      case opt
+      when '--dump' then
+        ENV['DUMP'] = '1'
+      when '--test' then
+        ENV['TEST'] = '1'
+      when '--file' then
+        ENV['FILE'] = arg
+      when '--help' then
+        help = true
+      when '--manual' then
+        manual = true
+      end
+    end
+  rescue StandardError => ex
+    puts "Option parsing failed: #{ex}"
+    exit
+  end
+
+  #
+  #  Show the help information.
+  #
+  if manual || help
+    DATA.read.split("\n").each do |line|
+      puts Regexp.last_match(1).dup if line =~ /^# ?(.*)/
+    end
+    exit 0
+  end
+
+  #
+  # Connected to the queue - be it redis or beanstalkd
+  #
+  settings = Custodian::Settings.instance
+  queue = Custodian::QueueType.create(settings.queue_type)
+  unless  queue
+    puts "Failed to connect to the #{settings.queue_type} queue"
+    exit 1
+  end
+
+  #
+  # Create the parser object.
+  #
+  mon = Custodian::Parser.new
+
+  #
+  # Parse our configuration file.  If there are errors then we'll
+  # exit this script.
+  #
+  begin
+    mon.parse_file(ENV['FILE'])
+  rescue => e
+    puts "Failure in parsing the configuration file : #{ENV['FILE']}"
+    puts e.to_s
+    exit(1)
+  end
+
+  mon.jobs.each do |test|
+    if  ENV['TEST']
+      # nop
+    elsif  ENV['DUMP']
+      puts test
+    else
+      queue.add(test.to_s)
+    end
+  end
+
+end
+
+
+__END__
 #
 # NAME
 #  custodian-enqueue - Parse tests from a file and enqueue them.
@@ -17,7 +112,8 @@
 #
 #  -m, --manual        Show this manual, and exit.
 #
-#  -d, --dump          Dump the parsed tests to the console; don't insert in the queue.
+#  -d, --dump          Dump the parsed tests to the console.
+#                      (They are not inserted to the queue.)
 #
 #  --test              Test the parsing of the given file, alert on errors.
 #
@@ -43,127 +139,3 @@
 #
 #  Steve Kemp  <steve@bytemark.co.uk>
 #
-
-
-
-#
-# Standard modules
-#
-require 'getoptlong'
-
-#
-# Our code.
-#
-require 'custodian/parser'
-require 'custodian/queue'
-require 'custodian/settings'
-
-
-
-#
-#  Entry-point to our code.
-#
-if __FILE__ == $PROGRAM_NAME then
-
-  $help   = false
-  $manual = false
-
-  begin
-    opts = GetoptLong.new(
-                          ['--dump',  '-d', GetoptLong::NO_ARGUMENT],
-                          ['--test',   GetoptLong::NO_ARGUMENT],
-                          ['--file',  '-f', GetoptLong::REQUIRED_ARGUMENT],
-                          ['--help',  '-h', GetoptLong::NO_ARGUMENT],
-                          ['--manual', '-m', GetoptLong::NO_ARGUMENT]
-                          )
-    opts.each do |opt, arg|
-      case opt
-      when '--dump' then
-          ENV['DUMP'] = '1'
-      when '--test' then
-          ENV['TEST'] = '1'
-       when '--file' then
-          ENV['FILE'] = arg
-      when '--help' then
-          $help = true
-      when '--manual' then
-          $manual = true
-      end
-    end
-  rescue StandardError => ex
-    puts "Option parsing failed: #{ex}"
-    exit
-  end
-
-
-  #
-  # CAUTION! Here be quality kode.
-  #
-  if $manual or $help
-
-    # Open the file, stripping the shebang line
-    lines = File.open(__FILE__){|fh| fh.readlines}[1..-1]
-
-    found_synopsis = false
-
-    lines.each do |line|
-
-      line.chomp!
-      break if line.empty?
-
-      if $help and !found_synopsis
-        found_synopsis = (line =~ /^#\s+SYNOPSIS\s*$/)
-        next
-      end
-
-      puts line[2..-1].to_s
-
-      break if $help and found_synopsis and line =~ /^#\s*$/
-
-    end
-
-    exit 0
-  end
-
-
-  #
-  # Connected to the queue - be it redis or beanstalkd
-  #
-  settings = Custodian::Settings.instance
-  queue = Custodian::QueueType.create(settings.queue_type)
-  if  !queue 
-    puts "Failed to connect to the #{settings.queue_type} queue"
-    exit 1
-  end
-
-
-  #
-  # Create the parser object.
-  #
-  mon = Custodian::Parser.new
-
-
-  #
-  # Parse our configuration file.  If there are errors then we'll
-  # exit this script.
-  #
-  begin
-    mon.parse_file(ENV['FILE'])
-  rescue => e
-    puts "Failure in parsing the configuration file : #{ENV['FILE']}"
-    puts e.to_s
-    exit(1)
-  end
-
-  mon.jobs.each do |test|
-
-    if  ENV['TEST'] 
-      # nop
-    elsif  ENV['DUMP'] 
-      puts test
-    else
-      queue.add(test.to_s)
-    end
-  end
-
-end
