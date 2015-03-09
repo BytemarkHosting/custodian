@@ -309,7 +309,7 @@ module Custodian
                 return false
               end
             rescue
-              @error = "Exception connecting to host #{host}:#{port} - #{$!}"
+              @error = "Exception connecting to host #{host}:#{port} - #{$ERROR_INFO}"
               return false
             end
           end

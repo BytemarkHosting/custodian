@@ -11,7 +11,7 @@
 #
 base = File.dirname(__FILE__)
 %w(bin lib .).each do |d|
-  $: << File.expand_path(File.join(base, "../#{d}"))
+  $LOAD_PATH << File.expand_path(File.join(base, "../#{d}"))
 end
 
 require 'test/unit'

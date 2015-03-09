@@ -106,7 +106,7 @@ hostname = ARGV.shift
 #  Abort if we don't have a hostname
 #
 if ( hostname.nil? )
-  puts "Usage: #{$0} hostname"
+  puts "Usage: #{$PROGRAM_NAME} hostname"
   exit 1
 end
 
