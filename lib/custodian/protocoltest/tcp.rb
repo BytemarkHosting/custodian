@@ -3,7 +3,7 @@ require 'custodian/settings'
 require 'custodian/testfactory'
 require 'socket'
 require 'timeout'
-
+require 'English'
 
 #
 #  The TCP-protocol test.
@@ -309,7 +309,7 @@ module Custodian
                 return false
               end
             rescue
-              @error = "Exception connecting to host #{host}:#{port} - #{$ERROR_INFO}"
+              @error = "Exception connecting to host:#{host} [port:#{port}] - #{$ERROR_INFO}"
               return false
             end
           end
