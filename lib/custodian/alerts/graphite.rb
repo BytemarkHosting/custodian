@@ -52,7 +52,7 @@ module Custodian
         #
         # hostname + test-type
         #
-        host = @test.target.gsub(/[\/\\.]/, "_")
+        host = @test.target.gsub(/[\/\\.]/, '_')
         test = @test.get_type
 
         #
@@ -69,7 +69,7 @@ module Custodian
 
       end
 
-      register_alert_type "graphite"
+      register_alert_type 'graphite'
 
 
     end

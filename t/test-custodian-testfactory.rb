@@ -45,25 +45,25 @@ class TestTestFactory < Test::Unit::TestCase
   def test_ftp_uri
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( "ftp.example.com must  run ftp." ) )
-      assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." ) )
-      assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp on 21." ) )
+      assert( Custodian::TestFactory.create( 'ftp.example.com must  run ftp.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp on 21.' ) )
       assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp on 21 otherwise 'xxx'." ) )
     end
 
 
-    assert( Custodian::TestFactory.create( "ftp.example.com        must run ftp." )[0].target == "ftp.example.com"  )
-    assert( Custodian::TestFactory.create( "ftp://ftp.example.com/ must run ftp." )[0].target == "ftp.example.com"  )
+    assert( Custodian::TestFactory.create( 'ftp.example.com        must run ftp.' )[0].target == 'ftp.example.com'  )
+    assert( Custodian::TestFactory.create( 'ftp://ftp.example.com/ must run ftp.' )[0].target == 'ftp.example.com'  )
 
 
     #
     #  Test the port detection
     #
     data = {
-      "foo must run ftp." => "21",
-      "ftp://ftp.example.com/ must run ftp." => "21",
-      "foo must run ftp on  1 otherwise 'x'." => "1",
-      "foo must run ftp on 33 otherwise"   => "33",
+      'foo must run ftp.' => '21',
+      'ftp://ftp.example.com/ must run ftp.' => '21',
+      "foo must run ftp on  1 otherwise 'x'." => '1',
+      'foo must run ftp on 33 otherwise'   => '33',
     }
 
     #
@@ -76,7 +76,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
-        assert_equal( obj[0].get_type, "ftp" )
+        assert_equal( obj[0].get_type, 'ftp' )
         assert_equal( obj[0].port.to_s, prt )
 
       end
@@ -91,11 +91,11 @@ class TestTestFactory < Test::Unit::TestCase
   #
   def test_port_detection
     data = {
-      "foo must run ftp." => "21",
-      "foo must run ssh." => "22",
-      "foo must run mysql otherwise 'alert'"   => "3306",
-      "foo must run redis otherwise 'alert'"   => "6379",
-      "foo must run mysql on 33 otherwise 'alert'"   => "33",
+      'foo must run ftp.' => '21',
+      'foo must run ssh.' => '22',
+      "foo must run mysql otherwise 'alert'"   => '3306',
+      "foo must run redis otherwise 'alert'"   => '6379',
+      "foo must run mysql on 33 otherwise 'alert'"   => '33',
     }
 
     #
@@ -124,26 +124,26 @@ class TestTestFactory < Test::Unit::TestCase
 
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( "example.com must  run rsync." ) )
-      assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync." ) )
-      assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync on 333." ) )
+      assert( Custodian::TestFactory.create( 'example.com must  run rsync.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://example.com/ must run rsync.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://example.com/ must run rsync on 333.' ) )
       assert( Custodian::TestFactory.create( "ftp://example.com/ must run rsync on 3311 otherwise 'xxx'." ) )
     end
 
-    assert( Custodian::TestFactory.create( "rsync.example.com  must run rsync." )[0].target ==
-            "rsync.example.com"  )
-    assert( Custodian::TestFactory.create( "rsync://rsync.example.com/ must run rsync." )[0].target ==
-            "rsync.example.com"  )
+    assert( Custodian::TestFactory.create( 'rsync.example.com  must run rsync.' )[0].target ==
+            'rsync.example.com'  )
+    assert( Custodian::TestFactory.create( 'rsync://rsync.example.com/ must run rsync.' )[0].target ==
+            'rsync.example.com'  )
 
 
     #
     #  Test the ports
     #
     data = {
-      "foo must run rsync." => "873",
-      "rsync://foo/ must run rsync." => "873",
-      "foo must run rsync on 1 otherwise 'x'." => "1",
-      "foo must run rsync on 33 otherwise"   => "33",
+      'foo must run rsync.' => '873',
+      'rsync://foo/ must run rsync.' => '873',
+      "foo must run rsync on 1 otherwise 'x'." => '1',
+      'foo must run rsync on 33 otherwise'   => '33',
     }
 
     #
@@ -191,7 +191,7 @@ class TestTestFactory < Test::Unit::TestCase
     #  Missing expected results
     #
     assert_raise ArgumentError do
-      assert( Custodian::TestFactory.create( "a.ns.bytemark.co.uk must run dns for www.bytemark.co.uk resolving NS " ) )
+      assert( Custodian::TestFactory.create( 'a.ns.bytemark.co.uk must run dns for www.bytemark.co.uk resolving NS ' ) )
     end
   end
 
@@ -205,9 +205,9 @@ class TestTestFactory < Test::Unit::TestCase
 
 
     assert_nothing_raised do
-      assert( Custodian::TestFactory.create( "example.com must not run rsync." ) )
-      assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync." ) )
-      assert( Custodian::TestFactory.create( "ftp://example.com/ must not run rsync on 333." ) )
+      assert( Custodian::TestFactory.create( 'example.com must not run rsync.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://example.com/ must not run rsync.' ) )
+      assert( Custodian::TestFactory.create( 'ftp://example.com/ must not run rsync on 333.' ) )
     end
 
 
@@ -215,11 +215,11 @@ class TestTestFactory < Test::Unit::TestCase
     #  Test some inversions
     #
     data = {
-      "foo must run rsync."              => false,
-      "rsync://foo/ must run rsync."     => false,
-      "foo must run ping otherwise"      => false,
-      "foo must not run ping otherwise"  => true,
-      "foo must not run ssh otherwise"   => true,
+      'foo must run rsync.'              => false,
+      'rsync://foo/ must run rsync.'     => false,
+      'foo must run ping otherwise'      => false,
+      'foo must not run ping otherwise'  => true,
+      'foo must not run ssh otherwise'   => true,
     }
 
     #
@@ -292,13 +292,13 @@ class TestTestFactory < Test::Unit::TestCase
 
     a = []
 
-    a.push( "test.host.example.com must run ftp.")
-    a.push( "ftp://test.host.example.com/ must run ftp.")
-    a.push( "ftp://test.host.example.com/foo must run ftp.")
-    a.push( "test.host.example.com must run ping.")
+    a.push( 'test.host.example.com must run ftp.')
+    a.push( 'ftp://test.host.example.com/ must run ftp.')
+    a.push( 'ftp://test.host.example.com/foo must run ftp.')
+    a.push( 'test.host.example.com must run ping.')
     a.push( "test.host.example.com  must run dns for bytemark.co.uk resolving NS as '80.68.80.26;85.17.170.78;80.68.80.27'.")
-    a.push( "rsync://test.host.example.com must run rsync.")
-    a.push( "rsync://test.host.example.com must run rsync.")
+    a.push( 'rsync://test.host.example.com must run rsync.')
+    a.push( 'rsync://test.host.example.com must run rsync.')
 
     a.each do |entry|
       assert_nothing_raised do
@@ -306,7 +306,7 @@ class TestTestFactory < Test::Unit::TestCase
         assert(obj)
         assert( obj.kind_of? Array )
         assert( ! obj.empty? )
-        assert_equal( "test.host.example.com", obj[0].target )
+        assert_equal( 'test.host.example.com', obj[0].target )
       end
     end
   end

@@ -55,7 +55,7 @@ module Custodian
       # Write the actual message to our target.
       #
       def write_message( msg )
-        file = File.open(@target, "a")
+        file = File.open(@target, 'a')
         file.puts( "#{Time.now} #{msg}" )
         file.close
 
@@ -64,7 +64,7 @@ module Custodian
 
 
 
-      register_alert_type "file"
+      register_alert_type 'file'
 
 
 

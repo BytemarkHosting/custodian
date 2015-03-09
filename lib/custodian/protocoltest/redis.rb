@@ -92,7 +92,7 @@ module Custodian
 
 
 
-      register_test_type "redis"
+      register_test_type 'redis'
 
 
 

@@ -26,8 +26,8 @@ module Custodian
       #
       def initialize( hostname )
 
-        raise ArgumentError, "Hostname must not be nil" if  hostname.nil? 
-        raise ArgumentError, "Hostname must be a String" unless  hostname.kind_of?( String )
+        raise ArgumentError, 'Hostname must not be nil' if  hostname.nil? 
+        raise ArgumentError, 'Hostname must be a String' unless  hostname.kind_of?( String )
 
         @hostname = hostname
         @resolved = Custodian::Util::DNS.hostname_to_ip( hostname )
@@ -83,7 +83,7 @@ module Custodian
             return true
           end
         else
-          puts "ERROR: Resolved to neither an IPv6 or IPv4 address."
+          puts 'ERROR: Resolved to neither an IPv6 or IPv4 address.'
         end
         false
       end

@@ -92,20 +92,20 @@ module Custodian
               c.ssl_verify_host = false
               c.proxy_url       = @host
               c.proxy_tunnel    = true
-              c.url             = "http://google.com/"
+              c.url             = 'http://google.com/'
               c.ssl_verify_peer = false
               c.timeout         = period
               c.perform
               @status = c.response_code
               @content = c.body_str
             rescue Curl::Err::SSLCACertificateError => x
-              @error = "SSL-Validation error"
+              @error = 'SSL-Validation error'
               return false
             rescue Curl::Err::TimeoutError
-              @error = "Timed out fetching page."
+              @error = 'Timed out fetching page.'
               return false
             rescue Curl::Err::TooManyRedirectsError
-              @error = "Too many redirections (more than 10)"
+              @error = 'Too many redirections (more than 10)'
               return false
             rescue => x
                @error = "Exception: #{x}"
@@ -113,7 +113,7 @@ module Custodian
             end
           end
         rescue Timeout::Error => e
-          @error = "Timed out during fetch."
+          @error = 'Timed out during fetch.'
           return false
         end
 
@@ -141,7 +141,7 @@ module Custodian
 
 
 
-      register_test_type "openproxy"
+      register_test_type 'openproxy'
 
 
 

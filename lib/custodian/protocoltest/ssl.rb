@@ -26,7 +26,7 @@ class SSLCheck
   # Takes one parameter -- the URL.
   #
   def initialize(uri)
-    raise ArgumentError, "URI must be a string" unless uri.is_a?(String)
+    raise ArgumentError, 'URI must be a string' unless uri.is_a?(String)
     @uri = URI.parse(uri)
 
     @domain = @uri.host
@@ -60,7 +60,7 @@ class SSLCheck
   # Allows the domain to be set manually.
   #
   def domain=(d)
-    raise ArgumentError, "domain must be a String" unless d.is_a?(String)
+    raise ArgumentError, 'domain must be a String' unless d.is_a?(String)
     @domain=d
   end
 
@@ -76,7 +76,7 @@ class SSLCheck
   # ones from ALL_TESTS are taken.  Anything else is ignored.
   #
   def tests=(ts)
-    raise ArgumentError, "tests must be an Array" unless ts.is_a?(Array)
+    raise ArgumentError, 'tests must be an Array' unless ts.is_a?(Array)
     @tests = ts.collect{|t| t.to_sym}.select{|t| ALL_TESTS.include?(t)}
 
     @tests
@@ -94,7 +94,7 @@ class SSLCheck
   # Probably not much use here.
   #
   def key=(k)
-    raise ArgumentError, "key must be a String" unless k.is_a?(String)
+    raise ArgumentError, 'key must be a String' unless k.is_a?(String)
     if k =~ /-----BEGIN/
       @key = OpenSSL::PKey::RSA.new(k)
     else
@@ -127,7 +127,7 @@ class SSLCheck
     elsif b.is_a?(OpenSSL::X509::Certificate)
       self.certificate_store.add_cert(b)
     else
-      raise ArgumentError, "bundle must be a String, an Array, or an OpenSSL::X509::Certificate"
+      raise ArgumentError, 'bundle must be a String, an Array, or an OpenSSL::X509::Certificate'
     end
     b
   end
@@ -140,7 +140,7 @@ class SSLCheck
 
     @certificate_store = OpenSSL::X509::Store.new
     @certificate_store.set_default_paths
-    @certificate_store.add_path("/etc/ssl/certs")
+    @certificate_store.add_path('/etc/ssl/certs')
     @certificate_store
   end
 
@@ -412,7 +412,7 @@ module Custodian
         #  Double-check we've got an SSL host
         #
         if  ! @host =~ /^https:\/\// 
-          puts( "Not an SSL URL" )
+          puts( 'Not an SSL URL' )
           return true
         end
 
@@ -442,7 +442,7 @@ module Custodian
         @error
       end
 
-      register_test_type "https"
+      register_test_type 'https'
 
     end
   end

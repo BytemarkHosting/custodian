@@ -31,7 +31,7 @@ module Custodian
         #
         # Ensure the host is an IP address.
         #
-        raise ArgumentError, "The target must be an IP address" unless( @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ )
+        raise ArgumentError, 'The target must be an IP address' unless( @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/ )
 
         #
         # See which blacklist(s) we're testing against.
@@ -39,7 +39,7 @@ module Custodian
         if  line =~ /via\s+([^\s]+)\s+/ 
           @zones = $1.dup
         else
-          @zones = "zen.spamhaus.org"
+          @zones = 'zen.spamhaus.org'
         end
 
         #
@@ -73,7 +73,7 @@ module Custodian
         # The error is empty.
         @error  = nil
 
-        @zones.split( "," ).each do |zone|
+        @zones.split( ',' ).each do |zone|
 
           #
           #  Convert the IP to be looked up.
@@ -110,7 +110,7 @@ module Custodian
       end
 
       # register ourselves with the class-factory
-      register_test_type "dnsbl"
+      register_test_type 'dnsbl'
     end
   end
 end

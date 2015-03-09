@@ -51,7 +51,7 @@ class TestCustodianParser < Test::Unit::TestCase
 
   def test_period
     parser = Custodian::Parser.new
-    result = parser.parse_line( "example.vm.bytemark.co.uk must run ping except between 00-23" )
+    result = parser.parse_line( 'example.vm.bytemark.co.uk must run ping except between 00-23' )
     assert( result.nil? )
   end
 
@@ -72,7 +72,7 @@ class TestCustodianParser < Test::Unit::TestCase
     parser = Custodian::Parser.new
 
     #  1.a.  Comment lines return nil.
-    result = parser.parse_line( "# this is a comment" )
+    result = parser.parse_line( '# this is a comment' )
     assert( result.nil? )
 
     #  1.b.  Non-strings are an error
@@ -94,7 +94,7 @@ class TestCustodianParser < Test::Unit::TestCase
     parser = Custodian::Parser.new
     #  2.a.  Comment lines return nil.
     tmp    = []
-    tmp.push( "# This is a comment.." )
+    tmp.push( '# This is a comment..' )
     assert( parser.parse_lines( tmp ).nil? )
 
     #  2.b.  Adding a test will return an array of test-objects.
@@ -172,8 +172,8 @@ EOF
     #  Input text
     #
     text = []
-    text.push( "FOO  is  kvm1.vm.bytemark.co.uk." )
-    text.push( "FOO2 is  kvm2.vm.bytemark.co.uk." )
+    text.push( 'FOO  is  kvm1.vm.bytemark.co.uk.' )
+    text.push( 'FOO2 is  kvm2.vm.bytemark.co.uk.' )
 
     #
     # Test the parser with this text
@@ -203,8 +203,8 @@ EOF
     #  Input text to parse.
     #
     text = []
-    text.push( "FOO is kvm1.vm.bytemark.co.uk." )
-    text.push( "FOO is kvm2.vm.bytemark.co.uk." )
+    text.push( 'FOO is kvm1.vm.bytemark.co.uk.' )
+    text.push( 'FOO is kvm2.vm.bytemark.co.uk.' )
 
     #
     # Test the parser with this text
@@ -241,7 +241,7 @@ EOF
     #  Expand a line - which should result in no change
     # as the line does not involve a known-macro
     #
-    in_txt  = "example.bytemark.co.uk must run smtp."
+    in_txt  = 'example.bytemark.co.uk must run smtp.'
     out_txt = parser.expand_macro( in_txt )
 
     #
@@ -255,14 +255,14 @@ EOF
     #
     #  Now define a macro
     #
-    parser.parse_line( "TARGET is example1.bytemark.co.uk and example2.bytemark.co.uk." )
+    parser.parse_line( 'TARGET is example1.bytemark.co.uk and example2.bytemark.co.uk.' )
     macros = parser.macros
     assert( !macros.empty? )
 
     #
     # Now we have a two-host macro, repeat the expansion
     #
-    ret = parser.expand_macro( "TARGET must run smtp on 25." )
+    ret = parser.expand_macro( 'TARGET must run smtp on 25.' )
 
     #
     # The result should be an array
@@ -284,12 +284,12 @@ EOF
     # test data
     #
     data = {
-      "http://example must run http."                         => true,
-      "http://example must run http with status 200."         => true,
+      'http://example must run http.'                         => true,
+      'http://example must run http with status 200.'         => true,
       "http://example must run http with content 'bar'."      => true,
-      "http://example must run http following redirects."     => true,
-      "http://example must run http not following redirects." => false,
-      "http://example must run http not following redirect."  => false,
+      'http://example must run http following redirects.'     => true,
+      'http://example must run http not following redirects.' => false,
+      'http://example must run http not following redirect.'  => false,
     }
 
     data.each do |str,follow|
@@ -325,10 +325,10 @@ EOF
     # test data
     #
     data = {
-      "http://example must run http."                         => true,
-      "http://example must run http with status 200."         => true,
+      'http://example must run http.'                         => true,
+      'http://example must run http with status 200.'         => true,
       "http://example must run http with content 'bar'."      => true,
-      "http://example must run http without cache busting."   => false,
+      'http://example must run http without cache busting.'   => false,
     }
 
     data.each do |str,cb|
@@ -365,13 +365,13 @@ EOF
     # test data
     #
     data = {
-      "foo must run rsync."                     => nil,
-      "foo must run redis."                     => nil,
-      "foo must not run ping."                  => nil,
-      "foo must not run ssh otherwise 'fail'"   => "fail",
-      "foo must not run ssh otherwise 'fail'."  => "fail",
-      "foo must run redis otherwise 'memorystorage service is dead'" => "memorystorage service is dead",
-      "foo must run ping otherwise 'don't you love me?'" => "don"
+      'foo must run rsync.'                     => nil,
+      'foo must run redis.'                     => nil,
+      'foo must not run ping.'                  => nil,
+      "foo must not run ssh otherwise 'fail'"   => 'fail',
+      "foo must not run ssh otherwise 'fail'."  => 'fail',
+      "foo must run redis otherwise 'memorystorage service is dead'" => 'memorystorage service is dead',
+      "foo must run ping otherwise 'don't you love me?'" => 'don'
     }
 
     #

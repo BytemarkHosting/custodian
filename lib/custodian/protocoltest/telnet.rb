@@ -90,7 +90,7 @@ module Custodian
 
 
 
-      register_test_type "telnet"
+      register_test_type 'telnet'
 
 
 

@@ -49,7 +49,7 @@ module Custodian
           require 'mauve/proto'
           @loaded = true
         rescue
-          puts "ERROR Loading mauve libraries!"
+          puts 'ERROR Loading mauve libraries!'
           @loaded = false
         end
       end
@@ -96,14 +96,14 @@ module Custodian
         #
         # Lookup the start of the day.
         #
-        day_start = @settings.key( "day_start" ).to_i || 10
-        day_end   = @settings.key( "day_end" ).to_i   || 18
+        day_start = @settings.key( 'day_start' ).to_i || 10
+        day_end   = @settings.key( 'day_end' ).to_i   || 18
 
         #
         #  In hour suppress
         #
-        working_suppress = @settings.key( "working_suppress" ).to_i || 4
-        oncall_suppress  = @settings.key( "oncall_suppress" ).to_i  || 10
+        working_suppress = @settings.key( 'working_suppress' ).to_i || 4
+        oncall_suppress  = @settings.key( 'oncall_suppress' ).to_i  || 10
 
         #
         # If we're Monday-Friday, between the start & end time, then
@@ -307,7 +307,7 @@ module Custodian
         #
         # Did we get an error?
         #
-        return "" unless  !resolved.nil? 
+        return '' unless  !resolved.nil? 
 
 
         #
@@ -330,7 +330,7 @@ module Custodian
       end
 
 
-      register_alert_type "mauve"
+      register_alert_type 'mauve'
 
 
 

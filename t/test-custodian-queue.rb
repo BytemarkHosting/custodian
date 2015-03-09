@@ -40,7 +40,7 @@ class TestCustodianQueue < Test::Unit::TestCase
 
     # creation will fail
     assert_raise RuntimeError do
-      t = Custodian::QueueType.create( "foo" )
+      t = Custodian::QueueType.create( 'foo' )
     end
 
   end
@@ -50,7 +50,7 @@ class TestCustodianQueue < Test::Unit::TestCase
   def test_redis
     q = nil
     assert_nothing_raised do
-      q = Custodian::QueueType.create( "redis" )
+      q = Custodian::QueueType.create( 'redis' )
     end
 
     #
@@ -68,7 +68,7 @@ class TestCustodianQueue < Test::Unit::TestCase
   def test_beanstalkd
     q = nil
     assert_nothing_raised do
-      q = Custodian::QueueType.create( "redis" )
+      q = Custodian::QueueType.create( 'redis' )
     end
 
     #

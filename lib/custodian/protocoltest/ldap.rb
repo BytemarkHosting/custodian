@@ -92,7 +92,7 @@ module Custodian
         begin
           require 'ldap'
         rescue LoadError
-          @error = "LDAP library not available - test disabled"
+          @error = 'LDAP library not available - test disabled'
           return false
         end
 
@@ -147,7 +147,7 @@ module Custodian
 
 
 
-    register_test_type "ldap"
+    register_test_type 'ldap'
 
 
     end

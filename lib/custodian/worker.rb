@@ -93,7 +93,7 @@ module Custodian
     # Show a message on STDOUT if "--verbose" was specified.
     #
     def log_message( msg )
-      puts msg if  ENV["VERBOSE" ] 
+      puts msg if  ENV['VERBOSE' ] 
     end
 
 
@@ -104,7 +104,7 @@ module Custodian
     #
     def run!
       while( true )
-        log_message( "Waiting for job.." )
+        log_message( 'Waiting for job..' )
         process_single_job
       end
     end
@@ -125,8 +125,8 @@ module Custodian
       #
       #  Ensure that the job is sane.
       #
-      raise ArgumentError, "Job was empty" if job.nil?
-      raise ArgumentError, "Job was not a string" unless job.kind_of?(String)
+      raise ArgumentError, 'Job was empty' if job.nil?
+      raise ArgumentError, 'Job was not a string' unless job.kind_of?(String)
 
       #
       # Create test-objects from our class-factory, and process them.
@@ -173,7 +173,7 @@ module Custodian
           result = ! result if  test.inverted 
 
           if  result 
-            log_message( "Test succeeed - clearing alert" )
+            log_message( 'Test succeeed - clearing alert' )
             do_clear( test )
           end
 
@@ -240,7 +240,7 @@ module Custodian
     # Raise an alert, with each registered alerter.
     #
     def do_raise( test )
-      @alerter.split( "," ).each do |alerter|
+      @alerter.split( ',' ).each do |alerter|
 
         log_message( "Creating alerter: #{alerter}" )
         alert = Custodian::AlertFactory.create( alerter, test )
@@ -261,7 +261,7 @@ module Custodian
     # Clear an alert, with each registered alerter.
     #
     def do_clear( test )
-      @alerter.split( "," ).each do |alerter|
+      @alerter.split( ',' ).each do |alerter|
         log_message( "Creating alerter: #{alerter}" )
         alert  = Custodian::AlertFactory.create( alerter, test )
 
@@ -280,7 +280,7 @@ module Custodian
     #  Log the test duration with each registered alerter.
     #
     def do_duration( test, duration )
-      @alerter.split( "," ).each do |alerter|
+      @alerter.split( ',' ).each do |alerter|
         log_message( "Creating alerter: #{alerter}" )
         alert  = Custodian::AlertFactory.create( alerter, test )
 
@@ -291,7 +291,7 @@ module Custodian
         # give the alerter a reference to the settings object.
         alert.set_settings( @settings )
 
-        alert.duration( duration ) if  alert.respond_to? "duration" 
+        alert.duration( duration ) if  alert.respond_to? 'duration' 
       end
     end
 

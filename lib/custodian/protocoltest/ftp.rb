@@ -92,7 +92,7 @@ module Custodian
 
 
 
-      register_test_type "ftp"
+      register_test_type 'ftp'
 
 
 

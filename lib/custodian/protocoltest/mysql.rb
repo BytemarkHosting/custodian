@@ -92,7 +92,7 @@ module Custodian
 
 
 
-      register_test_type "mysql"
+      register_test_type 'mysql'
 
 
 

@@ -92,8 +92,8 @@ module Custodian
 
 
 
-      register_test_type "pop3"
-      register_test_type "pop"
+      register_test_type 'pop3'
+      register_test_type 'pop'
 
 
 

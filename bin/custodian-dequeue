@@ -69,23 +69,23 @@ if __FILE__ == $PROGRAM_NAME then
 
   begin
     opts = GetoptLong.new(
-                          [ "--help",    "-h", GetoptLong::NO_ARGUMENT ],
-                          [ "--manual",  "-m", GetoptLong::NO_ARGUMENT ],
-                          [ "--fail",    "-f", GetoptLong::NO_ARGUMENT  ],
-                          [ "--single",  "-s", GetoptLong::NO_ARGUMENT ],
-                          [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ]
+                          [ '--help',    '-h', GetoptLong::NO_ARGUMENT ],
+                          [ '--manual',  '-m', GetoptLong::NO_ARGUMENT ],
+                          [ '--fail',    '-f', GetoptLong::NO_ARGUMENT  ],
+                          [ '--single',  '-s', GetoptLong::NO_ARGUMENT ],
+                          [ '--verbose', '-v', GetoptLong::NO_ARGUMENT ]
                           )
     opts.each do |opt, arg|
       case opt
-      when "--verbose" then
-          ENV["VERBOSE"] = "1"
-      when "--single" then
-          ENV["SINGLE"] = "1"
-      when "--fail" then
-          ENV["FAIL"] = "1"
-      when "--help" then
+      when '--verbose' then
+          ENV['VERBOSE'] = '1'
+      when '--single' then
+          ENV['SINGLE'] = '1'
+      when '--fail' then
+          ENV['FAIL'] = '1'
+      when '--help' then
           $help = true
-      when "--manual" then
+      when '--manual' then
           $manual = true
       end
     end

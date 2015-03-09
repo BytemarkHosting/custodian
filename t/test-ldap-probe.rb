@@ -34,7 +34,7 @@ class TestLDAPProbe < Test::Unit::TestCase
 
     assert( test.kind_of? Array )
     assert( ! test.empty? )
-    assert_equal( test[0].get_type, "ldap" )
+    assert_equal( test[0].get_type, 'ldap' )
   end
 
 
@@ -47,7 +47,7 @@ class TestLDAPProbe < Test::Unit::TestCase
     # test data
     #
     data = [
-            "foo.example.com must run ldap on 389.",
+            'foo.example.com must run ldap on 389.',
             "foo.example.com must run ldap with username 'test'.",
             "foo.example.com must run ldap with uername 'test' with password 'x'."
     ]

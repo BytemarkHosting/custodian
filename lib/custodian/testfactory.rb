@@ -31,8 +31,8 @@ module Custodian
     def self.create( line )
 
 
-      raise ArgumentError, "The type of test to create cannot be nil" if  line.nil? 
-      raise ArgumentError, "The type of test to create must be a string" unless  line.kind_of? String 
+      raise ArgumentError, 'The type of test to create cannot be nil' if  line.nil? 
+      raise ArgumentError, 'The type of test to create must be a string' unless  line.kind_of? String 
 
       #
       #  The array we return.
@@ -46,7 +46,7 @@ module Custodian
       if  line =~ /must\s+(not\s+)?run\s+(\S+)(\s+|\.|$)/ 
 
         test_type = $2.dup
-        test_type.chomp!( "." )
+        test_type.chomp!( '.' )
 
         if  @@subclasses[test_type].nil? 
             raise ArgumentError, "There is no handler registered for the '#{test_type}' test-type"

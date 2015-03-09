@@ -39,7 +39,7 @@ module Custodian
           @redis = Redis.new(:host => @target )
 
         rescue
-          puts "ERROR Loading redis rubygem!"
+          puts 'ERROR Loading redis rubygem!'
         end
 
         @test  = obj
@@ -55,16 +55,16 @@ module Custodian
         return unless( @redis )
 
         tmp = {}
-        tmp["time"]   = Time.now.to_i
-        tmp["type"]   = @test.get_type
-        tmp["target"] = @test.target
-        tmp["result"] = "RAISE"
-        tmp["reason"] = @test.error
-        tmp["test"  ] = @test.to_s
-        tmp["class" ] = @test.class
+        tmp['time']   = Time.now.to_i
+        tmp['type']   = @test.get_type
+        tmp['target'] = @test.target
+        tmp['result'] = 'RAISE'
+        tmp['reason'] = @test.error
+        tmp['test'  ] = @test.to_s
+        tmp['class' ] = @test.class
 
-        @redis.lpush( "recent-tests", tmp.to_json)
-        @redis.ltrim( "recent-tests", 0, 100 )
+        @redis.lpush( 'recent-tests', tmp.to_json)
+        @redis.ltrim( 'recent-tests', 0, 100 )
 
       end
 
@@ -79,19 +79,19 @@ module Custodian
 
 
         tmp = {}
-        tmp["time"]   = Time.now.to_i
-        tmp["type"]   = @test.get_type
-        tmp["target"] = @test.target
-        tmp["result"] = "OK"
-        tmp["reason"] = ""
-        tmp["test"  ] = @test.to_s
-        tmp["class" ] = @test.class
+        tmp['time']   = Time.now.to_i
+        tmp['type']   = @test.get_type
+        tmp['target'] = @test.target
+        tmp['result'] = 'OK'
+        tmp['reason'] = ''
+        tmp['test'  ] = @test.to_s
+        tmp['class' ] = @test.class
 
-        @redis.lpush( "recent-tests", tmp.to_json)
-        @redis.ltrim( "recent-tests", 0, 100 )
+        @redis.lpush( 'recent-tests', tmp.to_json)
+        @redis.ltrim( 'recent-tests', 0, 100 )
       end
 
-      register_alert_type "redis"
+      register_alert_type 'redis'
 
     end
   end

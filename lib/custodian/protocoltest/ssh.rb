@@ -93,7 +93,7 @@ module Custodian
 
 
 
-      register_test_type "ssh"
+      register_test_type 'ssh'
 
 
 

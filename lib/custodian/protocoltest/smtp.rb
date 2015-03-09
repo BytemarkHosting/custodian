@@ -90,7 +90,7 @@ module Custodian
 
 
 
-      register_test_type "smtp"
+      register_test_type 'smtp'
 
 
 

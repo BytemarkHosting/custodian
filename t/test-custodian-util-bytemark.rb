@@ -38,15 +38,15 @@ class TestBytemarkUtil < Test::Unit::TestCase
       #
       # Hosts inside the Bytemark network
       #
-      "80.68.85.48"               => true,
-      "2001:41c8:125:46::10"      => true,
+      '80.68.85.48'               => true,
+      '2001:41c8:125:46::10'      => true,
 
       #
       # Hosts outside the Bytemark network
       #
-      "127.0.0.1"                 => false,
-      "192.168.1.1"               => false,
-      "2a00:1450:400c:c00::93"    => false,
+      '127.0.0.1'                 => false,
+      '192.168.1.1'               => false,
+      '2a00:1450:400c:c00::93'    => false,
     }
 
 

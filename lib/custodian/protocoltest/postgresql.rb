@@ -92,7 +92,7 @@ module Custodian
 
 
 
-      register_test_type "postgresql"
+      register_test_type 'postgresql'
 
 
     end
