@@ -178,10 +178,10 @@ class SSLCheck
         ctx = OpenSSL::SSL::SSLContext.new(:SSLv3_client)
         retry
       end
-      self.errors << verbose("*Caught #{err.class}* (#{err.to_s}) when connecting to #{uri.host}:#{uri.port}")
+      self.errors << verbose("*Caught #{err.class}* (#{err}) when connecting to #{uri.host}:#{uri.port}")
 
     rescue StandardError, Timeout::Error => err
-      self.errors << verbose("*Caught #{err.class}* (#{err.to_s}) when connecting to #{uri.host}:#{uri.port}")
+      self.errors << verbose("*Caught #{err.class}* (#{err}) when connecting to #{uri.host}:#{uri.port}")
     ensure
       s.close if s.respond_to?(:close) and !s.closed?
     end
@@ -227,7 +227,7 @@ class SSLCheck
       #
       return true
     rescue StandardError, Timeout::Error => err
-      self.errors << verbose("*Caught #{err.class}* (#{err.to_s}) when connecting to #{uri.host}:#{uri.port} using SSLv3")
+      self.errors << verbose("*Caught #{err.class}* (#{err}) when connecting to #{uri.host}:#{uri.port} using SSLv3")
     ensure
       s.close if s.respond_to?(:close) and !s.closed?
     end
@@ -313,7 +313,7 @@ class SSLCheck
     # including any bundle that has been uploaded.
     #
     elsif self.certificate_store.is_a?(OpenSSL::X509::Store) and self.certificate_store.verify(self.certificate)
-      verbose  "Certificate signed by #{self.certificate.issuer.to_s}"
+      verbose  "Certificate signed by #{self.certificate.issuer}"
       return true
 
     #

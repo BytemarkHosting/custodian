@@ -297,7 +297,7 @@ module Custodian
             # Nothing to see here..!
             resolution_errors << resolve_mode
           rescue => x
-            errors << "#{protocol_msg}: #{x.class.to_s}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
+            errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           end
   
           #

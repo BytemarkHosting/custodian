@@ -90,7 +90,7 @@ if __FILE__ == $PROGRAM_NAME then
       end
     end
   rescue StandardError => ex
-    puts "Option parsing failed: #{ex.to_s}"
+    puts "Option parsing failed: #{ex}"
     exit
   end
 
