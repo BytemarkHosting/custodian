@@ -4,16 +4,8 @@ require 'test/unit'
 
 
 #
-#  Skip this test if we cannot load the gem.
+# This test is skipped if we cannot load the rubocop-gem.
 #
-begin
-  require 'rubocop'
-rescue LoadError => ex
-  puts "Failed to load 'rubocop' gem - skipping"
-  exit(0)
-end
-
-
 class TestRubocop < Test::Unit::TestCase
 
   def setup
@@ -23,9 +15,16 @@ class TestRubocop < Test::Unit::TestCase
   end
 
   def test_code
-    cli = RuboCop::CLI.new
-    result = cli.run
-    assert(result == 0, 'No errors found')
+    begin
+      require 'rubocop'
+
+      cli = RuboCop::CLI.new
+      result = cli.run
+      assert(result == 0, 'No errors found')
+
+    rescue LoadError => ex
+      skip("Failed to load 'rubocop' gem - skipping")
+    end
   end
 
 end
