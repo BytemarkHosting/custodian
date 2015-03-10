@@ -187,7 +187,7 @@ module Custodian
           # be no delay.  If the test fails then we'll sleep.
           #
           if  (result == false) && (@retry_delay > 0) && (count < @retry_count)
-            log_message("Sleeping for #{@retry_delay} seconds to allow cool-down")
+            log_message("Sleeping #{@retry_delay} before retry - failure: #{test.error}")
             sleep(@retry_delay)
           end
 
