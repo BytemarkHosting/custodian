@@ -1,4 +1,5 @@
 require 'custodian/settings'
+require 'custodian/testfactory'
 require 'custodian/util/dns'
 require 'resolv'
 
@@ -43,15 +44,6 @@ module Custodian
         #  Save the line
         #
         @line = line
-
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
 
         if  line =~ /for\s+([^\s]+)\sresolving\s([A-Z]+)\s+as\s'([^']+)'/
           @resolve_name     = $1.dup
@@ -107,7 +99,7 @@ module Custodian
         # Do the lookup
         #
         results = resolve_via(@host,  resolve_type, resolve_name, period)
-        return false if  results.nil?
+        return Custodian::TestResult::TEST_FAILED if  results.nil?
 
         #
         # OK we have an array of results.  If every one of the expected
@@ -116,9 +108,15 @@ module Custodian
 
         if  !(results - @resolve_expected).empty? or !(@resolve_expected - results).empty?
           @error = "DNS server *#{@host}* (#{@server_ip}) returned the wrong records for @#{resolve_name} IN #{resolve_type}@.\n\nWe expected '#{resolve_expected.join(',')}', but we received '#{results.join(',')}'\n"
+          return Custodian::TestResult::TEST_FAILED
         end
 
-        @error.nil?
+        #
+        #  We were valid.
+        #
+        @error = ''
+        Custodian::TestResult::TEST_PASSED
+
       end
 
 

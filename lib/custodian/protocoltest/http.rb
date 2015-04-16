@@ -1,5 +1,7 @@
 
 require 'custodian/settings'
+require 'custodian/testfactory'
+
 require 'timeout'
 require 'uri'
 
@@ -95,15 +97,6 @@ module Custodian
           raise ArgumentError, "The test case has a different protocol in the URI than that which we're testing: #{@line} - \"#{test_type} != #{u.scheme}\""
         end
 
-
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
 
         #
         # Expected status
@@ -203,7 +196,7 @@ module Custodian
           require 'curb'
         rescue LoadError
           @error = "The required rubygem 'curb' was not found."
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
         #
@@ -309,8 +302,8 @@ module Custodian
           end
 
           if  content.is_a?(String) and
-               expected_content.is_a?(String) and
-               content !~ /#{expected_content}/i
+            expected_content.is_a?(String) and
+            content !~ /#{expected_content}/i
             errors << "#{protocol_msg}: The response did not contain our expected text '#{expected_content}'."
           end
         end
@@ -325,13 +318,13 @@ module Custodian
             errors << "Host header was overridden as Host: #{@host_override}"
           end
           @error = errors.join("\n")
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
         #
         #  All done.
         #
-        true
+        Custodian::TestResult::TEST_PASSED
       end
 
       #
