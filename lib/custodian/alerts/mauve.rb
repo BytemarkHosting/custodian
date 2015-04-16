@@ -110,7 +110,7 @@ module Custodian
         # we're in the working day.
         #
         if  ((wday != 0) && (wday != 6)) &&
-             (hour >= day_start && hour < day_end)
+            (hour >= day_start && hour < day_end)
           working = true
         end
 
@@ -199,7 +199,7 @@ module Custodian
         subject = @test.target
 
         if  (subject =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
-             (subject =~ /^([0-9a-f:]+)$/)
+            (subject =~ /^([0-9a-f:]+)$/)
           res = Custodian::Util::DNS.ip_to_hostname(subject)
           if  res
             subject = res
@@ -289,44 +289,65 @@ module Custodian
 
 
         #
-        #  Resolved IP of the target
+        #  IP addresses we found for the host
         #
-        resolved = nil
+        ips = []
+
 
         #
         #  Resolve the target to an IP, unless it is already an address.
         #
         if  (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
-             (target =~ /^([0-9a-f:]+)$/)
-          resolved = target
+            (target =~ /^([0-9a-f:]+)$/)
+          ips.push(target)
         else
-          resolved = Custodian::Util::DNS.hostname_to_ip(target)
+
+          #
+          # OK if it didn't look like an IP address then attempt to
+          # look it up, as both IPv4 and IPv6.
+          #
+          begin
+            timeout(30) do
+
+              Resolv::DNS.open do |dns|
+
+                ress = dns.getresources(target, Resolv::DNS::Resource::IN::A)
+                ress.map { |r| ips.push(r.address.to_s) }
+
+                ress = dns.getresources(target, Resolv::DNS::Resource::IN::AAAA)
+                ress.map { |r| ips.push(r.address.to_s) }
+              end
+            end
+          rescue Timeout::Error => e
+            return ''
+          end
         end
 
 
         #
-        # Did we get an error?
+        # Did we fail to lookup any IPs?
         #
-        return '' unless  !resolved.nil?
+        return '' if ips.empty?
 
+
+        #
+        #  The string we return to the caller.
+        #
+        result = ''
 
         #
         #  Return the formatted message
         #
-        if  Custodian::Util::Bytemark.inside?(resolved.to_s)
-          if (resolved == target)
-            return "<p>#{host} is inside the Bytemark network.</p>"
+        ips.each do |result|
+
+          if  Custodian::Util::Bytemark.inside?(result.to_s)
+            result += "<p>#{host} resolves to #{result} which is inside the Bytemark network.</p>"
           else
-            return "<p>#{host} resolves to #{resolved} which is inside the Bytemark network.</p>"
-          end
-        else
-          if (resolved == target)
-            return "<p>#{host} is OUTSIDE the Bytemark network.</p>"
-          else
-            return "<p>#{host} resolves to #{resolved} which is OUTSIDE the Bytemark network.</p>"
+            result += "<p>#{host} resolves to #{result} which is OUTSIDE the Bytemark network.</p>"
           end
         end
 
+        result
       end
 
 
