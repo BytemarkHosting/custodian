@@ -126,27 +126,26 @@ module Custodian
             @error = "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
             return false
           end
+        rescue LDAP::ResultError => ex
+          @error = "LDAP exception: #{ex} when talking to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+          return false
         end
-      rescue LDAP::ResultError => ex
-        @error = "LDAP exception: #{ex} when talking to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-        return false
+
+        @error = "LDAP server test failed against '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
+        false
       end
 
-      @error = "LDAP server test failed against '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-      false
+
+      #
+      # If the test fails then report the error.
+      #
+      def error
+        @error
+      end
+
+
+
+      register_test_type 'ldap'
     end
-
-
-    #
-    # If the test fails then report the error.
-    #
-    def error
-      @error
-    end
-
-
-
-
-    register_test_type 'ldap'
   end
 end
