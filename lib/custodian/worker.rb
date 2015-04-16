@@ -154,15 +154,15 @@ module Custodian
         # The count of times this test has run, the result, and the start-time
         #
         count      = 1
-        result     = false
         start_time = Time.now
+        run        = true
 
         #
         #  If a job fails we'll repeat it, but no more than MAX times.
         #
         #  We exit here if we receive a single success.
         #
-        while  (count < (@retry_count + 1)) && (result == false)
+        while  (count < (@retry_count + 1)) && (run == true)
 
           log_message("Running test - [#{count}/#{@retry_count}]")
 
@@ -170,11 +170,41 @@ module Custodian
           # Run the test - inverting the result if we should
           #
           result = test.run_test
-          result = !result if  test.inverted
 
-          if  result
+
+          #
+          #  TODO: This is temporary
+          #
+          if  (result.is_a?(TrueClass)) ||
+               (result.is_a?(FalseClass))
+            puts 'ERROR: Class returned boolean'
+          end
+
+
+          #
+          #  Invert the test, if the result was pass/fail
+          #
+          if test.inverted?
+            puts "The test was inverted - old result was : #{result}"
+
+            if (result == Custodian::TestResult::TEST_FAILED)
+              result = Custodian::TestResult::TEST_PASSED
+            else
+
+              # rubocop:disable BlockNesting
+              if (result == Custodian::TestResult::TEST_PASSED)
+                result = Custodian::TestResult::TEST_FAILED
+              end
+            end
+            puts "The test was inverted - new result is  : #{result}"
+          end
+
+
+
+          if (result == Custodian::TestResult::TEST_PASSED)
             log_message('Test succeeed - clearing alert')
             do_clear(test)
+            run = false
           end
 
           #
@@ -186,7 +216,7 @@ module Custodian
           #  The intention here is that if the test passes then there will
           # be no delay.  If the test fails then we'll sleep.
           #
-          if  (result == false) && (@retry_delay > 0) && (count < @retry_count)
+          if  (run == true) && (@retry_delay > 0) && (count < @retry_count)
             log_message("Sleeping #{@retry_delay} before retry - failure: #{test.error}")
             sleep(@retry_delay)
           end
@@ -212,13 +242,16 @@ module Custodian
         #  Record that, if we have any alerters that are interested
         # in run-times.
         #
-        do_duration(test, duration)
+        if  (result == Custodian::TestResult::TEST_FAILED) ||
+             (result == Custodian::TestResult::TEST_PASSED)
+          do_duration(test, duration)
+        end
 
 
         #
         #  If we didn't succeed on any of the attempts raise the alert.
         #
-        if  !result
+        if (result == Custodian::TestResult::TEST_FAILED)
 
           #
           # Raise the alert, passing the error message.
