@@ -1,3 +1,10 @@
+custodian (0.24.7) stable; urgency=low
+
+  * Resolve hostnames for both IPv4 and IPv6 when sending a Bytemark-specific
+    alert via the mauve-notifier.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 16 Apr 2015 10:00:01 +0000
+
 custodian (0.24.6) stable; urgency=low
 
   * Allow SSL-certificate checking to be disabled via "no_ssl_check".
