@@ -29,7 +29,6 @@ require 'custodian/protocoltest/openproxy'
 require 'custodian/protocoltest/ssh'
 require 'custodian/protocoltest/ssl'
 require 'custodian/protocoltest/smtp'
-require 'custodian/protocoltest/smtprelay'
 require 'custodian/protocoltest/telnet'
 
 
