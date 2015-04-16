@@ -237,7 +237,7 @@ class TestTestFactory < Test::Unit::TestCase
         #  Ensure we got the object, and the port was correct.
         #
         assert(obj, "created object via TestFactory.create('#{str}')")
-        assert(obj[0].inverted == inv, "#{str} -> #{inv}")
+        assert(obj[0].inverted? == inv, "#{str} -> #{inv}")
       end
     end
 
@@ -270,10 +270,10 @@ class TestTestFactory < Test::Unit::TestCase
           assert_nothing_raised do
 
             test_one_obj = Custodian::TestFactory.create(test_one)
-            assert(!test_one_obj[0].inverted)
+            assert(!test_one_obj[0].inverted?)
 
             test_two_obj = Custodian::TestFactory.create(test_two)
-            assert(test_two_obj[0].inverted, "Found inverted test for #{tst}")
+            assert(test_two_obj[0].inverted?, "Found inverted test for #{tst}")
 
             assert_equal(tst, test_one_obj[0].get_type)
             assert_equal(tst, test_two_obj[0].get_type)
