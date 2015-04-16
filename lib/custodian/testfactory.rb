@@ -1,19 +1,36 @@
 
-
-#
-#
-# Base class for custodian protocol-tests
-#
-# Each subclass will register themselves, via the call
-# to 'register_test_type'.
-#
-# This class is a factory that will return the correct
-# derived class for a given line from our configuration
-# file.
-#
-#
 module Custodian
 
+
+  #
+  #  The result of a single test:
+  #
+  #  If a test returns "TEST_FAILED" an alert will be raised.
+  #
+  #  If a test returns "TEST_PASSED" any outstanding alert will clear.
+  #
+  #  If a test returns "TEST_SKIPPED" NEITHER of those things will happen.
+  #
+  class TestResult
+    TEST_PASSED  = 2
+    TEST_FAILED  = 4
+    TEST_SKIPPED = 8
+  end
+
+
+
+  #
+  #
+  # Base class for custodian protocol-tests
+  #
+  # Each subclass will register themselves, via the call
+  # to 'register_test_type'.
+  #
+  # This class is a factory that will return the correct
+  # derived class for a given line from our configuration
+  # file.
+  #
+  #
   class TestFactory
 
 
@@ -35,7 +52,10 @@ module Custodian
       raise ArgumentError, 'The type of test to create must be a string' unless  line.kind_of? String
 
       #
-      #  The array we return.
+      #  The array of tests we return.
+      #
+      #  This is required because a single test-definition may result in
+      # multiple tests being executed.
       #
       result = []
 
@@ -69,6 +89,11 @@ module Custodian
             if  line =~ /\s+otherwise\s+'([^']+)'/
               obj.set_notification_text($1.dup)
             end
+
+            #
+            # Is the test inverted?
+            #
+            obj.set_inverted(line =~ /must\s+not\s+run/ ? true : false)
 
             result.push(obj)
           else
@@ -155,7 +180,11 @@ module Custodian
     #
     #  Is this test inverted?
     #
-    def inverted
+    def set_inverted(val)
+      @inverted = val
+    end
+
+    def inverted?
       @inverted
     end
 
