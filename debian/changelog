@@ -2,6 +2,7 @@ custodian (0.24.7) stable; urgency=low
 
   * Resolve hostnames for both IPv4 and IPv6 when sending a Bytemark-specific
     alert via the mauve-notifier.
+  * Updated the LDAP test to by syntactically valid.
 
  -- Steve Kemp <steve@bytemark.co.uk>  Thu, 16 Apr 2015 10:00:01 +0000
 
