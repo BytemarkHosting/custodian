@@ -30,6 +30,12 @@ module Custodian
     attr_reader :parsed
 
 
+    #
+    # Constructor.  Only called once, as we're a singleton.
+    #
+    def initialize
+      @parsed = false
+    end
 
 
     #
