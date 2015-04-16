@@ -65,7 +65,7 @@ module Custodian
     def flush!
       raise 'Subclasses must implement this method!'
     end
-end
+  end
 
 
 
@@ -96,7 +96,7 @@ end
 
       loop do
 
-        foo, job = @redis.blpop('queue', :timeout => timeout)
+        _foo, job = @redis.blpop('queue', :timeout => timeout)
 
         if  job
           return job
@@ -164,7 +164,7 @@ end
         else
           raise 'ERRROR'
         end
-      rescue Beanstalk::TimedOut => ex
+      rescue Beanstalk::TimedOut => _ex
         return nil
       end
     end
