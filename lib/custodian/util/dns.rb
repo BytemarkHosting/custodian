@@ -37,7 +37,7 @@ module Custodian
               resolved = nil
             end
           end
-        rescue Timeout::Error => e
+        rescue Timeout::Error => _e
           resolved = nil
         end
         resolved
@@ -67,7 +67,7 @@ module Custodian
               resolved = nil
             end
           end
-        rescue Timeout::Error => e
+        rescue Timeout::Error => _e
           resolved = nil
         end
         resolved
