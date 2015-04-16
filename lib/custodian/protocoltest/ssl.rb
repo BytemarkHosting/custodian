@@ -162,7 +162,7 @@ class SSLCheck
         # Setup a hostname for SNI-purposes.
         begin
           s.hostname = uri.host
-        rescue NoMethodError => err
+        rescue NoMethodError => _err
           # SNI isn't possible, as the SSL library is too old.
         end
 
@@ -391,7 +391,7 @@ module Custodian
         #  If the line disables us then return early
         #
         if  @line =~ /no_ssl_check/
-          return true
+          return Custodian::TestResult::TEST_PASSED
         end
 
 
@@ -405,7 +405,7 @@ module Custodian
         #
         if  hour < 10 || hour > 17
           puts("Outside office hours - Not running SSL-Verification of #{@host}")
-          return true
+          return Custodian::TestResult::TEST_SKIPPED
         end
 
         #
@@ -413,7 +413,7 @@ module Custodian
         #
         if  ! @host =~ /^https:\/\//
           puts('Not an SSL URL')
-          return true
+          return Custodian::TestResult::TEST_SKIPPED
         end
 
         s = SSLCheck.new(@host)
@@ -421,15 +421,15 @@ module Custodian
 
         if true == result
           puts("SSL Verification succeeded for #{@host}")
-          return true
+          return Custodian::TestResult::TEST_PASSED
         elsif result.nil?
           puts("SSL Verification returned no result (timeout?) #{@host}")
-          return true
+          return Custodian::TestResult::TEST_PASSED
         else
           puts("SSL Verification for #{@host} has failed.")
           @error  = "SSL Verification for #{@host} failed: "
           @error +=  s.errors.join("\n")
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
       end

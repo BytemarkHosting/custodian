@@ -42,14 +42,6 @@ module Custodian
           @zones = 'zen.spamhaus.org'
         end
 
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
       end
 
 
@@ -58,7 +50,7 @@ module Custodian
       # Allow this test to be serialized.
       #
       def to_s
-          @line
+        @line
       end
 
 
@@ -89,16 +81,16 @@ module Custodian
 
             if  (!result.nil?) && (result.length > 0)
               @error = "IP #{@host} listed in blacklist #{zone}.  Lookup of #{name} lead to result: #{result}"
-              return true
+              return Custodian::TestResult::TEST_PASSED
             end
 
           else
-             @error = "#{@host} wasn't an IP address"
-             return true
+            @error = "#{@host} wasn't an IP address"
+            return Custodian::TestResult::TEST_PASSED
           end
         end
 
-        false
+        Custodian::TestResult::TEST_FAILED
       end
 
 

@@ -37,15 +37,6 @@ module Custodian
         end
 
         #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
-
-        #
         # Save the port
         #
         if  line =~ /on\s+([0-9]+)/

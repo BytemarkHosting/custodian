@@ -55,15 +55,6 @@ module Custodian
         end
 
         #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
-
-        #
         # Save the port
         #
         if  line =~ /on\s+([0-9]+)/
@@ -94,7 +85,7 @@ module Custodian
           require 'ldap'
         rescue LoadError
           @error = 'LDAP library not available - test disabled'
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
         # reset the error, in case we were previously executed.
@@ -122,18 +113,18 @@ module Custodian
               puts "We found an LDAP result #{entry.vals('cn')}"
             }
             ldap.unbind
-            return true
+            return Custodian::TestResult::TEST_PASSED
           else
             @error = "failed to bind to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-            return false
+            return Custodian::TestResult::TEST_FAILED
           end
         rescue LDAP::ResultError => ex
           @error = "LDAP exception: #{ex} when talking to LDAP server '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
         @error = "LDAP server test failed against '#{@host}' with username '#{@ldap_user}' and password '#{@ldap_pass}'"
-        false
+        Custodian::TestResult::TEST_FAILED
       end
 
 

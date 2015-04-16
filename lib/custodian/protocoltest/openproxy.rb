@@ -1,5 +1,6 @@
-
 require 'custodian/settings'
+require 'custodian/testfactory'
+
 require 'uri'
 
 
@@ -41,14 +42,6 @@ module Custodian
         #
         @host = line.split(/\s+/)[0]
 
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
       end
 
 
@@ -112,9 +105,9 @@ module Custodian
               return false
             end
           end
-        rescue Timeout::Error => e
+        rescue Timeout::Error => _e
           @error = 'Timed out during fetch.'
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
         #
@@ -122,10 +115,10 @@ module Custodian
         # got a result.
         #
         if (@status.to_i == 200)
-            return true
+          return Custodian::TestResult::TEST_PASSED
         else
-            @error = "Proxy fetch of http://google.com/ via #{@host} failed"
-            return false
+          @error = "Proxy fetch of http://google.com/ via #{@host} failed"
+          return Custodian::TestResult::TEST_FAILED
         end
       end
 

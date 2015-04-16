@@ -1,4 +1,5 @@
-require 'custodian/protocoltest/tcp'
+require 'custodian/settings'
+require 'custodian/testfactory'
 
 #
 #  The MX (DNS + smtp) test.
@@ -27,12 +28,6 @@ module Custodian
 
         # The main domain we're querying
         @host = line.split(/\s+/)[0]
-
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
 
       end
 
@@ -78,7 +73,7 @@ module Custodian
           end
         rescue Timeout::Error => e
           @error = "Timed-out performing DNS lookups: #{e}"
-          return nil
+          return Custodian::TestResult::TEST_FAILED
         end
 
         #
@@ -92,7 +87,7 @@ module Custodian
         #
         if  mx.empty?  then
           @error = "Failed to perform DNS lookup of MX record(s) for host #{@host}"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -130,7 +125,7 @@ module Custodian
                 error += "Error connecting to #{backend}:25. "
               end
             end
-          rescue Timeout::Error => ex
+          rescue Timeout::Error => _ex
             # Timeout
             failed += 1
             error += "Timeout connecting to #{backend}:25. "
@@ -142,9 +137,9 @@ module Custodian
         #
         if  failed > 0
           @error = "There are #{mx.size} hosts running as MX-servers for domain #{@host} - #{passed}:OK #{failed}:FAILED - #{error}"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         else
-          return true
+          return Custodian::TestResult::TEST_PASSED
         end
       end
 

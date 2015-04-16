@@ -40,13 +40,6 @@ module Custodian
       #
       attr_reader :port
 
-
-      #
-      # Is this test inverted?
-      #
-      attr_reader :inverted
-
-
       #
       #  The banner to look for, may be nil.
       #
@@ -71,15 +64,6 @@ module Custodian
         # Save the host
         #
         @host  = line.split(/\s+/)[0]
-
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
 
         #
         # Save the port
@@ -213,7 +197,7 @@ module Custodian
           end
         rescue Timeout::Error => e
           @error = "Timed-out performing DNS lookups: #{e}"
-          return nil
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -222,7 +206,7 @@ module Custodian
         #
         if  ips.empty?
           @error = "#{@host} failed to resolve to either IPv4 or IPv6"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -234,7 +218,7 @@ module Custodian
         ips.each do |ip|
           if  !run_test_internal_real(ip, port, banner, do_read)
 
-            return false
+            return Custodian::TestResult::TEST_FAILED
             #
             # @error will be already set.
             #
@@ -246,7 +230,7 @@ module Custodian
         #  All was OK
         #
         @error = nil
-        true
+        Custodian::TestResult::TEST_PASSED
       end
 
 

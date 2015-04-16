@@ -1,3 +1,4 @@
+require 'custodian/settings'
 require 'custodian/testfactory'
 
 
@@ -38,14 +39,6 @@ module Custodian
         #
         @host = line.split(/\s+/)[0]
 
-        #
-        # Is this test inverted?
-        #
-        if  line =~ /must\s+not\s+run\s+/
-          @inverted = true
-        else
-          @inverted = false
-        end
 
       end
 
@@ -75,7 +68,7 @@ module Custodian
 
         if  binary.nil?
           @error = "Failed to find '/usr/bin/multi-ping'"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -87,7 +80,7 @@ module Custodian
         #
         if  @host !~ /^([a-zA-Z0-9:\-\.]+)$/
           @error = "Invalid hostname for ping-test: #{@host}"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -152,7 +145,7 @@ module Custodian
           end
         rescue Timeout::Error => e
           @error = "Timed-out performing DNS lookups: #{e}"
-          return nil
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -161,7 +154,7 @@ module Custodian
         #
         if  ips.empty?
           @error = "#{@host} failed to resolve to either IPv4 or IPv6"
-          return false
+          return Custodian::TestResult::TEST_FAILED
         end
 
 
@@ -173,7 +166,7 @@ module Custodian
         ips.each do |ip|
           if (system(binary, ip) != true)
             @error = "Ping failed for #{ip} - from #{@host} "
-            return false
+            return Custodian::TestResult::TEST_FAILED
           end
         end
 
@@ -184,7 +177,7 @@ module Custodian
         # So by the time we reach here we know that all the addresses
         # were pingable.
         #
-        true
+        Custodian::TestResult::TEST_PASSED
       end
 
 
