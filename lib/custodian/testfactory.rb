@@ -15,6 +15,18 @@ module Custodian
     TEST_PASSED  = 2
     TEST_FAILED  = 4
     TEST_SKIPPED = 8
+
+
+    #
+    #  Allow one of our symbols to be converted back
+    #
+    def self.to_str(status)
+      for sym in self.constants
+        if self.const_get(sym) == status
+          return sym.to_s
+        end
+      end
+    end
   end
 
 
