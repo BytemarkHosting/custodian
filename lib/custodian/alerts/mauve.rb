@@ -338,12 +338,11 @@ module Custodian
         #
         #  Return the formatted message
         #
-        ips.each do |result|
-
-          if  Custodian::Util::Bytemark.inside?(result.to_s)
-            result += "<p>#{host} resolves to #{result} which is inside the Bytemark network.</p>"
+        ips.each do |ipaddr|
+          if  Custodian::Util::Bytemark.inside?(ipaddr.to_s)
+            result += "<p>#{host} resolves to #{ipaddr} which is inside the Bytemark network.</p>"
           else
-            result += "<p>#{host} resolves to #{result} which is OUTSIDE the Bytemark network.</p>"
+            result += "<p>#{host} resolves to #{ipaddr} which is OUTSIDE the Bytemark network.</p>"
           end
         end
 
