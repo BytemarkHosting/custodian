@@ -318,7 +318,7 @@ module Custodian
                 ress.map { |r| ips.push(r.address.to_s) }
               end
             end
-          rescue Timeout::Error => e
+          rescue Timeout::Error => _e
             return ''
           end
         end
