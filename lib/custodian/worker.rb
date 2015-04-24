@@ -185,7 +185,7 @@ module Custodian
           #  Invert the test, if the result was pass/fail
           #
           if test.inverted?
-            puts "The test was inverted - old result was : #{result}"
+            puts "The test was inverted - old result was : #{Custodian::TestResult.to_str(result)}"
 
             if (result == Custodian::TestResult::TEST_FAILED)
               result = Custodian::TestResult::TEST_PASSED
@@ -196,7 +196,7 @@ module Custodian
                 result = Custodian::TestResult::TEST_FAILED
               end
             end
-            puts "The test was inverted - new result is  : #{result}"
+            puts "The test was inverted - new result  is : #{Custodian::TestResult.to_str(result)}"
           end
 
 
@@ -217,7 +217,7 @@ module Custodian
           # be no delay.  If the test fails then we'll sleep.
           #
           if  (run == true) && (@retry_delay > 0) && (count < @retry_count)
-            log_message("Sleeping #{@retry_delay} before retry - failure: #{test.error}")
+            log_message("Sleeping for #{@retry_delay} seconds before retry.   Failure was: #{test.error}")
             sleep(@retry_delay)
           end
 
