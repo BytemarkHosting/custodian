@@ -1,3 +1,11 @@
+custodian (0.24.8) stable; urgency=low
+
+  * Updated the logic of testing to allow tests to cancel themselves
+    without raising/clearing alerts:
+    - https://projects.bytemark.co.uk/issues/10328
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 28 Apr 2015 13:14:17 +0000
+
 custodian (0.24.7) stable; urgency=low
 
   * Resolve hostnames for both IPv4 and IPv6 when sending a Bytemark-specific
