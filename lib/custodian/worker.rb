@@ -171,16 +171,6 @@ module Custodian
           #
           result = test.run_test
 
-
-          #
-          #  TODO: This is temporary
-          #
-          if  (result.is_a?(TrueClass)) ||
-               (result.is_a?(FalseClass))
-            puts 'ERROR: Class returned boolean'
-          end
-
-
           #
           #  Invert the test, if the result was pass/fail
           #
