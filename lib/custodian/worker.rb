@@ -198,21 +198,37 @@ module Custodian
           end
 
           #
-          #  Some of our routers/hosts don't like being hammered.
+          #  Some targets won't like being hammed by multiple tests
+          # in a short period of time.  Since we're hitting a failed
+          # device we're going to give it a little sleep.
           #
-          #  We delay before re-testing, but we only do this if
-          # we're not on the last count.
+          #  In theory this stops us from hammering a semi-alive
+          # device.  In practice we only reach this point if at least
+          # one test has failed, and if a test is failing then it probably
+          # failed due to a timeout - which is 30 seconds by default -
+          # so the extra sleep doesn't really gain us much.
           #
-          #  The intention here is that if the test passes then there will
-          # be no delay.  If the test fails then we'll sleep.
+          #
+          #  Anyway:  The intention here is that if a test passes then
+          #           there will, things will clear, and all is well.
+          #
+          #           If the test fails we'll sleep a while and retry
+          #           but no more than "@retry_count" times.
+          #
           #
           if  (run == true) && (@retry_delay > 0) && (count < @retry_count)
-            log_message("Sleeping for #{@retry_delay} seconds before retry.   Failure was: #{test.error}")
-            sleep(@retry_delay)
+
+            #
+            #  If the test disabled itself then we don't need to delay
+            #
+            unless( result == Custodian::TestResult::TEST_SKIPPED)
+              log_message("Delaying re-test by #{@retry_delay} seconds due to failure - : #{test.error}")
+              sleep(@retry_delay)
+            end
           end
 
           #
-          #  Increase the log of times we've repeated the test.
+          #  Increase the count of times we've repeated the test.
           #
           count += 1
         end
