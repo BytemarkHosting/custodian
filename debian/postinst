@@ -29,7 +29,7 @@ custodian-queue --flush || true
 for i in /etc/service/custodian-agent* /etc/service/cust-dequeue ; do
     if [ -d $i ] ; then
         echo "Restarting service: $i"
-        sv force-restart $i
+        sv force-restart $i || true
     fi
 done
 
