@@ -19,17 +19,17 @@ fi
 
 
 #
-# 1.  Flush the queue
+# 1.  Flush the queue, if present.
 #
 custodian-queue --flush || true
 
 #
-# 2.  If we have agents then restart them
+# 2.  If we have agents then restart them.
 #
-for i in /etc/service/custodian-agent*; do
+for i in /etc/service/custodian-agent* /etc/service/cust-dequeue ; do
     if [ -d $i ] ; then
         echo "Restarting service: $i"
-        sv restart $i
+        sv force-restart $i
     fi
 done
 
