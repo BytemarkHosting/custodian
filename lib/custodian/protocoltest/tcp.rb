@@ -68,10 +68,13 @@ module Custodian
         #
         # Save the port
         #
+        @port = nil
+
         if  line =~ /on\s+([0-9]+)/
           @port = $1.dup
-        else
-          @port = nil
+        end
+        if  line =~ /on\s+port\s+([0-9]+)/
+          @port = $1.dup
         end
 
         #

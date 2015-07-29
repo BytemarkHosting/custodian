@@ -98,6 +98,8 @@ class TestTestFactory < Test::Unit::TestCase
       "foo must run rEDIs otherwise 'alert'"   => '6379',
       "foo must run rdp otherwise 'alert'"   => '3389',
       "foo must run RDP otherwise 'alert'"   => '3389',
+      "foo must run tcp on 22 otherwise 'alert'"   => '22',
+      "foo must run tcp on port 22 otherwise 'alert'"   => '22',
       "foo must run mysql on 33 otherwise 'alert'"   => '33',
     }
 
