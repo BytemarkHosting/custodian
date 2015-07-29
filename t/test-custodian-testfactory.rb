@@ -95,7 +95,9 @@ class TestTestFactory < Test::Unit::TestCase
       'foo must run ssh.' => '22',
       "foo must run mysql otherwise 'alert'"   => '3306',
       "foo must run redis otherwise 'alert'"   => '6379',
+      "foo must run rEDIs otherwise 'alert'"   => '6379',
       "foo must run rdp otherwise 'alert'"   => '3389',
+      "foo must run RDP otherwise 'alert'"   => '3389',
       "foo must run mysql on 33 otherwise 'alert'"   => '33',
     }
 

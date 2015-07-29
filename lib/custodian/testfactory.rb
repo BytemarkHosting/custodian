@@ -78,6 +78,7 @@ module Custodian
       if  line =~ /must\s+(not\s+)?run\s+(\S+)(\s+|\.|$)/
 
         test_type = $2.dup
+        test_type = test_type.downcase
         test_type.chomp!('.')
 
         if  @@subclasses[test_type].nil?
