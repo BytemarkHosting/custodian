@@ -442,6 +442,16 @@ module Custodian
         @error
       end
 
+
+      #
+      # Override the base behaviour so that we get a better failure
+      # summary.
+      #
+      def get_type
+        "ssl-validity"
+      end
+
+      
       register_test_type 'https'
 
     end
