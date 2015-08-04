@@ -1,3 +1,10 @@
+custodian (0.24.10) stable; urgency=low
+
+  * The SSL-checking of certificates now alerts with a better name,
+    rather than "https".
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 04 Aug 2015 15:44:51 +0000
+
 custodian (0.24.9) stable; urgency=low
 
   * Updated to add an RDP-protocol-tester.
