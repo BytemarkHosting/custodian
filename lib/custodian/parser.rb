@@ -141,7 +141,7 @@ module Custodian
           val.push(line) if  line.length > 0
         end
 
-      elsif  line =~ /\s(is|are)\s+(.*)\.+$/
+      elsif  line =~ /\s(is|are)\s+(.*)\.*$/
 
         #
         #  Literal list of hosts

@@ -159,6 +159,60 @@ EOF
   end
 
 
+  #
+  #  Test a macro-definition without a trailing period
+  #
+  def test_macros_lines_no_period
+
+    parser = Custodian::Parser.new
+
+    #
+    #  Input text
+    #
+    text = <<EOF
+ONE is     kvm1.vm.bytemark.co.uk    and     kvm2.vm.bytemark.co.uk
+TWO is kvm1.vm.bytemark.co.uk and kvm2.vm.bytemark.co.uk
+EOF
+
+
+    #
+    # Test the parser with this text
+    #
+    parser.parse_lines(text)
+
+    #
+    #  We should now have two macros.
+    #
+    macros = parser.macros
+    assert(!macros.empty?, "We found some macros")
+    assert(macros.size == 2, "We found two macros")
+
+    #
+    #  Ensure they were defined.
+    #
+    assert( parser.is_macro?( "ONE" ), "The macro ONE exists" )
+    assert( parser.is_macro?( "TWO" ), "The macro TWO exists" )
+
+    #
+    #  Ensure we can get the values.
+    #
+    one = parser.get_macro_targets("ONE")
+    two = parser.get_macro_targets("TWO")
+    assert( one.kind_of? Array )
+    assert( one.size() == 2, "Both targets are in the macro" )
+    assert( one.find_index( "kvm1.vm.bytemark.co.uk" ) >= 0 ,
+            "We found the expected host: kvm1")
+    assert( one.find_index( "kvm2.vm.bytemark.co.uk" ) >= 0 ,
+            "We found the expected host: kvm2")
+
+    assert( two.kind_of? Array )
+    assert( two.size() == 2, "Both targets are in the macro" )
+    assert( two.find_index( "kvm1.vm.bytemark.co.uk" ) >= 0 ,
+            "We found the expected host: kvm1")
+    assert( two.find_index( "kvm2.vm.bytemark.co.uk" ) >= 0 ,
+            "We found the expected host: kvm2")
+
+  end
 
 
   #
