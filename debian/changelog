@@ -1,7 +1,14 @@
+custodian (0.24.12) stable; urgency=low
+
+  * Explicitly force the parser to use UTF-8 when reading the configuration
+    files for test-cases to apply.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 25 Aug 2015 13:33:31 +0000
+
 custodian (0.24.11) stable; urgency=high
 
   * Be more forgiving when parsing macro-defitions.
-  
+
  -- Steve Kemp <steve@bytemark.co.uk>  Fri, 07 Aug 2015 14:45:56 +0000
 
 custodian (0.24.10) stable; urgency=low
