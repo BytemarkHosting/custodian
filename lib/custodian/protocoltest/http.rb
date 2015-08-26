@@ -278,6 +278,8 @@ module Custodian
               end
             end
 
+          rescue Curl::Err::RecvError => x
+            errors << "#{protocol_msg}: Receive error: #{x.message}."
           rescue Curl::Err::SSLCACertificateError => x
             errors << "#{protocol_msg}: SSL validation error: #{x.message}."
           rescue Curl::Err::TimeoutError, Timeout::Error
