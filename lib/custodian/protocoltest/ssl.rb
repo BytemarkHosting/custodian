@@ -13,7 +13,7 @@ require 'timeout'
 #
 class SSLCheck
 
-  ALL_TESTS = [:signature, :valid_from, :valid_to, :subject, :sslv3_disabled]
+  ALL_TESTS = [:signature, :valid_from, :valid_to, :subject, :sslv3_disabled, :signing_algorithm]
 
   attr_reader :errors
 
@@ -200,7 +200,7 @@ class SSLCheck
       self.errors << verbose("Failed to fetch certificate for #{self.domain}")
       return nil
     else
-      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any? { |r| false == r }
+      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature, verify_signing_algorithm ].any? { |r| false == r }
     end
   end
 
@@ -233,6 +233,19 @@ class SSLCheck
     end
 
     false
+  end
+
+  def verify_signing_algorithm
+    unless self.tests.include?(:signing_algorithm)
+      verbose "Skipping signing algorithm check for #{self.domain}"
+      return true
+    end
+    if self.certificate.signature_algorithm.start_with? "sha1"
+      self.errors << verbose("Certificate for #{self.domain} is signed with a weak algorithm (SHA1) and should be reissued.")
+      return false
+    else
+      return true
+    end
   end
 
   def verify_subject
@@ -451,7 +464,7 @@ module Custodian
         "ssl-validity"
       end
 
-      
+
       register_test_type 'https'
 
     end
