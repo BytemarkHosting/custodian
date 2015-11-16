@@ -121,7 +121,7 @@ module Custodian
           tmp['reason'] = @test.error
 
           @redis.lpush( "#{key}.history", tmp.to_json)
-          @redis.ltrim('#{key}.history', 0, 100)
+          @redis.ltrim('#{key}.history', 0, 8192)
         end
 
       end
