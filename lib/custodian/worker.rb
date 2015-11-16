@@ -281,7 +281,10 @@ module Custodian
     def do_raise(test)
       @alerter.split(',').each do |alerter|
 
-        log_message("Creating alerter: #{alerter}")
+        alerter.strip!
+        log_message("Creating alerter: '#{alerter}'")
+
+
         alert = Custodian::AlertFactory.create(alerter, test)
 
         target = @settings.alerter_target(alerter)
@@ -301,7 +304,9 @@ module Custodian
     #
     def do_clear(test)
       @alerter.split(',').each do |alerter|
-        log_message("Creating alerter: #{alerter}")
+
+        alerter.strip!
+        log_message("Creating alerter: '#{alerter}'")
         alert  = Custodian::AlertFactory.create(alerter, test)
 
         target = @settings.alerter_target(alerter)
@@ -320,7 +325,10 @@ module Custodian
     #
     def do_duration(test, duration)
       @alerter.split(',').each do |alerter|
-        log_message("Creating alerter: #{alerter}")
+
+        alerter.strip!
+        log_message("Creating alerter: '#{alerter}'")
+
         alert  = Custodian::AlertFactory.create(alerter, test)
 
         target = @settings.alerter_target(alerter)
