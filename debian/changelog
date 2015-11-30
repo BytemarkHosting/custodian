@@ -1,3 +1,9 @@
+custodian (0.24.15) stable; urgency=low
+
+  * Disable SHA1 signature checking of SSL certificates by default.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 30 Nov 2015 11:11:11 +0000
+
 custodian (0.24.14) stable; urgency=low
 
   * Keep up to 8k of history transitions.
