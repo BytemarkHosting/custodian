@@ -200,7 +200,7 @@ class SSLCheck
       self.errors << verbose("Failed to fetch certificate for #{self.domain}")
       return nil
     else
-      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature, verify_signing_algorithm ].any? { |r| false == r }
+      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature ].any? { |r| false == r }
     end
   end
 
