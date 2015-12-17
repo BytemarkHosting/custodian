@@ -96,7 +96,7 @@ module Custodian
 
       loop do
 
-        _foo, job = @redis.blpop('queue', :timeout => timeout)
+        job = @redis.spop('queue')
 
         if  job
           return job
@@ -112,7 +112,7 @@ module Custodian
     #  Add a new job to the queue.
     #
     def add(job_string)
-      @redis.rpush('queue', job_string)
+      @redis.sadd('queue', job_string)
     end
 
 
@@ -120,7 +120,7 @@ module Custodian
     #  How many jobs in the queue?
     #
     def size?
-      @redis.llen('queue')
+      @redis.scard('queue')
     end
 
 
