@@ -82,26 +82,15 @@ module Custodian
 
       loop do
 
-        # Get the next job from the queue.
-        #
-        # NOTE: This returns an array - but the array will have only
-        # one element because we're picking from element 0 with a range
-        # of 0 - which really means 1,1.
-        #
-        job = @redis.ZREVRANGE('custodian_queue', '0', '0')
+        # Get a random job
+        job = @redis.spop('custodian_queue')
 
-        if ! job.empty?
-
-          # We only have one entry in our array
-          job = job[0]
-
-          # Remove from the queue
-          @redis.zrem('custodian_queue', job );
+        # If that worked return it
+        if !job.nil?
           return job
         else
           sleep(timeout)
         end
-
       end
     end
 
@@ -111,23 +100,9 @@ module Custodian
     #
     def add(job_string)
 
-      #
-      # We need to build a "score" for this job - the score
-      # will be used for ordering by Redis.
-      #
-      # We don't care what order the jobs are running in, however
-      # we do care that this the order is always the same.
-      #
-      # On that basis we need to create a score for the string which
-      # will always be the same, and will always be a number.
-      #
-      # We'll sum up the ASCII values of each character in the test
-      # which gives us a "number" which that should be consistent for
-      # each distinct-test.
-      #
-      #
-      score = Time.now.to_i
-      @redis.zadd('custodian_queue', score, job_string)
+      # Add unless already present
+      @redis.sadd('custodian_queue', test) unless
+        ( @redis.sismember( 'custodian_queue', test ) )
     end
 
 
