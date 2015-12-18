@@ -10,13 +10,15 @@ require "redis"
 
 x = []
 
-x.push( "http://example.com/ must run http otherwise 'fail'" )
-x.push( "1.2.3.4 must run ping otherwise 'fail'" )
-x.push( "https://steve.net/ must run https otherwise 'fail'" )
+x.push( "test 1" )
+x.push( "test 2" )
+x.push( "test 3" )
 
 
 for i in 0 .. 10 
     x.each do |test|
+      puts "adding #{test}"
       @redis.zadd('zset', Time.now.to_i, test)
     end
+    sleep 1
 end

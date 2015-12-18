@@ -27,12 +27,19 @@ def fetch(timeout = 1)
   end
 end
 
-
+seen = []
 
 while( x = fetch() )
   puts "Got job : #{x}"
-  if ( x =~ /ping/i )
-    puts "PING TEST - sleeping"
+  if seen.include?(x)
+    puts "Already seen #{x}"
+    break
+  end
+
+  seen << x
+
+  if ( x =~ /test 2/i )
+    puts "TEST 2 - sleeping"
     sleep 5
   end
 end
