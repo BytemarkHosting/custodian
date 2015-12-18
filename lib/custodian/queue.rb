@@ -83,8 +83,12 @@ module Custodian
       loop do
 
         # Get the next job from the queue.
-        # NOTE: This returns an array.
-        job = @redis.zrange('custodian_queue', 0, 0)
+        #
+        # NOTE: This returns an array - but the array will have only
+        # one element because we're picking from element 0 with a range
+        # of 0 - which really means 1,1.
+        #
+        job = @redis.ZREVRANGE('custodian_queue', '0', '0')
 
         if ! job.empty?
 
@@ -122,14 +126,7 @@ module Custodian
       # each distinct-test.
       #
       #
-      score = 0
-      job_string.split("").each do |x|
-        score = score + x.ord
-      end
-
-      # Bound the number to something sane.
-      score = score & 0xFFFF
-
+      score = Time.now.to_i
       @redis.zadd('custodian_queue', score, job_string)
     end
 
