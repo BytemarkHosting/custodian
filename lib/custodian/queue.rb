@@ -98,7 +98,7 @@ module Custodian
     #
     #  Add a new job to the queue.
     #
-    def add(job_string)
+    def add(test)
 
       # Add unless already present
       @redis.sadd('custodian_queue', test) unless
