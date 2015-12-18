@@ -1,3 +1,9 @@
+custodian (0.25) stable; urgency=low
+
+  * New release using a set to store jobs in the queue.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 18 Dec 2015 13:13:13 +0000
+
 custodian (0.24.18) stable; urgency=low
 
   * New release - use a sorted-set for our Redis-queue.
