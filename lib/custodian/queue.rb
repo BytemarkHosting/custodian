@@ -110,7 +110,7 @@ module Custodian
     #  How many jobs in the queue?
     #
     def size?
-      @redis.zcard('custodian_queue')
+      @redis.scard('custodian_queue')
     end
 
 
