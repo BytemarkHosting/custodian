@@ -62,8 +62,7 @@ if __FILE__ == $PROGRAM_NAME
   #
   #  Create the queue object.
   #
-  settings = Custodian::Settings.instance
-  queue = Custodian::QueueType.create(settings.queue_type)
+  queue = Custodian::RedisQueueType.new()
 
   #
   # Alerting on a queue that is too-full?
@@ -128,9 +127,6 @@ __END__
 #
 # This tool is designed to inspect the global queue, and also allows that
 # queue to be flushed of all pending-jobs.
-#
-# The queue may be redis-based, or beanstalkd-based, as defined by the
-# global configuration-file.
 #
 # AUTHOR
 #

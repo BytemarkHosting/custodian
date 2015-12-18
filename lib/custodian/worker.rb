@@ -73,7 +73,7 @@ module Custodian
       @settings = settings
 
       # Connect to the queue
-      @queue = QueueType.create(@settings.queue_type)
+      @queue = RedisQueueType.new()
 
       # Get the alerter-type(s) to instantiate
       @alerter = @settings.alerter

@@ -10,13 +10,13 @@ Homepage: https://projects.bytemark.co.uk/projects/custodian/
 Package: custodian
 Architecture: all
 Depends: ruby, rubygems, ${misc:Depends}, libldap-ruby | libldap-ruby1.8
-Suggests: beanstalkd, mauvealert-client (>= 3.13.1)
+Suggests: mauvealert-client (>= 3.13.1)
 Description: remote monitoring via distributed agents
  This package allows you to setup a semi-distributed monitoring
  solution, using the Bytemark MauveAlert server for notification.
  .
  The monitoring consists of a system to enqueue tests in
- a beanstalkd server, and an agent that will fetch tests from
+ a global queue, and an agent that will fetch tests from
  that same queue and execute them.
 
 Package: custodian-bytemark
