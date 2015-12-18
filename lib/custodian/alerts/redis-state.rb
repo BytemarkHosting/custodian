@@ -150,8 +150,6 @@ module Custodian
         #
         key = Digest::SHA1.hexdigest test_s
 
-        puts( "Key is #{key}")
-
         #
         #  The current state
         #
