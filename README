@@ -76,10 +76,7 @@ The software has not yet been tested upon JRuby, or similar.
 Dependencies, beyond ruby, are limited to the following gems:
 
 * For HTTP/HTTPS testing: curb
-* For communication with the queue: redis / beanstalkd-client
-
-(You don't need to install both redis and beanstalkd, just install
-the appropriate one for your preferences.)
+* For communication with the queue: redis
 
 
 
