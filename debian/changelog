@@ -1,3 +1,9 @@
+custodian (0.24.18) stable; urgency=low
+
+  * New release - use a sorted-set for our Redis-queue.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 18 Dec 2015 11:00:11 +0000
+
 custodian (0.24.17) stable; urgency=low
 
   * New release - to avoid overflowing our queue.
