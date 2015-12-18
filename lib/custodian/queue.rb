@@ -144,7 +144,6 @@ module Custodian
       # Bound the number to something sane.
       score = score & 0xFFFF
 
-      puts job_string, score
       @redis.zadd('custodian_queue', score, job_string)
     end
 
