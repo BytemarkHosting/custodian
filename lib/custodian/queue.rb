@@ -71,7 +71,7 @@ module Custodian
 
 
   #
-  # This is a simple FIFO queue which uses Redis for storage.
+  # This is a simple queue which uses Redis for storage.
   #
   class RedisQueueType < QueueType
 
@@ -96,9 +96,17 @@ module Custodian
 
       loop do
 
-        job = @redis.spop('queue')
+        # Get the next job from the queue.
+        # NOTE: This returns an array.
+        job = @redis.zrange('custodian_queue', 0, 0)
 
-        if  job
+        if ! job.empty?
+
+          # We only have one entry in our array
+          job = job[0]
+
+          # Remove from the queue
+          @redis.zrem('custodian_queue', job );
           return job
         else
           sleep(timeout)
@@ -112,7 +120,32 @@ module Custodian
     #  Add a new job to the queue.
     #
     def add(job_string)
-      @redis.sadd('queue', job_string)
+
+      #
+      # We need to build a "score" for this job - the score
+      # will be used for ordering by Redis.
+      #
+      # We don't care what order the jobs are running in, however
+      # we do care that this the order is always the same.
+      #
+      # On that basis we need to create a score for the string which
+      # will always be the same, and will always be a number.
+      #
+      # We'll sum up the ASCII values of each character in the test
+      # which gives us a "number" which that should be consistent for
+      # each distinct-test.
+      #
+      #
+      score = 0
+      job_string.split("").each do |x|
+        score = score + x.ord
+      end
+
+      # Bound the number to something sane.
+      score = score & 0xFFFF
+
+      puts job_string, score
+      @redis.zadd('custodian_queue', score, job_string)
     end
 
 
@@ -120,7 +153,7 @@ module Custodian
     #  How many jobs in the queue?
     #
     def size?
-      @redis.scard('queue')
+      @redis.zcard('custodian_queue')
     end
 
 
@@ -128,7 +161,7 @@ module Custodian
     #  Empty the queue, discarding all pending jobs.
     #
     def flush!
-      @redis.del('queue')
+      @redis.del('custodian_queue')
     end
 
   end
