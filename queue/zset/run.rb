@@ -10,7 +10,7 @@ def fetch(timeout = 1)
   job = nil
 
   loop do
-    job = @redis.ZREVRANGE('zset', '0', '0')
+    job = @redis.ZRANGE('zset', '0', '0')
 
     if !job.empty?
       # We only have one entry in our array

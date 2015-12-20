@@ -17,8 +17,13 @@ x.push( "test 3" )
 
 for i in 0 .. 10 
     x.each do |test|
-      puts "adding #{test}"
-      @redis.zadd('zset', Time.now.to_i, test)
+        @redis.watch('zset')
+        if (!(@redis.zscore("zset", test)))
+            res = @redis.multi do |r|
+                r.zadd('zset', Time.now.to_f * 10000000, test)
+            end
+        end
+        @redis.unwatch
     end
     sleep 1
 end
