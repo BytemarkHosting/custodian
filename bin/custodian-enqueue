@@ -85,16 +85,25 @@ if __FILE__ == $PROGRAM_NAME
     exit(1)
   end
 
+  #
+  #  Did we fail to add any tests to the queue?
+  #
+  failed = false
+
   mon.jobs.each do |test|
     if  ENV['TEST']
       # nop
     elsif  ENV['DUMP']
       puts test
     else
-      queue.add(test.to_s)
+      failed = true unless queue.add(test.to_s)
     end
   end
 
+  if ( failed )
+    puts "We failed to add at least one job to the queue."
+    exit( 1 )
+  end
 end
 
 
