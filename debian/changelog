@@ -1,3 +1,11 @@
+custodian (0.26) stable; urgency=low
+
+  * Minor tweaks to the configuration-file parser:
+    - Attempting to limit HTTP/HTTPS tests to ipv4/IPv6 fails.
+    - Quote-matching is improved for HTTP/HTTPS content-checking.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 10 Feb 2016 14:44:41 +0000
+
 custodian (0.25) stable; urgency=low
 
   * New release using a set to store jobs in the queue.
