@@ -143,6 +143,12 @@ module Custodian
         if  line =~ /with host header '([^']+)'/
           @host_override = $1.dup
         end
+
+         # We can't test on IPv4-only or IPv6-only basis
+         if  line =~ /ipv[46]_only/i
+          raise ArgumentError, "We cannot limit HTTP/HTTPS tests to IPv4/IPv6-only"
+         end
+
       end
 
 

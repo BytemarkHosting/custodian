@@ -434,6 +434,33 @@ EOF
 
 
   #
+  # HTTP/HTTPS tests don't like IPv4/IPv6-limits
+  #
+  def test_http_protocols
+
+    parser = Custodian::Parser.new
+
+    #
+    # A series of tests to parse
+    #
+    text = []
+    text.push('https://example.com/ must run https ipv4_only')
+    text.push('https://example.com/ must run https ipv6_only')
+    text.push('http://example.com/ must run http ipv4_only')
+    text.push('http://example.com/ must run http ipv6_only')
+
+    #
+    # Test the parser with this text
+    #
+    text.each do |txt|
+      assert_raise ArgumentError do
+        parser.parse_lines(txt)
+      end
+    end
+  end
+
+
+  #
   # Test that the text we're going to use in alerters is present.
   #
   def test_alert_text
