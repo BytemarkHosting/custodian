@@ -114,8 +114,8 @@ module Custodian
         #
         # The content we expect to find
         #
-        if  line =~ /with content ["']([^'"]+)['"]/
-          @expected_content = $1.dup
+        if  line =~ /with content (["'])(.*)\1/
+          @expected_content = $2.dup
         else
           @expected_content = nil
         end
