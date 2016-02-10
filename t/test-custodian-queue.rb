@@ -19,6 +19,13 @@ class TestCustodianQueue < Test::Unit::TestCase
   # Create the test suite environment: NOP.
   #
   def setup
+    unless defined? ::Redis
+      if methods.include? :skip
+        skip("Redis library missing -- skipping tests")
+      else
+        omit("Redis library missing -- skipping tests")
+      end
+    end
   end
 
 
@@ -35,6 +42,7 @@ class TestCustodianQueue < Test::Unit::TestCase
   #  Test we can create and use a Redis queue.
   #
   def test_redis
+
     q = nil
     assert_nothing_raised do
       q = Custodian::RedisQueueType.new()

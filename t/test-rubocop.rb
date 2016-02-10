@@ -23,7 +23,11 @@ class TestRubocop < Test::Unit::TestCase
       assert(result == 0, 'No errors found')
 
     rescue LoadError => ex
-      skip("Failed to load 'rubocop' gem - skipping")
+      if methods.include?(:skip)
+        skip("Failed to load 'rubocop' gem - skipping")
+      else
+        omit("Failed to load 'rubocop' gem - skipping")
+      end
     end
   end
 
