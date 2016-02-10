@@ -372,14 +372,15 @@ EOF
   # Test that we can use lots of different strings for content.
   #
   def test_http_with_content_parsing
-    content_strings = [
-     "'bar in single quotes'",
-     '"bar in double quotes"',
-     "'bar in single quotes with \"embedded double quotes\"'",
-     '"bar in double quotes with \'embedded double quotes\'"',
-    ]
+    content_strings = {
+     "'bar in single quotes'" => 'bar in single quotes',
+     '"bar in double quotes"' => "bar in double quotes",
+     "'bar in single quotes with \"embedded double quotes\"'" => 'bar in single quotes with "embedded double quotes"',
+     '"bar in double quotes with \'embedded double quotes\'"' => "bar in double quotes with 'embedded double quotes'",
+     "'bar testing greediness' with host header 'but dont be greedy'" => "bar testing greediness",
+    }
 
-    content_strings.each do |cs|
+    content_strings.each do |cs, ex|
       str = "http://example must run http with content #{cs}."
       obj = Custodian::TestFactory.create(str)
       assert(!obj.nil?)
@@ -387,7 +388,7 @@ EOF
       assert(obj.size == 1)
 
       assert_equal(obj[0].to_s, str)
-      assert_equal(cs[1..-2], obj[0].expected_content)
+      assert_equal(ex, obj[0].expected_content)
     end
   end
 
