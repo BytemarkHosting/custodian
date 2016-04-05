@@ -9,7 +9,7 @@ Homepage: https://projects.bytemark.co.uk/projects/custodian/
 
 Package: custodian
 Architecture: all
-Depends: ruby, rubygems, ${misc:Depends}, libldap-ruby | libldap-ruby1.8
+Depends: ruby, rubygems, ${misc:Depends}, ruby-ldap | libldap-ruby | libldap-ruby1.8
 Suggests: mauvealert-client (>= 3.13.1)
 Description: remote monitoring via distributed agents
  This package allows you to setup a semi-distributed monitoring

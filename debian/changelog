@@ -1,3 +1,9 @@
+custodian (0.27) stable; urgency=low
+
+  * Updated dependencies such that we can install upon Jessi.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 5 April 2016 13:33:31 +0000
+
 custodian (0.26) stable; urgency=low
 
   * Minor tweaks to the configuration-file parser:
