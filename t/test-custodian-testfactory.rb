@@ -266,7 +266,7 @@ class TestTestFactory < Test::Unit::TestCase
           #
           # NOTE: Skip the DNS and LDAP tests - they are more complex.
           #
-          next if  tst =~ /^(ldap|dns|dnsbl|sslcertificate)$/
+          next if  tst =~ /^(ldap|dns|dnsbl|sslcertificate|tftp)$/
 
           # normal
           test_one = "http://foo.com/.com must run #{tst} on 1234"

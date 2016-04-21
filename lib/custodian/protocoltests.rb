@@ -31,6 +31,7 @@ require 'custodian/protocoltest/ssh'
 require 'custodian/protocoltest/ssl'
 require 'custodian/protocoltest/smtp'
 require 'custodian/protocoltest/telnet'
+require 'custodian/protocoltest/tftp'
 
 
 #
