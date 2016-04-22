@@ -2,6 +2,8 @@ require 'custodian/settings'
 require 'custodian/testfactory'
 require 'custodian/util/tftp'
 
+require 'uri'
+
 
 #
 # The TFTP-protocol test
@@ -52,7 +54,7 @@ module Custodian
         #
         #  Save the URL
         #
-        url  = line.split(/\s+/)[0]
+        url = line.split(/\s+/)[0]
 
         #
         #  Ensure we've got a TFTP url.
@@ -62,14 +64,19 @@ module Custodian
         end
 
         #
-        # Extract host, port and file from URL
+        #  Parse the URL which should have a host + path, and optional port
         #
-        if line =~ /^tftp:\/\/([^\/]+)\/([^\s]*)/
-          @host = $1.split(':')[0]
-          @file = $2.dup
-          p = $1.split(':')[1]
-          @port = (p && p.to_i > 0) ? p.to_i : 69
-        end
+        u = URI.parse(url)
+
+        #
+        #  Record the values.
+        #
+        @host = u.host
+        @file = u.path
+
+        # Port might not be specified, if it is missing then default to 69.
+        @port = u.port || "69"
+        @port = @port.to_i
 
         #
         # Ensure there is a file to fetch
