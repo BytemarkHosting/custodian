@@ -48,7 +48,7 @@ Lint/UnreachableCode:
 # Offense count: 2
 # Cop supports --auto-correct.
 Lint/UnusedBlockArgument:
-  Enabled: true
+  Enabled: false
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -453,3 +453,16 @@ Style/VariableName:
 # Configuration parameters: WordRegex.
 Style/WordArray:
   MinSize: 2
+
+Style/BlockDelimiters:
+  Enabled: false
+
+
+Style/WordArray:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/WhileUntilDo:
+  Enabled: false

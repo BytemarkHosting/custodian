@@ -84,7 +84,7 @@ class TestCustodianParser < Test::Unit::TestCase
     #  1.c.  Adding a test will return an array of test-objects.
     result = parser.parse_line("smtp.bytemark.co.uk must run smtp on 25 otherwise 'failure'.")
     assert(!result.nil?)
-    assert(result.kind_of? Array)
+    assert(result.kind_of?(Array))
     assert(result.size == 1)
 
 
@@ -101,7 +101,7 @@ class TestCustodianParser < Test::Unit::TestCase
     tmp = []
     tmp.push("smtp.bytemark.co.uk must run ssh on 22 otherwise 'oops'.")
     ret = parser.parse_lines(tmp)
-    assert(ret.kind_of? Array)
+    assert(ret.kind_of?(Array))
     assert(ret.size == 1)
 
     #
@@ -121,7 +121,7 @@ smtp.bytemark.co.uk must run smtp on 25.
 google.com must run ping otherwise 'internet broken?'.
 EOF
     ret = parser.parse_lines(str)
-    assert(ret.kind_of? Array)
+    assert(ret.kind_of?(Array))
     assert(ret.size == 1)
 
   end
@@ -184,33 +184,33 @@ EOF
     #  We should now have two macros.
     #
     macros = parser.macros
-    assert(!macros.empty?, "We found some macros")
-    assert(macros.size == 2, "We found two macros")
+    assert(!macros.empty?, 'We found some macros')
+    assert(macros.size == 2, 'We found two macros')
 
     #
     #  Ensure they were defined.
     #
-    assert( parser.is_macro?( "ONE" ), "The macro ONE exists" )
-    assert( parser.is_macro?( "TWO" ), "The macro TWO exists" )
+    assert(parser.is_macro?('ONE'), 'The macro ONE exists')
+    assert(parser.is_macro?('TWO'), 'The macro TWO exists')
 
     #
     #  Ensure we can get the values.
     #
-    one = parser.get_macro_targets("ONE")
-    two = parser.get_macro_targets("TWO")
-    assert( one.kind_of? Array )
-    assert( one.size() == 2, "Both targets are in the macro" )
-    assert( one.find_index( "kvm1.vm.bytemark.co.uk" ) >= 0 ,
-            "We found the expected host: kvm1")
-    assert( one.find_index( "kvm2.vm.bytemark.co.uk" ) >= 0 ,
-            "We found the expected host: kvm2")
+    one = parser.get_macro_targets('ONE')
+    two = parser.get_macro_targets('TWO')
+    assert(one.kind_of?(Array))
+    assert(one.size == 2, 'Both targets are in the macro')
+    assert(one.find_index('kvm1.vm.bytemark.co.uk') >= 0,
+           'We found the expected host: kvm1')
+    assert(one.find_index('kvm2.vm.bytemark.co.uk') >= 0,
+           'We found the expected host: kvm2')
 
-    assert( two.kind_of? Array )
-    assert( two.size() == 2, "Both targets are in the macro" )
-    assert( two.find_index( "kvm1.vm.bytemark.co.uk" ) >= 0 ,
-            "We found the expected host: kvm1")
-    assert( two.find_index( "kvm2.vm.bytemark.co.uk" ) >= 0 ,
-            "We found the expected host: kvm2")
+    assert(two.kind_of?(Array))
+    assert(two.size == 2, 'Both targets are in the macro')
+    assert(two.find_index('kvm1.vm.bytemark.co.uk') >= 0,
+           'We found the expected host: kvm1')
+    assert(two.find_index('kvm2.vm.bytemark.co.uk') >= 0,
+           'We found the expected host: kvm2')
 
   end
 
@@ -301,7 +301,7 @@ EOF
     #
     #  The difference is the return value will be an array
     #
-    assert(out_txt.kind_of? Array)
+    assert(out_txt.kind_of?(Array))
     assert(out_txt.size == 1)
     assert(out_txt[0] == in_txt)
 
@@ -321,7 +321,7 @@ EOF
     #
     # The result should be an array
     #
-    assert(ret.kind_of? Array)
+    assert(ret.kind_of?(Array))
     assert_equal(ret.size, 2)
     assert(ret[0] =~ /example1/)
     assert(ret[1] =~ /example2/)
@@ -343,7 +343,7 @@ EOF
       "http://example must run http with content 'bar'."      => true,
       'http://example must run http following redirects.'     => true,
       'http://example must run http not following redirects.' => false,
-      'http://example must run http not following redirect.'  => false,
+      'http://example must run http not following redirect.'  => false
     }
 
     data.each do |str, follow|
@@ -355,11 +355,11 @@ EOF
         obj = Custodian::TestFactory.create(str)
 
         assert(!obj.nil?)
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  follow
+        if follow
           assert(obj[0].follow_redirects?)
         else
           assert(!obj[0].follow_redirects?)
@@ -373,18 +373,18 @@ EOF
   #
   def test_http_with_content_parsing
     content_strings = {
-     "'bar in single quotes'" => 'bar in single quotes',
-     '"bar in double quotes"' => "bar in double quotes",
-     "'bar in single quotes with \"embedded double quotes\"'" => 'bar in single quotes with "embedded double quotes"',
-     '"bar in double quotes with \'embedded double quotes\'"' => "bar in double quotes with 'embedded double quotes'",
-     "'bar testing greediness' with host header 'but dont be greedy'" => "bar testing greediness",
+      "'bar in single quotes'" => 'bar in single quotes',
+      '"bar in double quotes"' => 'bar in double quotes',
+      "'bar in single quotes with \"embedded double quotes\"'" => 'bar in single quotes with "embedded double quotes"',
+      '"bar in double quotes with \'embedded double quotes\'"' => "bar in double quotes with 'embedded double quotes'",
+      "'bar testing greediness' with host header 'but dont be greedy'" => 'bar testing greediness'
     }
 
     content_strings.each do |cs, ex|
       str = "http://example must run http with content #{cs}."
       obj = Custodian::TestFactory.create(str)
       assert(!obj.nil?)
-      assert(obj.kind_of? Array)
+      assert(obj.kind_of?(Array))
       assert(obj.size == 1)
 
       assert_equal(obj[0].to_s, str)
@@ -405,7 +405,7 @@ EOF
       'http://example must run http.'                         => true,
       'http://example must run http with status 200.'         => true,
       "http://example must run http with content 'bar'."      => true,
-      'http://example must run http without cache busting.'   => false,
+      'http://example must run http without cache busting.'   => false
     }
 
     data.each do |str, cb|
@@ -417,11 +417,11 @@ EOF
         obj = Custodian::TestFactory.create(str)
 
         assert(!obj.nil?)
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  cb
+        if cb
           assert(obj[0].cache_busting?)
         else
           assert(!obj[0].cache_busting?)
@@ -490,11 +490,11 @@ EOF
         obj = Custodian::TestFactory.create(str)
 
         assert(!obj.nil?)
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(obj.size == 1)
         assert_equal(obj[0].to_s, str)
 
-        if  fail.nil?
+        if fail.nil?
           assert(obj[0].get_notification_text.nil?)
         else
           assert_equal(obj[0].get_notification_text, fail)

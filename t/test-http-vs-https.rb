@@ -46,7 +46,7 @@ class TestTestName < Test::Unit::TestCase
     end
 
     assert(test)
-    assert(test.kind_of? Array)
+    assert(test.kind_of?(Array))
     assert(!test.empty?)
     assert_equal(test[0].get_type, 'http')
   end
@@ -63,7 +63,7 @@ class TestTestName < Test::Unit::TestCase
     end
 
     assert(test)
-    assert(test.kind_of? Array)
+    assert(test.kind_of?(Array))
     assert(!test.empty?)
     assert_equal(test[0].get_type, 'https')
   end
@@ -94,4 +94,3 @@ class TestTestName < Test::Unit::TestCase
   end
 
 end
-

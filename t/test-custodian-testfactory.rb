@@ -63,7 +63,7 @@ class TestTestFactory < Test::Unit::TestCase
       'foo must run ftp.' => '21',
       'ftp://ftp.example.com/ must run ftp.' => '21',
       "foo must run ftp on  1 otherwise 'x'." => '1',
-      'foo must run ftp on 33 otherwise'   => '33',
+      'foo must run ftp on 33 otherwise' => '33'
     }
 
     #
@@ -74,7 +74,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create(str)
 
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(!obj.empty?)
         assert_equal(obj[0].get_type, 'ftp')
         assert_equal(obj[0].port.to_s, prt)
@@ -98,9 +98,9 @@ class TestTestFactory < Test::Unit::TestCase
       "foo must run rEDIs otherwise 'alert'"   => '6379',
       "foo must run rdp otherwise 'alert'"   => '3389',
       "foo must run RDP otherwise 'alert'"   => '3389',
-      "foo must run tcp on 22 otherwise 'alert'"   => '22',
-      "foo must run tcp on port 22 otherwise 'alert'"   => '22',
-      "foo must run mysql on 33 otherwise 'alert'"   => '33',
+      "foo must run tcp on 22 otherwise 'alert'" => '22',
+      "foo must run tcp on port 22 otherwise 'alert'" => '22',
+      "foo must run mysql on 33 otherwise 'alert'" => '33'
     }
 
     #
@@ -112,7 +112,7 @@ class TestTestFactory < Test::Unit::TestCase
         obj = Custodian::TestFactory.create(str)
 
         assert(obj)
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(!obj.empty?)
         assert(obj[0].port.to_s == prt, "'#{str}' gave expected port '#{prt}'.")
       end
@@ -148,7 +148,7 @@ class TestTestFactory < Test::Unit::TestCase
       'foo must run rsync.' => '873',
       'rsync://foo/ must run rsync.' => '873',
       "foo must run rsync on 1 otherwise 'x'." => '1',
-      'foo must run rsync on 33 otherwise'   => '33',
+      'foo must run rsync on 33 otherwise' => '33'
     }
 
     #
@@ -159,7 +159,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create(str)
 
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(!obj.empty?)
         assert(obj[0].port.to_s == prt, "'#{str}' gave expected port '#{prt}'.")
       end
@@ -224,7 +224,7 @@ class TestTestFactory < Test::Unit::TestCase
       'rsync://foo/ must run rsync.'     => false,
       'foo must run ping otherwise'      => false,
       'foo must not run ping otherwise'  => true,
-      'foo must not run ssh otherwise'   => true,
+      'foo must not run ssh otherwise'   => true
     }
 
     #
@@ -235,7 +235,7 @@ class TestTestFactory < Test::Unit::TestCase
 
         obj = Custodian::TestFactory.create(str)
 
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(!obj.empty?)
 
         #
@@ -260,7 +260,7 @@ class TestTestFactory < Test::Unit::TestCase
       # for each handler ..
       registered[type].each do |name|
 
-        if  name.to_s =~ /protocoltest::(.*)Test$/i
+        if name.to_s =~ /protocoltest::(.*)Test$/i
           tst = $1.dup.downcase
 
           #
@@ -309,7 +309,7 @@ class TestTestFactory < Test::Unit::TestCase
       assert_nothing_raised do
         obj = Custodian::TestFactory.create(entry)
         assert(obj)
-        assert(obj.kind_of? Array)
+        assert(obj.kind_of?(Array))
         assert(!obj.empty?)
         assert_equal('test.host.example.com', obj[0].target)
       end

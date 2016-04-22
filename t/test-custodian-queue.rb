@@ -21,9 +21,9 @@ class TestCustodianQueue < Test::Unit::TestCase
   def setup
     unless defined? ::Redis
       if methods.include? :skip
-        skip("Redis library missing -- skipping tests")
+        skip('Redis library missing -- skipping tests')
       else
-        omit("Redis library missing -- skipping tests")
+        omit('Redis library missing -- skipping tests')
       end
     end
   end
@@ -45,7 +45,7 @@ class TestCustodianQueue < Test::Unit::TestCase
 
     q = nil
     assert_nothing_raised do
-      q = Custodian::RedisQueueType.new()
+      q = Custodian::RedisQueueType.new
     end
 
     #

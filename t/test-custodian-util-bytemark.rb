@@ -46,13 +46,13 @@ class TestBytemarkUtil < Test::Unit::TestCase
       #
       '127.0.0.1'                 => false,
       '192.168.1.1'               => false,
-      '2a00:1450:400c:c00::93'    => false,
+      '2a00:1450:400c:c00::93'    => false
     }
 
 
     to_test.each do |name, inside|
 
-      if  inside
+      if inside
         assert(Custodian::Util::Bytemark.inside?(name) == true)
       else
         assert(Custodian::Util::Bytemark.inside?(name) == false)

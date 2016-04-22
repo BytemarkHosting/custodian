@@ -65,7 +65,7 @@ module Custodian
     #
     def get_url_contents(uri_str)
       begin
-        uri_str = 'http://' + uri_str unless uri_str.match(/^http/)
+        uri_str = 'http://' + uri_str unless uri_str =~ /^http/
         url = URI.parse(uri_str)
         http = Net::HTTP.new(url.host, url.port)
 
@@ -96,7 +96,7 @@ module Custodian
         case response
         when Net::HTTPRedirection
         then
-          newURL = response['location'].match(/^http/) ?           response['Location'] : uri_str + response['Location']
+          newURL = (response['location'] =~ /^http/) ? response['Location'] : uri_str + response['Location']
           return(get_url_contents(newURL))
         else
           return response.body
@@ -138,7 +138,7 @@ module Custodian
 
         text = get_url_contents(uri)
         text.split(/[\r\n]/).each do |line|
-          val.push(line) if line.length > 0
+          val.push(line) if !line.empty?
         end
 
       elsif line =~ /\s(is|are)\s+(.*)\.*$/
@@ -245,7 +245,7 @@ module Custodian
       #
       # A blank line, or a comment may be skipped.
       #
-      return nil if (line.nil?) || (line =~ /^#/) || (line.length < 1)
+      return nil if (line.nil?) || (line =~ /^#/) || (line.empty?)
 
       #
       # Look for a time period.
@@ -411,7 +411,7 @@ module Custodian
     def parse_file(filename)
 
       raise ArgumentError, 'Missing configuration file!' if filename.nil?
-      raise ArgumentError, "File not found: #{@file}" unless  File.exist?(filename)
+      raise ArgumentError, "File not found: #{@file}" unless File.exist?(filename)
 
       #
       #  Read the configuration file.

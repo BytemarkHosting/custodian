@@ -74,7 +74,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
     #
     #  Valid hours are 0-23, inclusive.  Test outside that range.
     #
-    for i in  24..100
+    for i in 24..100
       assert_raise ArgumentError do
         result = Custodian::Util::TimeSpan.inside?(i, 2)
       end

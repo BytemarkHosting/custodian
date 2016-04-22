@@ -75,8 +75,8 @@ class TestAlertFactory < Test::Unit::TestCase
       # Ensure that the object implements the raise() + clear()
       # methods we mandate.
       #
-      assert(obj.respond_to? 'raise')
-      assert(obj.respond_to? 'clear')
+      assert(obj.respond_to?('raise'))
+      assert(obj.respond_to?('clear'))
     end
 
 
@@ -100,4 +100,3 @@ class TestAlertFactory < Test::Unit::TestCase
   end
 
 end
-

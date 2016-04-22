@@ -92,7 +92,7 @@ class TestTftpUtil < Test::Unit::TestCase
   #
   def test_tftp_failed_fetch
     helper = Custodian::Util::Tftp.new('foo')
-    def helper.tftp(args)
+    def helper.tftp(_args)
       return false
     end
 
