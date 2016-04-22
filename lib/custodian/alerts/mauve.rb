@@ -213,7 +213,7 @@ module Custodian
         test_host = test.target
         test_type = test.get_type
 
-        alert         = Mauve::Proto::Alert.new
+        alert = Mauve::Proto::Alert.new
 
         #
         # Mauve only lets us use IDs which are <= 255 characters in length
@@ -234,9 +234,9 @@ module Custodian
         #
         #  If we're raising then add the error
         #
-        if  failure
+        if failure
 
-          alert.detail  = "<p>The #{test_type} test failed against #{test_host}.</p>"
+          alert.detail = "<p>The #{test_type} test failed against #{test_host}.</p>"
 
           #
           #  The text from the job-defition
@@ -246,7 +246,7 @@ module Custodian
           #
           # Add the user-detail if present
           #
-          alert.detail = "#{alert.detail}<p>#{user_text}</p>" if  !user_text.nil?
+          alert.detail = "#{alert.detail}<p>#{user_text}</p>" if !user_text.nil?
 
           #
           # Add the test-failure message
@@ -257,7 +257,7 @@ module Custodian
           #  Determine if this is inside/outside the bytemark network
           #
           location = expand_inside_bytemark(test_host)
-          if  !location.nil? && location.length
+          if !location.nil? && location.length
             alert.detail = "#{alert.detail}\n#{location}"
           end
         end
@@ -282,7 +282,7 @@ module Custodian
         #  We'll also make the host a link that can be clicked in the alert we raise.
         #
         target = host
-        if  target =~ /^([a-z]+):\/\/([^\/]+)/
+        if target =~ /^([a-z]+):\/\/([^\/]+)/
           target = $2.dup
           host   = "<a href=\"#{host}\">#{host}</a>"
         end
@@ -339,7 +339,7 @@ module Custodian
         #  Return the formatted message
         #
         ips.each do |ipaddr|
-          if  Custodian::Util::Bytemark.inside?(ipaddr.to_s)
+          if Custodian::Util::Bytemark.inside?(ipaddr.to_s)
             result += "<p>#{host} resolves to #{ipaddr} which is inside the Bytemark network.</p>"
           else
             result += "<p>#{host} resolves to #{ipaddr} which is OUTSIDE the Bytemark network.</p>"

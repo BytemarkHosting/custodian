@@ -71,7 +71,7 @@ module Custodian
           puts 'ERROR Loading redis rubygem!'
         end
 
-        @test  = obj
+        @test = obj
       end
 
 
@@ -88,7 +88,7 @@ module Custodian
         #
         test_s = @test.to_s
 
-        @redis.sadd( "known_tests", test_s )
+        @redis.sadd('known_tests', test_s)
 
         #
         #  Get the current state of this test - so that if the state
@@ -101,16 +101,16 @@ module Custodian
         #
         #  The current state
         #
-        current = @redis.get( "#{key}.current" ) || "unknown"
-        @redis.set( "#{key}.current", "FAIL" )
+        current = @redis.get("#{key}.current") || 'unknown'
+        @redis.set("#{key}.current", 'FAIL')
 
-        count = @redis.get( "#{key}.count" ) || "0"
-        @redis.set( "#{key}.count", (count.to_i + 1))
+        count = @redis.get("#{key}.count") || '0'
+        @redis.set("#{key}.count", (count.to_i + 1))
 
         #
         #  Bump the execution count for this test.
         #
-        if ( current != "FAIL" )
+        if (current != 'FAIL')
 
           #
           #  The state has changed to raise.
@@ -120,7 +120,7 @@ module Custodian
           tmp['result'] = 'FAIL'
           tmp['reason'] = @test.error
 
-          @redis.lpush( "#{key}.history", tmp.to_json)
+          @redis.lpush("#{key}.history", tmp.to_json)
           @redis.ltrim('#{key}.history', 0, 8192)
         end
 
@@ -140,7 +140,7 @@ module Custodian
         #
         test_s = @test.to_s
 
-        @redis.sadd( "known_tests", test_s )
+        @redis.sadd('known_tests', test_s)
 
         #
         #  Get the current state of this test - so that if the state
@@ -153,13 +153,13 @@ module Custodian
         #
         #  The current state
         #
-        current = @redis.get( "#{key}.current" ) || "unknown"
-        @redis.set( "#{key}.current", "OK" )
+        current = @redis.get("#{key}.current") || 'unknown'
+        @redis.set("#{key}.current", 'OK')
 
-        count = @redis.get( "#{key}.count" ) || "0"
-        @redis.set( "#{key}.count", (count.to_i + 1 ))
+        count = @redis.get("#{key}.count") || '0'
+        @redis.set("#{key}.count", (count.to_i + 1))
 
-        if ( current != "OK" )
+        if (current != 'OK')
 
           #
           #  The state has changed to raise.
@@ -169,7 +169,7 @@ module Custodian
           tmp['result'] = 'OK'
           tmp['reason'] = @test.error
 
-          @redis.lpush( "#{key}.history", tmp.to_json)
+          @redis.lpush("#{key}.history", tmp.to_json)
           @redis.ltrim('#{key}.history', 0, 100)
         end
       end

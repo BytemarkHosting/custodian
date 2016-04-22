@@ -23,7 +23,7 @@ module Custodian
       # Constructor - save the test-object away.
       #
       def initialize(obj)
-        @test  = obj
+        @test = obj
       end
 
 
