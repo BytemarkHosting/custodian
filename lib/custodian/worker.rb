@@ -73,7 +73,7 @@ module Custodian
       @settings = settings
 
       # Connect to the queue
-      @queue = RedisQueueType.new()
+      @queue = RedisQueueType.new
 
       # Get the alerter-type(s) to instantiate
       @alerter = @settings.alerter
@@ -93,7 +93,7 @@ module Custodian
     # Show a message on STDOUT if "--verbose" was specified.
     #
     def log_message(msg)
-      puts msg if  ENV['VERBOSE']
+      puts msg if ENV['VERBOSE']
     end
 
 
@@ -162,7 +162,7 @@ module Custodian
         #
         #  We exit here if we receive a single success.
         #
-        while  (count < (@retry_count + 1)) && (run == true)
+        while (count < (@retry_count + 1)) && (run == true)
 
           log_message("Running test - [#{count}/#{@retry_count}]")
 
@@ -216,12 +216,12 @@ module Custodian
           #           but no more than "@retry_count" times.
           #
           #
-          if  (run == true) && (@retry_delay > 0) && (count < @retry_count)
+          if (run == true) && (@retry_delay > 0) && (count < @retry_count)
 
             #
             #  If the test disabled itself then we don't need to delay
             #
-            unless( result == Custodian::TestResult::TEST_SKIPPED)
+            unless (result == Custodian::TestResult::TEST_SKIPPED)
               log_message("Delaying re-test by #{@retry_delay} seconds due to failure - : #{test.error}")
               sleep(@retry_delay)
             end
@@ -248,8 +248,8 @@ module Custodian
         #  Record that, if we have any alerters that are interested
         # in run-times.
         #
-        if  (result == Custodian::TestResult::TEST_FAILED) ||
-             (result == Custodian::TestResult::TEST_PASSED)
+        if (result == Custodian::TestResult::TEST_FAILED) ||
+           (result == Custodian::TestResult::TEST_PASSED)
           do_duration(test, duration)
         end
 
@@ -338,7 +338,7 @@ module Custodian
         # give the alerter a reference to the settings object.
         alert.set_settings(@settings)
 
-        alert.duration(duration) if  alert.respond_to? 'duration'
+        alert.duration(duration) if alert.respond_to? 'duration'
       end
     end
 

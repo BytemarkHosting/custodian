@@ -88,7 +88,7 @@ module Custodian
           job = job[0]
 
           # Remove from the queue
-          @redis.zrem('zset', job );
+          @redis.zrem('zset', job)
 
           return job
         else
@@ -110,7 +110,7 @@ module Custodian
         # Count the number of times we attempt to add the test
         #
         attempts = 0
-        added    = false
+        added = false
 
 
         #
@@ -119,12 +119,12 @@ module Custodian
         # (a) the score is missing
         # (b) the zadd function succeeds
         #
-        while( attempts < 40 ) do
+        while (attempts < 40) do
 
           #
           # Only update if no score is set
           #
-          if !@redis.zscore("zset", test)
+          if !@redis.zscore('zset', test)
 
             #
             # If MULTI returns nil, the transaction failed, so we need to try
@@ -144,7 +144,7 @@ module Custodian
           #
           # Bump the count of attempts.
           #
-          attempts = attempts + 1
+          attempts += 1
         end
 
         #

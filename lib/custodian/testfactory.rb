@@ -60,8 +60,8 @@ module Custodian
     def self.create(line)
 
 
-      raise ArgumentError, 'The type of test to create cannot be nil' if  line.nil?
-      raise ArgumentError, 'The type of test to create must be a string' unless  line.kind_of? String
+      raise ArgumentError, 'The type of test to create cannot be nil' if line.nil?
+      raise ArgumentError, 'The type of test to create must be a string' unless line.kind_of? String
 
       #
       #  The array of tests we return.
@@ -127,7 +127,7 @@ module Custodian
     # Register a new test type - this must be called by our derived classes
     #
     def self.register_test_type(name)
-      @@subclasses[name] ||=  []
+      @@subclasses[name] ||= []
       @@subclasses[name].push(self)
     end
 
