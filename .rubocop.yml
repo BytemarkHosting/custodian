@@ -102,11 +102,6 @@ Style/AndOr:
   Enabled: false
 
 # Offense count: 1
-# Cop supports --auto-correct.
-Style/Blocks:
-  Enabled: false
-
-# Offense count: 1
 Style/CaseEquality:
   Enabled: false
 
@@ -318,10 +313,6 @@ Style/RedundantReturn:
 Style/RedundantSelf:
   Enabled: false
 
-# Offense count: 4
-Style/RegexpLiteral:
-  MaxSlashes: 4
-
 # Offense count: 16
 # Cop supports --auto-correct.
 # Configuration parameters: AllowAsExpressionSeparator.
@@ -336,7 +327,7 @@ Style/SignalException:
 
 # Offense count: 4
 # Cop supports --auto-correct.
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Enabled: true
 
 # Offense count: 1
@@ -347,11 +338,6 @@ Style/SpaceAfterColon:
 # Offense count: 20
 # Cop supports --auto-correct.
 Style/SpaceAfterComma:
-  Enabled: true
-
-# Offense count: 29
-# Cop supports --auto-correct.
-Style/SpaceAfterControlKeyword:
   Enabled: true
 
 # Offense count: 1
@@ -436,10 +422,7 @@ Style/Tab:
 Style/TrailingBlankLines:
   Enabled: false
 
-# Offense count: 7
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
   Enabled: false
 
 # Offense count: 12
