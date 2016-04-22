@@ -50,7 +50,7 @@ module Custodian
         #
         #  Save the URL
         #
-        @url  = line.split(/\s+/)[0]
+        @url = line.split(/\s+/)[0]
         @host = @url
 
         #
@@ -67,7 +67,7 @@ module Custodian
         #
         #  Ensure we've got a HTTP/HTTPS url.
         #
-        if  @url !~ /^https?:/
+        if @url !~ /^https?:/
           raise ArgumentError, "The target wasn't a HTTP/HTTPS URL: #{line}"
         end
 
@@ -101,20 +101,20 @@ module Custodian
         #
         # Expected status
         #
-        if  line =~ /with status ([0-9]+)/
+        if line =~ /with status ([0-9]+)/
           @expected_status = $1.dup
         else
           @expected_status = '200'
         end
 
-        if  line =~ /with (IPv[46])/i
+        if line =~ /with (IPv[46])/i
           @resolve_modes << $1.downcase.to_sym
         end
 
         #
         # The content we expect to find
         #
-        if  line =~ /with content (["'])(.*?)\1/
+        if line =~ /with content (["'])(.*?)\1/
           @expected_content = $2.dup
         else
           @expected_content = nil
@@ -123,7 +123,7 @@ module Custodian
         #
         # Do we follow redirects?
         #
-        if  line =~ /not following redirects?/i
+        if line =~ /not following redirects?/i
           @redirect = false
         end
 
@@ -131,22 +131,22 @@ module Custodian
         # Do we use cache-busting?
         #
         @cache_busting = true
-        if  line =~ /with\s+cache\s+busting/
+        if line =~ /with\s+cache\s+busting/
           @cache_busting = true
         end
-        if  line =~ /without\s+cache\s+busting/
+        if line =~ /without\s+cache\s+busting/
           @cache_busting = false
         end
 
         # Do we need to override the HTTP Host: Header?
         @host_override = nil
-        if  line =~ /with host header '([^']+)'/
+        if line =~ /with host header '([^']+)'/
           @host_override = $1.dup
         end
 
          # We can't test on IPv4-only or IPv6-only basis
-         if  line =~ /ipv[46]_only/i
-          raise ArgumentError, "We cannot limit HTTP/HTTPS tests to IPv4/IPv6-only"
+         if line =~ /ipv[46]_only/i
+          raise ArgumentError, 'We cannot limit HTTP/HTTPS tests to IPv4/IPv6-only'
          end
 
       end
@@ -156,9 +156,9 @@ module Custodian
       #  Get the right type of this object, based on the URL
       #
       def get_type
-        if  @url =~ /^https:/
+        if @url =~ /^https:/
           'https'
-        elsif  @url =~ /^http:/
+        elsif @url =~ /^http:/
           'http'
         else
           raise ArgumentError, "URL isn't http/https: #{@url}"
@@ -193,9 +193,8 @@ module Custodian
       # Run the test.
       #
       def run_test
-
-        #  Reset state, in case we've previously run.
-        @error    = nil
+        # Reset state, in case we've previously run.
+        @error = nil
 
         begin
           require 'rubygems'
@@ -205,11 +204,9 @@ module Custodian
           return Custodian::TestResult::TEST_FAILED
         end
 
-        #
         # Get the timeout period for this test.
-        #
         settings = Custodian::Settings.instance
-        period   = settings.timeout
+        period = settings.timeout
 
         #
         # The URL we'll fetch/poll.
@@ -220,26 +217,23 @@ module Custodian
         #  Parse and append a query-string if not present, if we're
         # running with cache-busting.
         #
-        if  @cache_busting
+        if @cache_busting
           u = URI.parse(test_url)
-          if  !u.query
-            u.query   = "ctime=#{Time.now.to_i}"
-            test_url  = u.to_s
+          if !u.query
+            u.query = "ctime=#{Time.now.to_i}"
+            test_url = u.to_s
           end
         end
 
         errors = []
         resolution_errors = []
 
-        if @resolve_modes.empty?
-          resolve_modes = [:ipv4, :ipv6]
-        else
-          resolve_modes = @resolve_modes
-        end
+        resolve_modes = [:ipv4, :ipv6]
+        resolve_modes = @resolve_modes if !@resolve_modes.empty?
 
         resolve_modes.each do |resolve_mode|
-          status   = nil
-          content  = nil
+          status = nil
+          content = nil
 
           c = Curl::Easy.new(test_url)
 
@@ -248,9 +242,9 @@ module Custodian
           #
           # Should we follow redirections?
           #
-          if  follow_redirects?
+          if follow_redirects?
             c.follow_location = true
-            c.max_redirects   = 10
+            c.max_redirects = 10
           end
 
           unless @host_override.nil?
@@ -259,7 +253,7 @@ module Custodian
 
           c.ssl_verify_host = false
           c.ssl_verify_peer = false
-          c.timeout         = period
+          c.timeout = period
 
           #
           # Set a basic protocol message, for use later.
@@ -278,7 +272,7 @@ module Custodian
             #
             if c.primary_ip
               if :ipv4 == resolve_mode
-                protocol_msg = "#{c.primary_ip}"
+                protocol_msg = c.primary_ip.to_s
               else
                 protocol_msg = "[#{c.primary_ip}]"
               end
@@ -305,11 +299,11 @@ module Custodian
           # A this point we've either had an exception, or we've
           # got a result
           #
-          if  status and expected_status.to_i != status.to_i
+          if status and expected_status.to_i != status.to_i
             errors << "#{protocol_msg}: Status code was #{status} not the expected #{expected_status}."
           end
 
-          if  content.is_a?(String) and
+          if content.is_a?(String) and
             expected_content.is_a?(String) and
             content !~ /#{expected_content}/i
             errors << "#{protocol_msg}: The response did not contain our expected text '#{expected_content}'."
@@ -321,7 +315,7 @@ module Custodian
           errors << "Hostname did not resolve for #{resolution_errors.join(', ')}"
         end
 
-        if errors.length > 0
+        if !errors.empty?
           if @host_override
             errors << "Host header was overridden as Host: #{@host_override}"
           end

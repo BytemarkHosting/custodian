@@ -75,14 +75,14 @@ module Custodian
         @file = u.path
 
         # Port might not be specified, if it is missing then default to 69.
-        @port = u.port || "69"
+        @port = u.port || '69'
         @port = @port.to_i
 
         #
         # Ensure there is a file to fetch
         #
         if @file.nil? || @file.empty?
-          raise ArgumentError, "Missing file name"
+          raise ArgumentError, 'Missing file name'
         end
 
       end

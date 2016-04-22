@@ -32,7 +32,7 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split(/\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # The username/password
@@ -40,24 +40,24 @@ module Custodian
         @ldap_user = nil
         @ldap_pass = nil
 
-        if  line =~ /with\s+username\s+'([^']+)'/
+        if line =~ /with\s+username\s+'([^']+)'/
           @ldap_user = $1.dup
         end
-        if  line =~ /with\s+password\s+'([^']+)'/
+        if line =~ /with\s+password\s+'([^']+)'/
           @ldap_pass = $1.dup
         end
 
-        if  @ldap_user.nil?
+        if @ldap_user.nil?
           raise ArgumentError, "No username specified: #{@line}"
         end
-        if  @ldap_pass.nil?
+        if @ldap_pass.nil?
           raise ArgumentError, "No password specified: #{@line}"
         end
 
         #
         # Save the port
         #
-        if  line =~ /on\s+([0-9]+)/
+        if line =~ /on\s+([0-9]+)/
           @port = $1.dup.to_i
         else
           @port = 389
@@ -104,12 +104,12 @@ module Custodian
 
           #  Bind.
           ldap.bind(@ldap_user, @ldap_pass)
-          if  ldap.bound?
+          if ldap.bound?
 
             #
             # Search
             #
-            ldap.search(base, scope, filter, attrs)  { |entry|
+            ldap.search(base, scope, filter, attrs) { |entry|
               puts "We found an LDAP result #{entry.vals('cn')}"
             }
             ldap.unbind

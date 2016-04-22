@@ -90,6 +90,12 @@ Metrics/PerceivedComplexity:
 Style/AccessorMethodName:
   Enabled: false
 
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/ParenthesesAroundCondition:
+  Enabled: false
+
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/Alias:
@@ -281,12 +287,6 @@ Style/NegatedIf:
 Style/Next:
   Enabled: false
 
-# Offense count: 185
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment.
-Style/ParenthesesAroundCondition:
-  Enabled: true
-
 # Offense count: 48
 # Cop supports --auto-correct.
 Style/PerlBackrefs:
@@ -302,6 +302,9 @@ Style/PredicateName:
 Style/RedundantBegin:
   Enabled: false
 
+Style/RegexpLiteral:
+  Enabled: false
+
 # Offense count: 20
 # Cop supports --auto-correct.
 # Configuration parameters: AllowMultipleReturnValues.
@@ -311,6 +314,9 @@ Style/RedundantReturn:
 # Offense count: 50
 # Cop supports --auto-correct.
 Style/RedundantSelf:
+  Enabled: false
+
+Style/RedundantParentheses:
   Enabled: false
 
 # Offense count: 16

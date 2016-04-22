@@ -85,7 +85,7 @@ module Custodian
         #
         # So on that basis we must alert.
         #
-        if  mx.empty?  then
+        if mx.empty? then
           @error = "Failed to perform DNS lookup of MX record(s) for host #{@host}"
           return Custodian::TestResult::TEST_FAILED
         end
@@ -109,12 +109,12 @@ module Custodian
                 read = socket.sysread(1024)
 
                 # trim to a sane length & strip newlines.
-                if  !read.nil?
+                if !read.nil?
                   read = read[0, 255]
                   read.gsub!(/[\n\r]/, '')
                 end
 
-                if  read =~ /^220/
+                if read =~ /^220/
                   passed += 1
                 else
                   failed += 1
@@ -135,7 +135,7 @@ module Custodian
         #
         #  At this point we should have tested the things
         #
-        if  failed > 0
+        if failed > 0
           @error = "There are #{mx.size} hosts running as MX-servers for domain #{@host} - #{passed}:OK #{failed}:FAILED - #{error}"
           return Custodian::TestResult::TEST_FAILED
         else

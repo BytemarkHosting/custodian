@@ -32,12 +32,12 @@ module Custodian
         #
         # Save the host
         #
-        @host  = line.split(/\s+/)[0]
+        @host = line.split(/\s+/)[0]
 
         #
         # Save the port
         #
-        if  line =~ /on\s+([0-9]+)/
+        if line =~ /on\s+([0-9]+)/
           @port = $1.dup
         else
           @port = 5222

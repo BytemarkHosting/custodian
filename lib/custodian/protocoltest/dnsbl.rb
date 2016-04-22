@@ -36,7 +36,7 @@ module Custodian
         #
         # See which blacklist(s) we're testing against.
         #
-        if  line =~ /via\s+([^\s]+)\s+/
+        if line =~ /via\s+([^\s]+)\s+/
           @zones = $1.dup
         else
           @zones = 'zen.spamhaus.org'
@@ -63,7 +63,7 @@ module Custodian
       def run_test
 
         # The error is empty.
-        @error  = nil
+        @error = nil
 
         @zones.split(',').each do |zone|
 
@@ -73,13 +73,13 @@ module Custodian
           #  Given IP 1.2.3.4 we lookup the address of the name
           # 4.3.2.1.$zone
           #
-          if  @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/
+          if @host =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/
 
             name = "#{$4}.#{$3}.#{$2}.#{$1}.#{zone}"
 
             result = Custodian::Util::DNS.hostname_to_ip(name)
 
-            if  (!result.nil?) && (result.length > 0)
+            if (!result.nil?) && (!result.empty?)
               @error = "IP #{@host} listed in blacklist #{zone}.  Lookup of #{name} lead to result: #{result}"
               return Custodian::TestResult::TEST_PASSED
             end

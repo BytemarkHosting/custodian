@@ -200,7 +200,7 @@ class SSLCheck
       self.errors << verbose("Failed to fetch certificate for #{self.domain}")
       return nil
     else
-      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature ].any? { |r| false == r }
+      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any? { |r| false == r }
     end
   end
 
@@ -240,7 +240,7 @@ class SSLCheck
       verbose "Skipping signing algorithm check for #{self.domain}"
       return true
     end
-    if self.certificate.signature_algorithm.start_with? "sha1"
+    if self.certificate.signature_algorithm.start_with? 'sha1'
       self.errors << verbose("Certificate for #{self.domain} is signed with a weak algorithm (SHA1) and should be reissued.")
       return false
     else
@@ -403,7 +403,7 @@ module Custodian
         #
         #  If the line disables us then return early
         #
-        if  @line =~ /no_ssl_check/
+        if @line =~ /no_ssl_check/
           return Custodian::TestResult::TEST_PASSED
         end
 
@@ -416,7 +416,7 @@ module Custodian
         #
         #  If outside 10AM-5PM we don't run the test.
         #
-        if  hour < 10 || hour > 17
+        if hour < 10 || hour > 17
           puts("Outside office hours - Not running SSL-Verification of #{@host}")
           return Custodian::TestResult::TEST_SKIPPED
         end
@@ -424,7 +424,7 @@ module Custodian
         #
         #  Double-check we've got an SSL host
         #
-        if  ! @host =~ /^https:\/\//
+        if !@host =~ /^https:\/\//
           puts('Not an SSL URL')
           return Custodian::TestResult::TEST_SKIPPED
         end
@@ -440,8 +440,8 @@ module Custodian
           return Custodian::TestResult::TEST_PASSED
         else
           puts("SSL Verification for #{@host} has failed.")
-          @error  = "SSL Verification for #{@host} failed: "
-          @error +=  s.errors.join("\n")
+          @error = "SSL Verification for #{@host} failed: "
+          @error += s.errors.join("\n")
           return Custodian::TestResult::TEST_FAILED
         end
 
@@ -461,7 +461,7 @@ module Custodian
       # summary.
       #
       def get_type
-        "ssl-validity"
+        'ssl-validity'
       end
 
 

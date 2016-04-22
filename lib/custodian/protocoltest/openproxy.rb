@@ -60,7 +60,7 @@ module Custodian
       def run_test
 
         #  Reset state, in case we've previously run.
-        @error    = nil
+        @error = nil
 
         begin
           require 'rubygems'

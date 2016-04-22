@@ -64,9 +64,9 @@ module Custodian
         #
         binary = nil
         binary = './bin/multi-ping'
-        binary = '/usr/bin/multi-ping'  if  File.exist?('/usr/bin/multi-ping')
+        binary = '/usr/bin/multi-ping' if File.exist?('/usr/bin/multi-ping')
 
-        if  binary.nil?
+        if binary.nil?
           @error = "Failed to find '/usr/bin/multi-ping'"
           return Custodian::TestResult::TEST_FAILED
         end
@@ -78,7 +78,7 @@ module Custodian
         #
         #   $(/tmp/exploit.sh) must run ping ..
         #
-        if  @host !~ /^([a-zA-Z0-9:\-\.]+)$/
+        if @host !~ /^([a-zA-Z0-9:\-\.]+)$/
           @error = "Invalid hostname for ping-test: #{@host}"
           return Custodian::TestResult::TEST_FAILED
         end
@@ -102,7 +102,7 @@ module Custodian
         #
         begin
           x = IPAddr.new(@host)
-          if  x.ipv4? or x.ipv6?
+          if x.ipv4? or x.ipv6?
             ips.push(@host)
           end
         rescue ArgumentError
@@ -118,10 +118,10 @@ module Custodian
         #
         # Allow the test to disable one/both
         #
-        if  @line =~ /ipv4_only/
+        if @line =~ /ipv4_only/
           do_ipv6 = false
         end
-        if  @line =~ /ipv6_only/
+        if @line =~ /ipv6_only/
           do_ipv4 = false
         end
 
@@ -133,11 +133,11 @@ module Custodian
           timeout(period) do
 
             Resolv::DNS.open do |dns|
-              if  do_ipv4
+              if do_ipv4
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::A)
                 ress.map { |r| ips.push(r.address.to_s) }
               end
-              if  do_ipv6
+              if do_ipv6
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::AAAA)
                 ress.map { |r| ips.push(r.address.to_s) }
               end
@@ -152,7 +152,7 @@ module Custodian
         #
         #  Did we fail to perform a DNS lookup?
         #
-        if  ips.empty?
+        if ips.empty?
           @error = "#{@host} failed to resolve to either IPv4 or IPv6"
           return Custodian::TestResult::TEST_FAILED
         end
