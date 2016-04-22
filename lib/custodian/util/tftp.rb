@@ -13,13 +13,13 @@ module Custodian
       # Store hostname and port
       #
       def initialize(hostname, port=69)
-      
+
         raise ArgumentError, 'Hostname must not be nil' if  hostname.nil?
         raise ArgumentError, 'Hostname must be a String' unless  hostname.kind_of?(String)
         raise ArgumentError, 'Port must be a number' unless port.to_i > 0
 
         @hostname = hostname
-        @port = port.to_i
+        @port     = port.to_i
       end
 
       #
