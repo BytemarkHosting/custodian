@@ -24,12 +24,12 @@ if __FILE__ == $PROGRAM_NAME
 
   begin
     opts = GetoptLong.new(
-      ['--dump',  '-d', GetoptLong::NO_ARGUMENT],
-      ['--test',   GetoptLong::NO_ARGUMENT],
-      ['--file',  '-f', GetoptLong::REQUIRED_ARGUMENT],
-      ['--help',  '-h', GetoptLong::NO_ARGUMENT],
+      ['--dump', '-d', GetoptLong::NO_ARGUMENT],
+      ['--test', GetoptLong::NO_ARGUMENT],
+      ['--file', '-f', GetoptLong::REQUIRED_ARGUMENT],
+      ['--help', '-h', GetoptLong::NO_ARGUMENT],
       ['--manual', '-m', GetoptLong::NO_ARGUMENT]
-                          )
+    )
     opts.each do |opt, arg|
       case opt
       when '--dump' then
@@ -62,8 +62,8 @@ if __FILE__ == $PROGRAM_NAME
   #
   # Connected to the queue.
   #
-  queue = Custodian::RedisQueueType.new()
-  unless  queue
+  queue = Custodian::RedisQueueType.new
+  unless queue
     puts "Failed to connect to the #{settings.queue_type} queue"
     exit 1
   end
@@ -91,18 +91,18 @@ if __FILE__ == $PROGRAM_NAME
   failed = false
 
   mon.jobs.each do |test|
-    if  ENV['TEST']
+    if ENV['TEST']
       # nop
-    elsif  ENV['DUMP']
+    elsif ENV['DUMP']
       puts test
     else
       failed = true unless queue.add(test.to_s)
     end
   end
 
-  if ( failed )
-    puts "We failed to add at least one job to the queue."
-    exit( 1 )
+  if failed
+    puts 'We failed to add at least one job to the queue.'
+    exit(1)
   end
 end
 

@@ -25,15 +25,15 @@ if __FILE__ == $PROGRAM_NAME
       ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
       ['--monitor', '-M', GetoptLong::OPTIONAL_ARGUMENT],
       ['--stats',   '-s', GetoptLong::NO_ARGUMENT]
-                          )
+    )
     opts.each do |opt, arg|
       case opt
       when '--monitor' then
-        if  arg
-          monitor = arg.to_i
-        else
-          monitor = 5000
-        end
+        monitor = if arg
+                    arg.to_i
+                  else
+                    5000
+                  end
       when '--stats' then
         stats = true
       when '--flush' then
@@ -62,7 +62,7 @@ if __FILE__ == $PROGRAM_NAME
   #
   #  Create the queue object.
   #
-  queue = Custodian::RedisQueueType.new()
+  queue = Custodian::RedisQueueType.new
 
   #
   # Alerting on a queue that is too-full?

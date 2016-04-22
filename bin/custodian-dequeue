@@ -29,12 +29,12 @@ if __FILE__ == $PROGRAM_NAME
 
   begin
     opts = GetoptLong.new(
-      ['--help',    '-h', GetoptLong::NO_ARGUMENT],
-      ['--manual',  '-m', GetoptLong::NO_ARGUMENT],
-      ['--fail',    '-f', GetoptLong::NO_ARGUMENT],
-      ['--single',  '-s', GetoptLong::NO_ARGUMENT],
+      ['--help', '-h', GetoptLong::NO_ARGUMENT],
+      ['--manual', '-m', GetoptLong::NO_ARGUMENT],
+      ['--fail', '-f', GetoptLong::NO_ARGUMENT],
+      ['--single', '-s', GetoptLong::NO_ARGUMENT],
       ['--verbose', '-v', GetoptLong::NO_ARGUMENT]
-                          )
+    )
     opts.each do |opt, _arg|
       case opt
       when '--verbose' then
@@ -73,7 +73,7 @@ if __FILE__ == $PROGRAM_NAME
   #
   #  Single step?
   #
-  if  ENV['SINGLE']
+  if ENV['SINGLE']
     worker.process_single_job
     exit(0)
   end
@@ -81,7 +81,7 @@ if __FILE__ == $PROGRAM_NAME
   #
   #  Run until we see a failure?
   #
-  if  ENV['FAIL']
+  if ENV['FAIL']
     worker.process_until_fail
     exit(0)
   end
