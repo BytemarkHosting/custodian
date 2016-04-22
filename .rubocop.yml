@@ -66,7 +66,7 @@ Metrics/AbcSize:
 # Offense count: 8
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 202
+  Max: 300
 
 # Offense count: 22
 Metrics/CyclomaticComplexity:
@@ -75,7 +75,7 @@ Metrics/CyclomaticComplexity:
 # Offense count: 118
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
-  Max: 216
+  Max: 300
 
 # Offense count: 78
 # Configuration parameters: CountComments.
@@ -302,14 +302,12 @@ Style/PredicateName:
 Style/RedundantBegin:
   Enabled: false
 
+Style/RedundantReturn:
+  Enabled: false
+
 Style/RegexpLiteral:
   Enabled: false
 
-# Offense count: 20
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Enabled: true
 
 # Offense count: 50
 # Cop supports --auto-correct.

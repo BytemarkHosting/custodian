@@ -17,7 +17,7 @@ module Custodian
         #
         #  Handle PM times.
         #
-        if  (desc.kind_of? String) &&
+        if (desc.kind_of? String) &&
              (desc =~ /([0-9]+)pm$/i)
           desc = $1.dup.to_i + 12
         end
@@ -25,7 +25,7 @@ module Custodian
         #
         #  Handle AM times.
         #
-        if  desc.kind_of? String
+        if desc.kind_of? String
           desc = desc.sub(/am$/, '')
           desc = desc.to_i
         end
@@ -33,8 +33,8 @@ module Custodian
         #
         #  Ensure within a valid range
         #
-        raise ArgumentError, 'Integer required for time'   unless desc.kind_of? Integer
-        raise ArgumentError,  "Invalid time: #{desc}" unless (desc >= 0) && (desc <= 23)
+        raise ArgumentError, 'Integer required for time' unless desc.kind_of? Integer
+        raise ArgumentError, "Invalid time: #{desc}" unless (desc >= 0) && (desc <= 23)
 
 
         #
@@ -70,7 +70,7 @@ module Custodian
         while (hour != p_end)
           valid[hour] = 1
           hour += 1
-          hour  = 0 if  hour > 23
+          hour = 0 if hour > 23
         end
         valid[p_end] = 1
 
@@ -92,7 +92,7 @@ module Custodian
         #
         # Default to the current hour, if not specified.
         #
-        if  cur_hour.nil?
+        if cur_hour.nil?
           cur_hour = Time.now.hour
         end
 

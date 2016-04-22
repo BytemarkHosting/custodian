@@ -12,14 +12,14 @@ module Custodian
       #
       # Store hostname and port
       #
-      def initialize(hostname, port=69)
+      def initialize(hostname, port = 69)
 
-        raise ArgumentError, 'Hostname must not be nil' if  hostname.nil?
-        raise ArgumentError, 'Hostname must be a String' unless  hostname.kind_of?(String)
+        raise ArgumentError, 'Hostname must not be nil' if hostname.nil?
+        raise ArgumentError, 'Hostname must be a String' unless hostname.kind_of?(String)
         raise ArgumentError, 'Port must be a number' unless port.to_i > 0
 
         @hostname = hostname
-        @port     = port.to_i
+        @port = port.to_i
       end
 
       #
@@ -35,7 +35,7 @@ module Custodian
         FileUtils.rm_f(target)
       end
 
-      def fetch(file, target=nil)
+      def fetch(file, target = nil)
         # HPA's tftp client appears to have a 25s timeout that it is
         # not possible to change on the command line.
         return tftp("-m binary #{@hostname} #{@port} -c get #{file} #{target}")
