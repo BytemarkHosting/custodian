@@ -1,16 +1,17 @@
 
 Source:
-    https://projects.bytemark.co.uk/projects/custodian
+    https://gitlab.bytemark.co.uk/open-source/custodian
 
 Github Mirror:
     https://github.com/BytemarkHosting/custodian
 
 
 Copyright:
-    Copyright (c) 2012-2015 Bytemark Computer Consulting Ltd
+    Copyright (c) 2012-2016 Bytemark Computer Consulting Ltd
 
 Bug Tracker:
-    https://projects.bytemark.co.uk/projects/custodian/issues/new
+    https://github.com/BytemarkHosting/custodian/issues
+    https://gitlab.bytemark.co.uk/open-source/custodian/issues
 
 Licence:
     This program is free software; you can redistribute it and/or modify
@@ -79,24 +80,3 @@ Dependencies, beyond ruby, are limited to the following gems:
 * For communication with the queue: redis
 
 
-
-Formatting
-----------
-
-Our code is formatted and tested with [rubodoc](https://github.com/bbatsov/rubocop).
-
-Code should not be committed to the repository which results in warnings
-or errors from the current `.rubodoc` configuration file.
-
-
-
-Documentation
--------------
-
-The software is documented online at the project home-page:
-
-    https://projects.bytemark.co.uk/projects/custodian/wiki
-
-Beyond that each script has a manpage which is installed when the
-package is installed - or which may be examined by invoking the
-script with the "--manual" flag.
