@@ -438,8 +438,10 @@ module Custodian
           puts("SSL Verification succeeded for #{@host}")
           return Custodian::TestResult::TEST_PASSED
         elsif result.nil?
-          puts("SSL Verification returned no result (timeout?) #{@host}")
-          return Custodian::TestResult::TEST_PASSED
+          puts("SSL Verification returned no result #{@host}")
+          @error = "SSL Verification for #{@host} failed - TLS negotiation failure?\n";
+          @error += s.errors.join("\n")
+          return Custodian::TestResult::TEST_FAILED
         else
           puts("SSL Verification for #{@host} has failed.")
           @error = "SSL Verification for #{@host} failed: "
