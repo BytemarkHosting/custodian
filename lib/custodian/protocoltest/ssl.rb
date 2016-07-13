@@ -173,8 +173,10 @@ class SSLCheck
       end
     rescue OpenSSL::SSL::SSLError => err
       unless retried
+        #
         # retry with a different context
         #
+        retried = true
         ctx = OpenSSL::SSL::SSLContext.new(:SSLv3_client)
         retry
       end
