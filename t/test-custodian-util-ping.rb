@@ -60,29 +60,6 @@ class TestPingUtil < Test::Unit::TestCase
 
 
   #
-  #  Test IPv4 lookups
-  #
-  def test_lookup_ipv4
-
-    helper = Custodian::Util::Ping.new('ipv4.steve.org.uk')
-    assert(helper.is_ipv4?)
-    assert(!helper.is_ipv6?)
-
-  end
-
-
-  #
-  #  Test IPv6 lookups
-  #
-  def test_lookup_ipv6
-
-    helper = Custodian::Util::Ping.new('ipv6.steve.org.uk')
-    assert(helper.is_ipv6?)
-    assert(!helper.is_ipv4?)
-  end
-
-
-  #
   #  Test lookup of hosts that don't work
   #
   def test_lookup_fail

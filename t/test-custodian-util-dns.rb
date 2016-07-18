@@ -39,13 +39,6 @@ class TestDNSUtil < Test::Unit::TestCase
             (details == '80.68.81.80'))
 
 
-    details = Custodian::Util::DNS.hostname_to_ip('ipv4.steve.org.uk')
-    assert(details == '80.68.84.111')
-
-    details = Custodian::Util::DNS.hostname_to_ip('ipv6.steve.org.uk')
-    assert(details == '2001:41c8:10b:103::111')
-
-
     #
     # Failure case
     #
