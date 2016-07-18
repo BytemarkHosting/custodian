@@ -145,6 +145,48 @@ class SSLCheck
   end
 
   #
+  # This is a fall-back method which is used to retrieve the certificate
+  # from the remote host in the case where fetching natively fails.
+  #
+  # It is obviously not a great method, because we shouldn't need to
+  # be shelling out to a command-line application over using our
+  # native/available SSL library.
+  #
+  # Beyond the ropy nature of this method there is another problem:
+  # we cannot fetch the bundle the remote-server might send us.
+  #
+  # So if this method is used `@fallback` is set to `true` such that
+  # we only validate the certificate is non-expired, and not that it
+  # is valid.
+  #
+  def certificate_fallback
+    cert = ""
+    in_cert = false
+
+    # Run the command.
+    out = `echo "" | openssl s_client -connect  #{uri.host}:#{uri.port} 2>/dev/null`
+    # For each line of the output
+    out.split( /[\r\n]/ ).each do |line|
+
+      # Are we in a certificate?
+      in_cert = true if ( line =~ /BEGIN CERT/ )
+
+      # If so append the line.
+      if ( in_cert )
+        cert += line
+        cert += "\n"
+      end
+
+      # Are we at the end?
+      in_cert = false if ( line =~ /END CERT/ )
+    end
+
+    # Return the certificate
+    cert
+  end
+
+
+  #
   # This connects to a host, and fetches its certificate and bundle
   #
   def certificate
@@ -198,12 +240,28 @@ class SSLCheck
     if self.tests.empty?
       verbose "All tests have been disabled for #{self.domain}"
       return true
-    elsif self.certificate.nil?
-      self.errors << verbose("Failed to fetch certificate for #{self.domain}")
-      return nil
-    else
-      return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any? { |r| false == r }
     end
+
+    # Did we fail to find the certificate?
+    if self.certificate.nil?
+
+      # Use our fallback method.
+      fallback = certificate_fallback()
+
+      # If we failed to fetch it then we cannot do anything useful.
+      if ( fallback.nil? )
+        self.errors << verbose("Failed to fetch certificate for #{self.domain}")
+	return nil
+      else
+        # Populate the certificate, and report that we used our
+        # fallback method - because we've no longer got access
+        # to the bundle the remote server might have sent us.
+        @fallback    = true
+        @certificate = OpenSSL::X509::Certificate.new(fallback)
+      end
+    end
+
+    return ![verify_subject, verify_valid_from, verify_valid_to, verify_signature].any? { |r| false == r }
   end
 
   def verify_sslv3_disabled
@@ -308,6 +366,16 @@ class SSLCheck
   end
 
   def verify_signature
+    #
+    # If we used our fallback method we cannot verify that the
+    # signature is valid, because we're missing the bundle that
+    # the remote server should have sent us.
+    #
+    if ( @fallback )
+      verbose "Skipping certificate signature validation for #{self.domain} because fallback SSL-certificate had to be used and we think we'll fail"
+      return true;
+    end
+
     unless self.tests.include?(:signature)
       verbose "Skipping certificate signature validation for #{self.domain}"
       return true
