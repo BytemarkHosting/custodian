@@ -164,7 +164,7 @@ class SSLCheck
     in_cert = false
 
     # Run the command.
-    out = `echo "" | openssl s_client -connect  #{uri.host}:#{uri.port} 2>/dev/null`
+    out = `echo "" | openssl s_client -servername #{uri.host} -connect #{uri.host}:#{uri.port} 2>/dev/null`
     # For each line of the output
     out.split( /[\r\n]/ ).each do |line|
 
