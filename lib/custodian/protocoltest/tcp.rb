@@ -301,7 +301,7 @@ module Custodian
             end
           end
         rescue Timeout::Error => e
-          @error = "TIMEOUT: #{e}"
+          @error = "Timed out connecting to #{host}:#{port} - #{e}"
           return false
         end
         @error = 'Misc failure'
