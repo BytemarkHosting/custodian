@@ -1,3 +1,11 @@
+custodian (0.32) stable; urgency=low
+
+  * When a TCP-test fails, due to timeout, show the host/port which was
+    being connected to.  This removes ambiguity when a test could be applied
+    over both IPv4 & IPv6.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Mon, 19 Dec 2016 14:00:41 +0100
+
 custodian (0.31) stable; urgency=low
 
   * When falling back to using `openssl`, if TLS 1.2 negotation fails, we
