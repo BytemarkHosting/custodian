@@ -1,3 +1,11 @@
+custodian (0.33) stable; urgency=low
+
+  * Allow an alert's subject to be prefixed with a custom string, read from
+    /store/clients/*/custodian-prefix.cfg.  If multiple files are present
+    then the last match wins.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 16 Mar 2016 12:11:21 +0100
+
 custodian (0.32) stable; urgency=low
 
   * When a TCP-test fails, due to timeout, show the host/port which was
