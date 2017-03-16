@@ -2,6 +2,7 @@
 
 require 'custodian/util/bytemark'
 require 'custodian/util/dns'
+require 'custodian/util/prefix'
 
 require 'digest/sha1'
 
@@ -223,12 +224,14 @@ module Custodian
         # Because there might be N-classes which implemented the test
         # we need to make sure these are distinct too.
         #
-        id_key  = test.to_s
-        id_key += test.class.to_s
+        id_key    = test.to_s
+        id_key   += test.class.to_s
+        alert.id  = Digest::SHA1.hexdigest(id_key)
 
-        alert.id = Digest::SHA1.hexdigest(id_key)
+        # Look for a subject-prefix
+        subject_prefix = Custodian::Util::Prefix.text()
 
-        alert.subject = subject
+        alert.subject = subject_prefix + subject
         alert.summary = "The #{test_type} test failed against #{test_host}"
 
         #
