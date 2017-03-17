@@ -430,7 +430,31 @@ EOF
     end
   end
 
+  #
+  # HTTP/HTTPS tests might specify custom expiry
+  #
+  def test_https_custom_expiry
 
+    parser = Custodian::Parser.new
+
+    #
+    # A series of tests to parse
+    #
+    text = []
+    text.push('https://example.com/ must run https')
+    text.push('https://example.com/ must run https and cannot expire within 14 days')
+    text.push('https://example.com/ must run https and cannot expire within 45 days')
+    text.push('https://example.com/ must run https and cannot expire within 300 days')
+
+    #
+    # Test the parser with this text
+    #
+    text.each do |txt|
+      assert_raise ArgumentError do
+        parser.parse_lines(txt)
+      end
+    end
+  end
 
 
   #

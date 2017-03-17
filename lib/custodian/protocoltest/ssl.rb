@@ -25,12 +25,14 @@ class SSLCheck
   #
   # Takes one parameter -- the URL.
   #
-  def initialize(uri)
+  def initialize(uri, expiry_days = 14)
     raise ArgumentError, 'URI must be a string' unless uri.is_a?(String)
     @uri = URI.parse(uri)
 
     @domain = @uri.host
     @key = nil
+
+    @expiry_days = expiry_days
 
     @certificate = nil
     @certificate_store = nil
@@ -352,7 +354,7 @@ class SSLCheck
 
     days_until_expiry = (self.certificate.not_after.to_i - Time.now.to_i) / (24.0 * 3600).floor.to_i
 
-    if days_until_expiry > 14
+    if days_until_expiry > @expiry_days
       verbose "The certificate for #{self.domain} is valid until #{self.certificate.not_after}."
       return true
     else
@@ -440,6 +442,12 @@ module Custodian
         #
         @line = line
 
+        if @line =~ /and cannot expire within (\d+) days/ then
+          @expiry_days = $1
+        else
+          @expiry_days = 14
+        end
+
         #
         # Save the host
         #
@@ -499,7 +507,7 @@ module Custodian
           return Custodian::TestResult::TEST_SKIPPED
         end
 
-        s = SSLCheck.new(@host)
+        s = SSLCheck.new(@host,@expiry_days)
         result = s.verify
 
         if true == result
