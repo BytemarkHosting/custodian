@@ -5,7 +5,7 @@ stages:
 
 
 test:jessie: &test
-  image: $CI_REGISTRY/docker-images/layers:$DISTRO-deb
+  image: $CI_REGISTRY/docker-images/layers:$DISTRO-ruby
   stage: test
   variables:
     DISTRO: jessie
