@@ -29,7 +29,7 @@ class TestDNSUtil < Test::Unit::TestCase
   #  Test forward lookups
   #
   def test_lookup
-    return unless( ENV['GITLAB_CI'].nil? )
+    return unless ENV['GITLAB_CI'].nil?
 
     details = Custodian::Util::DNS.hostname_to_ip('bytemark.co.uk')
     assert((details == '2001:41c9:0:1019:81::80') ||
@@ -53,7 +53,7 @@ class TestDNSUtil < Test::Unit::TestCase
   #  Test forward lookups
   #
   def test_reverse_lookup
-    return unless( ENV['GITLAB_CI'].nil? )
+    return unless ENV['GITLAB_CI'].nil?
 
     #
     # IPv6 lookup
