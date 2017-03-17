@@ -1,6 +1,16 @@
 stages:
+  - test
   - package
   - publish
+
+
+test:jessie: &test
+  image: $CI_REGISTRY/docker-images/layers:$DISTRO-deb
+  stage: test
+  variables:
+    DISTRO: jessie
+  script:
+    - make test
 
 .package: &package
   image: $CI_REGISTRY/docker-images/layers:$DISTRO-deb
