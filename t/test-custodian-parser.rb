@@ -1,6 +1,5 @@
 #!/usr/bin/ruby -I./lib/ -I../lib/
 
-
 require 'test/unit'
 require 'custodian/parser'
 
@@ -430,7 +429,54 @@ EOF
     end
   end
 
+  #
+  # HTTP/HTTPS tests might specify custom expiry
+  #
+  def test_https_custom_expiry
 
+    parser = Custodian::Parser.new
+
+    #
+    # A series of tests to parse
+    #
+    expiries = {}
+    expiries['https://example.com/ must run https'] = 14
+    expiries['https://example.com/ must run https and cannot expire within 14 days'] = 14
+    expiries['https://example.com/ must run https and cannot expire within 45 days'] = 45
+    expiries['https://example.com/ must run https and cannot expire within 300 days'] = 300
+
+    #
+    # Test the parser with this text
+    #
+    expiries.each do |str,days|
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create(str)
+        assert(!obj.nil?)
+        assert(obj.kind_of?(Array))
+
+        # There are *TWO* registered tests for http URLs.
+        assert(obj.size == 2)
+
+        found_days = -1
+
+        # Test both of them to make sure we got our expiry period.
+        obj.each do |x|
+          if ( x.class.name =~ /SSL/ )
+            found_days =  x.expiry_days
+          end
+        end
+
+        # Ensure we did find a match.
+        assert(found_days != -1 )
+        assert(found_days == days)
+
+      end
+    end
+  end
 
 
   #
