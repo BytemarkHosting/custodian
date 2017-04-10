@@ -63,6 +63,11 @@ module Custodian
         #
         @redirect = true
 
+        #
+        # No basic-authentication by default
+        #
+        @username = nil
+        @password = nil
 
         #
         #  Ensure we've got a HTTP/HTTPS url.
@@ -96,6 +101,12 @@ module Custodian
         if (u.scheme != test_type)
           raise ArgumentError, "The test case has a different protocol in the URI than that which we're testing: #{@line} - \"#{test_type} != #{u.scheme}\""
         end
+
+        #
+        #  Save username/password if they were specified
+        #
+        @username = u.user if ( u.user )
+        @password = u.password if ( u.password )
 
 
         #
@@ -181,6 +192,24 @@ module Custodian
       end
 
       #
+      #  Do we have basic auth?
+      #
+      def basic_auth?
+        ( @username.nil? == false ) && ( @password.nil? == false )
+      end
+
+      #
+      #  Get the username/password for basic-auth
+      #
+      def basic_auth_username
+        @username
+      end
+
+      def basic_auth_password
+        @password
+      end
+
+      #
       # Allow this test to be serialized.
       #
       def to_s
@@ -238,6 +267,15 @@ module Custodian
           c = Curl::Easy.new(test_url)
 
           c.resolve_mode = resolve_mode
+
+          #
+          # Should we use HTTP basic-auth?
+          #
+          if  basic_auth?
+            c.http_auth_types = :basic
+            c.username = basic_auth_username
+            c.password = basic_auth_password
+          end
 
           #
           # Should we follow redirections?

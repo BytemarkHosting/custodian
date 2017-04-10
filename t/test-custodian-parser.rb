@@ -430,6 +430,46 @@ EOF
   end
 
   #
+  # Test that the parser works for basic-auth.
+  #
+  def test_http_user_password
+
+    #
+    # test data
+    #
+    data = {
+      'http://bob:steve@example must run http.'  =>
+      { username: 'bob', password: 'steve'},
+      'http://stee\':steve@example must run http.' =>
+      { username: 'stee\'', password: 'steve'},
+      'http://e\'e:pa$$w0rd@example must run http.' =>
+      { username: 'e\'e', password: 'pa$$w0rd'},
+    }
+
+    data.each do |str, hash |
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create(str)
+
+        assert(!obj.nil?)
+        assert(obj.kind_of?(Array))
+        assert(obj.size == 1)
+        assert_equal(obj[0].to_s, str)
+
+        # There should be auth-enabled
+        assert(obj[0].basic_auth?)
+        assert(obj[0].basic_auth_username == hash[:username] )
+        assert(obj[0].basic_auth_password == hash[:password] )
+
+      end
+    end
+  end
+
+
+  #
   # HTTP/HTTPS tests might specify custom expiry
   #
   def test_https_custom_expiry
