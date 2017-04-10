@@ -108,7 +108,6 @@ module Custodian
         @username = u.user if ( u.user )
         @password = u.password if ( u.password )
 
-
         #
         # Expected status
         #
@@ -252,6 +251,17 @@ module Custodian
             u.query = "ctime=#{Time.now.to_i}"
             test_url = u.to_s
           end
+        end
+
+        #
+        #  If we're running with HTTP-basic-auth we should remove
+        # the username/password from the URL we're passing to curb.
+        #
+        if ( basic_auth? )
+          u = URI.parse(test_url)
+          u.user     = nil
+          u.password = nil
+          test_url = u.to_s
         end
 
         errors = []
