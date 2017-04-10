@@ -102,18 +102,12 @@ module Custodian
           raise ArgumentError, "The test case has a different protocol in the URI than that which we're testing: #{@line} - \"#{test_type} != #{u.scheme}\""
         end
 
+        #
+        #  Save username/password if they were specified
+        #
+        @username = u.user if ( u.user )
+        @password = u.password if ( u.password )
 
-        #
-        # Look for username & password
-        #
-        if line =~ /with auth '([^']+)'/
-          data = $1.dup
-          @username, @password = data.split( ":" )
-        end
-        if line =~ /with auth "([^"]+)"/
-          data = $1.dup
-          @username, @password = data.split( ":" )
-        end
 
         #
         # Expected status

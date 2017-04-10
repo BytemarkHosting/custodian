@@ -438,12 +438,12 @@ EOF
     # test data
     #
     data = {
-      'http://example must run http with auth "bob:steve".'  =>
+      'http://bob:steve@example must run http.'  =>
       { username: 'bob', password: 'steve'},
-      'http://example must run http with auth "stee\':steve".' =>
+      'http://stee\':steve@example must run http.' =>
       { username: 'stee\'', password: 'steve'},
-      'http://example must run http with auth \'e"e:pa$$w0rd\'.' =>
-      { username: 'e"e', password: 'pa$$w0rd'},
+      'http://e\'e:pa$$w0rd@example must run http.' =>
+      { username: 'e\'e', password: 'pa$$w0rd'},
     }
 
     data.each do |str, hash |
