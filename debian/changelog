@@ -1,3 +1,10 @@
+custodian (0.34) stable; urgency=low
+
+  * Install a cron.daily task to reap old tests - which will ensure that
+    the "redis" alerter contains accurate data if it is used.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 26 Jun 2017 12:00:21 +0100
+
 custodian (0.33) stable; urgency=low
 
   * Allow an alert's subject to be prefixed with a custom string, read from
