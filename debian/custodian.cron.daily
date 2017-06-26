@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#
+# Ensure that any known-tests are pruned.
+#
+# This is only used if the `redis` alerter is enabled, if this is not
+# used then this will be harmless.
+#
+# (This script is required because redis set-members do not have TTLs
+# so they cannot be reaped automatically.)
+#
+
+/usr/bin/redis-cli  del known_tests >/dev/null 2>/dev/null
