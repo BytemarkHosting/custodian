@@ -1,3 +1,9 @@
+custodian (0.35) stable; urgency=low
+
+  * Alert in more detail on DNS failures.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 26 Jun 2017 12:00:21 +0100
+
 custodian (0.34) stable; urgency=low
 
   * Install a cron.daily task to reap old tests - which will ensure that

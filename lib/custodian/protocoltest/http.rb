@@ -338,7 +338,7 @@ module Custodian
             errors << "#{protocol_msg}: More than 10 redirections."
           rescue Curl::Err::HostResolutionError => x
             # Log the DNS error-message.
-            resolution_errors << "#{resolve_mode} - #{x.message}"
+            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           rescue => x
             errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           end
@@ -359,7 +359,7 @@ module Custodian
         end
 
         # uh-oh! Resolution failed on both protocols!
-        if resolution_errors.length > 0
+        if resolution_errors.length > 1
           errors << "DNS Error when resolving host - #{resolution_errors.join(',')}"
         end
 
