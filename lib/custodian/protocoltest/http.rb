@@ -61,44 +61,52 @@ module Custodian
       #
       def ignore_failure?( protocol )
 
-        #  IP addresses we found for the host
-        ips = []
-
         # Get the hostname we're connecting to.
         u = URI.parse(@url)
         target = u.host
 
-        #
-        #  Resolve the target to an IP, unless it is already an address.
-        #
-        if (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
-           (target =~ /^([0-9a-f:]+)$/)
-          ips.push(target)
+        # IPs for the target
+        ips = []
+
+        case protocol
+        when :ipv4
+          if (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/)
+            ips << target
+          end
+        when :ipv6
+          if (target =~ /^([0-9a-f:]+)$/)
+            ips << target
+          end
         else
+          raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
+        end
 
-          #
-          # OK if it didn't look like an IP address then attempt to
-          # look it up, as both IPv4 and IPv6.
-          #
-          begin
-            timeout(30) do
+        # Early termination?
+        return true unless ips.empty?
 
+        #
+        # OK if it didn't look like an IP address then attempt to
+        # look it up, as both IPv4 and IPv6.
+        #
+        begin
+          timeout(30) do
+
+            type = case protocol
+                   when :ipv4
+                     Resolv::DNS::Resource::IN::A
+                   when :ipv6
+                     Resolv::DNS::Resource::IN::AAAA
+                   else
+                     raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
+                   end
+
+            begin
               Resolv::DNS.open do |dns|
-
-                if ( protocol == :ipv4 )
-                  ress = dns.getresources(target, Resolv::DNS::Resource::IN::A)
-                  ress.map { |r| ips.push(r.address.to_s) }
-                elsif ( protocol == :ipv6 )
-
-                  ress = dns.getresources(target, Resolv::DNS::Resource::IN::AAAA)
-                  ress.map { |r| ips.push(r.address.to_s) }
-                else
-                  raise ArgumentError, "Sanity-checking DNS-failure of unknown type"
-                end
+                ips = dns.getresources(target, type)
               end
+            rescue Timeout::Error => _e
+              # NOP
             end
-          rescue Timeout::Error => _e
-            # NOP
           end
         end
 
