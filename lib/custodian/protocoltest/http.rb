@@ -89,26 +89,25 @@ module Custodian
         # look it up, as both IPv4 and IPv6.
         #
         begin
+
+          type = case protocol
+                 when :ipv4
+                   Resolv::DNS::Resource::IN::A
+                 when :ipv6
+                   Resolv::DNS::Resource::IN::AAAA
+                 else
+                   raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
+                 end
+
           timeout(30) do
-
-            type = case protocol
-                   when :ipv4
-                     Resolv::DNS::Resource::IN::A
-                   when :ipv6
-                     Resolv::DNS::Resource::IN::AAAA
-                   else
-                     raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
-                   end
-
-            begin
-              Resolv::DNS.open do |dns|
-                ips = dns.getresources(target, type)
-              end
-            rescue Timeout::Error => _e
-              # NOP
+            Resolv::DNS.open do |dns|
+              ips = dns.getresources(target, type)
             end
           end
+        rescue Timeout::Error => _e
+          # NOP
         end
+
 
         #
         #  At this point we either have:
