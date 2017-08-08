@@ -59,7 +59,7 @@ module Custodian
       #    raise an alert, but if it is this false-error then we
       #    will silently disable this test-run.
       #
-      def ignore_failure?
+      def ignore_failure?( protocol )
 
         #  IP addresses we found for the host
         ips = []
@@ -85,11 +85,16 @@ module Custodian
 
               Resolv::DNS.open do |dns|
 
-                ress = dns.getresources(target, Resolv::DNS::Resource::IN::A)
-                ress.map { |r| ips.push(r.address.to_s) }
+                if ( protocol == :ipv4 )
+                  ress = dns.getresources(target, Resolv::DNS::Resource::IN::A)
+                  ress.map { |r| ips.push(r.address.to_s) }
+                elsif ( protocol == :ipv6 )
 
-                ress = dns.getresources(target, Resolv::DNS::Resource::IN::AAAA)
-                ress.map { |r| ips.push(r.address.to_s) }
+                  ress = dns.getresources(target, Resolv::DNS::Resource::IN::AAAA)
+                  ress.map { |r| ips.push(r.address.to_s) }
+                else
+                  raise ArgumentError, "Sanity-checking DNS-failure of unknown type"
+                end
               end
             end
           rescue Timeout::Error => _e
@@ -409,7 +414,7 @@ module Custodian
           rescue Curl::Err::TooManyRedirectsError
             errors << "#{protocol_msg}: More than 10 redirections."
           rescue Curl::Err::HostResolutionError => x
-            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
+            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}." unless ignore_failure?( resolve_mode)
 
           rescue => x
             errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
@@ -432,9 +437,6 @@ module Custodian
 
         # uh-oh! Resolution failed on both protocols!
         if resolution_errors.length > 1
-
-          return Custodian::TestResult::TEST_SKIPPED if ignore_failure?
-
           errors << "DNS Error when resolving host - #{resolution_errors.join(',')}"
         end
 
