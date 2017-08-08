@@ -1,3 +1,10 @@
+custodian (0.36) stable; urgency=high
+
+  * If we receive a DNS-error from the curb-gem we ignore it, unless
+    failing to resolve the appropriate hostname ourselves.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Tue, 08 Aug 2017 08:55:08 +0200
+
 custodian (0.35) stable; urgency=low
 
   * Alert in more detail on DNS failures.
