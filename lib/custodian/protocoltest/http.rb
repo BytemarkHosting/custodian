@@ -337,8 +337,80 @@ module Custodian
           rescue Curl::Err::TooManyRedirectsError
             errors << "#{protocol_msg}: More than 10 redirections."
           rescue Curl::Err::HostResolutionError => x
-            # Log the DNS error-message.
+
+            #
+            # We've been beset by a series of false-alerts in the recent
+            # past which have all occurred at this point:
+            #
+            #   * We get bogus errors in resolving DNS from curb/libcurl.
+            #
+            #   * These errors go away on retry.
+            #
+            #   * But the retry isn't fast enough to outrace the
+            #     supression-time of our alerts.
+            #
+            # For the moment we're going to _temporarily_ ignore these
+            # errors.
+            #
+            #  * If a host has Connection-Refused, the wrong status-cde
+            #    or similar failure it will be handled as normal.
+            #
+            #  * If the host has genuinely lost DNS then we're going to
+            #    raise an alert, but if it is this false-error then we
+            #    will silently disable this test-run.
+            #
+            #
+
+            #  IP addresses we found for the host
+            ips = []
+
+            # Get the hostname we're connecting to.
+            u = URI.parse(test_url)
+            target = u.host
+
+            #
+            #  Resolve the target to an IP, unless it is already an address.
+            #
+            if (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/) ||
+               (target =~ /^([0-9a-f:]+)$/)
+              ips.push(target)
+            else
+
+              #
+              # OK if it didn't look like an IP address then attempt to
+              # look it up, as both IPv4 and IPv6.
+              #
+              begin
+                timeout(30) do
+
+                  Resolv::DNS.open do |dns|
+
+                    ress = dns.getresources(target, Resolv::DNS::Resource::IN::A)
+                    ress.map { |r| ips.push(r.address.to_s) }
+
+                    ress = dns.getresources(target, Resolv::DNS::Resource::IN::AAAA)
+                    ress.map { |r| ips.push(r.address.to_s) }
+                  end
+                end
+              rescue Timeout::Error => _e
+                # NOP
+              end
+            end
+
+            #
+            #  At this point we either have:
+            #
+            #   "ips" containing entries - because the hostname resolved
+            #
+            #   "ips" being empty because the DNS failure was genuine
+            #
+            return Custodian::TestResult::TEST_SKIPPED unless ips.empty?
+
+            #
+            # Log the DNS error-message, as this is genuine.
+            #
             resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
+
           rescue => x
             errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           end
@@ -361,6 +433,7 @@ module Custodian
         # uh-oh! Resolution failed on both protocols!
         if resolution_errors.length > 1
           errors << "DNS Error when resolving host - #{resolution_errors.join(',')}"
+
         end
 
         if !errors.empty?
