@@ -38,6 +38,90 @@ module Custodian
       attr_reader :expected_status, :expected_content
 
       #
+      # Should we ignore a (temporary) DNS error in this test?
+      #
+      # We've been beset by a series of false-alerts in the recent
+      # past which have all occurred at this point:
+      #
+      #   * We get bogus errors in resolving DNS from curb/libcurl.
+      #
+      #   * These errors go away on retry.
+      #
+      #   * But the retry isn't fast enough to outrace the
+      #     supression-time of our alerts.
+      #
+      # For the moment we're going to _temporarily_ ignore these errors.
+      #
+      #  * If a host has Connection-Refused, the wrong status-cde
+      #    or similar failure it will be handled as normal.
+      #
+      #  * If the host has genuinely lost DNS then we're going to
+      #    raise an alert, but if it is this false-error then we
+      #    will silently disable this test-run.
+      #
+      def ignore_failure?( protocol )
+
+        # Get the hostname we're connecting to.
+        u = URI.parse(@url)
+        target = u.host
+
+        # IPs for the target
+        ips = []
+
+        case protocol
+        when :ipv4
+          if (target =~ /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/)
+            ips << target
+          end
+        when :ipv6
+          if (target =~ /^([0-9a-f:]+)$/)
+            ips << target
+          end
+        else
+          raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
+        end
+
+        # Early termination?
+        return true unless ips.empty?
+
+        #
+        # OK if it didn't look like an IP address then attempt to
+        # look it up, as both IPv4 and IPv6.
+        #
+        begin
+
+          type = case protocol
+                 when :ipv4
+                   Resolv::DNS::Resource::IN::A
+                 when :ipv6
+                   Resolv::DNS::Resource::IN::AAAA
+                 else
+                   raise ArgumentError, "Sanity-checking DNS-failure of unknown type: #{protocol}"
+                 end
+
+          timeout(30) do
+            Resolv::DNS.open do |dns|
+              ips = dns.getresources(target, type)
+            end
+          end
+        rescue Timeout::Error => _e
+          # NOP
+        end
+
+
+        #
+        #  At this point we either have:
+        #
+        #   "ips" containing entries - because the hostname resolved
+        #
+        #   "ips" being empty because the DNS failure was genuine
+        #
+        return ( ! ips.empty? )
+      end
+
+
+
+      #
       # Constructor
       #
       def initialize(line)
@@ -337,8 +421,8 @@ module Custodian
           rescue Curl::Err::TooManyRedirectsError
             errors << "#{protocol_msg}: More than 10 redirections."
           rescue Curl::Err::HostResolutionError => x
-            # Log the DNS error-message.
-            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
+            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}." unless ignore_failure?( resolve_mode)
+
           rescue => x
             errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."
           end
