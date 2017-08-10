@@ -47,36 +47,37 @@ class TestConfigurationSingleton < Test::Unit::TestCase
 
     # retry delay - probably unset.
     a = settings.retry_delay
-    assert(a.class == Fixnum)
+    assert(a.class == Integer ||
+           a.class == Fixnum)
 
     # store a number
     settings._store('retry_delay', 5)
     a = settings.retry_delay
-    assert(a.class == Fixnum)
+    assert(a.class == Integer || a.class == Fixnum )
     assert(a == 5)
 
     # store a string
     settings._store('retry_delay', '35')
     a = settings.retry_delay
-    assert(a.class == Fixnum)
+    assert(a.class == Integer || a.class == Fixnum )
     assert(a == 35)
 
 
 
     # timeout - probably unset.
     a = settings.timeout
-    assert(a.class == Fixnum)
+    assert(a.class == Integer || a.class == Fixnum )
 
     # store a number
     settings._store('timeout', 5)
     a = settings.timeout
-    assert(a.class == Fixnum)
+    assert(a.class == Integer || a.class == Fixnum )
     assert(a == 5)
 
     # store a string
     settings._store('timeout', '35')
     a = settings.timeout
-    assert(a.class == Fixnum)
+    assert(a.class == Integer || a.class == Fixnum )
     assert(a == 35)
 
 

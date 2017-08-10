@@ -14,25 +14,25 @@ module Custodian
       #
       # Return the custom-prefix to use, if any.
       #
-      def Prefix.text()
+      def Prefix.text
         # Default to no prefix.
-        default = ""
+        default = ''
 
         # Look for matches - last one wins.
-        Dir.glob( "/store/clients/*/custodian-prefix.cfg" ).each do |file|
+        Dir.glob('/store/clients/*/custodian-prefix.cfg').each do |file|
           begin
-            default = File.read( file )
+            default = File.read(file)
           rescue Errno::EACCES
             # Permission-denied.
           end
         end
 
         # Remove any newline characters
-        default.gsub!( /[\r\n]/, '' )
+        default.gsub!(/[\r\n]/, '')
 
         # Truncate, if required.
         max = 32
-        default = default[0...max] if ( default.length > max )
+        default = default[0...max] if (default.length > max)
 
         default
       end

@@ -96,7 +96,7 @@ module Custodian
         case response
         when Net::HTTPRedirection
         then
-          newURL = (response['location'] =~ /^http/) ? response['Location'] : uri_str + response['Location']
+          newURL = response['location'] =~ /^http/ ? response['Location'] : uri_str + response['Location']
           return(get_url_contents(newURL))
         else
           return response.body

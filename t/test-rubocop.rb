@@ -20,7 +20,7 @@ class TestRubocop < Test::Unit::TestCase
 
       cli = RuboCop::CLI.new
       result = cli.run
-      assert(result == 0, 'No errors found')
+      assert(result.zero?, 'No errors found')
 
     rescue LoadError => ex
       if methods.include?(:skip)

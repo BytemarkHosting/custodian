@@ -162,25 +162,25 @@ class SSLCheck
   # is valid.
   #
   def certificate_fallback
-    cert = ""
+    cert = ''
     in_cert = false
 
     # Run the command.
     out = `echo "" | openssl s_client -servername #{uri.host} -connect #{uri.host}:#{uri.port} 2>/dev/null`
     # For each line of the output
-    out.split( /[\r\n]/ ).each do |line|
+    out.split(/[\r\n]/).each do |line|
 
       # Are we in a certificate?
-      in_cert = true if ( line =~ /BEGIN CERT/ )
+      in_cert = true if (line =~ /BEGIN CERT/)
 
       # If so append the line.
-      if ( in_cert )
+      if (in_cert)
         cert += line
         cert += "\n"
       end
 
       # Are we at the end?
-      in_cert = false if ( line =~ /END CERT/ )
+      in_cert = false if (line =~ /END CERT/)
     end
 
     # Return the certificate
@@ -248,10 +248,10 @@ class SSLCheck
     if self.certificate.nil?
 
       # Use our fallback method.
-      fallback = certificate_fallback()
+      fallback = certificate_fallback
 
       # If we failed to fetch it then we cannot do anything useful.
-      if ( fallback.nil? )
+      if (fallback.nil?)
         self.errors << verbose("Failed to fetch certificate for #{self.domain}")
 	return nil
       else
@@ -373,9 +373,9 @@ class SSLCheck
     # signature is valid, because we're missing the bundle that
     # the remote server should have sent us.
     #
-    if ( @fallback )
+    if (@fallback)
       verbose "Skipping certificate signature validation for #{self.domain} because fallback SSL-certificate had to be used and we think we'll fail"
-      return true;
+      return true
     end
 
     unless self.tests.include?(:signature)
@@ -514,7 +514,7 @@ module Custodian
           return Custodian::TestResult::TEST_SKIPPED
         end
 
-        s = SSLCheck.new(@host,@expiry_days)
+        s = SSLCheck.new(@host, @expiry_days)
         result = s.verify
 
         if true == result
@@ -522,7 +522,7 @@ module Custodian
           return Custodian::TestResult::TEST_PASSED
         elsif result.nil?
           puts("SSL Verification returned no result #{@host}")
-          @error = "SSL Verification for #{@host} failed - TLS negotiation failure?\n";
+          @error = "SSL Verification for #{@host} failed - TLS negotiation failure?\n"
           @error += s.errors.join("\n")
           return Custodian::TestResult::TEST_FAILED
         else

@@ -438,15 +438,15 @@ EOF
     # test data
     #
     data = {
-      'http://bob:steve@example must run http.'  =>
-      { username: 'bob', password: 'steve'},
+      'http://bob:steve@example must run http.' =>
+      { :username => 'bob', :password => 'steve' },
       'http://stee\':steve@example must run http.' =>
-      { username: 'stee\'', password: 'steve'},
+      { :username => 'stee\'', :password => 'steve' },
       'http://e\'e:pa$$w0rd@example must run http.' =>
-      { username: 'e\'e', password: 'pa$$w0rd'},
+      { :username => 'e\'e', :password => 'pa$$w0rd' }
     }
 
-    data.each do |str, hash |
+    data.each do |str, hash|
       assert_nothing_raised do
 
         #
@@ -461,8 +461,8 @@ EOF
 
         # There should be auth-enabled
         assert(obj[0].basic_auth?)
-        assert(obj[0].basic_auth_username == hash[:username] )
-        assert(obj[0].basic_auth_password == hash[:password] )
+        assert(obj[0].basic_auth_username == hash[:username])
+        assert(obj[0].basic_auth_password == hash[:password])
 
       end
     end
@@ -488,7 +488,7 @@ EOF
     #
     # Test the parser with this text
     #
-    expiries.each do |str,days|
+    expiries.each do |str, days|
       assert_nothing_raised do
 
         #
@@ -505,13 +505,13 @@ EOF
 
         # Test both of them to make sure we got our expiry period.
         obj.each do |x|
-          if ( x.class.name =~ /SSL/ )
-            found_days =  x.expiry_days
+          if (x.class.name =~ /SSL/)
+            found_days = x.expiry_days
           end
         end
 
         # Ensure we did find a match.
-        assert(found_days != -1 )
+        assert(found_days != -1)
         assert(found_days == days)
 
       end

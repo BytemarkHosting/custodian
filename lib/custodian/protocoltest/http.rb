@@ -59,7 +59,7 @@ module Custodian
       #    raise an alert, but if it is this false-error then we
       #    will silently disable this test-run.
       #
-      def ignore_failure?( protocol )
+      def ignore_failure?(protocol)
 
         # Get the hostname we're connecting to.
         u = URI.parse(@url)
@@ -116,7 +116,7 @@ module Custodian
         #
         #   "ips" being empty because the DNS failure was genuine
         #
-        return ( ! ips.empty? )
+        return (!ips.empty?)
       end
 
 
@@ -189,8 +189,8 @@ module Custodian
         #
         #  Save username/password if they were specified
         #
-        @username = u.user if ( u.user )
-        @password = u.password if ( u.password )
+        @username = u.user if (u.user)
+        @password = u.password if (u.password)
 
         #
         # Expected status
@@ -278,7 +278,7 @@ module Custodian
       #  Do we have basic auth?
       #
       def basic_auth?
-        ( @username.nil? == false ) && ( @password.nil? == false )
+        (@username.nil? == false) && (@password.nil? == false)
       end
 
       #
@@ -341,7 +341,7 @@ module Custodian
         #  If we're running with HTTP-basic-auth we should remove
         # the username/password from the URL we're passing to curb.
         #
-        if ( basic_auth? )
+        if (basic_auth?)
           u = URI.parse(test_url)
           u.user     = nil
           u.password = nil
@@ -365,7 +365,7 @@ module Custodian
           #
           # Should we use HTTP basic-auth?
           #
-          if  basic_auth?
+          if basic_auth?
             c.http_auth_types = :basic
             c.username = basic_auth_username
             c.password = basic_auth_password
@@ -421,7 +421,7 @@ module Custodian
           rescue Curl::Err::TooManyRedirectsError
             errors << "#{protocol_msg}: More than 10 redirections."
           rescue Curl::Err::HostResolutionError => x
-            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}." unless ignore_failure?( resolve_mode)
+            resolution_errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}." unless ignore_failure?(resolve_mode)
 
           rescue => x
             errors << "#{protocol_msg}: #{x.class}: #{x.message}\n  #{x.backtrace.join("\n  ")}."

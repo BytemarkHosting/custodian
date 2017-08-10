@@ -14,7 +14,8 @@ manual = false
 
 opts = GetoptLong.new(
   ['--help',   '-h', GetoptLong::NO_ARGUMENT],
-  ['--manual', '-m', GetoptLong::NO_ARGUMENT])
+  ['--manual', '-m', GetoptLong::NO_ARGUMENT]
+)
 
 begin
   opts.each do |opt, _arg|

@@ -112,17 +112,17 @@ module Custodian
         #
         #  Both types?
         #
-        do_ipv6 = true
-        do_ipv4 = true
+        ipv6 = true
+        ipv4 = true
 
         #
         # Allow the test to disable one/both
         #
         if @line =~ /ipv4_only/
-          do_ipv6 = false
+          ipv6 = false
         end
         if @line =~ /ipv6_only/
-          do_ipv4 = false
+          ipv4 = false
         end
 
         #
@@ -133,11 +133,11 @@ module Custodian
           timeout(period) do
 
             Resolv::DNS.open do |dns|
-              if do_ipv4
+              if ipv4
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::A)
                 ress.map { |r| ips.push(r.address.to_s) }
               end
-              if do_ipv6
+              if ipv6
                 ress = dns.getresources(@host, Resolv::DNS::Resource::IN::AAAA)
                 ress.map { |r| ips.push(r.address.to_s) }
               end

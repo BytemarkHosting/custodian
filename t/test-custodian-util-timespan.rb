@@ -214,7 +214,7 @@ class TestTimeSpanUtil < Test::Unit::TestCase
   #
   def test_wrap_around
 
-    for h in 00..23
+    for h in 0o0..23
       assert_equal(1, Custodian::Util::TimeSpan.to_hours(h, h).size)
     end
 

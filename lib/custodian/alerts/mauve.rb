@@ -110,7 +110,7 @@ module Custodian
         # If we're Monday-Friday, between the start & end time, then
         # we're in the working day.
         #
-        if  ((wday != 0) && (wday != 6)) &&
+        if  ((wday.nonzero?) && (wday != 6)) &&
             (hour >= day_start && hour < day_end)
           working = true
         end
@@ -229,7 +229,7 @@ module Custodian
         alert.id  = Digest::SHA1.hexdigest(id_key)
 
         # Look for a subject-prefix
-        subject_prefix = Custodian::Util::Prefix.text()
+        subject_prefix = Custodian::Util::Prefix.text
 
         alert.subject = subject_prefix + subject
         alert.summary = "The #{test_type} test failed against #{test_host}"

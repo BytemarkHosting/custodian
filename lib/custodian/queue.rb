@@ -3,7 +3,7 @@
 #
 # Without this we cannot connect to our queue.
 #
-%w( redis ).each do |library|
+%w(redis).each do |library|
   begin
     require library
   rescue LoadError
