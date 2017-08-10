@@ -70,7 +70,7 @@ Metrics/ClassLength:
 
 # Offense count: 22
 Metrics/CyclomaticComplexity:
-  Max: 19
+  Max: 25
 
 # Offense count: 118
 # Configuration parameters: AllowURI, URISchemes.
@@ -466,3 +466,38 @@ Style/MutableConstant:
 
 Style/WhileUntilDo:
   Enabled: false
+
+Lint/AssignmentInCondition:
+  Exclude:
+    - 'lib/custodian/queue.rb'
+
+# Offense count: 2
+Lint/ShadowedException:
+  Exclude:
+    - 'lib/custodian/protocoltest/ssl.rb'
+
+# Offense count: 6
+# Cop supports --auto-correct.
+Lint/UnifiedInteger:
+  Exclude:
+    - 't/test-custodian-settings.rb'
+
+# Offense count: 1
+Metrics/AbcSize:
+  Max: 85
+
+# Offense count: 1
+# Configuration parameters: CountComments.
+Metrics/MethodLength:
+  Max: 97
+
+# Offense count: 1
+Metrics/PerceivedComplexity:
+  Max: 23
+
+# Offense count: 7
+# Cop supports --auto-correct.
+Style/SpaceInsideParens:
+  Exclude:
+    - 't.rb'
+    - 't/test-custodian-settings.rb'
