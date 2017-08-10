@@ -4,6 +4,14 @@ stages:
   - publish
 
 
+test:wheezy: &test
+  image: $CI_REGISTRY/docker-images/layers:$DISTRO-ruby
+  stage: test
+  variables:
+    DISTRO: wheezy
+  script:
+    - make test
+
 test:jessie: &test
   image: $CI_REGISTRY/docker-images/layers:$DISTRO-ruby
   stage: test
