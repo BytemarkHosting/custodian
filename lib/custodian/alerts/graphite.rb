@@ -1,4 +1,5 @@
 require 'socket'
+require 'timeout'
 
 #
 #  The graphite-alerter.
@@ -61,12 +62,25 @@ module Custodian
         payload = "custodian.#{test}.#{host}.test_duration_ms #{ms} #{Time.now.to_i}"
 
         #
-        #  Send via UDP.
+        #  Send metrics via TCP.
         #
-        socket = UDPSocket.new
-        socket.send(payload, 0, @target, 2003)
-        socket.close
-
+        begin
+          Timeout.timeout(10) do
+            begin
+              socket = TCPSocket.new(@target,2003)
+              puts payload
+              socket.write(payload)
+              socket.flush
+              socket.close
+            rescue Errno::ENETUNREACH
+              puts("Metrics host unreachable: #{e}")
+            rescue StandardError => e
+              puts("Error submitting metrics: #{e}")
+            end
+          end
+        rescue Timeout::Error
+          puts('Timeout submitting metrics')
+        end
       end
 
       register_alert_type 'graphite'
