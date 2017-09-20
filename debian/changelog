@@ -1,3 +1,10 @@
+custodian (0.37) stable; urgency=high
+
+  * Always send a User-Agent-header when submitting HTTP/HTTPS tests.
+  * Updated how we submit metrics to our central graphite host(s).
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Wed, 20 Sep 2017 09:33:09 +0200
+
 custodian (0.36) stable; urgency=high
 
   * If we receive a DNS-error from the curb-gem we ignore it, unless
