@@ -360,6 +360,9 @@ module Custodian
 
           c = Curl::Easy.new(test_url)
 
+          # setup a user-agent.
+          c.headers["User-Agent"] = "custodian/protocol-tester"
+
           c.resolve_mode = resolve_mode
 
           #
