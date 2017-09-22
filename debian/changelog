@@ -1,3 +1,9 @@
+custodian (0.40) stable; urgency=high
+
+  * Fake-release to ensure all hosts are updated.
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Fri, 22 Sep 2017 12:22:21 +0200
+
 custodian (0.37) stable; urgency=high
 
   * Always send a User-Agent-header when submitting HTTP/HTTPS tests.
