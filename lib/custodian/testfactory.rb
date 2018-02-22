@@ -99,8 +99,19 @@ module Custodian
             #
             # We do this only after we've instantiated the test.
             #
-            if  line =~ /\s+otherwise\s+'([^']+)'/
+            if line =~ /\s+otherwise\s+'([^']+)'/
               obj.set_notification_text($1.dup)
+            end
+
+
+            #
+            # Some tests will replace their subject.
+            #
+            #
+            if line =~ /\s+with\s+subject\s+'([^']+)'/
+              obj.set_subject($1.dup)
+            else
+              obj.set_subject( nil )
             end
 
             #
@@ -168,6 +179,20 @@ module Custodian
     end
 
 
+    #
+    # If this test has a custom subject then return it
+    #
+    def get_subject
+      @subject
+    end
+
+
+    #
+    # Setup a custom subject for the (mauve) alert we raise
+    #
+    def set_subject( subject )
+      @subject = subject
+    end
 
 
     #
