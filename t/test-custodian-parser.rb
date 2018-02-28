@@ -429,6 +429,41 @@ EOF
     end
   end
 
+
+  #
+  # Test that the parser allows subject-setting.
+  #
+  def test_http_subject_setting
+
+    #
+    # test data
+    #
+    data = {
+      "http://example must run http with subject 'foo'."                         => "foo",
+      "http://example must run http with status 200 with subject 'bart simpson'."         => "bart simpson",
+      "http://example must run http with content 'bar'."      => nil,
+      'http://example must run http without cache busting.'   => nil
+    }
+
+    data.each do |str, sub|
+      assert_nothing_raised do
+
+        #
+        # Create the new parser
+        #
+        obj = Custodian::TestFactory.create(str)
+
+        assert(!obj.nil?)
+        assert(obj.kind_of?(Array))
+        assert(obj.size == 1)
+        assert_equal(obj[0].to_s, str)
+
+        assert_equal(obj[0].get_subject, sub)
+      end
+    end
+  end
+
+
   #
   # Test that the parser works for basic-auth.
   #

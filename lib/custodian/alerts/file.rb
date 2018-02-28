@@ -31,7 +31,12 @@ module Custodian
       # Record a raise event for the given test.
       #
       def raise
-        write_message("RAISE: #{test.target} failed #{test.get_type}-test - #{test.error}")
+        subject = test.target
+        subject = test.get_subject() unless test.get_subject().nil?
+
+        write_message("RAISE: #{subject} failed #{test.get_type}-test - #{test.error}")
+
+
       end
 
 
@@ -47,7 +52,10 @@ module Custodian
       # Record a clear event for the given test.
       #
       def clear
-        write_message("CLEAR: #{test.target} failed #{test.get_type}-test")
+        subject = test.target
+        subject = test.get_subject() unless test.get_subject().nil?
+
+        write_message("CLEAR: #{subject} failed #{test.get_type}-test")
       end
 
 

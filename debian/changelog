@@ -1,3 +1,9 @@
+custodian (0.41) stable; urgency=low
+
+  * Allow tests to override the alert-subject raised via mauve (#21, !15)
+
+ -- Steve Kemp <steve@bytemark.co.uk>  Thu, 22 Feb 2018 14:22:41 +0200
+
 custodian (0.40) stable; urgency=high
 
   * Fake-release to ensure all hosts are updated.

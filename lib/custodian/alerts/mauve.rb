@@ -2,7 +2,6 @@
 
 require 'custodian/util/bytemark'
 require 'custodian/util/dns'
-require 'custodian/util/prefix'
 
 require 'digest/sha1'
 
@@ -228,10 +227,16 @@ module Custodian
         id_key   += test.class.to_s
         alert.id  = Digest::SHA1.hexdigest(id_key)
 
-        # Look for a subject-prefix
-        subject_prefix = Custodian::Util::Prefix.text()
+        #
+        # Set the subject of the alert
+        #
+        alert.subject = subject
 
-        alert.subject = subject_prefix + subject
+        #
+        # But allow it to be overwritten if something was specified.
+        #
+        alert.subject = test.get_subject() unless test.get_subject().nil?
+
         alert.summary = "The #{test_type} test failed against #{test_host}"
 
         #
