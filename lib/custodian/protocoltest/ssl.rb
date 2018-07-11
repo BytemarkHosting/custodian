@@ -166,7 +166,7 @@ class SSLCheck
     in_cert = false
 
     # Run the command.
-    out = `echo "" | timeout --kill-after=10s 10s openssl s_client -servername #{uri.host} -connect #{uri.host}:#{uri.port} 2>/dev/null`
+    out = `echo "" | timeout --kill-after=12s 10s openssl s_client -servername #{uri.host} -connect #{uri.host}:#{uri.port} 2>/dev/null`
     # For each line of the output
     out.split( /[\r\n]/ ).each do |line|
 
